@@ -1,0 +1,157 @@
+import React, { useState, useEffect } from 'react';
+import Login from '../components/forms/Login';
+import Register from '../components/forms/Register';
+import { useSelector } from 'react-redux';
+import axios from 'axios';
+
+const LoginAndRegister = ({ history }) => {
+  const [whitelist, setWhitelist] = useState([]);
+
+  const { user } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    if (user && user.token) history.push('/');
+  }, [user]);
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`${process.env.REACT_APP_API}/fetch-whitelist`)
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setWhitelist(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
+
+  // useEffect(() => {
+  //   fetch('https://api.ipregistry.co/?key=tryout&fields=location.country.code')
+  //     .then(function (response) {
+  //       return response.json();
+  //     })
+  //     .then(function (payload) {
+  //       const userCountryCode = payload['location']['country']['code'];
+  //       if (!whitelist.includes(userCountryCode)) {
+  //         history.push('/');
+  //       }
+  //     });
+  // }, []);
+
+  useEffect(() => {
+    const whitelist = [
+      'AD',
+      'AG',
+      'AR',
+      'AM',
+      'AU',
+      'AT',
+      'BS',
+      'BB',
+      'BY',
+      'BE',
+      'BR',
+      'BG',
+      'CA',
+      'CR',
+      'HR',
+      'CY',
+      'CZ',
+      'DK',
+      'EE',
+      'FI',
+      'FR',
+      'GE',
+      'DE',
+      'GR',
+      'GT',
+      'VA',
+      'HN',
+      'HU',
+      'IS',
+      'IE',
+      'IL',
+      'IT',
+      'KZ',
+      'KG',
+      'LV',
+      'LI',
+      'LT',
+      'LU',
+      'MV',
+      'MT',
+      'MH',
+      'MU',
+      'MX',
+      'MD',
+      'MC',
+      'ME',
+      'NL',
+      'NZ',
+      'NO',
+      'PA',
+      'PY',
+      'PL',
+      'PT',
+      'RO',
+      'RU',
+      'KN',
+      'LC',
+      'VC',
+      'SM',
+      'RS',
+      'SC',
+      'SK',
+      'SI',
+      'ES',
+      'SE',
+      'CH',
+      'UA',
+      'GB',
+      'US',
+      'UY',
+      'VE',
+    ];
+
+    fetch('https://api.ipregistry.co/?key=tryout&fields=location.country.code')
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (payload) {
+        const userCountryCode = payload['location']['country']['code'];
+        if (!whitelist.includes(userCountryCode)) {
+          history.push('/');
+        }
+      });
+  }, []);
+
+  const showLogin = () => {
+    document.getElementById('login').style.left = '50px';
+    document.getElementById('register').style.left = '450px';
+    document.getElementById('btn').style.left = '0px';
+  };
+
+  const showRegister = () => {
+    document.getElementById('login').style.left = '-400px';
+    document.getElementById('register').style.left = '50px';
+    document.getElementById('btn').style.left = '95px';
+  };
+
+  return (
+    <div className='form-box'>
+      <div className='button-box'>
+        <div id='btn' />
+        <button type='button' className='toggle-btn' onClick={showLogin}>
+          Login
+        </button>
+        <button type='button' className='toggle-btn' onClick={showRegister}>
+          Register
+        </button>
+      </div>
+      <Register />
+      <Login />
+    </div>
+  );
+};
+
+export default LoginAndRegister;
