@@ -8,9 +8,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTrashCan,
   faMagnifyingGlass,
+  faLock,
+  faKey,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import UserDeleteAdmin from '../../components/modals/UserDeleteAdmin';
+import AddUserToAdmin from '../../components/modals/AddUserToAdmin';
+import RemoveUserFromAdmin from '../../components/modals/RemoveUserFromAdmin';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -18,6 +22,11 @@ const Users = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [userDeleteModalIsOpen, setUserDeleteModalIsOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState({});
+  const [addToAdminModalIsOpen, setAddToAdminModalIsOpen] = useState(false);
+  const [userToAddToAdmin, setUserToAddToAdmin] = useState({});
+  const [removeFromAdminModalIsOpen, setRemoveFromAdminModalIsOpen] =
+    useState(false);
+  const [userToRemoveFromAdmin, setUserToRemoveFromAdmin] = useState({});
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -66,6 +75,16 @@ const Users = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const addToAdmin = (u) => {
+    setAddToAdminModalIsOpen(true);
+    setUserToAddToAdmin(u);
+  };
+
+  const removeFromAdmin = (u) => {
+    setRemoveFromAdminModalIsOpen(true);
+    setUserToRemoveFromAdmin(u);
   };
 
   const handleDelete = async (u) => {
@@ -122,6 +141,24 @@ const Users = () => {
                 >
                   <p>{u.name || u.email.split('@')[0]}</p>
                 </Link>
+                {u.role === 'subscriber' && (
+                  <span>
+                    <FontAwesomeIcon
+                      icon={faLock}
+                      className='fa admin'
+                      onClick={() => addToAdmin(u)}
+                    />
+                  </span>
+                )}
+                {u.role === 'admin' && (
+                  <span>
+                    <FontAwesomeIcon
+                      icon={faKey}
+                      className='fa admin'
+                      onClick={() => removeFromAdmin(u)}
+                    />
+                  </span>
+                )}
                 <span>
                   <FontAwesomeIcon
                     icon={faTrashCan}
@@ -137,6 +174,18 @@ const Users = () => {
         userDeleteModalIsOpen={userDeleteModalIsOpen}
         setUserDeleteModalIsOpen={setUserDeleteModalIsOpen}
         userToDelete={userToDelete}
+        fetchUsers={fetchUsers}
+      />
+      <AddUserToAdmin
+        addToAdminModalIsOpen={addToAdminModalIsOpen}
+        setAddToAdminModalIsOpen={setAddToAdminModalIsOpen}
+        userToAddToAdmin={userToAddToAdmin}
+        fetchUsers={fetchUsers}
+      />
+      <RemoveUserFromAdmin
+        removeFromAdminModalIsOpen={removeFromAdminModalIsOpen}
+        setRemoveFromAdminModalIsOpen={setRemoveFromAdminModalIsOpen}
+        userToRemoveFromAdmin={userToRemoveFromAdmin}
         fetchUsers={fetchUsers}
       />
     </div>

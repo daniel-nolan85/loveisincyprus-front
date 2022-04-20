@@ -1,9 +1,11 @@
 import React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination } from 'swiper';
-import 'swiper/css';
-import 'swiper/css/autoplay';
-import 'swiper/css/pagination';
+import 'swiper/swiper-bundle.min.css';
+import 'swiper/swiper.min.css';
+// import 'swiper/css';
+// import 'swiper/css/autoplay';
+// import 'swiper/css/pagination';
 import sliderPic1 from '../../assets/sliderPic1.jpg';
 import sliderPic2 from '../../assets/sliderPic2.jpg';
 import sliderPic3 from '../../assets/sliderPic3.jpg';

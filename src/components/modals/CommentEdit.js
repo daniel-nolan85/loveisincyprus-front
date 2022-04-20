@@ -14,27 +14,28 @@ import { toast } from 'react-toastify';
 
 Modal.setAppElement('#root');
 
-const SinglePost = ({
-  postModalIsOpen,
-  setPostModalIsOpen,
-  post,
-  newsFeed,
+const CommentEdit = ({
+  commentEditModalIsOpen,
+  setCommentEditModalIsOpen,
+  commentToEdit,
   fetchUserPosts,
+  newsFeed,
+  fetchThisUsersPosts,
+  postOfCommentToEdit,
 }) => {
-  const [content, setContent] = useState(post.content);
+  const [text, setText] = useState(commentToEdit.text);
   const [uploading, setUploading] = useState(false);
   const [image, setImage] = useState({});
 
   const { user } = useSelector((state) => ({ ...state }));
 
-  const postSubmit = async (e) => {
-    e.preventDefault();
+  const updateComment = async (postId, comment) => {
     setUploading(true);
 
     await axios
       .put(
-        `${process.env.REACT_APP_API}/update-post/${post._id}`,
-        { post, content, image, user },
+        `${process.env.REACT_APP_API}/update-comment`,
+        { postId, comment, text, image, user },
         {
           headers: {
             authtoken: user.token,
@@ -43,19 +44,21 @@ const SinglePost = ({
       )
       .then((res) => {
         setUploading(false);
+        console.log(res.data);
 
         if (res.data.error) {
           toast.error(res.data.error, {
             position: toast.POSITION.TOP_CENTER,
           });
         } else {
-          toast.success(`Post updated.`, {
+          toast.success(`Comment updated.`, {
             position: toast.POSITION.TOP_CENTER,
           });
         }
         newsFeed && newsFeed();
         fetchUserPosts && fetchUserPosts();
-        setPostModalIsOpen(false);
+        fetchThisUsersPosts && fetchThisUsersPosts();
+        setCommentEditModalIsOpen(false);
         setImage({});
       })
       .catch((err) => console.log(err));
@@ -100,33 +103,19 @@ const SinglePost = ({
 
   return (
     <Modal
-      isOpen={postModalIsOpen}
-      onRequestClose={() => setPostModalIsOpen(false)}
+      isOpen={commentEditModalIsOpen}
+      onRequestClose={() => setCommentEditModalIsOpen(false)}
       style={modalStyles}
       contentLabel='Example Modal'
     >
-      <div className='write-post-container'>
-        <div className='user-profile'>
-          <Link to={`/user/profile/${user._id}`}>
-            <img
-              src={user.profileImage ? user.profileImage.url : defaultProfile}
-              alt={`${user.name || user.email.split('@')[0]}'s profile picture`}
-            />
-          </Link>
-          <Link to={`/user/profile/${user._id}`}>
-            <p>{user.name || (user.email && user.email.split('@')[0])}</p>
-          </Link>
-        </div>
-        <div className='post-input-container'>
+      <div className='write-comment-container'>
+        <div className='comment-input-container'>
           <form>
             <textarea
-              defaultValue={post.content}
-              onChange={(e) => setContent(e.target.value)}
-              placeholder={`What's on your mind, ${
-                user.name
-                  ? user.name.split(' ')[0]
-                  : user.email && user.email.split('@')[0]
-              }?`}
+              defaultValue={commentToEdit.text}
+              onChange={(e) => setText(e.target.value)}
+              placeholder='Write a comment...'
+              rows={3}
             />
           </form>
           <div className='write-post-footer'>
@@ -134,8 +123,8 @@ const SinglePost = ({
               <label>
                 {image && image.url ? (
                   <img src={image.url} />
-                ) : post.image && post.image.url ? (
-                  <img src={post.image.url} />
+                ) : commentToEdit.image && commentToEdit.image.url ? (
+                  <img src={commentToEdit.image.url} />
                 ) : (
                   <FontAwesomeIcon icon={faCamera} className='fa' />
                 )}
@@ -148,10 +137,10 @@ const SinglePost = ({
               </label>
             </div>
             <button
-              onClick={postSubmit}
+              onClick={() => updateComment(postOfCommentToEdit, commentToEdit)}
               type='submit'
               className='submit-btn'
-              disabled={uploading}
+              //   disabled={!comment || uploading}
             >
               {uploading ? (
                 <FontAwesomeIcon icon={faSpinner} className='fa' spin />
@@ -167,4 +156,4 @@ const SinglePost = ({
   );
 };
 
-export default SinglePost;
+export default CommentEdit;

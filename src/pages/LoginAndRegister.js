@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Login from '../components/forms/Login';
 import Register from '../components/forms/Register';
 import { useSelector } from 'react-redux';
@@ -9,24 +9,130 @@ const LoginAndRegister = ({ history }) => {
 
   const { user } = useSelector((state) => ({ ...state }));
 
+  const isFirstRun = useRef(true);
+
   useEffect(() => {
     if (user && user.token) history.push('/');
   }, [user]);
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`${process.env.REACT_APP_API}/fetch-whitelist`)
-  //     .then((res) => {
-  //       console.log(res.data);
-  //       setWhitelist(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }, []);
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API}/fetch-whitelist`)
+      .then((res) => {
+        // console.log(res.data);
+        setWhitelist(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      checkPermission();
+    }
+  }, [whitelist]);
+
+  const checkPermission = () => {
+    fetch(
+      'https://api.ipregistry.co/76.202.50.183?key=asf3qlfeefwmnv5w&fields=location.country.code'
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (payload) {
+        const userCountryCode = payload['location']['country']['code'];
+        console.log('userCountryCode => ', userCountryCode);
+        console.log('whitelist => ', whitelist);
+
+        if (!whitelist.some((e) => e.countryCode === userCountryCode)) {
+          history.push('/');
+        }
+      });
+  };
 
   // useEffect(() => {
-  //   fetch('https://api.ipregistry.co/?key=tryout&fields=location.country.code')
+  //   const whitelist = [
+  //     'AD',
+  //     'AG',
+  //     'AR',
+  //     'AM',
+  //     'AU',
+  //     'AT',
+  //     'BS',
+  //     'BB',
+  //     'BY',
+  //     'BE',
+  //     'BR',
+  //     'BG',
+  //     'CA',
+  //     'CR',
+  //     'HR',
+  //     'CY',
+  //     'CZ',
+  //     'DK',
+  //     'EE',
+  //     'FI',
+  //     'FR',
+  //     'GE',
+  //     'DE',
+  //     'GR',
+  //     'GT',
+  //     'VA',
+  //     'HN',
+  //     'HU',
+  //     'IS',
+  //     'IE',
+  //     'IL',
+  //     'IT',
+  //     'KZ',
+  //     'KG',
+  //     'LV',
+  //     'LI',
+  //     'LT',
+  //     'LU',
+  //     'MV',
+  //     'MT',
+  //     'MH',
+  //     'MU',
+  //     'MX',
+  //     'MD',
+  //     'MC',
+  //     'ME',
+  //     'NL',
+  //     'NZ',
+  //     'NO',
+  //     'PA',
+  //     'PY',
+  //     'PL',
+  //     'PT',
+  //     'RO',
+  //     'RU',
+  //     'KN',
+  //     'LC',
+  //     'VC',
+  //     'SM',
+  //     'RS',
+  //     'SC',
+  //     'SK',
+  //     'SI',
+  //     'ES',
+  //     'SE',
+  //     'CH',
+  //     'UA',
+  //     'GB',
+  //     'US',
+  //     'UY',
+  //     'VE',
+  //   ];
+
+  //   // fetch('https://api.ipregistry.co/?key=tryout&fields=location.country.code')
+  //   fetch(
+  //     'https://api.ipregistry.co/76.202.50.183?key=asf3qlfeefwmnv5w&fields=location.country.code'
+  //   )
   //     .then(function (response) {
   //       return response.json();
   //     })
@@ -37,93 +143,6 @@ const LoginAndRegister = ({ history }) => {
   //       }
   //     });
   // }, []);
-
-  useEffect(() => {
-    const whitelist = [
-      'AD',
-      'AG',
-      'AR',
-      'AM',
-      'AU',
-      'AT',
-      'BS',
-      'BB',
-      'BY',
-      'BE',
-      'BR',
-      'BG',
-      'CA',
-      'CR',
-      'HR',
-      'CY',
-      'CZ',
-      'DK',
-      'EE',
-      'FI',
-      'FR',
-      'GE',
-      'DE',
-      'GR',
-      'GT',
-      'VA',
-      'HN',
-      'HU',
-      'IS',
-      'IE',
-      'IL',
-      'IT',
-      'KZ',
-      'KG',
-      'LV',
-      'LI',
-      'LT',
-      'LU',
-      'MV',
-      'MT',
-      'MH',
-      'MU',
-      'MX',
-      'MD',
-      'MC',
-      'ME',
-      'NL',
-      'NZ',
-      'NO',
-      'PA',
-      'PY',
-      'PL',
-      'PT',
-      'RO',
-      'RU',
-      'KN',
-      'LC',
-      'VC',
-      'SM',
-      'RS',
-      'SC',
-      'SK',
-      'SI',
-      'ES',
-      'SE',
-      'CH',
-      'UA',
-      'GB',
-      'US',
-      'UY',
-      'VE',
-    ];
-
-    fetch('https://api.ipregistry.co/?key=tryout&fields=location.country.code')
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (payload) {
-        const userCountryCode = payload['location']['country']['code'];
-        if (!whitelist.includes(userCountryCode)) {
-          history.push('/');
-        }
-      });
-  }, []);
 
   const showLogin = () => {
     document.getElementById('login').style.left = '50px';

@@ -78,32 +78,18 @@ const Profile = ({ history }) => {
   const [commentDeleteModalIsOpen, setCommentDeleteModalIsOpen] =
     useState(false);
   const [postOfCommentToDelete, setPostOfCommentToDelete] = useState([]);
+  const [commentEditModalIsOpen, setCommentEditModalIsOpen] = useState(false);
+  const [commentToEdit, setCommentToEdit] = useState({});
+  const [postOfCommentToEdit, setPostOfCommentToEdit] = useState([]);
 
   const { user } = useSelector((state) => ({ ...state }));
 
   let dispatch = useDispatch();
 
   useEffect(() => {
-    axios
-      .post(
-        `${process.env.REACT_APP_API}/total-posts-by-user`,
-        {
-          user,
-        },
-        {
-          headers: {
-            authtoken: user.token,
-          },
-        }
-      )
-      .then((res) => {
-        setTotalPosts(res.data);
-      });
-  }, [page]);
-
-  useEffect(() => {
     if (user && user.token) {
       fetchUserPosts();
+      fetchUserTotalPosts();
     }
   }, [user && user.token, page]);
 
@@ -340,6 +326,27 @@ const Profile = ({ history }) => {
       });
   };
 
+  const fetchUserTotalPosts = () => {
+    axios
+      .post(
+        `${process.env.REACT_APP_API}/total-posts-by-user`,
+        {
+          user,
+        },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        setTotalPosts(res.data);
+        // if (totalPosts < 10) {
+        //   setMorePosts(false);
+        // }
+      });
+  };
+
   const infinity = () => {
     let postsLength = posts.length;
     if (postsLength === totalPosts) {
@@ -380,6 +387,7 @@ const Profile = ({ history }) => {
           setContent('');
           setImage({});
           fetchUserPosts();
+          fetchUserTotalPosts();
         }
       })
       .catch((err) => {
@@ -492,6 +500,12 @@ const Profile = ({ history }) => {
     setCommentDeleteModalIsOpen(true);
     setPostOfCommentToDelete(postId);
     setCommentToDelete(comment);
+  };
+
+  const editComment = async (postId, comment) => {
+    setCommentEditModalIsOpen(true);
+    setCommentToEdit(comment);
+    setPostOfCommentToEdit(postId);
   };
 
   const showLikes = (post) => {
@@ -880,6 +894,11 @@ const Profile = ({ history }) => {
                           }
                           commentToDelete={commentToDelete}
                           postOfCommentToDelete={postOfCommentToDelete}
+                          editComment={editComment}
+                          commentEditModalIsOpen={commentEditModalIsOpen}
+                          setCommentEditModalIsOpen={setCommentEditModalIsOpen}
+                          commentToEdit={commentToEdit}
+                          postOfCommentToEdit={postOfCommentToEdit}
                         />
                       </div>
                     </div>
@@ -981,6 +1000,7 @@ const Profile = ({ history }) => {
         setPostDeleteModalIsOpen={setPostDeleteModalIsOpen}
         postToDelete={postToDelete}
         fetchUserPosts={fetchUserPosts}
+        fetchUserTotalPosts={fetchUserTotalPosts}
       />
     </div>
   );

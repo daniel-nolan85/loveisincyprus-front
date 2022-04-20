@@ -1,11 +1,12 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faTrashCan, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import defaultProfile from '../../assets/defaultProfile.png';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CommentDelete from '../../components/modals/CommentDelete';
+import CommentEdit from '../../components/modals/CommentEdit';
 
 const Comments = ({
   post,
@@ -17,6 +18,11 @@ const Comments = ({
   fetchUserPosts,
   newsFeed,
   fetchThisUsersPosts,
+  editComment,
+  commentEditModalIsOpen,
+  setCommentEditModalIsOpen,
+  commentToEdit,
+  postOfCommentToEdit,
 }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -69,6 +75,11 @@ const Comments = ({
                   className='fa trash'
                   onClick={() => removeComment(post._id, c)}
                 />
+                <FontAwesomeIcon
+                  icon={faPenToSquare}
+                  className='fa edit'
+                  onClick={() => editComment(post._id, c)}
+                />
               </div>
             )) ||
               (user && user._id === post.postedBy._id && (
@@ -101,6 +112,15 @@ const Comments = ({
         fetchUserPosts={fetchUserPosts}
         newsFeed={newsFeed}
         fetchThisUsersPosts={fetchThisUsersPosts}
+      />
+      <CommentEdit
+        commentEditModalIsOpen={commentEditModalIsOpen}
+        setCommentEditModalIsOpen={setCommentEditModalIsOpen}
+        commentToEdit={commentToEdit}
+        fetchUserPosts={fetchUserPosts}
+        newsFeed={newsFeed}
+        fetchThisUsersPosts={fetchThisUsersPosts}
+        postOfCommentToEdit={postOfCommentToEdit}
       />
     </>
   );

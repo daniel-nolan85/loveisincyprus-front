@@ -90,20 +90,24 @@ const Header = () => {
             )}
             <ul>
               <Link to='/user/dashboard'>
-                <li>
+                <li className='tooltip'>
                   <FontAwesomeIcon icon={faNewspaper} className='menu-icon' />
+                  <span className='tooltip-text'>Dashboard</span>
                 </li>
               </Link>
               <Link to='/swipe-to-match'>
-                <li>
+                <li className='tooltip'>
                   <FontAwesomeIcon icon={faBolt} className='menu-icon' />
+                  <span className='tooltip-text'>Swipe</span>
                 </li>
               </Link>
-              <li>
+              <li className='tooltip'>
                 <FontAwesomeIcon icon={faBell} className='menu-icon' />
+                <span className='tooltip-text'>Notifications</span>
               </li>
-              <li>
+              <li className='tooltip'>
                 <FontAwesomeIcon icon={faMessage} className='menu-icon' />
+                <span className='tooltip-text'>Messages</span>
               </li>
             </ul>
           </>

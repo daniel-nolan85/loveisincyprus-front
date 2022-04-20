@@ -6,21 +6,19 @@ import { useSelector } from 'react-redux';
 
 Modal.setAppElement('#root');
 
-const PostDelete = ({
-  postDeleteModalIsOpen,
-  setPostDeleteModalIsOpen,
-  postToDelete,
-  newsFeed,
-  fetchUserPosts,
-  fetchUserTotalPosts,
+const RemoveUserFromAdmin = ({
+  removeFromAdminModalIsOpen,
+  setRemoveFromAdminModalIsOpen,
+  userToRemoveFromAdmin,
+  fetchUsers,
 }) => {
   let { user } = useSelector((state) => ({ ...state }));
 
-  const deletePost = async (post) => {
+  const removeFromAdmin = async (u) => {
     await axios
       .put(
-        `${process.env.REACT_APP_API}/delete-post/${post._id}`,
-        { user, post },
+        `${process.env.REACT_APP_API}/admin/remove-user-from-admin`,
+        { u, user },
         {
           headers: {
             authtoken: user.token,
@@ -28,16 +26,15 @@ const PostDelete = ({
         }
       )
       .then((res) => {
-        toast.error('Post deleted', {
+        toast.success(`${u.name || u.email.split('@')[0]} removed from admin`, {
           position: toast.POSITION.TOP_CENTER,
         });
-        setPostDeleteModalIsOpen(false);
-        newsFeed && newsFeed();
-        fetchUserPosts && fetchUserPosts();
-        // setUploading(false);
-        fetchUserTotalPosts && fetchUserTotalPosts();
+        setRemoveFromAdminModalIsOpen(false);
+        fetchUsers();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   const modalStyles = {
@@ -52,35 +49,36 @@ const PostDelete = ({
     },
   };
 
-  const { content, image, postedBy } = postToDelete;
+  const { name, email, profileImage } = userToRemoveFromAdmin;
 
   return (
     <Modal
-      isOpen={postDeleteModalIsOpen}
-      onRequestClose={() => setPostDeleteModalIsOpen(false)}
+      isOpen={removeFromAdminModalIsOpen}
+      onRequestClose={() => setRemoveFromAdminModalIsOpen(false)}
       style={modalStyles}
       contentLabel='Example Modal'
     >
       <div className='match'>
-        <h1>Are you sure you want to delete this post?</h1>
+        <h1>Are you sure you want to remove this user from admin?</h1>
         <br />
-        <p>{content}</p>
-        <br />
-        {image && (
+        {profileImage && (
           <div className='match-images'>
             <img
-              src={image.url}
-              alt={`${postedBy.name || postedBy.email.split('@')[0]}'s post`}
+              src={profileImage.url}
+              alt={`${name || email.split('@')[0]}'s post`}
             />
           </div>
         )}
         <br />
-        <button className='submit-btn' onClick={() => deletePost(postToDelete)}>
-          Yes, delete
+        <button
+          className='submit-btn'
+          onClick={() => removeFromAdmin(userToRemoveFromAdmin)}
+        >
+          Yes, remove this user
         </button>
         <button
           className='submit-btn trash'
-          onClick={() => setPostDeleteModalIsOpen(false)}
+          onClick={() => setRemoveFromAdminModalIsOpen(false)}
         >
           No, cancel
         </button>
@@ -89,4 +87,4 @@ const PostDelete = ({
   );
 };
 
-export default PostDelete;
+export default RemoveUserFromAdmin;

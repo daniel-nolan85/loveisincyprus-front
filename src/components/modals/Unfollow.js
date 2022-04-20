@@ -12,6 +12,7 @@ const Unfollow = ({
   setUnfollowModalIsOpen,
   userToUnfollow,
   fetchMatches,
+  fetchFollowing,
 }) => {
   let { user } = useSelector((state) => ({ ...state }));
 
@@ -63,6 +64,7 @@ const Unfollow = ({
         });
         setUnfollowModalIsOpen(false);
         fetchMatches && fetchMatches();
+        fetchFollowing && fetchFollowing();
       })
       .catch((err) => {
         console.log(err);

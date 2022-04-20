@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import defaultProfile from '../../assets/defaultProfile.png';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
-import { toast } from 'react-toastify';
 import Unfollow from '../../components/modals/Unfollow';
 
 const Matches = ({ history }) => {
@@ -15,8 +14,6 @@ const Matches = ({ history }) => {
   const [unfollowModalIsOpen, setUnfollowModalIsOpen] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     console.log(user);

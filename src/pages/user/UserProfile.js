@@ -52,6 +52,9 @@ const UserProfile = () => {
   const [commentDeleteModalIsOpen, setCommentDeleteModalIsOpen] =
     useState(false);
   const [postOfCommentToDelete, setPostOfCommentToDelete] = useState([]);
+  const [commentEditModalIsOpen, setCommentEditModalIsOpen] = useState(false);
+  const [commentToEdit, setCommentToEdit] = useState({});
+  const [postOfCommentToEdit, setPostOfCommentToEdit] = useState([]);
 
   let { user } = useSelector((state) => ({ ...state }));
 
@@ -267,6 +270,12 @@ const UserProfile = () => {
     setCommentDeleteModalIsOpen(true);
     setPostOfCommentToDelete(postId);
     setCommentToDelete(comment);
+  };
+
+  const editComment = async (postId, comment) => {
+    setCommentEditModalIsOpen(true);
+    setCommentToEdit(comment);
+    setPostOfCommentToEdit(postId);
   };
 
   const handleImage = async (e) => {
@@ -555,6 +564,11 @@ const UserProfile = () => {
                           }
                           commentToDelete={commentToDelete}
                           postOfCommentToDelete={postOfCommentToDelete}
+                          editComment={editComment}
+                          commentEditModalIsOpen={commentEditModalIsOpen}
+                          setCommentEditModalIsOpen={setCommentEditModalIsOpen}
+                          commentToEdit={commentToEdit}
+                          postOfCommentToEdit={postOfCommentToEdit}
                         />
                       </div>
                     </div>

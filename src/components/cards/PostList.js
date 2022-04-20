@@ -34,6 +34,11 @@ const PostList = ({
   setCommentDeleteModalIsOpen,
   commentToDelete,
   postOfCommentToDelete,
+  editComment,
+  commentEditModalIsOpen,
+  setCommentEditModalIsOpen,
+  commentToEdit,
+  postOfCommentToEdit,
 }) => {
   const [currentPost, setCurrentPost] = useState({});
   const [likesModalIsOpen, setLikesModalIsOpen] = useState(false);
@@ -178,6 +183,11 @@ const PostList = ({
                     setCommentDeleteModalIsOpen={setCommentDeleteModalIsOpen}
                     commentToDelete={commentToDelete}
                     postOfCommentToDelete={postOfCommentToDelete}
+                    editComment={editComment}
+                    commentEditModalIsOpen={commentEditModalIsOpen}
+                    setCommentEditModalIsOpen={setCommentEditModalIsOpen}
+                    commentToEdit={commentToEdit}
+                    postOfCommentToEdit={postOfCommentToEdit}
                   />
                 </div>
               </div>

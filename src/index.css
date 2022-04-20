@@ -70,6 +70,40 @@ nav {
   color: #626262;
 }
 
+.tooltip {
+  position: relative;
+}
+
+.tooltip .tooltip-text {
+  visibility: hidden;
+  width: 120px;
+  background-color: #fff;
+  color: var(--nav-color);
+  text-align: center;
+  border-radius: 6px;
+  padding: 3px 0;
+  position: absolute;
+  z-index: 1;
+  top: 130%;
+  left: 50%;
+  margin-left: -70px;
+}
+
+.tooltip .tooltip-text::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+}
+
+.tooltip:hover .tooltip-text {
+  visibility: visible;
+}
+
 .nav-user-icon img {
   width: 45px;
   height: 45px;
@@ -930,6 +964,7 @@ nav {
 .admin-card .fa {
   font-size: 40px;
   color: var(--nav-color);
+  cursor: pointer;
 }
 
 .admin-info {
@@ -1003,8 +1038,11 @@ nav {
   margin-right: 10px;
 }
 
-.admin-card .fa {
-  cursor: pointer;
+.admin-card .fa.admin {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 25px;
 }
 
 .admin-card .fa.trash {

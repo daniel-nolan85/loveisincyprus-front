@@ -34,16 +34,44 @@ const UserDashboard = () => {
   const [commentDeleteModalIsOpen, setCommentDeleteModalIsOpen] =
     useState(false);
   const [postOfCommentToDelete, setPostOfCommentToDelete] = useState([]);
+  const [commentEditModalIsOpen, setCommentEditModalIsOpen] = useState(false);
+  const [commentToEdit, setCommentToEdit] = useState({});
+  const [postOfCommentToEdit, setPostOfCommentToEdit] = useState([]);
+  const [followersPosts, setFollowersPosts] = useState(0);
 
   const { user } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
 
+  // useEffect(() => {
+  //   axios.get(`${process.env.REACT_APP_API}/total-posts`).then((res) => {
+  //     setTotalPosts(res.data);
+  //   });
+  // }, [page]);
+
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API}/total-posts`).then((res) => {
-      setTotalPosts(res.data);
-    });
+    followersPostsNum();
   }, [page]);
+
+  const followersPostsNum = async () => {
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/followers-posts`,
+        { user },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        setFollowersPosts(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   useEffect(() => {
     if (user && user.token) {
@@ -140,6 +168,7 @@ const UserDashboard = () => {
       )
       .then((res) => {
         setPosts(res.data);
+        followersPostsNum();
       })
       .catch((err) => {
         console.log(err);
@@ -148,7 +177,7 @@ const UserDashboard = () => {
 
   const infinity = () => {
     let postsLength = posts.length;
-    if (postsLength === totalPosts) {
+    if (postsLength === followersPosts) {
       setMorePosts(false);
     }
     setPage(page + 1);
@@ -301,6 +330,12 @@ const UserDashboard = () => {
     setCommentToDelete(comment);
   };
 
+  const editComment = async (postId, comment) => {
+    setCommentEditModalIsOpen(true);
+    setCommentToEdit(comment);
+    setPostOfCommentToEdit(postId);
+  };
+
   return (
     <div className='container'>
       <LeftSidebar />
@@ -343,6 +378,11 @@ const UserDashboard = () => {
             setCommentDeleteModalIsOpen={setCommentDeleteModalIsOpen}
             commentToDelete={commentToDelete}
             postOfCommentToDelete={postOfCommentToDelete}
+            editComment={editComment}
+            commentEditModalIsOpen={commentEditModalIsOpen}
+            setCommentEditModalIsOpen={setCommentEditModalIsOpen}
+            commentToEdit={commentToEdit}
+            postOfCommentToEdit={postOfCommentToEdit}
           />
         </InfiniteScroll>
         <AddComment
