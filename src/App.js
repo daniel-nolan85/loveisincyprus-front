@@ -35,6 +35,8 @@ import Swipe from './pages/user/Swipe';
 import Visitors from './pages/user/Visitors';
 import Photos from './pages/user/Photos';
 import GeoBlock from './pages/admin/GeoBlock';
+import Category from './pages/admin/Category';
+import Sub from './pages/admin/Sub';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -146,6 +148,8 @@ const App = () => {
         <AdminRoute exact path='/admin/posts' component={Posts} />
         <AdminRoute exact path='/admin/users' component={Users} />
         <AdminRoute exact path='/admin/geo-block' component={GeoBlock} />
+        <AdminRoute exact path='/admin/category' component={Category} />
+        <AdminRoute exact path='/admin/sub' component={Sub} />
       </Switch>
       {/* </Suspense> */}
     </>

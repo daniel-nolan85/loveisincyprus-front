@@ -15,44 +15,44 @@ const LoginAndRegister = ({ history }) => {
     if (user && user.token) history.push('/');
   }, [user]);
 
-  useEffect(() => {
-    axios
-      .get(`${process.env.REACT_APP_API}/fetch-whitelist`)
-      .then((res) => {
-        // console.log(res.data);
-        setWhitelist(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   axios
+  //     .get(`${process.env.REACT_APP_API}/fetch-whitelist`)
+  //     .then((res) => {
+  //       // console.log(res.data);
+  //       setWhitelist(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
-  useEffect(() => {
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      return;
-    } else {
-      checkPermission();
-    }
-  }, [whitelist]);
+  // useEffect(() => {
+  //   if (isFirstRun.current) {
+  //     isFirstRun.current = false;
+  //     return;
+  //   } else {
+  //     checkPermission();
+  //   }
+  // }, [whitelist]);
 
-  const checkPermission = () => {
-    fetch(
-      'https://api.ipregistry.co/76.202.50.183?key=asf3qlfeefwmnv5w&fields=location.country.code'
-    )
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (payload) {
-        const userCountryCode = payload['location']['country']['code'];
-        console.log('userCountryCode => ', userCountryCode);
-        console.log('whitelist => ', whitelist);
+  // const checkPermission = () => {
+  //   fetch(
+  //     'https://api.ipregistry.co/76.202.50.183?key=asf3qlfeefwmnv5w&fields=location.country.code'
+  //   )
+  //     .then(function (response) {
+  //       return response.json();
+  //     })
+  //     .then(function (payload) {
+  //       const userCountryCode = payload['location']['country']['code'];
+  //       console.log('userCountryCode => ', userCountryCode);
+  //       console.log('whitelist => ', whitelist);
 
-        if (!whitelist.some((e) => e.countryCode === userCountryCode)) {
-          history.push('/');
-        }
-      });
-  };
+  //       if (!whitelist.some((e) => e.countryCode === userCountryCode)) {
+  //         history.push('/');
+  //       }
+  //     });
+  // };
 
   // useEffect(() => {
   //   const whitelist = [

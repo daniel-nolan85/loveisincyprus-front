@@ -14,7 +14,7 @@ import { useHistory, Link } from 'react-router-dom';
 import { createOrUpdateUser } from '../../functions/auth';
 
 const Login = () => {
-  const [email, setEmail] = useState('jennjustice84@gmail.com');
+  const [email, setEmail] = useState('danielnolan85@yahoo.com');
   const [password, setPassword] = useState('123456');
   const [emailLoading, setEmailLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);

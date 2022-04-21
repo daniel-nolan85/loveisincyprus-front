@@ -78,6 +78,9 @@ const UserProfile = () => {
       )
       .then((res) => {
         // console.log('res.data => ', res.data);
+        if (res.data === 0) {
+          setMorePosts(false);
+        }
         setTotalPosts(res.data);
       });
   }, [page, userId]);

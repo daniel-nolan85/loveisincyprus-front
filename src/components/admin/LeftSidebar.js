@@ -6,6 +6,10 @@ import {
   faUsers,
   faToolbox,
   faEarthAmericas,
+  faTicket,
+  faShirt,
+  faTag,
+  faTags,
 } from '@fortawesome/free-solid-svg-icons';
 
 const LeftSidebar = () => {
@@ -27,6 +31,22 @@ const LeftSidebar = () => {
         <Link to='/admin/geo-block'>
           <FontAwesomeIcon icon={faEarthAmericas} className='fa' />
           Geo-Block
+        </Link>
+        <Link to='/admin/products'>
+          <FontAwesomeIcon icon={faShirt} className='fa' />
+          Products
+        </Link>
+        <Link to='/admin/category'>
+          <FontAwesomeIcon icon={faTag} className='fa' />
+          Category
+        </Link>
+        <Link to='/admin/sub'>
+          <FontAwesomeIcon icon={faTags} className='fa' />
+          Sub-Category
+        </Link>
+        <Link to='/admin/coupon'>
+          <FontAwesomeIcon icon={faTicket} className='fa' />
+          Coupon
         </Link>
       </div>
     </div>

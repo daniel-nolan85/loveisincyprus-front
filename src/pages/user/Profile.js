@@ -340,6 +340,9 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
+        if (res.data === 0) {
+          setMorePosts(false);
+        }
         setTotalPosts(res.data);
         // if (totalPosts < 10) {
         //   setMorePosts(false);

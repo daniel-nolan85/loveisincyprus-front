@@ -65,7 +65,10 @@ const UserDashboard = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
+        if (res.data === 0) {
+          setMorePosts(false);
+        }
         setFollowersPosts(res.data);
       })
       .catch((err) => {
