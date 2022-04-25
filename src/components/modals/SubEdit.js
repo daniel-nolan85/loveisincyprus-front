@@ -15,15 +15,19 @@ const SubEdit = ({
   loading,
   setLoading,
   loadSubs,
+  category,
+  setCategory,
+  categories,
 }) => {
   const [name, setName] = useState(subToEdit.name);
+  const [parent, setParent] = useState(subToEdit.parent);
 
   let { user } = useSelector((state) => ({ ...state }));
 
   const editSub = async (e, sub) => {
     e.preventDefault();
     setLoading(true);
-    updateSub(sub.slug, { name }, user.token)
+    updateSub(sub.slug, { name, parent: category }, user.token)
       .then((res) => {
         setLoading(false);
         toast.success(`${res.data.name} has been updated`, {
@@ -46,9 +50,25 @@ const SubEdit = ({
   const subForm = () => (
     <div className='form-box sub update'>
       <div className='button-box'>
-        <p className='form-header'>Update Sub-Category</p>
+        <p className='form-header sub'>Update Sub-Category</p>
       </div>
       <form>
+        <div>
+          <label>Category</label>
+          <select name='category' onChange={(e) => setCategory(e.target.value)}>
+            <option>Please select</option>
+            {categories.length > 0 &&
+              categories.map((c) => (
+                <option
+                  key={c._id}
+                  value={c._id}
+                  selected={c._id === subToEdit.parent}
+                >
+                  {c.name}
+                </option>
+              ))}
+          </select>
+        </div>
         <input
           type='text'
           className='input-field'

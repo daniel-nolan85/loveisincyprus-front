@@ -18,6 +18,7 @@ import SubEdit from '../../components/modals/SubEdit';
 const Sub = () => {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [category, setCategory] = useState('');
   const [categories, setCategories] = useState([]);
   const [subs, setSubs] = useState([]);
   const [subDeleteModalIsOpen, setSubDeleteModalIsOpen] = useState(false);
@@ -30,20 +31,18 @@ const Sub = () => {
 
   useEffect(() => {
     loadCategories();
-  }, []);
-
-  useEffect(() => {
     loadSubs();
   }, []);
 
   const loadCategories = () =>
     getCategories().then((c) => setCategories(c.data));
+
   const loadSubs = () => getSubs().then((s) => setSubs(s.data));
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    createSub({ name }, user.token)
+    createSub({ name, parent: category }, user.token)
       .then((res) => {
         setLoading(false);
         setName('');
@@ -71,6 +70,7 @@ const Sub = () => {
   const handleEdit = async (sub) => {
     setSubEditModalIsOpen(true);
     setSubToEdit(sub);
+    console.log(sub);
   };
 
   const handleSearch = (e) => {
@@ -129,12 +129,18 @@ const Sub = () => {
         </div>
         <div>
           <label>Category</label>
-          <select name='category'>
+          <select name='category' onChange={(e) => setCategory(e.target.value)}>
+            <option>Please select</option>
             {categories.length > 0 &&
-              categories.map((c) => <option key={c._id} value={}>{c.name}</option>)}
+              categories.map((c) => (
+                <option key={c._id} value={c._id}>
+                  {c.name}
+                </option>
+              ))}
           </select>
         </div>
-        {/* <div className='admin-cards'>
+
+        <div className='admin-cards'>
           {subs.filter(searched(query)).map((s) => (
             <div className='admin-card' key={s._id}>
               <h3>{s.name}</h3>
@@ -150,7 +156,7 @@ const Sub = () => {
               />
             </div>
           ))}
-        </div> */}
+        </div>
         <SubDelete
           subDeleteModalIsOpen={subDeleteModalIsOpen}
           setSubDeleteModalIsOpen={setSubDeleteModalIsOpen}
@@ -168,6 +174,9 @@ const Sub = () => {
           loading={loading}
           setLoading={setLoading}
           loadSubs={loadSubs}
+          category={category}
+          setCategory={setCategory}
+          categories={categories}
         />
       </div>
     </div>

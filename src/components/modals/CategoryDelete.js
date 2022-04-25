@@ -63,6 +63,7 @@ const CategoryDelete = ({
     >
       <div className='match'>
         <h1>Are you sure you want to delete {name}?</h1>
+        <p>This will permanently delete all related sub-categories as well</p>
         <br />
         <button
           className='submit-btn'

@@ -1125,6 +1125,12 @@ nav {
   height: 180px;
 }
 
+.form-box.sub.update {
+  width: 350px;
+  margin-top: 20px;
+  height: 350px;
+}
+
 .form-box.category .button-box {
   margin: 0 auto;
 }
@@ -1134,7 +1140,7 @@ nav {
 }
 
 .form-box.category .form-header.sub {
-  width: 220px;
+  width: 240px;
 }
 
 .form-box.category .submit-btn {
