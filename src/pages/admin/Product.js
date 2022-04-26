@@ -12,7 +12,7 @@ import {
   faTrashCan,
   faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
-
+import FileUpload from '../../components/forms/FileUpload';
 import { Select } from 'antd';
 
 const { Option } = Select;
@@ -100,6 +100,12 @@ const Product = () => {
       <div className='button-box'>
         <p className='form-header'>Create Product</p>
       </div>
+      {/* {JSON.stringify(values.images)} */}
+      <FileUpload
+        values={values}
+        setValues={setValues}
+        // setLoading={setLoading}
+      />
       <form>
         <input
           type='text'

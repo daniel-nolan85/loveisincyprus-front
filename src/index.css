@@ -593,6 +593,26 @@ nav {
   border-radius: 50%;
 }
 
+.add-post-links .uploaded-imgs {
+  position: relative;
+}
+
+.add-post-links .delete {
+  height: 10px;
+  width: 12px;
+  border: 1px solid #c70000;
+  border-radius: 50%;
+  background-color: #c70000;
+  color: #fff;
+  text-align: center;
+  font-size: 8px;
+  padding-bottom: 10px;
+  position: absolute;
+  left: 35px;
+  top: 3px;
+  cursor: pointer;
+}
+
 .add-post-links .fa {
   color: var(--nav-color);
   margin-right: 30px;
