@@ -53,22 +53,19 @@ const SubEdit = ({
         <p className='form-header sub'>Update Sub-Category</p>
       </div>
       <form>
-        <div>
-          <label>Category</label>
-          <select name='category' onChange={(e) => setCategory(e.target.value)}>
-            <option>Please select</option>
-            {categories.length > 0 &&
-              categories.map((c) => (
-                <option
-                  key={c._id}
-                  value={c._id}
-                  selected={c._id === subToEdit.parent}
-                >
-                  {c.name}
-                </option>
-              ))}
-          </select>
-        </div>
+        <select name='category' onChange={(e) => setCategory(e.target.value)}>
+          <option>Select a category</option>
+          {categories.length > 0 &&
+            categories.map((c) => (
+              <option
+                key={c._id}
+                value={c._id}
+                selected={c._id === subToEdit.parent}
+              >
+                {c.name}
+              </option>
+            ))}
+        </select>
         <input
           type='text'
           className='input-field'

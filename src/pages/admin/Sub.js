@@ -96,6 +96,19 @@ const Sub = () => {
           required
           // disabled={loading}
         />
+        <select
+          name='category'
+          className='gray'
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <option>Select a category</option>
+          {categories.length > 0 &&
+            categories.map((c) => (
+              <option key={c._id} value={c._id}>
+                {c.name}
+              </option>
+            ))}
+        </select>
         <button
           onClick={handleSubmit}
           type='submit'
@@ -127,18 +140,7 @@ const Sub = () => {
             value={query}
           />
         </div>
-        <div>
-          <label>Category</label>
-          <select name='category' onChange={(e) => setCategory(e.target.value)}>
-            <option>Please select</option>
-            {categories.length > 0 &&
-              categories.map((c) => (
-                <option key={c._id} value={c._id}>
-                  {c.name}
-                </option>
-              ))}
-          </select>
-        </div>
+        <br />
 
         <div className='admin-cards'>
           {subs.filter(searched(query)).map((s) => (

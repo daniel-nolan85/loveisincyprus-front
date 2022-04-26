@@ -32,17 +32,17 @@ const LeftSidebar = () => {
           <FontAwesomeIcon icon={faEarthAmericas} className='fa' />
           Geo-Block
         </Link>
-        <Link to='/admin/products'>
+        <Link to='/admin/product'>
           <FontAwesomeIcon icon={faShirt} className='fa' />
           Products
         </Link>
         <Link to='/admin/category'>
           <FontAwesomeIcon icon={faTag} className='fa' />
-          Category
+          Categories
         </Link>
         <Link to='/admin/sub'>
           <FontAwesomeIcon icon={faTags} className='fa' />
-          Sub-Category
+          Sub-Categories
         </Link>
         <Link to='/admin/coupon'>
           <FontAwesomeIcon icon={faTicket} className='fa' />

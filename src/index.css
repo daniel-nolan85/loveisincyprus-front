@@ -1115,7 +1115,7 @@ nav {
 }
 
 .form-box.category {
-  height: 200px;
+  height: 250px;
   margin: 0 auto;
 }
 
@@ -1139,12 +1139,20 @@ nav {
   margin: 0 auto;
 }
 
-.form-box.category .form-header.sub {
+.form-header.sub {
   width: 240px;
 }
 
 .form-box.category .submit-btn {
   width: 150px;
+}
+
+.form-box.product {
+  height: 500px;
+}
+
+select.gray {
+  background: var(--body-color);
 }
 
 /* --------------- profile-page --------------- */

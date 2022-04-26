@@ -37,6 +37,7 @@ import Photos from './pages/user/Photos';
 import GeoBlock from './pages/admin/GeoBlock';
 import Category from './pages/admin/Category';
 import Sub from './pages/admin/Sub';
+import Product from './pages/admin/Product';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -150,6 +151,7 @@ const App = () => {
         <AdminRoute exact path='/admin/geo-block' component={GeoBlock} />
         <AdminRoute exact path='/admin/category' component={Category} />
         <AdminRoute exact path='/admin/sub' component={Sub} />
+        <AdminRoute exact path='/admin/product' component={Product} />
       </Switch>
       {/* </Suspense> */}
     </>
