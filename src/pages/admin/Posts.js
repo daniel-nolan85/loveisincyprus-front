@@ -122,7 +122,11 @@ const Posts = () => {
                   <h3>
                     {post.postedBy.name || post.postedBy.email.split('@')[0]}
                   </h3>
-                  <p>{post.content}</p>
+                  <p>
+                    {post.content.length > 100
+                      ? `${post.content.substring(0, 100)}...`
+                      : post.content}
+                  </p>
                 </div>
                 {post.image && (
                   <img

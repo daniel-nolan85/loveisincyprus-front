@@ -3,7 +3,12 @@ import LeftSidebar from '../../components/admin/LeftSidebar';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { getCategories, getCategorySubs } from '../../functions/category';
-import { createProduct } from '../../functions/product';
+import {
+  createProduct,
+  getProductsByCount,
+  removeProduct,
+  updateProduct,
+} from '../../functions/product';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSpinner,
@@ -13,6 +18,8 @@ import {
   faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
 import FileUpload from '../../components/forms/FileUpload';
+import ProductDelete from '../../components/modals/ProductDelete';
+import ProductEdit from '../../components/modals/ProductEdit';
 import { Select } from 'antd';
 
 const { Option } = Select;
@@ -33,26 +40,34 @@ const Product = () => {
   const [loading, setLoading] = useState(false);
   const [subOptions, setSubOptions] = useState([]);
   const [showSub, setShowSub] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [productDeleteModalIsOpen, setProductDeleteModalIsOpen] =
+    useState(false);
+  const [productToDelete, setProductToDelete] = useState({});
+  const [productEditModalIsOpen, setProductEditModalIsOpen] = useState(false);
+  const [productToEdit, setProductToEdit] = useState({});
+  const [query, setQuery] = useState('');
 
   const { user } = useSelector((state) => ({ ...state }));
 
   useEffect(() => {
     loadCategories();
+    loadAllProducts();
   }, []);
 
   const loadCategories = () =>
     getCategories().then((c) => setValues({ ...values, categories: c.data }));
 
-  const {
-    title,
-    description,
-    price,
-    category,
-    categories,
-    subs,
-    quantity,
-    images,
-  } = values;
+  const loadAllProducts = () => {
+    getProductsByCount(100)
+      .then((res) => {
+        // console.log(res.data);
+        setProducts(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -65,6 +80,7 @@ const Product = () => {
           position: toast.POSITION.TOP_CENTER,
         });
         setValues(initialState);
+        loadAllProducts();
       })
       .catch((err) => {
         console.log(err);
@@ -95,17 +111,41 @@ const Product = () => {
   //   console.log(subs);
   // };
 
+  const handleDelete = async (product) => {
+    setProductDeleteModalIsOpen(true);
+    setProductToDelete(product);
+  };
+
+  const handleEdit = async (slug) => {
+    setProductEditModalIsOpen(true);
+    setProductToEdit(slug);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setQuery(e.target.value.toLowerCase());
+  };
+
+  const searched = (query) => (p) => p.title.toLowerCase().includes(query);
+
+  const {
+    title,
+    description,
+    price,
+    category,
+    categories,
+    subs,
+    quantity,
+    images,
+  } = values;
+
   const productForm = () => (
     <div className='form-box category product'>
       <div className='button-box'>
         <p className='form-header'>Create Product</p>
       </div>
       {/* {JSON.stringify(values.images)} */}
-      <FileUpload
-        values={values}
-        setValues={setValues}
-        // setLoading={setLoading}
-      />
+      <FileUpload values={values} setValues={setValues} />
       <form>
         <input
           type='text'
@@ -216,45 +256,59 @@ const Product = () => {
           <input
             type='search'
             placeholder='Search Products'
-            // onChange={handleSearch}
-            // value={query}
+            onChange={handleSearch}
+            value={query}
           />
         </div>
         <div className='admin-cards'>
-          {/* {categories.filter(searched(query)).map((c) => (
-        <div className='admin-card' key={c._id}>
-          <h3>{c.name}</h3>
-          <FontAwesomeIcon
-            icon={faTrashCan}
-            className='fa trash'
-            onClick={() => handleDelete(c)}
-          />
-          <FontAwesomeIcon
-            icon={faEdit}
-            className='fa update'
-            onClick={() => handleEdit(c)}
-          />
+          {products.filter(searched(query)).map((p) => (
+            <div className='admin-card' key={p._id}>
+              <div>
+                <h3>{p.title}</h3>
+                <p>
+                  {p.description && p.description.length > 100
+                    ? `${p.description.substring(0, 100)}...`
+                    : p.description}
+                </p>
+              </div>
+              {p.images.length > 0 && (
+                <img
+                  src={p.images[0].url}
+                  alt={`${p.title} image`}
+                  className='admin-post-img'
+                />
+              )}
+              <FontAwesomeIcon
+                icon={faTrashCan}
+                className='fa trash'
+                onClick={() => handleDelete(p)}
+              />
+              <FontAwesomeIcon
+                icon={faEdit}
+                className='fa update'
+                onClick={() => handleEdit(p.slug)}
+              />
+            </div>
+          ))}
         </div>
-      ))} */}
-        </div>
-        {/* <CategoryDelete
-      categoryDeleteModalIsOpen={categoryDeleteModalIsOpen}
-      setCategoryDeleteModalIsOpen={setCategoryDeleteModalIsOpen}
-      categoryToDelete={categoryToDelete}
-      removeCategory={removeCategory}
-      loading={loading}
-      setLoading={setLoading}
-      loadCategories={loadCategories}
-    />
-    <CategoryEdit
-      categoryEditModalIsOpen={categoryEditModalIsOpen}
-      setCategoryEditModalIsOpen={setCategoryEditModalIsOpen}
-      categoryToEdit={categoryToEdit}
-      updateCategory={updateCategory}
-      loading={loading}
-      setLoading={setLoading}
-      loadCategories={loadCategories}
-    /> */}
+        <ProductDelete
+          productDeleteModalIsOpen={productDeleteModalIsOpen}
+          setProductDeleteModalIsOpen={setProductDeleteModalIsOpen}
+          productToDelete={productToDelete}
+          removeProduct={removeProduct}
+          loading={loading}
+          setLoading={setLoading}
+          loadAllProducts={loadAllProducts}
+        />
+        <ProductEdit
+          productEditModalIsOpen={productEditModalIsOpen}
+          setProductEditModalIsOpen={setProductEditModalIsOpen}
+          productToEdit={productToEdit}
+          updateProduct={updateProduct}
+          loading={loading}
+          setLoading={setLoading}
+          loadAllProducts={loadAllProducts}
+        />
       </div>
     </div>
   );

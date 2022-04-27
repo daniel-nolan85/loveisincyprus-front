@@ -70,6 +70,10 @@ nav {
   color: #626262;
 }
 
+.nav-left ul {
+  margin-top: 17px;
+}
+
 .tooltip {
   position: relative;
 }
@@ -1139,6 +1143,12 @@ nav {
   margin: 0 auto;
 }
 
+.form-box.product.update {
+  height: 550px;
+  width: 350px;
+  margin: 0 auto;
+}
+
 .form-box.category.update {
   width: 350px;
   margin-top: 20px;
@@ -1909,6 +1919,42 @@ input[name='Photos'] {
   font-size: 40px;
   font-weight: bold;
   vertical-align: middle;
+}
+
+/* --------------- shop pages --------------- */
+.product-cards {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.product-card {
+  width: 300px;
+  margin-top: 20px;
+}
+
+.product-image {
+  height: 250px;
+  object-fit: cover;
+}
+
+.product-card .fa {
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.product-card .fa.view {
+  color: var(--nav-color);
+}
+
+.product-card .fa.add {
+  color: #7cfc00;
+}
+
+.product-card .fa.minus {
+  color: #c70000;
 }
 
 /* --------------- information pages --------------- */

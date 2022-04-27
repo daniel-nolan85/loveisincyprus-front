@@ -9,6 +9,7 @@ import {
   faMessage,
   faNewspaper,
   faRightToBracket,
+  faShop,
   faToolbox,
 } from '@fortawesome/free-solid-svg-icons';
 import SettingsMenu from './SettingsMenu';
@@ -85,6 +86,14 @@ const Header = () => {
                   <Link to='/admin/users'>Users</Link>
                   <br />
                   <Link to='/admin/geo-block'>Geo-Block</Link>
+                  <br />
+                  <Link to='/admin/product'>Products</Link>
+                  <br />
+                  <Link to='/admin/category'>Categories</Link>
+                  <br />
+                  <Link to='/admin/sub'>Sub-Categories</Link>
+                  <br />
+                  <Link to='/admin/coupon'>Coupon</Link>
                 </div>
               </div>
             )}
@@ -112,6 +121,12 @@ const Header = () => {
             </ul>
           </>
         )}
+        <Link to='/shop'>
+          <div className='tooltip'>
+            <FontAwesomeIcon icon={faShop} className='menu-icon ' />
+            <span className='tooltip-text'>Shop</span>
+          </div>
+        </Link>
         <div className='settings-links dropdown'>
           <FontAwesomeIcon icon={faCircleInfo} className='menu-icon' />
           <div className='dropdown-content information'>

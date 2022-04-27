@@ -38,6 +38,7 @@ import GeoBlock from './pages/admin/GeoBlock';
 import Category from './pages/admin/Category';
 import Sub from './pages/admin/Sub';
 import Product from './pages/admin/Product';
+import Shop from './pages/user/Shop';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -135,6 +136,7 @@ const App = () => {
         <Route exact path='/relationship-coaching' component={RelCoach} />
         <Route exact path='/privacy-policy' component={PrivacyPolicy} />
         <Route exact path='/terms-and-conditions' component={TsAndCs} />
+        <Route exact path='/shop' component={Shop} />
         <UserRoute exact path='/change/password' component={ChangePassword} />
         <UserRoute exact path='/user/dashboard' component={UserDashboard} />
         <UserRoute exact path='/user/profile/:userId' component={Profile} />
