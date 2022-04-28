@@ -27,6 +27,7 @@
     "react-infinite-scroll-component": "^6.1.0",
     "react-modal": "^3.14.4",
     "react-redux": "^7.2.6",
+    "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3",
     "react-tinder-card": "^1.4.5",

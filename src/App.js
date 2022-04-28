@@ -37,8 +37,9 @@ import Photos from './pages/user/Photos';
 import GeoBlock from './pages/admin/GeoBlock';
 import Category from './pages/admin/Category';
 import Sub from './pages/admin/Sub';
-import Product from './pages/admin/Product';
+import Products from './pages/admin/Products';
 import Shop from './pages/user/Shop';
+import Product from './pages/user/Product';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -137,6 +138,7 @@ const App = () => {
         <Route exact path='/privacy-policy' component={PrivacyPolicy} />
         <Route exact path='/terms-and-conditions' component={TsAndCs} />
         <Route exact path='/shop' component={Shop} />
+        <Route exact path='/product/:slug' component={Product} />
         <UserRoute exact path='/change/password' component={ChangePassword} />
         <UserRoute exact path='/user/dashboard' component={UserDashboard} />
         <UserRoute exact path='/user/profile/:userId' component={Profile} />
@@ -153,7 +155,7 @@ const App = () => {
         <AdminRoute exact path='/admin/geo-block' component={GeoBlock} />
         <AdminRoute exact path='/admin/category' component={Category} />
         <AdminRoute exact path='/admin/sub' component={Sub} />
-        <AdminRoute exact path='/admin/product' component={Product} />
+        <AdminRoute exact path='/admin/product' component={Products} />
       </Switch>
       {/* </Suspense> */}
     </>
