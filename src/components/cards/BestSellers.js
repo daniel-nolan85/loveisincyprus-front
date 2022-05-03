@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getProducts, getProductsCount } from '../../functions/product';
-import Product from './Product';
+import ProductInfo from './ProductInfo';
 import LoadingCard from './LoadingCard';
 import { Pagination } from 'antd';
 
@@ -43,7 +43,7 @@ const BestSellers = () => {
               {products &&
                 products.map((product) => (
                   <div className='product-card' key={product._id}>
-                    <Product product={product} />
+                    <ProductInfo product={product} />
                   </div>
                 ))}
             </>

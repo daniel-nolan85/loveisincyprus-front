@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { auth, googleAuthProvider } from '../../firebase';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -9,7 +9,7 @@ import {
   faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { createOrUpdateUser } from '../../functions/auth';
 
@@ -20,14 +20,29 @@ const Login = () => {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const { user } = useSelector((state) => ({ ...state }));
+
   let dispatch = useDispatch();
   let history = useHistory();
 
-  const roleBasedRedirect = (res) => {
-    if (res.data.role === 'admin') {
-      history.push('/admin/dashboard');
+  let intended = history.location.state;
+  useEffect(() => {
+    if (intended) {
+      return;
     } else {
-      history.push('/user/dashboard');
+      if (user && user.token) history.push('/');
+    }
+  }, [user, history]);
+
+  const roleBasedRedirect = (res) => {
+    if (intended) {
+      history.push(intended.from);
+    } else {
+      if (res.data.role === 'admin') {
+        history.push('/admin/dashboard');
+      } else {
+        history.push('/user/dashboard');
+      }
     }
   };
 

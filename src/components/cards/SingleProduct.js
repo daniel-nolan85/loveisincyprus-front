@@ -4,18 +4,21 @@ import {
   faCartShopping,
   faCartArrowDown,
   faHeart,
-  faStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import defaultItem from '../../assets/defaultItem.png';
+import StarRating from 'react-star-ratings';
+import Rating from '../modals/Rating';
 import { Card, Tabs } from 'antd';
+import { showAverage } from '../../functions/rating';
 
 const { TabPane } = Tabs;
 
-const SingleProduct = ({ product }) => {
-  const { title, description, images, slug, price, category, subs } = product;
+const SingleProduct = ({ product, onStarClick, star }) => {
+  const { title, description, images, slug, price, category, subs, _id } =
+    product;
   return (
     <div className='small-container single-product'>
       <div className='row'>
@@ -45,12 +48,26 @@ const SingleProduct = ({ product }) => {
                   <span className='tooltip-text'>Add to Wishlist</span>
                 </div>
               </Link>,
+              <Rating>
+                <StarRating
+                  name={_id}
+                  numberOfStars={5}
+                  rating={star}
+                  changeRating={onStarClick}
+                  isSelectable={false}
+                  starRatedColor='gold'
+                  starHoverColor='gold'
+                />
+              </Rating>,
             ]}
           >
             <h1>{title}</h1>
+            {product && product.ratings && product.ratings.length > 0
+              ? showAverage(product)
+              : 'No rating yet'}
+            <br />
             <h4>&euro;{price}</h4>
             <br />
-            <h5>Star rating</h5>
             {category && (
               <div className='cat-links'>
                 <p>Category:</p>

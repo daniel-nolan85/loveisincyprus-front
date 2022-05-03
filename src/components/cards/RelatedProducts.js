@@ -1,6 +1,7 @@
 import React from 'react';
+import ProductInfo from './ProductInfo';
 
-const RelatedProducts = () => {
+const RelatedProducts = ({ related, product }) => {
   return (
     <div>
       <div className='small-container'>
@@ -11,22 +12,28 @@ const RelatedProducts = () => {
       </div>
       <div className='small-container'>
         <div className='row'>
-          <div className='col-4'>
-            <a href='product-details.html'>
-              <img src='images/product-9.jpg' />
-            </a>
-            <a href='product-details.html'>
-              <h4>Leather Strap Watch</h4>
-            </a>
-            <div className='rating'>
-              <i className='fa fa-star' />
-              <i className='fa fa-star' />
-              <i className='fa fa-star' />
-              <i className='fa fa-star-half-o' />
-              <i className='fa fa-star-o' />
-            </div>
-            <p>£80.00</p>
-          </div>
+          {related.length
+            ? related.map((r) => (
+                <div className='col-4' key={r._id}>
+                  <ProductInfo product={r} />
+                  <a href='product-details.html'>
+                    <img src='images/product-9.jpg' />
+                  </a>
+                  <a href='product-details.html'>
+                    <h4>Leather Strap Watch</h4>
+                  </a>
+                  <div className='rating'>
+                    <i className='fa fa-star' />
+                    <i className='fa fa-star' />
+                    <i className='fa fa-star' />
+                    <i className='fa fa-star-half-o' />
+                    <i className='fa fa-star-o' />
+                  </div>
+                  <p>£80.00</p>
+                </div>
+              ))
+            : 'No related products found'}
+
           <div className='col-4'>
             <a href='product-details.html'>
               <img src='images/product-10.jpg' />

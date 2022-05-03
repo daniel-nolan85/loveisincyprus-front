@@ -2007,11 +2007,6 @@ input[name='Photos'] {
   font-weight: bold;
 }
 
-.single-product h5 {
-  font-size: 18px;
-  margin-bottom: 35px;
-}
-
 .single-product a {
   color: var(--nav-color);
   font-weight: bold;
@@ -2032,6 +2027,11 @@ input[name='Photos'] {
 .ant-tabs-tab-btn,
 .ant-tabs-tab-active {
   color: var(--nav-color) !important;
+}
+
+.home-rating {
+  text-align: center;
+  margin-bottom: 10px;
 }
 
 /* --------------- information pages --------------- */
