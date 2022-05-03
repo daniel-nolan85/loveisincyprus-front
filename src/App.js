@@ -40,6 +40,8 @@ import Sub from './pages/admin/Sub';
 import Products from './pages/admin/Products';
 import Shop from './pages/user/Shop';
 import Product from './pages/user/Product';
+import CategoryHome from './pages/user/CategoryHome';
+import SubHome from './pages/user/SubHome';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -139,6 +141,8 @@ const App = () => {
         <Route exact path='/terms-and-conditions' component={TsAndCs} />
         <Route exact path='/shop' component={Shop} />
         <Route exact path='/product/:slug' component={Product} />
+        <Route exact path='/category/:slug' component={CategoryHome} />
+        <Route exact path='/sub/:slug' component={SubHome} />
         <UserRoute exact path='/change/password' component={ChangePassword} />
         <UserRoute exact path='/user/dashboard' component={UserDashboard} />
         <UserRoute exact path='/user/profile/:userId' component={Profile} />

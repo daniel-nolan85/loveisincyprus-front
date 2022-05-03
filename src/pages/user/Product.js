@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import RelatedProducts from '../../components/cards/RelatedProducts';
 import SingleProduct from '../../components/cards/SingleProduct';
 import ProductInfo from '../../components/cards/ProductInfo';
 import { getProduct, productStar, getRelated } from '../../functions/product';
@@ -46,26 +45,17 @@ const Product = ({ match }) => {
     <>
       <SingleProduct product={product} onStarClick={onStarClick} star={star} />
       <div>
-        <div className='small-container'>
-          <div className='row row-2'>
-            <h2>Related Products</h2>
-            <p>View More</p>
-          </div>
-        </div>
-        <div className='small-container'>
-          <div className='row'>
-            {related.length
-              ? related.map((r) => (
-                  <div className='col-4' key={r._id}>
-                    <ProductInfo product={r} />
-                  </div>
-                ))
-              : 'No related products found'}
-          </div>
+        <h1 className='center'>Related Products</h1>
+        <div className='container'>
+          {related.length
+            ? related.map((r) => (
+                <div className='product-card' key={r._id}>
+                  <ProductInfo product={r} />
+                </div>
+              ))
+            : 'No related products found'}
         </div>
       </div>
-      {/* <RelatedProducts related={related} product={product} /> */}
-      {/* {JSON.stringify(related, null, 4)} */}
     </>
   );
 };
