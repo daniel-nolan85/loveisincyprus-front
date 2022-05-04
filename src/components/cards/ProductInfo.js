@@ -13,7 +13,17 @@ import { showAverage } from '../../functions/rating';
 const { Meta } = Card;
 
 const ProductInfo = ({ product }) => {
-  const { title, description, images, slug } = product;
+  const handleAddToCart = () => {
+    let cart = [];
+    if (typeof window !== 'undefined') {
+      if (localStorage.getItem('cart')) {
+        cart = JSON.parse(localStorage.getItem('cart'));
+      }
+      cart.push({ ...product, count: 1 });
+    }
+  };
+
+  const { title, description, images, slug, price } = product;
 
   return (
     <>
@@ -36,14 +46,20 @@ const ProductInfo = ({ product }) => {
               <span className='tooltip-text'>View Product</span>
             </div>
           </Link>,
-          <div className='tooltip'>
+          <div className='tooltip' onClick={handleAddToCart}>
             <FontAwesomeIcon icon={faCartShopping} className='fa add' />,
             <span className='tooltip-text'>Add to Cart</span>
           </div>,
         ]}
       >
         <Meta
-          title={title}
+          title={
+            <>
+              <span>{title}</span>
+              <br />
+              <span>€{price}</span>
+            </>
+          }
           description={
             description && description.length > 50
               ? `${description.substring(0, 50)}...`

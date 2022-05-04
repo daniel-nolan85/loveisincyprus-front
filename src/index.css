@@ -360,6 +360,7 @@ nav {
 .imp-links {
   border-bottom: 1px solid #ccc;
   position: relative;
+  margin-bottom: 30px;
 }
 
 .imp-links span {
@@ -370,6 +371,17 @@ nav {
   width: 25px;
   text-align: center;
   color: #fff;
+}
+
+.shortcut-links .search-box {
+  padding: 10px;
+  margin: 0 0 30px;
+  border: 1px solid #efefef;
+  background-color: #fff;
+}
+
+.shortcut-links .search-box input {
+  padding: 0 15px 0;
 }
 
 .shortcut-links p {
@@ -744,9 +756,6 @@ nav {
 .comments-container-inner {
   margin-bottom: 20px;
 }
-
-/* .back {
-} */
 
 .footer {
   background-image: url('./assets/footer.jpg');
@@ -2032,6 +2041,15 @@ input[name='Photos'] {
 .home-rating {
   text-align: center;
   margin-bottom: 10px;
+}
+
+.badge {
+  border: 1px solid var(--nav-color);
+  background-color: var(--nav-color);
+  color: #fff;
+  padding: 10px 5px;
+  margin: 5px;
+  cursor: pointer;
 }
 
 /* --------------- information pages --------------- */
