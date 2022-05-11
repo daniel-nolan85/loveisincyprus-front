@@ -67,7 +67,7 @@ const AdminDashboard = () => {
 
           <div className='admin-card'>
             <div>
-              <h1>&euro;25,000</h1>
+              <h1>€25,000</h1>
               <h3>Income</h3>
             </div>
             <FontAwesomeIcon icon={faMoneyBill1Wave} className='fa' />
@@ -95,7 +95,7 @@ const AdminDashboard = () => {
                 <tr>
                   <td>John Doe</td>
                   <td>0123456789</td>
-                  <td>&euro;120</td>
+                  <td>€120</td>
                   <td>
                     <Link to='#'>View</Link>
                   </td>
@@ -103,7 +103,7 @@ const AdminDashboard = () => {
                 <tr>
                   <td>John Doe</td>
                   <td>0123456789</td>
-                  <td>&euro;120</td>
+                  <td>€120</td>
                   <td>
                     <Link to='#'>View</Link>
                   </td>
@@ -111,7 +111,7 @@ const AdminDashboard = () => {
                 <tr>
                   <td>John Doe</td>
                   <td>0123456789</td>
-                  <td>&euro;120</td>
+                  <td>€120</td>
                   <td>
                     <Link to='#'>View</Link>
                   </td>
@@ -119,7 +119,7 @@ const AdminDashboard = () => {
                 <tr>
                   <td>John Doe</td>
                   <td>0123456789</td>
-                  <td>&euro;120</td>
+                  <td>€120</td>
                   <td>
                     <Link to='#'>View</Link>
                   </td>
@@ -127,7 +127,7 @@ const AdminDashboard = () => {
                 <tr>
                   <td>John Doe</td>
                   <td>0123456789</td>
-                  <td>&euro;120</td>
+                  <td>€120</td>
                   <td>
                     <Link to='#'>View</Link>
                   </td>
@@ -135,7 +135,7 @@ const AdminDashboard = () => {
                 <tr>
                   <td>John Doe</td>
                   <td>0123456789</td>
-                  <td>&euro;120</td>
+                  <td>€120</td>
                   <td>
                     <Link to='#'>View</Link>
                   </td>

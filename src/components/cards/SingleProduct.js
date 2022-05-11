@@ -114,7 +114,7 @@ const SingleProduct = ({ product, onStarClick, star }) => {
               ? showAverage(product)
               : 'No rating yet'}
             <br />
-            <h4>&euro;{price}</h4>
+            <h4>€{price}</h4>
             <br />
             {category && (
               <div className='cat-links'>
