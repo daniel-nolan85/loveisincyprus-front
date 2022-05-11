@@ -1988,6 +1988,17 @@ input[name='Photos'] {
   color: #c70000;
 }
 
+.out-of-stock,
+.add-to-cart {
+  border: none;
+  background: none;
+}
+
+.fa.out {
+  cursor: not-allowed;
+  color: #ccc;
+}
+
 .small-container {
   max-width: 1080px;
   margin: auto;
@@ -2054,6 +2065,23 @@ input[name='Photos'] {
 .ant-tabs-tab-btn,
 .ant-tabs-tab-active {
   color: var(--nav-color) !important;
+}
+
+.ant-pagination-item-active a,
+.ant-pagination-item a:hover,
+.ant-pagination-item-link:hover {
+  color: var(--nav-color) !important;
+}
+
+.ant-pagination-item-active,
+.ant-pagination-item:hover,
+.ant-pagination-item-link:hover {
+  border-color: var(--nav-color) !important;
+}
+
+.antd-pagination {
+  text-align: center;
+  margin-bottom: 60px;
 }
 
 .home-rating {
@@ -2141,6 +2169,7 @@ td a {
   border-radius: 7px;
   padding: 40px;
 }
+
 .stripe-input {
   border-radius: 6px;
   margin-bottom: 6px;
@@ -2152,18 +2181,22 @@ td a {
   background: white;
   box-sizing: border-box;
 }
+
 .result-message {
   line-height: 22px;
   font-size: 16px;
 }
+
 .result-message a {
   color: rgb(89, 111, 214);
   font-weight: 600;
   text-decoration: none;
 }
+
 .hidden {
   display: none;
 }
+
 #card-error {
   color: rgb(105, 115, 134);
   font-size: 16px;
@@ -2171,6 +2204,7 @@ td a {
   margin-top: 12px;
   text-align: center;
 }
+
 #card-element {
   border-radius: 4px 4px 0 0;
   padding: 12px;
@@ -2180,9 +2214,11 @@ td a {
   background: white;
   box-sizing: border-box;
 }
+
 #payment-request-button {
   margin-bottom: 32px;
 }
+
 /* Buttons and links */
 .stripe-button {
   background: #5469d4;
@@ -2199,19 +2235,23 @@ td a {
   box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
   width: 100%;
 }
+
 button:hover {
   filter: contrast(115%);
 }
+
 .stripe-button:disabled {
   opacity: 0.5;
   cursor: default;
 }
+
 /* spinner/processing state, errors */
 .spinner,
 .spinner:before,
 .spinner:after {
   border-radius: 50%;
 }
+
 .spinner {
   color: #ffffff;
   font-size: 22px;
@@ -2225,11 +2265,13 @@ button:hover {
   -ms-transform: translateZ(0);
   transform: translateZ(0);
 }
+
 .spinner:before,
 .spinner:after {
   position: absolute;
   content: '';
 }
+
 .spinner:before {
   width: 10.4px;
   height: 20.4px;
@@ -2242,6 +2284,7 @@ button:hover {
   -webkit-animation: loading 2s infinite ease 1.5s;
   animation: loading 2s infinite ease 1.5s;
 }
+
 .spinner:after {
   width: 10.4px;
   height: 10.2px;
@@ -2254,6 +2297,7 @@ button:hover {
   -webkit-animation: loading 2s infinite ease;
   animation: loading 2s infinite ease;
 }
+
 @keyframes loading {
   0% {
     -webkit-transform: rotate(0deg);
@@ -2264,6 +2308,7 @@ button:hover {
     transform: rotate(360deg);
   }
 }
+
 @media only screen and (max-width: 600px) {
   form {
     width: 80vw;

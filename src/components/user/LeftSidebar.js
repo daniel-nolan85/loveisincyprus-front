@@ -89,11 +89,11 @@ const LeftSidebar = () => {
         </form>
         {user && (
           <>
-            <Link to='/user/history'>
+            <Link to='/purchase/history'>
               <FontAwesomeIcon icon={faBagShopping} className='fa' />
               Purchase History
             </Link>
-            <Link to='/user/wishlist'>
+            <Link to='/wishlist'>
               <FontAwesomeIcon icon={faStar} className='fa' />
               Wishlist
             </Link>

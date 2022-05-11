@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { useSelector, useDispatch } from 'react-redux';
 import { createPaymentIntent } from '../../functions/stripe';
+import { createOrder, emptyUserCart } from '../../functions/user';
 import { Link } from 'react-router-dom';
 import { Card } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -50,6 +51,20 @@ const StripeCheckout = ({ history }) => {
       setError(`Payment failed ${payload.error.message}`);
       setProcessing(false);
     } else {
+      createOrder(payload, user.token).then((res) => {
+        if (res.data.ok) {
+          if (typeof window !== 'undefined') localStorage.removeItem('cart');
+          dispatch({
+            type: 'ADD_TO_CART',
+            payload: [],
+          });
+          dispatch({
+            type: 'COUPON_APPLIED',
+            payload: false,
+          });
+          emptyUserCart(user.token);
+        }
+      });
       console.log(JSON.stringify(payload, null, 4));
       setError(null);
       setProcessing(false);
@@ -135,7 +150,8 @@ const StripeCheckout = ({ history }) => {
         <br />
         {error && <div>{error}</div>}
         <p className={succeeded ? 'result-message' : 'result-message hidden'}>
-          Payment Successful. <Link to='payment/history'>View history</Link>
+          Payment Successful.{' '}
+          <Link to='purchase/history'>View purchase history</Link>
         </p>
       </form>
     </>

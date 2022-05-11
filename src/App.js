@@ -48,6 +48,7 @@ import Cart from './pages/user/Cart';
 import Checkout from './pages/user/Checkout';
 import Coupon from './pages/admin/Coupon';
 import Payment from './pages/user/Payment';
+import PurchaseHistory from './pages/user/PurchaseHistory';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -164,6 +165,7 @@ const App = () => {
         <UserRoute exact path='/photos/:userId' component={Photos} />
         <UserRoute exact path='/checkout' component={Checkout} />
         <UserRoute exact path='/payment' component={Payment} />
+        <UserRoute exact path='/purchase/history' component={PurchaseHistory} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/posts' component={Posts} />
         <AdminRoute exact path='/admin/users' component={Users} />

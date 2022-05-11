@@ -54,6 +54,7 @@ const BestSellers = () => {
         current={page}
         total={Math.round((productsCount / 3) * 10)}
         onChange={(value) => setPage(value)}
+        className='antd-pagination'
       />
     </>
   );
