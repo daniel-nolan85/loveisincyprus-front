@@ -15,6 +15,7 @@
     "axios": "^0.26.0",
     "firebase": "^9.6.7",
     "formik": "^2.2.9",
+    "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "react": "^17.0.2",
     "react-countup": "^6.1.1",
@@ -26,6 +27,7 @@
     "react-image-file-resizer": "^0.4.7",
     "react-infinite-scroll-component": "^6.1.0",
     "react-modal": "^3.14.4",
+    "react-modal-image": "^2.5.0",
     "react-redux": "^7.2.6",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^5.2.0",
@@ -63,5 +65,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-error-overlay": "^6.0.9"
   }
 }

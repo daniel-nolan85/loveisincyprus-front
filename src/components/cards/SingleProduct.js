@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCartShopping,
@@ -13,12 +13,47 @@ import StarRating from 'react-star-ratings';
 import Rating from '../modals/Rating';
 import { Card, Tabs } from 'antd';
 import { showAverage } from '../../functions/rating';
+import _ from 'lodash';
+import { useSelector, useDispatch } from 'react-redux';
 
 const { TabPane } = Tabs;
 
 const SingleProduct = ({ product, onStarClick, star }) => {
+  const [added, setAdded] = useState(false);
+
+  const { user, cart } = useSelector((state) => ({ ...state }));
+
+  const dispatch = useDispatch();
+
+  const handleAddToCart = () => {
+    let cart = [];
+    if (typeof window !== 'undefined') {
+      if (localStorage.getItem('cart')) {
+        cart = JSON.parse(localStorage.getItem('cart'));
+      }
+      cart.push({ ...product, count: 1 });
+      let unique = _.uniqWith(cart, _.isEqual);
+      console.log('unique => ', unique);
+      localStorage.setItem('cart', JSON.stringify(unique));
+      setAdded(true);
+      dispatch({
+        type: 'ADD_TO_CART',
+        payload: unique,
+      });
+      dispatch({
+        type: 'SET_VISIBLE',
+        payload: true,
+      });
+    }
+  };
+
+  // const handleRemoveFromCart = () => {
+  //   setAdded(false);
+  // };
+
   const { title, description, images, slug, price, category, subs, _id } =
     product;
+
   return (
     <div className='small-container single-product'>
       <div className='row'>
@@ -39,8 +74,21 @@ const SingleProduct = ({ product, onStarClick, star }) => {
           <Card
             actions={[
               <div className='tooltip'>
-                <FontAwesomeIcon icon={faCartShopping} className='fa add' />,
-                <span className='tooltip-text'>Add to Cart</span>
+                {added ? (
+                  // <div onClick={handleRemoveFromCart}>
+                  <div>
+                    <FontAwesomeIcon
+                      icon={faCartArrowDown}
+                      className='fa minus'
+                    />
+                    <span className='tooltip-text'>Remove from Cart</span>
+                  </div>
+                ) : (
+                  <div onClick={handleAddToCart}>
+                    <FontAwesomeIcon icon={faCartShopping} className='fa add' />
+                    <span className='tooltip-text'>Add to Cart</span>
+                  </div>
+                )}
               </div>,
               <Link to='/'>
                 <div className='tooltip'>

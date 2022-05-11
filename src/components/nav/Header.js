@@ -11,6 +11,7 @@ import {
   faRightToBracket,
   faShop,
   faToolbox,
+  faCartShopping,
 } from '@fortawesome/free-solid-svg-icons';
 import SettingsMenu from './SettingsMenu';
 import { useSelector, useDispatch } from 'react-redux';
@@ -19,13 +20,14 @@ import axios from 'axios';
 import SearchResults from './SearchResults';
 import firebase from 'firebase/compat/app';
 import { Link, useHistory } from 'react-router-dom';
+import { Badge } from 'antd';
 
 const Header = () => {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [settingsMenu, setSettingsMenu] = useState(false);
 
-  let { user } = useSelector((state) => ({ ...state }));
+  let { user, cart } = useSelector((state) => ({ ...state }));
 
   let history = useHistory();
 
@@ -125,6 +127,14 @@ const Header = () => {
           <div className='tooltip'>
             <FontAwesomeIcon icon={faShop} className='menu-icon ' />
             <span className='tooltip-text'>Shop</span>
+          </div>
+        </Link>
+        <Link to='/cart'>
+          <div className='tooltip'>
+            <Badge count={cart.length} offset={[-20, 0]}>
+              <FontAwesomeIcon icon={faCartShopping} className='menu-icon ' />
+            </Badge>
+            <span className='tooltip-text'>Cart</span>
           </div>
         </Link>
         <div className='settings-links dropdown'>

@@ -489,6 +489,10 @@ nav {
   margin-bottom: 20px;
 }
 
+.center a {
+  color: var(--nav-color);
+}
+
 .story {
   flex-basis: 18%;
   padding-top: 32%;
@@ -1188,6 +1192,20 @@ nav {
 
 .form-box.product {
   height: 500px;
+}
+
+.form-box.coupon {
+  height: 450px;
+  margin: 0 auto;
+}
+
+.form-box.coupon .react-datepicker-popper {
+  position: relative;
+  z-index: 20000;
+}
+
+.form-box.coupon .react-datepicker__input-container input {
+  background-color: #efefef;
 }
 
 select.gray {
@@ -2050,6 +2068,68 @@ input[name='Photos'] {
   padding: 10px 5px;
   margin: 5px;
   cursor: pointer;
+}
+
+.cart-page {
+  margin: 80px auto;
+}
+
+.cart-page table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cart-info {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.cart-page th {
+  text-align: left;
+  padding: 5px;
+  color: #fff;
+  background: var(--nav-color);
+  font-weight: normal;
+}
+
+.cart-page td {
+  padding: 10px 5px;
+}
+
+.cart-page td input {
+  width: 40px;
+  height: 30px;
+  padding: 5px;
+}
+
+td a {
+  color: var(--nav-color);
+  font-size: 12px;
+}
+
+.cart-page .product-image {
+  width: 80px;
+  height: 80px;
+  margin-right: 10px;
+}
+
+.total-price {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.total-price table {
+  border-top: 3px solid var(--nav-color);
+  width: 100%;
+  max-width: 400px;
+}
+
+.cart-page td:last-child {
+  text-align: right;
+}
+
+.cart-page th:last-child {
+  text-align: right;
 }
 
 /* --------------- information pages --------------- */

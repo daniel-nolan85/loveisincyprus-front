@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 import Header from './components/nav/Header';
+import SideDrawer from './components/drawer/SideDrawer';
 import Home from './pages/Home';
 import LoginAndRegister from './pages/LoginAndRegister';
 import RegisterComplete from './components/forms/RegisterComplete';
@@ -43,6 +44,10 @@ import Product from './pages/user/Product';
 import CategoryHome from './pages/user/CategoryHome';
 import SubHome from './pages/user/SubHome';
 import ShopSearch from './pages/user/ShopSearch';
+import Cart from './pages/user/Cart';
+import Checkout from './pages/user/Checkout';
+import Coupon from './pages/admin/Coupon';
+import Payment from './pages/user/Payment';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -128,6 +133,7 @@ const App = () => {
     // >
     <>
       <Header />
+      <SideDrawer />
       <ToastContainer />
       <Switch>
         <Route exact path='/' component={Home} />
@@ -145,6 +151,7 @@ const App = () => {
         <Route exact path='/category/:slug' component={CategoryHome} />
         <Route exact path='/sub/:slug' component={SubHome} />
         <Route exact path='/shop/search' component={ShopSearch} />
+        <Route exact path='/cart' component={Cart} />
         <UserRoute exact path='/change/password' component={ChangePassword} />
         <UserRoute exact path='/user/dashboard' component={UserDashboard} />
         <UserRoute exact path='/user/profile/:userId' component={Profile} />
@@ -155,6 +162,8 @@ const App = () => {
         <UserRoute exact path='/user/:userId' component={UserProfile} />
         <UserRoute exact path='/swipe-to-match' component={Swipe} />
         <UserRoute exact path='/photos/:userId' component={Photos} />
+        <UserRoute exact path='/checkout' component={Checkout} />
+        <UserRoute exact path='/payment' component={Payment} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/posts' component={Posts} />
         <AdminRoute exact path='/admin/users' component={Users} />
@@ -162,6 +171,7 @@ const App = () => {
         <AdminRoute exact path='/admin/category' component={Category} />
         <AdminRoute exact path='/admin/sub' component={Sub} />
         <AdminRoute exact path='/admin/product' component={Products} />
+        <AdminRoute exact path='/admin/coupon' component={Coupon} />
       </Switch>
       {/* </Suspense> */}
     </>
