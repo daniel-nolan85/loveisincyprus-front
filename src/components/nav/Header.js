@@ -89,6 +89,8 @@ const Header = () => {
                   <br />
                   <Link to='/admin/geo-block'>Geo-Block</Link>
                   <br />
+                  <Link to='/admin/orders'>Orders</Link>
+                  <br />
                   <Link to='/admin/product'>Products</Link>
                   <br />
                   <Link to='/admin/category'>Categories</Link>

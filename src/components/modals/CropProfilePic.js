@@ -143,6 +143,8 @@ const CropProfilePic = ({
               role: res.data.role,
               _id: res.data._id,
               createdAt: res.data.createdAt,
+              address: res.data.address,
+              wishlist: res.data.wishlist,
             },
           });
         }

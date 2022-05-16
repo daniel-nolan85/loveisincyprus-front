@@ -49,6 +49,8 @@ import Checkout from './pages/user/Checkout';
 import Coupon from './pages/admin/Coupon';
 import Payment from './pages/user/Payment';
 import PurchaseHistory from './pages/user/PurchaseHistory';
+import Orders from './pages/admin/Orders';
+import Wishlist from './pages/user/Wishlist';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -114,6 +116,8 @@ const App = () => {
                 role: res.data.role,
                 _id: res.data._id,
                 createdAt: res.data.createdAt,
+                address: res.data.address,
+                wishlist: res.data.wishlist,
               },
             });
             console.log('logged in user ==> ', res);
@@ -166,6 +170,7 @@ const App = () => {
         <UserRoute exact path='/checkout' component={Checkout} />
         <UserRoute exact path='/payment' component={Payment} />
         <UserRoute exact path='/purchase/history' component={PurchaseHistory} />
+        <UserRoute exact path='/wishlist' component={Wishlist} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/posts' component={Posts} />
         <AdminRoute exact path='/admin/users' component={Users} />
@@ -174,6 +179,7 @@ const App = () => {
         <AdminRoute exact path='/admin/sub' component={Sub} />
         <AdminRoute exact path='/admin/product' component={Products} />
         <AdminRoute exact path='/admin/coupon' component={Coupon} />
+        <AdminRoute exact path='/admin/orders' component={Orders} />
       </Switch>
       {/* </Suspense> */}
     </>

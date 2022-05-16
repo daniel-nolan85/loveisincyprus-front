@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCartShopping,
@@ -15,13 +15,29 @@ import { Card, Tabs } from 'antd';
 import { showAverage } from '../../functions/rating';
 import _ from 'lodash';
 import { useSelector, useDispatch } from 'react-redux';
+import {
+  getWishlist,
+  addToWishlist,
+  removeFromWishlist,
+} from '../../functions/user';
+import { toast } from 'react-toastify';
 
 const { TabPane } = Tabs;
 
 const SingleProduct = ({ product, onStarClick, star }) => {
+  const [wishlist, setWishlist] = useState([]);
   const { user, cart } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    loadWishlist();
+  }, [wishlist]);
+
+  const loadWishlist = () =>
+    getWishlist(user.token).then((res) => {
+      setWishlist(res.data.wishlist);
+    });
 
   const handleAddToCart = () => {
     let cart = [];
@@ -62,6 +78,36 @@ const SingleProduct = ({ product, onStarClick, star }) => {
       });
     }
   };
+
+  const handleAddToWishlist = () => {
+    addToWishlist(product._id, user.token).then((res) => {
+      toast.success(`${product.title} has been added to your wishlist`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      dispatch({
+        type: 'LOGGED_IN_USER',
+        payload: {
+          ...user,
+          wishlist: res.data.wishlist,
+        },
+      });
+    });
+  };
+
+  const handleRemoveFromWishlist = () =>
+    removeFromWishlist(product._id, user.token).then((res) => {
+      toast.error(`${product.title} has been removed from your wishlist`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      dispatch({
+        type: 'LOGGED_IN_USER',
+        payload: {
+          ...user,
+          wishlist: res.data.wishlist,
+        },
+      });
+      // window.location.reload();
+    });
 
   const {
     title,
@@ -120,12 +166,28 @@ const SingleProduct = ({ product, onStarClick, star }) => {
                   </button>
                 )}
               </div>,
-              <Link to='/'>
-                <div className='tooltip'>
-                  <FontAwesomeIcon icon={faHeart} className='fa view' />,
-                  <span className='tooltip-text'>Add to Wishlist</span>
-                </div>
-              </Link>,
+
+              <div className='tooltip'>
+                {/* {user !== null &&
+                user.wishlist &&
+                user.wishlist.includes(_id) ? ( */}
+                {wishlist.some((ele) => ele._id === _id) ? (
+                  <div onClick={handleRemoveFromWishlist}>
+                    <FontAwesomeIcon icon={faHeart} className='fa view' />
+                    <span className='tooltip-text'>Remove from Wishlist</span>
+                  </div>
+                ) : (
+                  <div onClick={handleAddToWishlist}>
+                    <FontAwesomeIcon
+                      icon={faHeart}
+                      className='fa view'
+                      style={{ color: '#ccc' }}
+                    />
+                    <span className='tooltip-text'>Add to Wishlist</span>
+                  </div>
+                )}
+              </div>,
+
               <Rating>
                 <StarRating
                   name={_id}

@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import ShowPaymentInfo from '../../components/cards/ShowPaymentInfo';
+import Invoice from '../../components/cards/Invoice';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 const PurchaseHistory = () => {
   const [orders, setOrders] = useState([]);
@@ -26,9 +28,7 @@ const PurchaseHistory = () => {
       <div key={i}>
         <ShowPaymentInfo order={order} />
         {showOrderInTable(order)}
-        <div>
-          <p>PDF Download</p>
-        </div>
+        <div>{showDownloadLink(order)}</div>
       </div>
     ));
 
@@ -51,6 +51,16 @@ const PurchaseHistory = () => {
         ))}
       </tbody>
     </table>
+  );
+
+  const showDownloadLink = (order) => (
+    <PDFDownloadLink
+      document={<Invoice order={order} />}
+      fileName='invoice.pdf'
+      className='submit-btn'
+    >
+      Download PDF
+    </PDFDownloadLink>
   );
 
   return (
