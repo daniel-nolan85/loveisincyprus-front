@@ -1083,6 +1083,10 @@ nav {
   color: #c70000;
 }
 
+.fa.trash {
+  color: #c70000;
+}
+
 .admin-card .fa.comments,
 .admin-card .fa.admin,
 .admin-card .fa.update {
@@ -1194,8 +1198,13 @@ nav {
   height: 500px;
 }
 
+.form-box.address {
+  margin: 0 100px 0 0;
+  height: 580px;
+}
+
 .form-box.coupon {
-  height: 450px;
+  height: 350px;
   margin: 0 auto;
 }
 
@@ -2102,7 +2111,13 @@ input[name='Photos'] {
   margin: 80px auto;
 }
 
-.cart-page table {
+.checkout-page {
+  width: 500px;
+  margin-bottom: 50px;
+}
+
+.cart-page table,
+.checkout-page table {
   width: 100%;
   border-collapse: collapse;
 }
@@ -2112,7 +2127,8 @@ input[name='Photos'] {
   flex-wrap: wrap;
 }
 
-.cart-page th {
+.cart-page th,
+.checkout-page th {
   text-align: left;
   padding: 5px;
   color: #fff;
@@ -2120,11 +2136,13 @@ input[name='Photos'] {
   font-weight: normal;
 }
 
-.cart-page td {
+.cart-page td,
+.checkout-page td {
   padding: 10px 5px;
 }
 
-.cart-page td input {
+.cart-page td input,
+.checkout-page td input {
   width: 40px;
   height: 30px;
   padding: 5px;
@@ -2152,11 +2170,13 @@ td a {
   max-width: 400px;
 }
 
-.cart-page td:last-child {
+.cart-page td:last-child,
+.checkout-page td:last-child {
   text-align: right;
 }
 
-.cart-page th:last-child {
+.cart-page th:last-child,
+.checkout-page th:last-child {
   text-align: right;
 }
 

@@ -43,7 +43,8 @@ const Cart = ({ history }) => {
     <>
       {!cart.length ? (
         <h1 className='center'>
-          Your cart is empty. <Link to='/shop/search'>Continue shopping?</Link>
+          Your cart is currently empty.{' '}
+          <Link to='/shop/search'>Go shopping?</Link>
         </h1>
       ) : (
         <div className='small-container cart-page'>

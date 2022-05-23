@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   getUserCart,
@@ -8,12 +8,24 @@ import {
 } from '../../functions/user';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import {
+  faSpinner,
+  faPaperPlane,
+  faUndo,
+} from '@fortawesome/free-solid-svg-icons';
+import AddressForm from '../../components/forms/AddressForm';
 
 const Checkout = ({ history }) => {
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
-  const [address, setAddress] = useState('');
+  const [address, setAddress] = useState({
+    firstLine: '',
+    secondLine: '',
+    city: '',
+    state: '',
+    zip: '',
+    country: '',
+  });
   const [addressSaved, setAddressSaved] = useState(false);
   const [coupon, setCoupon] = useState('');
   const [loading, setLoading] = useState(false);
@@ -24,54 +36,103 @@ const Checkout = ({ history }) => {
 
   const dispatch = useDispatch();
 
+  const isFirstRun = useRef(true);
+
   useEffect(() => {
     getUserCart(user.token).then((res) => {
-      console.log('user cart res => ', JSON.stringify(res.data, null, 4));
+      // console.log('user cart res => ', JSON.stringify(res.data, null, 4));
       setProducts(res.data.products);
       setTotal(res.data.cartTotal);
     });
   }, []);
 
-  const showAddress = () => (
-    <>
-      <textarea
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
-      ></textarea>
-      <button onClick={saveAddressToDb}>Save</button>
-    </>
-  );
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      saveUserAddress(address, user.token).then((res) => {
+        if (res.data.ok) {
+          setAddressSaved(true);
+          toast.success(`Your address has been saved.`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+        }
+      });
+    }
+  }, [address]);
 
-  const saveAddressToDb = () => {
-    saveUserAddress(address, user.token).then((res) => {
-      if (res.data.ok) {
-        setAddressSaved(true);
-        toast.success(`Your address has been saved.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-      }
+  const saveAddressToDb = (values) => {
+    setAddress((prevState) => {
+      return { ...prevState, ...values };
     });
   };
 
-  const showProductSummary = () =>
-    products.map((p, i) => (
-      <div key={i}>
-        <p>
-          {p.product.title} x {p.count} = {p.product.price * p.count}
-        </p>
+  const showProductSummary = () => (
+    <div className='small-container checkout-page'>
+      <h1 className='center'>Order Summary</h1>
+      <div className='total-price'>
+        <table>
+          <tbody>
+            {products.map((p, i) => (
+              <tr key={i}>
+                <td>
+                  {p.product.title} x {p.count} = {p.product.price * p.count}
+                </td>
+              </tr>
+            ))}
+            <tr>
+              <td>Cart total: €{total}</td>
+            </tr>
+            {totalAfterDiscount > 0 && (
+              <tr>
+                <td>Discount applied! Total payable: €{totalAfterDiscount}</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
       </div>
-    ));
+      <div className='contact-form-btns'>
+        {loading ? (
+          <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+        ) : (
+          <button
+            type='submit'
+            className='submit-btn'
+            onClick={() => history.push('/payment')}
+            disabled={!addressSaved || !products.length || loading}
+          >
+            {loading ? (
+              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+            ) : (
+              <FontAwesomeIcon icon={faPaperPlane} className='fa' />
+            )}
+            Place Order
+          </button>
+        )}
+        <button
+          type='reset'
+          className='submit-btn reset'
+          onClick={emptyCart}
+          disabled={!products.length || loading}
+        >
+          <FontAwesomeIcon icon={faUndo} className='fa' />
+          Empty cart
+        </button>
+      </div>
+    </div>
+  );
 
   const showApplyCoupon = () => (
-    <div className='form-box category'>
+    <div className='form-box coupon'>
       <div className='button-box'>
-        <p className='form-header'>Enter Coupon</p>
+        <p className='form-header'>Got Coupon?</p>
       </div>
       <form>
         <input
           type='text'
           className='input-field'
-          placeholder='Coupon'
+          placeholder='Enter coupon'
           value={coupon}
           onChange={(e) => {
             setCoupon(e.target.value);
@@ -81,6 +142,7 @@ const Checkout = ({ history }) => {
           required
           // disabled={loading}
         />
+        {discountError && <p>{discountError}</p>}
         <button onClick={applyCoupon} type='submit' className='submit-btn'>
           {loading ? (
             <FontAwesomeIcon icon={faSpinner} className='fa' spin />
@@ -142,40 +204,19 @@ const Checkout = ({ history }) => {
   return (
     <>
       <div>
-        <h4>Delivery address</h4>
-        <br />
-        {showAddress()}
-        <hr />
-        <h4>Got coupon?</h4>
-        <br />
-        {showApplyCoupon()}
-        <br />
-        {discountError && <p>{discountError}</p>}
-      </div>
-      <div>
-        <h4>Order summary</h4>
-        <hr />
-        <p>Products {products.length}</p>
-        <hr />
-        {showProductSummary()}
-        <hr />
-        <p>Cart total: €{total}</p>
-        {totalAfterDiscount > 0 && (
-          <p>Discount applied! Total payable: €{totalAfterDiscount}</p>
-        )}
-      </div>
-      <div>
-        <button
-          onClick={() => history.push('/payment')}
-          disabled={!addressSaved || !products.length}
-        >
-          place order
-        </button>
-      </div>
-      <div>
-        <button onClick={emptyCart} disabled={!products.length}>
-          empty cart
-        </button>
+        <div className='contact-container'>
+          <br />
+          <AddressForm
+            address={address}
+            setAddress={setAddress}
+            saveAddressToDb={saveAddressToDb}
+          />
+          <div>
+            <br />
+            {showApplyCoupon()}
+            {showProductSummary()}
+          </div>
+        </div>
       </div>
     </>
   );
