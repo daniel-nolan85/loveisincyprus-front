@@ -93,3 +93,48 @@ export const addToWishlist = async (productId, authtoken) =>
       },
     }
   );
+
+export const getUserPointsTotal = async (authtoken) =>
+  await axios.get(`${process.env.REACT_APP_API}/user-points-total`, {
+    headers: {
+      authtoken,
+    },
+  });
+
+export const addPoints = async (number, reason, authtoken) => {
+  await axios.put(
+    `${process.env.REACT_APP_API}/add-points`,
+    { number, reason },
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
+};
+
+export const removePoints = async (number, reason, authtoken) => {
+  await axios.put(
+    `${process.env.REACT_APP_API}/remove-points`,
+    { number, reason },
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
+};
+
+export const getUserPointsGainedData = async (authtoken) =>
+  await axios.get(`${process.env.REACT_APP_API}/user-points-gained-data`, {
+    headers: {
+      authtoken,
+    },
+  });
+
+export const getUserPointsLostData = async (authtoken) =>
+  await axios.get(`${process.env.REACT_APP_API}/user-points-lost-data`, {
+    headers: {
+      authtoken,
+    },
+  });

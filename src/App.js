@@ -1,11 +1,14 @@
-import React, { useEffect, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { auth } from './firebase';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { ChatState } from './context/ChatProvider';
+import io from 'socket.io-client';
+import axios from 'axios';
 
 import Header from './components/nav/Header';
 import SideDrawer from './components/drawer/SideDrawer';
@@ -51,6 +54,8 @@ import Payment from './pages/user/Payment';
 import PurchaseHistory from './pages/user/PurchaseHistory';
 import Orders from './pages/admin/Orders';
 import Wishlist from './pages/user/Wishlist';
+import Points from './pages/user/Points';
+import Chats from './pages/user/Chats';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -84,8 +89,30 @@ import Wishlist from './pages/user/Wishlist';
 // const Photos = lazy(() => import('./pages/user/Photos'));
 // const GeoBlock = lazy(() => import('./pages/admin/GeoBlock'));
 
+const ENDPOINT = 'http://localhost:8000';
+let socket, selectedChatCompare;
+
 const App = () => {
+  const { user } = useSelector((state) => ({ ...state }));
+
   const dispatch = useDispatch();
+
+  const isFirstRun = useRef(true);
+
+  const {
+    selectedChat,
+    setSelectedChat,
+    chats,
+    setChats,
+    notification,
+    setNotification,
+    messages,
+    setMessages,
+    // isTyping,
+    // setIsTyping,
+    socketConnected,
+    setSocketConnected,
+  } = ChatState();
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -118,15 +145,81 @@ const App = () => {
                 createdAt: res.data.createdAt,
                 address: res.data.address,
                 wishlist: res.data.wishlist,
+                points: res.data.points,
               },
             });
-            console.log('logged in user ==> ', res);
+            // console.log('logged in user ==> ', res);
           })
           .catch((err) => console.log(err));
       }
     });
     return () => unsubscribe();
   }, [dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      socket = io(ENDPOINT);
+      socket.emit('setup', user);
+      socket.on('connected', () => setSocketConnected(true));
+
+      // socket.on('message received', (newMessageReceived) => {
+      //   if (!selectedChat || selectedChat._id !== newMessageReceived.chat._id) {
+      //     if (!notification.includes(newMessageReceived)) {
+      //       setNotification([newMessageReceived, ...notification]);
+      //     }
+      //   } else {
+      //     setMessages([...messages, newMessageReceived]);
+      //   }
+      // });
+      // socket.on('typing', () => setIsTyping(true));
+      // socket.on('stop typing', () => setIsTyping(false));
+    }
+    // }
+  }, [user && user.token]);
+
+  useEffect(() => {
+    selectedChatCompare = selectedChat;
+  }, [selectedChat]);
+
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      socket.on('message received', (newMessageReceived) => {
+        fetchChats();
+        if (
+          !selectedChatCompare ||
+          selectedChatCompare._id != newMessageReceived.chat._id
+        ) {
+          if (!notification.includes(newMessageReceived)) {
+            setNotification([newMessageReceived, ...notification]);
+          }
+        } else {
+          setMessages([...messages, newMessageReceived]);
+        }
+      });
+    }
+  });
+
+  const fetchChats = async () => {
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/fetch-chats`,
+        { user },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        setChats(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     // <Suspense
@@ -171,6 +264,8 @@ const App = () => {
         <UserRoute exact path='/payment' component={Payment} />
         <UserRoute exact path='/purchase/history' component={PurchaseHistory} />
         <UserRoute exact path='/wishlist' component={Wishlist} />
+        <UserRoute exact path='/points' component={Points} />
+        <UserRoute exact path='/chats' component={Chats} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/posts' component={Posts} />
         <AdminRoute exact path='/admin/users' component={Users} />

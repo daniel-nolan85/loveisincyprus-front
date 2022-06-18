@@ -9,15 +9,18 @@ import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './reducers';
+import ChatProvider from './context/ChatProvider';
 
 const store = createStore(rootReducer, composeWithDevTools());
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
+      <ChatProvider>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </ChatProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

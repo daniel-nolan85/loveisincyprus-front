@@ -12,6 +12,7 @@ import {
   faShop,
   faToolbox,
   faCartShopping,
+  faCoins,
 } from '@fortawesome/free-solid-svg-icons';
 import SettingsMenu from './SettingsMenu';
 import { useSelector, useDispatch } from 'react-redux';
@@ -21,6 +22,7 @@ import SearchResults from './SearchResults';
 import firebase from 'firebase/compat/app';
 import { Link, useHistory } from 'react-router-dom';
 import { Badge } from 'antd';
+import { ChatState } from '../../context/ChatProvider';
 
 const Header = () => {
   const [query, setQuery] = useState('');
@@ -28,6 +30,8 @@ const Header = () => {
   const [settingsMenu, setSettingsMenu] = useState(false);
 
   let { user, cart } = useSelector((state) => ({ ...state }));
+
+  const { notification, setNotification } = ChatState();
 
   let history = useHistory();
 
@@ -114,14 +118,51 @@ const Header = () => {
                   <span className='tooltip-text'>Swipe</span>
                 </li>
               </Link>
-              <li className='tooltip'>
-                <FontAwesomeIcon icon={faBell} className='menu-icon' />
+              <Link to='/points'>
+                <li className='tooltip'>
+                  <FontAwesomeIcon icon={faCoins} className='menu-icon' />
+                  <span className='tooltip-text'>Points</span>
+                </li>
+              </Link>
+              {/* <li className='tooltip'>
+                <Badge count={notification.length} offset={[-20, 0]}>
+                  <FontAwesomeIcon icon={faBell} className='menu-icon' />
+                </Badge>
                 <span className='tooltip-text'>Notifications</span>
-              </li>
-              <li className='tooltip'>
-                <FontAwesomeIcon icon={faMessage} className='menu-icon' />
-                <span className='tooltip-text'>Messages</span>
-              </li>
+              </li> */}
+
+              <div className='settings-links dropdown'>
+                <Badge count={notification.length} offset={[-20, 0]}>
+                  <FontAwesomeIcon icon={faBell} className='menu-icon' />
+                </Badge>
+                <div className='dropdown-content information'>
+                  {!notification.length && 'No new notifications'}
+                  {notification.map((notif) => (
+                    <div key={notif._id}>
+                      {notif.chat && (
+                        <p
+                          onClick={() => {
+                            history.push('/chats');
+                            setNotification(
+                              notification.filter((n) => n !== notif)
+                            );
+                          }}
+                        >
+                          You received a new chat message from{' '}
+                          {notif.chat.users[1].email.split('@')[0]}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <Link to='/chats'>
+                <li className='tooltip'>
+                  <FontAwesomeIcon icon={faMessage} className='menu-icon' />
+                  <span className='tooltip-text'>Chats</span>
+                </li>
+              </Link>
             </ul>
           </>
         )}

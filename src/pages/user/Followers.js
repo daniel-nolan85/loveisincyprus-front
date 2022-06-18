@@ -92,6 +92,7 @@ const Followers = ({ history }) => {
             createdAt: res.data.createdAt,
             address: res.data.address,
             wishlist: res.data.wishlist,
+            points: res.data.points,
           },
         });
       })

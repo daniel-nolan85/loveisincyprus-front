@@ -1844,6 +1844,275 @@ select.decorated option:active {
   color: #626262;
 }
 
+/* --------------- points page --------------- */
+.points-filter-btns {
+  display: flex;
+}
+
+.points-filter-btns .submit-btn {
+  width: 140px;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.chart-header .fa {
+  font-size: 25px;
+  color: var(--nav-color);
+  cursor: pointer;
+}
+
+/* --------------- chats page --------------- */
+.main {
+  width: 100%;
+  height: 85vh;
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #efefef;
+}
+
+.chats-container {
+  width: 60rem;
+  height: 95%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chat-list {
+  width: 40%;
+  height: 100%;
+  background: var(--nav-color);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.chat-list form {
+  height: 10vh;
+}
+
+.chat-list .search-box {
+  margin: 20px 10px;
+  width: 94.5%;
+}
+
+.ms-a {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 4rem;
+  cursor: pointer;
+}
+
+.ms-a .avatar {
+  margin-left: 5px;
+  margin-right: 10px;
+}
+
+.ms-a .avatar img {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+}
+
+.msg-info {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+/* .ms-info {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+} */
+
+.sender-name {
+  color: white;
+  letter-spacing: 1px;
+}
+
+.action {
+  display: flex;
+  justify-content: space-between;
+}
+
+.time {
+  margin-right: 20px;
+}
+
+.action p {
+  margin-bottom: 0;
+}
+
+.action span {
+  font-size: 12px;
+}
+
+.chat {
+  width: 60%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  background: #f6f2f2;
+}
+
+.chat-header {
+  width: 100%;
+  height: 10vh;
+  background: var(--nav-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-content {
+  width: 100%;
+  /* height: 100%; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  flex-direction: row;
+}
+
+.sender-avatar img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-left: 20px;
+}
+
+.sender-action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sender-action h3 {
+  font-weight: 100;
+  color: white;
+  letter-spacing: 1px;
+}
+
+.sender-action span {
+  font-size: 15px;
+  color: #ececec;
+}
+
+.chat-icons .fa {
+  border: 1px solid #ececec;
+  border-radius: 50%;
+  padding: 10px;
+  background-color: #ececec;
+  color: var(--nav-color);
+  font-size: 25px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.chat-body {
+  width: 90%;
+  /* max-height: 100%; */
+  overflow-y: auto;
+  scrollbar-width: none;
+  /* display: flex;
+  flex-direction: column; */
+}
+
+.chat-body::-webkit-scrollbar {
+  display: none;
+}
+
+.message-sender {
+  width: 100%;
+  display: flex;
+  /* align-items: center; */
+  /* margin-top: 1rem; */
+}
+
+.message-sender {
+  /* flex-direction: row-reverse; */
+}
+
+.message-sender-message {
+  height: auto;
+  width: auto;
+  max-width: 75%;
+  /* margin-right: 1rem; */
+  /* background: #fff; */
+  border-radius: 30px;
+  display: flex;
+  /* justify-content: center; */
+  align-items: center;
+}
+
+.message-sender-message p {
+  padding: 10px;
+  font-size: 0.8rem;
+  margin: 0;
+  /* text-align: center; */
+}
+
+/* .message-sender-icon {
+  margin-right: 15px;
+  color: #34debb;
+  font-size: 12px;
+} */
+
+.message-sender-avatar {
+  margin-right: 17px;
+}
+
+.message-sender-avatar img {
+  border-radius: 50%;
+  height: 50px;
+  width: 50px;
+}
+
+.message-box {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.message-box-aria {
+  width: 96%;
+  margin-top: 10px;
+  background: #fff;
+  /* position: absolute;
+  bottom: -250px; */
+  border-radius: 30px;
+  box-shadow: 0px 7px 23px -8px rgba(204, 202, 204, 1);
+}
+
+.message-box-aria input {
+  width: 90%;
+  height: 4rem;
+  border: none;
+  outline: none;
+  background: none;
+  margin-left: 20px;
+}
+
+.message-box-aria input::placeholder {
+  color: gray;
+}
+
+.message-box-aria i {
+  color: gray;
+  cursor: pointer;
+}
+
 /* --------------- photos page --------------- */
 /* .radio-inputs {
   display: none;

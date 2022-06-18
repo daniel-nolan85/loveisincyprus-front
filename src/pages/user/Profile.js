@@ -16,6 +16,7 @@ import {
   faFaceGrinStars,
   faSignsPost,
   faPeopleArrows,
+  faCoins,
 } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfileUpdate from '../../components/modals/ProfileUpdate';
@@ -33,6 +34,7 @@ import AddComment from '../../components/modals/AddComment';
 import ShowLikes from '../../components/modals/ShowLikes';
 import SinglePost from '../../components/modals/SinglePost';
 import PostDelete from '../../components/modals/PostDelete';
+import { getUserPointsTotal, addPoints } from '../../functions/user';
 
 const Profile = ({ history }) => {
   const [email, setEmail] = useState('');
@@ -81,6 +83,7 @@ const Profile = ({ history }) => {
   const [commentEditModalIsOpen, setCommentEditModalIsOpen] = useState(false);
   const [commentToEdit, setCommentToEdit] = useState({});
   const [postOfCommentToEdit, setPostOfCommentToEdit] = useState([]);
+  const [points, setPoints] = useState(0);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -115,6 +118,7 @@ const Profile = ({ history }) => {
       fetchPhotos();
       fetchMatches();
       fetchVisitors();
+      fetchUserPoints();
     }
   }, [user && user.token]);
 
@@ -181,6 +185,7 @@ const Profile = ({ history }) => {
               createdAt: res.data.createdAt,
               address: res.data.address,
               wishlist: res.data.wishlist,
+              points: res.data.points,
             },
           });
         }
@@ -299,6 +304,12 @@ const Profile = ({ history }) => {
       });
   };
 
+  const fetchUserPoints = () =>
+    getUserPointsTotal(user.token).then((res) => {
+      console.log(res.data);
+      setPoints(res.data);
+    });
+
   const fetchUserPosts = async () => {
     await axios
       .post(
@@ -380,19 +391,20 @@ const Profile = ({ history }) => {
       )
       .then((res) => {
         setUploading(false);
-
+        addPoints(3, 'post', user.token);
         if (res.data.error) {
           toast.error(res.data.error, {
             position: toast.POSITION.TOP_CENTER,
           });
         } else {
-          toast.success(`Post added.`, {
+          toast.success(`Post added. You have been awarded 3 points!`, {
             position: toast.POSITION.TOP_CENTER,
           });
           setContent('');
           setImage({});
           fetchUserPosts();
           fetchUserTotalPosts();
+          fetchUserPoints();
         }
       })
       .catch((err) => {
@@ -628,6 +640,11 @@ const Profile = ({ history }) => {
                 <FontAwesomeIcon icon={faPeopleArrows} className='fa' />
                 {user.matches.length}
                 {user.matches.length === 1 ? ' Match' : ' Matches'}
+              </li>
+              <li>
+                <FontAwesomeIcon icon={faCoins} className='fa' />
+                {points}
+                {points === 1 ? ' Point' : ' Points'}
               </li>
             </ul>
           </div>
@@ -1006,6 +1023,7 @@ const Profile = ({ history }) => {
         postToDelete={postToDelete}
         fetchUserPosts={fetchUserPosts}
         fetchUserTotalPosts={fetchUserTotalPosts}
+        fetchUserPoints={fetchUserPoints}
       />
     </div>
   );

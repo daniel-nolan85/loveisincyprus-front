@@ -12,6 +12,7 @@ import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory, Link } from 'react-router-dom';
 import { createOrUpdateUser } from '../../functions/auth';
+import { addPoints } from '../../functions/user';
 
 const Login = () => {
   const [email, setEmail] = useState('danielnolan85@yahoo.com');
@@ -81,9 +82,40 @@ const Login = () => {
               createdAt: res.data.createdAt,
               address: res.data.address,
               wishlist: res.data.wishlist,
+              points: res.data.points,
             },
           });
           roleBasedRedirect(res);
+          addPoints(1, 'login', idTokenResult.token);
+
+          // addPoints(1, 'login', idTokenResult.token).then(
+          //   toast.success(
+          //     `Welcome to Love is in Cyprus. You have been awarded 1 point!`,
+          //     {
+          //       position: toast.POSITION.TOP_CENTER,
+          //     }
+          //   )
+          // );
+
+          // var hours = 24;
+          // var now = new Date().getTime();
+          // var setupTime = localStorage.getItem('setupTime');
+          // if (setupTime == null) {
+          //   localStorage.setItem('setupTime', now);
+          // } else {
+          //   if (now - setupTime > hours * 60 * 60 * 1000) {
+          //     addPoints(1, 'login', idTokenResult.token).then(
+          //       toast.success(
+          //         `Welcome to Love is in Cyprus. You have been awarded 1 point!`,
+          //         {
+          //           position: toast.POSITION.TOP_CENTER,
+          //         }
+          //       )
+          //     );
+          //     localStorage.removeItem('setupTime');
+          //     localStorage.setItem('setupTime', now);
+          //   }
+          // }
         })
         .catch((err) => console.log(err));
     } catch (err) {
@@ -131,9 +163,11 @@ const Login = () => {
                 createdAt: res.data.createdAt,
                 address: res.data.address,
                 wishlist: res.data.wishlist,
+                points: res.data.points,
               },
             });
             roleBasedRedirect(res);
+            addPoints(1, 'login', idTokenResult.token);
           })
           .catch((err) => console.log(err));
       })

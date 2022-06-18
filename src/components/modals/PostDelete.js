@@ -3,6 +3,7 @@ import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { removePoints } from '../../functions/user';
 
 Modal.setAppElement('#root');
 
@@ -13,6 +14,7 @@ const PostDelete = ({
   newsFeed,
   fetchUserPosts,
   fetchUserTotalPosts,
+  fetchUserPoints,
 }) => {
   let { user } = useSelector((state) => ({ ...state }));
 
@@ -28,7 +30,8 @@ const PostDelete = ({
         }
       )
       .then((res) => {
-        toast.error('Post deleted', {
+        removePoints(3, 'post', user.token);
+        toast.error('Post deleted. 3 points were removed', {
           position: toast.POSITION.TOP_CENTER,
         });
         setPostDeleteModalIsOpen(false);
@@ -36,6 +39,7 @@ const PostDelete = ({
         fetchUserPosts && fetchUserPosts();
         // setUploading(false);
         fetchUserTotalPosts && fetchUserTotalPosts();
+        fetchUserPoints && fetchUserPoints();
       })
       .catch((err) => console.log(err));
   };

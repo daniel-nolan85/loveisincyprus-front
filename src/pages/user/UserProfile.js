@@ -27,6 +27,7 @@ import { toast } from 'react-toastify';
 import ShowLikes from '../../components/modals/ShowLikes';
 import Match from '../../components/modals/Match';
 import Unfollow from '../../components/modals/Unfollow';
+import { addPoints } from '../../functions/user';
 
 const UserProfile = () => {
   const [thisUser, setThisUser] = useState({});
@@ -90,6 +91,7 @@ const UserProfile = () => {
     fetchVisitor();
     fetchThisUsersPhotos();
     visitorPhotosCount();
+    // addPoints(1, 'visit', user.token); need to ensure this is first visit to users page first
   }, [userId]);
 
   useEffect(() => {
@@ -352,6 +354,7 @@ const UserProfile = () => {
             createdAt: res.data.createdAt,
             address: res.data.address,
             wishlist: res.data.wishlist,
+            points: res.data.points,
           },
         });
       })

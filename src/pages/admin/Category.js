@@ -118,7 +118,11 @@ const Category = () => {
       <div className='admin-main-content'>
         {categoryForm()}
         <div className='search-box'>
-          <FontAwesomeIcon icon={faMagnifyingGlass} className='fa' />
+          <FontAwesomeIcon
+            icon={faMagnifyingGlass}
+            onClick={handleSearch}
+            className='fa'
+          />
           <input
             type='search'
             placeholder='Search Categories'

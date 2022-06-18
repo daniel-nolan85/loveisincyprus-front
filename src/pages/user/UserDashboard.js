@@ -12,6 +12,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import Match from '../../components/modals/Match';
+import { addPoints } from '../../functions/user';
 
 const UserDashboard = () => {
   const [content, setContent] = useState('');
@@ -148,6 +149,7 @@ const UserDashboard = () => {
             createdAt: res.data.createdAt,
             address: res.data.address,
             wishlist: res.data.wishlist,
+            points: res.data.points,
           },
         });
         let filtered = users.filter((f) => f._id !== u._id);
@@ -208,13 +210,13 @@ const UserDashboard = () => {
       )
       .then((res) => {
         setUploading(false);
-
+        addPoints(3, 'post', user.token);
         if (res.data.error) {
           toast.error(res.data.error, {
             position: toast.POSITION.TOP_CENTER,
           });
         } else {
-          toast.success(`Post added.`, {
+          toast.success(`Post added. You have been awarded 3 points!`, {
             position: toast.POSITION.TOP_CENTER,
           });
           // console.log('post submit => ', res.data);
