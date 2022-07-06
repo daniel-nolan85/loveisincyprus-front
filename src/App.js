@@ -56,6 +56,7 @@ import Orders from './pages/admin/Orders';
 import Wishlist from './pages/user/Wishlist';
 import Points from './pages/user/Points';
 import Chats from './pages/user/Chats';
+import Notifications from './pages/user/Notifications';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -146,6 +147,7 @@ const App = () => {
                 address: res.data.address,
                 wishlist: res.data.wishlist,
                 points: res.data.points,
+                notifications: res.data.notifications,
               },
             });
             // console.log('logged in user ==> ', res);
@@ -156,25 +158,35 @@ const App = () => {
     return () => unsubscribe();
   }, [dispatch]);
 
+  console.log(notification);
+
   useEffect(() => {
     if (user) {
       socket = io(ENDPOINT);
       socket.emit('setup', user);
       socket.on('connected', () => setSocketConnected(true));
 
-      // socket.on('message received', (newMessageReceived) => {
-      //   if (!selectedChat || selectedChat._id !== newMessageReceived.chat._id) {
-      //     if (!notification.includes(newMessageReceived)) {
-      //       setNotification([newMessageReceived, ...notification]);
-      //     }
-      //   } else {
-      //     setMessages([...messages, newMessageReceived]);
-      //   }
-      // });
-      // socket.on('typing', () => setIsTyping(true));
-      // socket.on('stop typing', () => setIsTyping(false));
+      socket.on('post liked', (post) => {
+        console.log(`a user liked your post ${post.content}`);
+        setNotification([post, ...notification]);
+      });
+      socket.on('comment added', (p) => {
+        console.log(`a user commented on your post ${p.content}`);
+        setNotification([p.comments, ...notification]);
+      });
+      socket.on('follower added', (f) => {
+        console.log(`a user likes you ${f.email}`);
+        setNotification([f, ...notification]);
+      });
+      socket.on('follower added', (f) => {
+        console.log(`a user likes you ${f.email}`);
+        setNotification([f, ...notification]);
+      });
+      socket.on('visitor added', (v, u) => {
+        console.log(`a new user visited your profile ${u.email}`);
+        setNotification([u, ...notification]);
+      });
     }
-    // }
   }, [user && user.token]);
 
   useEffect(() => {
@@ -266,6 +278,7 @@ const App = () => {
         <UserRoute exact path='/wishlist' component={Wishlist} />
         <UserRoute exact path='/points' component={Points} />
         <UserRoute exact path='/chats' component={Chats} />
+        <UserRoute exact path='/notifications' component={Notifications} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/posts' component={Posts} />
         <AdminRoute exact path='/admin/users' component={Users} />

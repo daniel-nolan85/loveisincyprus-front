@@ -31,7 +31,14 @@ const Header = () => {
 
   let { user, cart } = useSelector((state) => ({ ...state }));
 
-  const { notification, setNotification } = ChatState();
+  const {
+    notification,
+    setNotification,
+    // thisPost,
+    // setThisPost,
+    // notifModalIsOpen,
+    // setNotifModalIsOpen,
+  } = ChatState();
 
   let history = useHistory();
 
@@ -58,6 +65,11 @@ const Header = () => {
         console.log(err);
       });
   };
+
+  // const notifPost = (post) => {
+  //   setThisPost(post);
+  //   setNotifModalIsOpen(true);
+  // };
 
   const logout = () => {
     setSettingsMenu(false);
@@ -124,39 +136,101 @@ const Header = () => {
                   <span className='tooltip-text'>Points</span>
                 </li>
               </Link>
-              {/* <li className='tooltip'>
-                <Badge count={notification.length} offset={[-20, 0]}>
-                  <FontAwesomeIcon icon={faBell} className='menu-icon' />
-                </Badge>
-                <span className='tooltip-text'>Notifications</span>
-              </li> */}
-
-              <div className='settings-links dropdown'>
-                <Badge count={notification.length} offset={[-20, 0]}>
-                  <FontAwesomeIcon icon={faBell} className='menu-icon' />
-                </Badge>
-                <div className='dropdown-content information'>
-                  {!notification.length && 'No new notifications'}
-                  {notification.map((notif) => (
-                    <div key={notif._id}>
-                      {notif.chat && (
-                        <p
-                          onClick={() => {
-                            history.push('/chats');
-                            setNotification(
-                              notification.filter((n) => n !== notif)
-                            );
-                          }}
-                        >
-                          You received a new chat message from{' '}
-                          {notif.chat.users[1].email.split('@')[0]}
-                        </p>
-                      )}
-                    </div>
-                  ))}
+              <Link to='/notifications'>
+                <li className='tooltip'>
+                  <Badge count={notification.length} offset={[-20, 0]}>
+                    <FontAwesomeIcon icon={faBell} className='menu-icon' />
+                  </Badge>
+                  <span className='tooltip-text'>Notifications</span>
+                </li>
+              </Link>
+              {/* <li>
+                <div className='settings-links dropdown'>
+                  <Badge count={notification.length} offset={[-20, 0]}>
+                    <FontAwesomeIcon icon={faBell} className='menu-icon' />
+                  </Badge>
+                  <div className='dropdown-content information'>
+                    {!notification.length && 'No new notifications'}
+                    {notification.map((notif) => (
+                      <div key={notif._id}>
+                        {notif.chat ? (
+                          <p
+                            onClick={() => {
+                              history.push('/chats');
+                              setNotification(
+                                notification.filter((n) => n !== notif)
+                              );
+                            }}
+                          >
+                            You received a new chat message from{' '}
+                            {notif.chat.users[1].email.split('@')[0]}
+                          </p>
+                        ) : notif.likes ? (
+                          <p
+                            onClick={() => {
+                              notifPost(notif);
+                              setNotification(
+                                notification.filter((n) => n !== notif)
+                              );
+                            }}
+                          >
+                            {
+                              notif.likes[notif.likes.length - 1].email.split(
+                                '@'
+                              )[0]
+                            }{' '}
+                            liked your post
+                          </p>
+                        ) : notif.following &&
+                          notif.following[notif.following.length - 1]._id ===
+                            user._id ? (
+                          <p
+                            onClick={() => {
+                              history.push(`/user/profile/${notif._id}`);
+                              setNotification(
+                                notification.filter((n) => n !== notif)
+                              );
+                            }}
+                          >
+                            {notif.email.split('@')[0]} likes you
+                          </p>
+                        ) : notif.email && notif._id !== user._id ? (
+                          <p
+                            onClick={() => {
+                              history.push(`/user/profile/${notif._id}`);
+                              setNotification(
+                                notification.filter((n) => n !== notif)
+                              );
+                            }}
+                          >
+                            {notif.email.split('@')[0]} visited your profile
+                          </p>
+                        ) : notif.some((obj) =>
+                            Object.keys(obj).includes('text')
+                          ) ? (
+                          <p
+                            onClick={() => {
+                              notifPost(notif);
+                              setNotification(
+                                notification.filter((n) => n !== notif)
+                              );
+                            }}
+                          >
+                            {
+                              notif[notif.length - 1].postedBy.email.split(
+                                '@'
+                              )[0]
+                            }{' '}
+                            commented on your post
+                          </p>
+                        ) : (
+                          ''
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-
+              </li> */}
               <Link to='/chats'>
                 <li className='tooltip'>
                   <FontAwesomeIcon icon={faMessage} className='menu-icon' />

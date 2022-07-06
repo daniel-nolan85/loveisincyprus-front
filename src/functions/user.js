@@ -101,10 +101,10 @@ export const getUserPointsTotal = async (authtoken) =>
     },
   });
 
-export const addPoints = async (number, reason, authtoken) => {
+export const addPoints = async (number, reason, authtoken, otherUser) => {
   await axios.put(
     `${process.env.REACT_APP_API}/add-points`,
-    { number, reason },
+    { number, reason, otherUser },
     {
       headers: {
         authtoken,

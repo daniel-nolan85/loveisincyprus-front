@@ -13,6 +13,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import Match from '../../components/modals/Match';
 import { addPoints } from '../../functions/user';
+import io from 'socket.io-client';
+import { ChatState } from '../../context/ChatProvider';
+// import NotifPost from '../../components/modals/NotifPost';
+
+const ENDPOINT = 'http://localhost:8000';
+let socket;
 
 const UserDashboard = () => {
   const [content, setContent] = useState('');
@@ -42,6 +48,15 @@ const UserDashboard = () => {
 
   const { user } = useSelector((state) => ({ ...state }));
 
+  const {
+    socketConnected,
+    setSocketConnected,
+    // thisPost,
+    // setThisPost,
+    // notifModalIsOpen,
+    // setNotifModalIsOpen,
+  } = ChatState();
+
   const dispatch = useDispatch();
 
   // useEffect(() => {
@@ -53,6 +68,12 @@ const UserDashboard = () => {
   useEffect(() => {
     followersPostsNum();
   }, [page]);
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit('setup', user);
+    socket.on('connected', () => setSocketConnected(true));
+  }, []);
 
   const followersPostsNum = async () => {
     await axios
@@ -125,6 +146,7 @@ const UserDashboard = () => {
         toast.success(`You like ${u.name ? u.name : u.email.split('@')[0]}.`, {
           position: toast.POSITION.TOP_CENTER,
         });
+        socket.emit('new follower', res.data);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
@@ -150,6 +172,7 @@ const UserDashboard = () => {
             address: res.data.address,
             wishlist: res.data.wishlist,
             points: res.data.points,
+            notifications: res.data.notifications,
           },
         });
         let filtered = users.filter((f) => f._id !== u._id);
@@ -273,6 +296,10 @@ const UserDashboard = () => {
         }
       )
       .then((res) => {
+        console.log(res.data);
+        if (res.data.postedBy !== user._id) {
+          socket.emit('like post', res.data);
+        }
         newsFeed();
       })
       .catch((err) => {
@@ -325,6 +352,9 @@ const UserDashboard = () => {
         setImage({});
         setCommentModalIsOpen(false);
         newsFeed();
+        if (res.data.postedBy._id !== user._id) {
+          socket.emit('new comment', res.data);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -407,6 +437,29 @@ const UserDashboard = () => {
           setMatchModalIsOpen={setMatchModalIsOpen}
           match={match}
         />
+        {/* <NotifPost
+          notifModalIsOpen={notifModalIsOpen}
+          setNotifModalIsOpen={setNotifModalIsOpen}
+          post={thisPost}
+          handleDelete={handleDelete}
+          handleLike={handleLike}
+          handleUnlike={handleUnlike}
+          handleComment={handleComment}
+          removeComment={removeComment}
+          newsFeed={newsFeed}
+          postDeleteModalIsOpen={postDeleteModalIsOpen}
+          setPostDeleteModalIsOpen={setPostDeleteModalIsOpen}
+          postToDelete={postToDelete}
+          commentDeleteModalIsOpen={commentDeleteModalIsOpen}
+          setCommentDeleteModalIsOpen={setCommentDeleteModalIsOpen}
+          commentToDelete={commentToDelete}
+          postOfCommentToDelete={postOfCommentToDelete}
+          editComment={editComment}
+          commentEditModalIsOpen={commentEditModalIsOpen}
+          setCommentEditModalIsOpen={setCommentEditModalIsOpen}
+          commentToEdit={commentToEdit}
+          postOfCommentToEdit={postOfCommentToEdit}
+        /> */}
       </div>
       <RightSidebar />
     </div>

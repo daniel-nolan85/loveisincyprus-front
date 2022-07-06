@@ -242,6 +242,10 @@ const Points = () => {
                     <p>
                       {pg.reason === 'post' && 'You created a new post'}
                       {pg.reason === 'login' && 'You logged in to the site'}
+                      {pg.reason === 'new visitor' &&
+                        'A new user visited your profile'}
+                      {pg.reason === 'new visit' &&
+                        "You visited a new member's  profile"}
                     </p>
                   </td>
                 </tr>

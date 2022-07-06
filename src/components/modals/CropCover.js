@@ -146,6 +146,7 @@ const CropCover = ({
               address: res.data.address,
               wishlist: res.data.wishlist,
               points: res.data.points,
+              notifications: res.data.notifications,
             },
           });
         }

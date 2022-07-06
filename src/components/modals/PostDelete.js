@@ -15,6 +15,9 @@ const PostDelete = ({
   fetchUserPosts,
   fetchUserTotalPosts,
   fetchUserPoints,
+  fetchNotifications,
+  deleteNotif,
+  notifToDelete,
 }) => {
   let { user } = useSelector((state) => ({ ...state }));
 
@@ -40,6 +43,8 @@ const PostDelete = ({
         // setUploading(false);
         fetchUserTotalPosts && fetchUserTotalPosts();
         fetchUserPoints && fetchUserPoints();
+        fetchNotifications && fetchNotifications();
+        deleteNotif && deleteNotif(notifToDelete);
       })
       .catch((err) => console.log(err));
   };
@@ -74,7 +79,7 @@ const PostDelete = ({
           <div className='match-images'>
             <img
               src={image.url}
-              alt={`${postedBy.name || postedBy.email.split('@')[0]}'s post`}
+              // alt={`${postedBy.name || postedBy.email.split('@')[0]}'s post`}
             />
           </div>
         )}

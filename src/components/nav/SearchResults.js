@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faHeartBroken } from '@fortawesome/free-solid-svg-icons';
@@ -8,6 +8,11 @@ import defaultProfile from '../../assets/defaultProfile.png';
 import { Link } from 'react-router-dom';
 import Match from '../../components/modals/Match';
 import Unfollow from '../../components/modals/Unfollow';
+import io from 'socket.io-client';
+import { ChatState } from '../../context/ChatProvider';
+
+const ENDPOINT = 'http://localhost:8000';
+let socket;
 
 const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
   const [match, setMatch] = useState({});
@@ -17,7 +22,15 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
 
   let { user } = useSelector((state) => ({ ...state }));
 
+  const { socketConnected, setSocketConnected } = ChatState();
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit('setup', user);
+    socket.on('connected', () => setSocketConnected(true));
+  }, []);
 
   const handleFollow = async (u) => {
     await axios
@@ -41,6 +54,8 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
         toast.success(`You like ${u.name ? u.name : u.email.split('@')[0]}.`, {
           position: toast.POSITION.TOP_CENTER,
         });
+        socket.emit('new follower', res.data);
+        console.log(res.data);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
@@ -66,6 +81,7 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
             address: res.data.address,
             wishlist: res.data.wishlist,
             points: res.data.points,
+            notifications: res.data.notifications,
           },
         });
       })

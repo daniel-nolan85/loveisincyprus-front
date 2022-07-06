@@ -9,6 +9,11 @@ import RightSidebar from '../../components/user/RightSidebar';
 import { toast } from 'react-toastify';
 import Match from '../../components/modals/Match';
 import Unfollow from '../../components/modals/Unfollow';
+import io from 'socket.io-client';
+import { ChatState } from '../../context/ChatProvider';
+
+const ENDPOINT = 'http://localhost:8000';
+let socket;
 
 const Visitors = ({ history }) => {
   const [users, setUsers] = useState([]);
@@ -19,7 +24,15 @@ const Visitors = ({ history }) => {
 
   const { user } = useSelector((state) => ({ ...state }));
 
+  const { socketConnected, setSocketConnected } = ChatState();
+
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit('setup', user);
+    socket.on('connected', () => setSocketConnected(true));
+  }, []);
 
   useEffect(() => {
     console.log(user);
@@ -68,6 +81,7 @@ const Visitors = ({ history }) => {
         toast.success(`You like ${u.name ? u.name : u.email.split('@')[0]}.`, {
           position: toast.POSITION.TOP_CENTER,
         });
+        socket.emit('new follower', res.data);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
@@ -93,6 +107,7 @@ const Visitors = ({ history }) => {
             address: res.data.address,
             wishlist: res.data.wishlist,
             points: res.data.points,
+            notifications: res.data.notifications,
           },
         });
       })

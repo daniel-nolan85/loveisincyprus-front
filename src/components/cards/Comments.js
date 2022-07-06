@@ -23,6 +23,7 @@ const Comments = ({
   setCommentEditModalIsOpen,
   commentToEdit,
   postOfCommentToEdit,
+  setNotifModalIsOpen,
 }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -73,12 +74,18 @@ const Comments = ({
                 <FontAwesomeIcon
                   icon={faTrashCan}
                   className='fa trash'
-                  onClick={() => removeComment(post._id, c)}
+                  onClick={() => {
+                    removeComment(post._id, c);
+                    setNotifModalIsOpen(false);
+                  }}
                 />
                 <FontAwesomeIcon
                   icon={faPenToSquare}
                   className='fa edit'
-                  onClick={() => editComment(post._id, c)}
+                  onClick={() => {
+                    editComment(post._id, c);
+                    setNotifModalIsOpen(false);
+                  }}
                 />
               </div>
             )) ||

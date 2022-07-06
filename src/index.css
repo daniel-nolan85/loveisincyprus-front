@@ -1553,6 +1553,17 @@ select.gray {
   cursor: pointer;
 }
 
+/* --------------- notifications-page --------------- */
+span.link {
+  color: var(--nav-color);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.new {
+  font-weight: bold;
+}
+
 /* --------------- swipe to match page --------------- */
 .tinder-card-container {
   display: flex;

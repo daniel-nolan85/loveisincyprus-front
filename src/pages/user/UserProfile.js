@@ -28,6 +28,11 @@ import ShowLikes from '../../components/modals/ShowLikes';
 import Match from '../../components/modals/Match';
 import Unfollow from '../../components/modals/Unfollow';
 import { addPoints } from '../../functions/user';
+import io from 'socket.io-client';
+import { ChatState } from '../../context/ChatProvider';
+
+const ENDPOINT = 'http://localhost:8000';
+let socket;
 
 const UserProfile = () => {
   const [thisUser, setThisUser] = useState({});
@@ -59,9 +64,17 @@ const UserProfile = () => {
 
   let { user } = useSelector((state) => ({ ...state }));
 
+  const { socketConnected, setSocketConnected } = ChatState();
+
   const { userId } = useParams();
 
   let dispatch = useDispatch();
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit('setup', user);
+    socket.on('connected', () => setSocketConnected(true));
+  }, []);
 
   useEffect(() => {
     axios
@@ -87,6 +100,7 @@ const UserProfile = () => {
   }, [page, userId]);
 
   useEffect(() => {
+    // newVisitor();
     fetchUser();
     fetchVisitor();
     fetchThisUsersPhotos();
@@ -147,15 +161,30 @@ const UserProfile = () => {
 
   const fetchVisitor = async () => {
     try {
-      await axios.post(
-        `${process.env.REACT_APP_API}/fetch-visitor`,
-        { userId, user },
-        {
-          headers: {
-            authtoken: user.token,
-          },
-        }
-      );
+      await axios
+        .post(
+          `${process.env.REACT_APP_API}/fetch-visitor`,
+          { userId, user },
+          {
+            headers: {
+              authtoken: user.token,
+            },
+          }
+        )
+        .then((res) => {
+          console.log(res.data);
+          if (!res.data.visitors.includes(user._id)) {
+            socket.emit('new visitor', res.data, user);
+            addPoints(5, 'new visitor', user.token, res.data);
+            addPoints(1, 'new visit', user.token);
+            toast.success(`First visit. You have been awarded 1 point!`, {
+              position: toast.POSITION.TOP_CENTER,
+            });
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } catch (err) {
       console.log(err);
     }
@@ -213,6 +242,7 @@ const UserProfile = () => {
         }
       )
       .then((res) => {
+        socket.emit('like post', res.data);
         fetchThisUsersPosts();
       })
       .catch((err) => {
@@ -330,6 +360,7 @@ const UserProfile = () => {
         toast.success(`You like ${name ? name : email.split('@')[0]}.`, {
           position: toast.POSITION.TOP_CENTER,
         });
+        socket.emit('new follower', res.data);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
@@ -355,6 +386,7 @@ const UserProfile = () => {
             address: res.data.address,
             wishlist: res.data.wishlist,
             points: res.data.points,
+            notifications: res.data.notifications,
           },
         });
       })

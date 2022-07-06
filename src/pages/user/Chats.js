@@ -75,7 +75,7 @@ const Chats = ({ history }) => {
     setUsers(usersToSort);
   }, [chats]);
 
-  console.log('notification => ', notification);
+  // console.log('notification => ', notification);
 
   useEffect(() => {
     socket = io(ENDPOINT);
@@ -112,7 +112,7 @@ const Chats = ({ history }) => {
         }
       )
       .then((res) => {
-        // console.log('users ==> ', res.data);
+        console.log('users ==> ', res.data);
         setUsers(res.data);
       })
       .catch((err) => {
@@ -308,7 +308,12 @@ const Chats = ({ history }) => {
                         chat.users.some((e) => e._id === u._id) &&
                         chat.latestMessage && (
                           <div className='action' key={chat._id}>
-                            <p>{chat.latestMessage.content}</p>
+                            <p>
+                              {chat.latestMessage.content.length > 25
+                                ? chat.latestMessage.content.substring(0, 26) +
+                                  '...'
+                                : chat.latestMessage.content}
+                            </p>
                             <span className='time'>
                               {moment(chat.latestMessage.createdAt).fromNow()}
                             </span>

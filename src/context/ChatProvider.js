@@ -9,6 +9,8 @@ const ChatProvider = ({ children }) => {
   const [messages, setMessages] = useState([]);
   // const [isTyping, setIsTyping] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
+  // const [thisPost, setThisPost] = useState({});
+  // const [notifModalIsOpen, setNotifModalIsOpen] = useState(false);
 
   return (
     <ChatContext.Provider
@@ -25,6 +27,10 @@ const ChatProvider = ({ children }) => {
         // setIsTyping,
         socketConnected,
         setSocketConnected,
+        // thisPost,
+        // setThisPost,
+        // notifModalIsOpen,
+        // setNotifModalIsOpen,
       }}
     >
       {children}

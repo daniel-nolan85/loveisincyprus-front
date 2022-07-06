@@ -21,6 +21,8 @@ const ShowLikes = ({ likesModalIsOpen, setLikesModalIsOpen, post }) => {
     },
   };
 
+  console.log(post);
+
   return (
     <Modal
       isOpen={likesModalIsOpen}
