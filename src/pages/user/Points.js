@@ -159,7 +159,9 @@ const Points = () => {
 
   const updateGainedChart = () => {
     setPointsGainedGraph({
-      labels: pointsGainedDisplay.map((date) => moment(date.awarded)),
+      labels: pointsGainedDisplay.map((date) =>
+        moment(date.awarded).format('MMMM Do YYYY')
+      ),
       datasets: [
         {
           label: 'Points Accumulated',
@@ -172,7 +174,9 @@ const Points = () => {
 
   const updateLostChart = () => {
     setPointsLostGraph({
-      labels: pointsLostDisplay.map((date) => moment(date.removed)),
+      labels: pointsLostDisplay.map((date) =>
+        moment(date.removed).format('MMMM Do YYYY')
+      ),
       datasets: [
         {
           label: 'Points Lost',
@@ -226,14 +230,14 @@ const Points = () => {
           <table>
             <tbody>
               <tr>
-                <th>Time & Date</th>
+                <th>Date</th>
                 <th>Points</th>
                 <th>Action</th>
               </tr>
               {pointsGainedDisplay.map((pg) => (
                 <tr key={pg._id}>
                   <td>
-                    <p>{pg.awarded}</p>
+                    <p>{moment(pg.awarded).format('MMMM Do YYYY')}</p>
                   </td>
                   <td>
                     <p>{pg.amount}</p>
@@ -282,7 +286,7 @@ const Points = () => {
               {pointsLostDisplay.map((pl) => (
                 <tr key={pl._id}>
                   <td>
-                    <p>{pl.removed}</p>
+                    <p>{moment(pl.removed).format('MMMM Do YYYY')}</p>
                   </td>
                   <td>
                     <p>-{pl.amount}</p>

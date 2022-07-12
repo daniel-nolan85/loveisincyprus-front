@@ -6,7 +6,7 @@ import defaultProfile from '../../assets/defaultProfile.png';
 
 Modal.setAppElement('#root');
 
-const ShowLikes = ({ likesModalIsOpen, setLikesModalIsOpen, post }) => {
+const Maybe = ({ maybeModalIsOpen, setMaybeModalIsOpen, post }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
   const modalStyles = {
@@ -21,48 +21,51 @@ const ShowLikes = ({ likesModalIsOpen, setLikesModalIsOpen, post }) => {
     },
   };
 
+  console.log(post);
+
   return (
     <Modal
-      isOpen={likesModalIsOpen}
-      onRequestClose={() => setLikesModalIsOpen(false)}
+      isOpen={maybeModalIsOpen}
+      onRequestClose={() => setMaybeModalIsOpen(false)}
       style={modalStyles}
       contentLabel='Example Modal'
     >
-      {post.likes &&
-        post.likes.map((like) => (
-          <div className='likes-container' key={like._id}>
+      {post.notif && post.notif.maybe.length > 0 ? (
+        post.notif.maybe.map((m) => (
+          <div className='likes-container' key={m._id}>
             <div className='user-profile'>
               <Link
                 to={
-                  like._id === user._id
+                  m._id === user._id
                     ? `/user/profile/${user._id}`
-                    : `/user/${like._id}`
+                    : `/user/${m._id}`
                 }
               >
                 <img
-                  src={
-                    like.profileImage ? like.profileImage.url : defaultProfile
-                  }
-                  alt={`${
-                    like.name || like.email.split('@'[0])
-                  }'s profile picture`}
+                  src={m.profileImage ? m.profileImage.url : defaultProfile}
+                  alt={`${m.name || m.email.split('@'[0])}'s profile picture`}
                 />
               </Link>
               <Link
                 to={
-                  user._id === like._id
+                  user._id === m._id
                     ? `/user/profile/${user._id}`
-                    : `/user/${like._id}`
+                    : `/user/${m._id}`
                 }
               >
-                <p>{like.name ? like.name : like.email.split('@')[0]}</p>
+                <p>{m.name ? m.name : m.email.split('@')[0]}</p>
               </Link>
             </div>
             <br />
           </div>
-        ))}
+        ))
+      ) : (
+        <div className='likes-container'>
+          No members have said they might come yet
+        </div>
+      )}
     </Modal>
   );
 };
 
-export default ShowLikes;
+export default Maybe;

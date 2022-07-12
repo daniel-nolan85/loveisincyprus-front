@@ -10,11 +10,14 @@ import {
   faMagnifyingGlass,
   faLock,
   faKey,
+  faStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import UserDeleteAdmin from '../../components/modals/UserDeleteAdmin';
 import AddUserToAdmin from '../../components/modals/AddUserToAdmin';
 import RemoveUserFromAdmin from '../../components/modals/RemoveUserFromAdmin';
+import AddUserToFeaturedMembers from '../../components/modals/AddUserToFeaturedMembers';
+import RemoveUserFromFeaturedMembers from '../../components/modals/RemoveUserFromFeaturedMembers';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -27,6 +30,17 @@ const Users = () => {
   const [removeFromAdminModalIsOpen, setRemoveFromAdminModalIsOpen] =
     useState(false);
   const [userToRemoveFromAdmin, setUserToRemoveFromAdmin] = useState({});
+  const [userToAddToFeaturedMembers, setUserToAddToFeaturedMembers] = useState(
+    {}
+  );
+  const [userToRemoveFromFeaturedMembers, setUserToRemoveFromFeaturedMembers] =
+    useState({});
+  const [addToFeaturedMembersModalIsOpen, setAddToFeaturedMembersModalIsOpen] =
+    useState(false);
+  const [
+    removeFromFeaturedMembersModalIsOpen,
+    setRemoveFromFeaturedMembersModalIsOpen,
+  ] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -75,6 +89,16 @@ const Users = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const removeFromFeaturedMembers = (u) => {
+    setRemoveFromFeaturedMembersModalIsOpen(true);
+    setUserToRemoveFromFeaturedMembers(u);
+  };
+
+  const addToFeaturedMembers = (u) => {
+    setAddToFeaturedMembersModalIsOpen(true);
+    setUserToAddToFeaturedMembers(u);
   };
 
   const addToAdmin = (u) => {
@@ -141,6 +165,25 @@ const Users = () => {
                 >
                   <p>{u.name || u.email.split('@')[0]}</p>
                 </Link>
+                {u.featuredMember === true ? (
+                  <span>
+                    <FontAwesomeIcon
+                      icon={faStar}
+                      className='fa star gold'
+                      onClick={() => removeFromFeaturedMembers(u)}
+                    />
+                  </span>
+                ) : (
+                  u.featuredMember === false && (
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faStar}
+                        className='fa star grey'
+                        onClick={() => addToFeaturedMembers(u)}
+                      />
+                    </span>
+                  )
+                )}
                 {u.role === 'subscriber' && (
                   <span>
                     <FontAwesomeIcon
@@ -186,6 +229,22 @@ const Users = () => {
         removeFromAdminModalIsOpen={removeFromAdminModalIsOpen}
         setRemoveFromAdminModalIsOpen={setRemoveFromAdminModalIsOpen}
         userToRemoveFromAdmin={userToRemoveFromAdmin}
+        fetchUsers={fetchUsers}
+      />
+      <AddUserToFeaturedMembers
+        addToFeaturedMembersModalIsOpen={addToFeaturedMembersModalIsOpen}
+        setAddToFeaturedMembersModalIsOpen={setAddToFeaturedMembersModalIsOpen}
+        userToAddToFeaturedMembers={userToAddToFeaturedMembers}
+        fetchUsers={fetchUsers}
+      />
+      <RemoveUserFromFeaturedMembers
+        removeFromFeaturedMembersModalIsOpen={
+          removeFromFeaturedMembersModalIsOpen
+        }
+        setRemoveFromFeaturedMembersModalIsOpen={
+          setRemoveFromFeaturedMembersModalIsOpen
+        }
+        userToRemoveFromFeaturedMembers={userToRemoveFromFeaturedMembers}
         fetchUsers={fetchUsers}
       />
     </div>

@@ -16,8 +16,9 @@ const PostDelete = ({
   fetchUserTotalPosts,
   fetchUserPoints,
   fetchNotifications,
-  deleteNotif,
-  notifToDelete,
+  setNotifModalIsOpen,
+  // deleteNotif,
+  // notifToDelete,
 }) => {
   let { user } = useSelector((state) => ({ ...state }));
 
@@ -44,7 +45,8 @@ const PostDelete = ({
         fetchUserTotalPosts && fetchUserTotalPosts();
         fetchUserPoints && fetchUserPoints();
         fetchNotifications && fetchNotifications();
-        deleteNotif && deleteNotif(notifToDelete);
+        // deleteNotif && deleteNotif(notifToDelete);
+        setNotifModalIsOpen(false);
       })
       .catch((err) => console.log(err));
   };

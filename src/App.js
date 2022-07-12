@@ -57,6 +57,7 @@ import Wishlist from './pages/user/Wishlist';
 import Points from './pages/user/Points';
 import Chats from './pages/user/Chats';
 import Notifications from './pages/user/Notifications';
+import Event from './pages/admin/Event';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -148,6 +149,14 @@ const App = () => {
                 wishlist: res.data.wishlist,
                 points: res.data.points,
                 notifications: res.data.notifications,
+                featuredMember: res.data.featuredMember,
+                events: res.data.events,
+                language: res.data.language,
+                maritalStatus: res.data.maritalStatus,
+                numOfChildren: res.data.numOfChildren,
+                drinks: res.data.drinks,
+                smokes: res.data.smokes,
+                nationality: res.data.nationality,
               },
             });
             // console.log('logged in user ==> ', res);
@@ -288,6 +297,7 @@ const App = () => {
         <AdminRoute exact path='/admin/product' component={Products} />
         <AdminRoute exact path='/admin/coupon' component={Coupon} />
         <AdminRoute exact path='/admin/orders' component={Orders} />
+        <AdminRoute exact path='/admin/event' component={Event} />
       </Switch>
       {/* </Suspense> */}
     </>

@@ -24,7 +24,7 @@ const Notifications = () => {
   const [post, setPost] = useState({});
   const [currentPost, setCurrentPost] = useState({});
   const [image, setImage] = useState({});
-  const [notifToDelete, setNotifToDelete] = useState([]);
+  // const [notifToDelete, setNotifToDelete] = useState([]);
   const [postToDelete, setPostToDelete] = useState([]);
   const [postDeleteModalIsOpen, setPostDeleteModalIsOpen] = useState(false);
   const [comment, setComment] = useState('');
@@ -37,6 +37,7 @@ const Notifications = () => {
   const [commentToEdit, setCommentToEdit] = useState({});
   const [postOfCommentToEdit, setPostOfCommentToEdit] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -45,10 +46,12 @@ const Notifications = () => {
   useEffect(() => {
     fetchNotifications();
     populateNotifications();
+    console.log(user);
   }, []);
 
   useEffect(() => {
     popPostNotifs();
+    console.log(data);
   }, [data]);
 
   useEffect(() => {
@@ -73,6 +76,7 @@ const Notifications = () => {
         }
       )
       .then((res) => {
+        console.log(res.data);
         setNotifications(res.data.notifications);
       })
       .catch((err) => {
@@ -128,6 +132,7 @@ const Notifications = () => {
   };
 
   const viewNotif = async (n) => {
+    console.log(n);
     await axios
       .post(
         `${process.env.REACT_APP_API}/mark-notif-as-read`,
@@ -143,32 +148,14 @@ const Notifications = () => {
       });
     console.log(n);
     setNotifModalIsOpen(true);
-    setPost(n.notif);
-    setNotifToDelete(n);
+    setPost(n);
+    // setNotifToDelete(n);
     n.new = false;
   };
 
   const handleDelete = async (post) => {
     setPostDeleteModalIsOpen(true);
     setPostToDelete(post);
-  };
-
-  const deleteNotif = async (n) => {
-    console.log(n);
-    await axios
-      .put(
-        `${process.env.REACT_APP_API}/delete-notification/${n._id}`,
-        { user, n },
-        {
-          headers: {
-            authtoken: user.token,
-          },
-        }
-      )
-      .then((res) => {
-        fetchNotifications();
-      })
-      .catch((err) => console.log(err));
   };
 
   const handleComment = (post) => {
@@ -285,6 +272,78 @@ const Notifications = () => {
       });
   };
 
+  const acceptInvite = async (post) => {
+    console.log(post);
+    toast.success(`Great! We can't wait to see you there!`, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/accept-invite`,
+        { user, post },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        fetchNotifications();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const maybe = async (post) => {
+    console.log(post);
+    toast.success(`Ok, we'll keep our fingers crossed!`, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/maybe`,
+        { user, post },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        fetchNotifications();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const declineInvite = async (post) => {
+    console.log(post);
+    toast.success(`Too bad! We hope to see you at the next one!`, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/decline-invite`,
+        { user, post },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        fetchNotifications();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className='container'>
       <LeftSidebar />
@@ -316,46 +375,74 @@ const Notifications = () => {
           <table>
             <tbody>
               <tr>
-                <th>Time & Date</th>
+                <th>Date</th>
                 <th>Action</th>
               </tr>
-              {populatedNotifs.map((n) => (
-                <tr key={n._id}>
-                  <td>
-                    <p className={n.new === true ? 'new' : ''}>{n.occurred}</p>
-                  </td>
-                  <td>
-                    {n.action === 'liked post' && (
+              {populatedNotifs.map((n) =>
+                typeof n.notif === 'object' ? (
+                  <tr key={n._id}>
+                    <td>
                       <p className={n.new === true ? 'new' : ''}>
-                        {n.notif.likes.length > 1
-                          ? n.notif.likes[n.notif.likes.length - 1].email.split(
-                              '@'
-                            )[0]
-                          : n.notif.likes[0].email.split('@')[0]}{' '}
-                        liked your{' '}
+                        {moment(n.occurred).format('MMMM Do YYYY')}
+                      </p>
+                    </td>
+                    <td>
+                      {n.action === 'liked post' && (
+                        <p className={n.new === true ? 'new' : ''}>
+                          {/* {n.notif.likes.length > 1
+                            ? n.notif.likes[
+                                n.notif.likes.length - 1
+                              ].email.split('@')[0]
+                            : n.notif.likes[0].email.split('@')[0]}{' '} */}
+                          Someone liked your{' '}
+                          <span className='link' onClick={() => viewNotif(n)}>
+                            post
+                          </span>
+                        </p>
+                      )}
+                      {n.action === 'commented post' && (
+                        <p className={n.new === true ? 'new' : ''}>
+                          {/* {n.notif.comments.length > 1
+                            ? n.notif.comments[
+                                n.notif.comments.length - 1
+                              ].postedBy.email.split('@')[0]
+                            : n.notif.comments[0].postedBy.email.split(
+                                '@'
+                              )[0]}{' '} */}
+                          Someone commented on your{' '}
+                          <span className='link' onClick={() => viewNotif(n)}>
+                            post
+                          </span>
+                        </p>
+                      )}
+                      {n.action === 'new event' && (
+                        <p className={n.new === true ? 'new' : ''}>
+                          You have been invited to an{' '}
+                          <span className='link' onClick={() => viewNotif(n)}>
+                            event
+                          </span>
+                        </p>
+                      )}
+                    </td>
+                  </tr>
+                ) : (
+                  <tr key={n._id}>
+                    <td>
+                      <p className={n.new === true ? 'new' : ''}>
+                        {moment(n.occurred).format('MMMM Do YYYY')}
+                      </p>
+                    </td>
+                    <td>
+                      <p className={n.new === true ? 'new' : ''}>
+                        Someone interacted with your{' '}
                         <span className='link' onClick={() => viewNotif(n)}>
                           post
                         </span>
                       </p>
-                    )}
-                    {n.action === 'commented post' && (
-                      <p className={n.new === true ? 'new' : ''}>
-                        {n.notif.comments.length > 1
-                          ? n.notif.comments[
-                              n.notif.comments.length - 1
-                            ].postedBy.email.split('@')[0]
-                          : n.notif.comments[0].postedBy.email.split(
-                              '@'
-                            )[0]}{' '}
-                        commented on your{' '}
-                        <span className='link' onClick={() => viewNotif(n)}>
-                          post
-                        </span>
-                      </p>
-                    )}
-                  </td>
-                </tr>
-              ))}
+                    </td>
+                  </tr>
+                )
+              )}
             </tbody>
           </table>
         </div>
@@ -391,9 +478,12 @@ const Notifications = () => {
           commentToEdit={commentToEdit}
           postOfCommentToEdit={postOfCommentToEdit}
           fetchNotifications={fetchNotifications}
-          deleteNotif={deleteNotif}
-          notifToDelete={notifToDelete}
-          setNotifToDelete={setNotifToDelete}
+          // notifToDelete={notifToDelete}
+          // setNotifToDelete={setNotifToDelete}
+          acceptInvite={acceptInvite}
+          maybe={maybe}
+          declineInvite={declineInvite}
+          loading={loading}
         />
       </div>
       <RightSidebar />

@@ -84,6 +84,12 @@ const Profile = ({ history }) => {
   const [commentToEdit, setCommentToEdit] = useState({});
   const [postOfCommentToEdit, setPostOfCommentToEdit] = useState([]);
   const [points, setPoints] = useState(0);
+  const [language, setLanguage] = useState('');
+  const [maritalStatus, setMaritalStatus] = useState('');
+  const [numOfChildren, setNumOfChildren] = useState(0);
+  const [drinks, setDrinks] = useState('');
+  const [smokes, setSmokes] = useState('');
+  const [nationality, setNationality] = useState('');
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -115,6 +121,12 @@ const Profile = ({ history }) => {
       setLocation(user.location);
       setGenderWanted(user.genderWanted);
       setRelWanted(user.relWanted);
+      setLanguage(user.language);
+      setMaritalStatus(user.maritalStatus);
+      setNumOfChildren(user.numOfChildren);
+      setDrinks(user.drinks);
+      setSmokes(user.smokes);
+      setNationality(user.nationality);
       fetchPhotos();
       fetchMatches();
       fetchVisitors();
@@ -142,6 +154,12 @@ const Profile = ({ history }) => {
           location,
           genderWanted,
           relWanted,
+          language,
+          maritalStatus,
+          numOfChildren,
+          drinks,
+          smokes,
+          nationality,
         },
         {
           headers: {
@@ -187,6 +205,14 @@ const Profile = ({ history }) => {
               wishlist: res.data.wishlist,
               points: res.data.points,
               notifications: res.data.notifications,
+              featuredMember: res.data.featuredMember,
+              events: res.data.events,
+              language: res.data.language,
+              maritalStatus: res.data.maritalStatus,
+              numOfChildren: res.data.numOfChildren,
+              drinks: res.data.drinks,
+              smokes: res.data.smokes,
+              nationality: res.data.nationality,
             },
           });
         }
@@ -957,6 +983,18 @@ const Profile = ({ history }) => {
         setGenderWanted={setGenderWanted}
         relWanted={relWanted}
         setRelWanted={setRelWanted}
+        language={language}
+        setLanguage={setLanguage}
+        maritalStatus={maritalStatus}
+        setMaritalStatus={setMaritalStatus}
+        numOfChildren={numOfChildren}
+        setNumOfChildren={setNumOfChildren}
+        drinks={drinks}
+        setDrinks={setDrinks}
+        smokes={smokes}
+        setSmokes={setSmokes}
+        nationality={nationality}
+        setNationality={setNationality}
       />
       {user.coverImage && user.coverImage.url && (
         <CropCover

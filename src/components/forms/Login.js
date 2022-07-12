@@ -84,6 +84,14 @@ const Login = () => {
               wishlist: res.data.wishlist,
               points: res.data.points,
               notifications: res.data.notifications,
+              featuredMember: res.data.featuredMember,
+              events: res.data.events,
+              language: res.data.language,
+              maritalStatus: res.data.maritalStatus,
+              numOfChildren: res.data.numOfChildren,
+              drinks: res.data.drinks,
+              smokes: res.data.smokes,
+              nationality: res.data.nationality,
             },
           });
           roleBasedRedirect(res);
@@ -166,6 +174,14 @@ const Login = () => {
                 wishlist: res.data.wishlist,
                 points: res.data.points,
                 notifications: res.data.notifications,
+                featuredMember: res.data.featuredMember,
+                events: res.data.events,
+                language: res.data.language,
+                maritalStatus: res.data.maritalStatus,
+                numOfChildren: res.data.numOfChildren,
+                drinks: res.data.drinks,
+                smokes: res.data.smokes,
+                nationality: res.data.nationality,
               },
             });
             roleBasedRedirect(res);
