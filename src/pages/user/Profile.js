@@ -90,6 +90,39 @@ const Profile = ({ history }) => {
   const [drinks, setDrinks] = useState('');
   const [smokes, setSmokes] = useState('');
   const [nationality, setNationality] = useState('');
+  const [height, setHeight] = useState('');
+  const [build, setBuild] = useState('');
+  const [hairStyle, setHairStyle] = useState('');
+  const [hairLength, setHairLength] = useState('');
+  const [eyeColor, setEyeColor] = useState('');
+  const [ethnicity, setEthnicity] = useState('');
+  const [feetType, setFeetType] = useState('');
+  const [loves, setLoves] = useState([]);
+  const [hates, setHates] = useState([]);
+  const [education, setEducation] = useState('');
+  const [occupation, setOccupation] = useState('');
+  const [politics, setPolitics] = useState('');
+  const [religion, setReligion] = useState('');
+  const [pets, setPets] = useState([]);
+  const [interests, setInterests] = useState([]);
+  const [music, setMusic] = useState([]);
+  const [foods, setFoods] = useState('');
+  const [books, setBooks] = useState([]);
+  const [films, setFilms] = useState([]);
+  const [sports, setSports] = useState([]);
+  const [livesWith, setLivesWith] = useState('');
+  const [roleInLife, setRoleInLife] = useState('');
+  const [managesEdu, setManagesEdu] = useState('');
+  const [hobbies, setHobbies] = useState([]);
+  const [marriage, setMarriage] = useState('');
+  const [income, setIncome] = useState(0);
+  const [ageOfPartner, setAgeOfPartner] = useState('');
+  const [traits, setTraits] = useState([]);
+  const [changes, setChanges] = useState('');
+  const [relocate, setRelocate] = useState('');
+  const [treatSelf, setTreatSelf] = useState([]);
+  const [sexLikes, setSexLikes] = useState('');
+  const [sexFrequency, setSexFrequency] = useState('');
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -127,6 +160,39 @@ const Profile = ({ history }) => {
       setDrinks(user.drinks);
       setSmokes(user.smokes);
       setNationality(user.nationality);
+      setHeight(user.height);
+      setBuild(user.build);
+      setHairStyle(user.hairStyle);
+      setHairLength(user.hairLength);
+      setEyeColor(user.eyeColor);
+      setEthnicity(user.ethnicity);
+      setFeetType(user.feetType);
+      setLoves(user.loves);
+      setHates(user.hates);
+      setEducation(user.education);
+      setOccupation(user.occupation);
+      setPolitics(user.politics);
+      setReligion(user.religion);
+      setPets(user.pets);
+      setInterests(user.interests);
+      setMusic(user.music);
+      setFoods(user.foods);
+      setBooks(user.books);
+      setFilms(user.films);
+      setSports(user.sports);
+      setLivesWith(user.livesWith);
+      setRoleInLife(user.roleInLife);
+      setManagesEdu(user.managesEdu);
+      setHobbies(user.hobbies);
+      setMarriage(user.marriage);
+      setIncome(user.income);
+      setAgeOfPartner(user.ageOfPartner);
+      setTraits(user.traits);
+      setChanges(user.changes);
+      setRelocate(user.relocate);
+      setTreatSelf(user.treatSelf);
+      setSexLikes(user.sexLikes);
+      setSexFrequency(user.sexFrequency);
       fetchPhotos();
       fetchMatches();
       fetchVisitors();
@@ -160,6 +226,39 @@ const Profile = ({ history }) => {
           drinks,
           smokes,
           nationality,
+          height,
+          build,
+          hairStyle,
+          hairLength,
+          eyeColor,
+          ethnicity,
+          feetType,
+          loves,
+          hates,
+          education,
+          occupation,
+          politics,
+          religion,
+          pets,
+          interests,
+          music,
+          foods,
+          books,
+          films,
+          sports,
+          livesWith,
+          roleInLife,
+          managesEdu,
+          hobbies,
+          marriage,
+          income,
+          ageOfPartner,
+          traits,
+          changes,
+          relocate,
+          treatSelf,
+          sexLikes,
+          sexFrequency,
         },
         {
           headers: {
@@ -182,6 +281,7 @@ const Profile = ({ history }) => {
           dispatch({
             type: 'LOGGED_IN_USER',
             payload: {
+              ...user,
               profileImage: res.data.profileImage,
               coverImage: res.data.coverImage,
               name: res.data.name,
@@ -193,26 +293,45 @@ const Profile = ({ history }) => {
               location: res.data.location,
               genderWanted: res.data.genderWanted,
               relWanted: res.data.relWanted,
-              following: res.data.following,
-              followers: res.data.followers,
-              matches: res.data.matches,
-              visitors: res.data.visitors,
-              token: user.token,
-              role: res.data.role,
-              _id: res.data._id,
-              createdAt: res.data.createdAt,
-              address: res.data.address,
-              wishlist: res.data.wishlist,
-              points: res.data.points,
-              notifications: res.data.notifications,
-              featuredMember: res.data.featuredMember,
-              events: res.data.events,
               language: res.data.language,
               maritalStatus: res.data.maritalStatus,
               numOfChildren: res.data.numOfChildren,
               drinks: res.data.drinks,
               smokes: res.data.smokes,
               nationality: res.data.nationality,
+              height: res.data.height,
+              build: res.data.build,
+              hairStyle: res.data.hairStyle,
+              hairLength: res.data.hairLength,
+              eyeColor: res.data.eyeColor,
+              ethnicity: res.data.ethnicity,
+              feetType: res.data.feetType,
+              loves: res.data.loves,
+              hates: res.data.hates,
+              education: res.data.education,
+              occupation: res.data.occupation,
+              politics: res.data.politics,
+              religion: res.data.religion,
+              pets: res.data.pets,
+              interests: res.data.interests,
+              music: res.data.music,
+              foods: res.data.foods,
+              books: res.data.books,
+              films: res.data.films,
+              sports: res.data.sports,
+              livesWith: res.data.livesWith,
+              roleInLife: res.data.roleInLife,
+              managesEdu: res.data.managesEdu,
+              hobbies: res.data.hobbies,
+              marriage: res.data.marriage,
+              income: res.data.income,
+              ageOfPartner: res.data.ageOfPartner,
+              traits: res.data.traits,
+              changes: res.data.changes,
+              relocate: res.data.relocate,
+              treatSelf: res.data.treatSelf,
+              sexLikes: res.data.sexLikes,
+              sexFrequency: res.data.sexFrequency,
             },
           });
         }
@@ -995,6 +1114,72 @@ const Profile = ({ history }) => {
         setSmokes={setSmokes}
         nationality={nationality}
         setNationality={setNationality}
+        height={height}
+        setHeight={setHeight}
+        build={build}
+        setBuild={setBuild}
+        hairStyle={hairStyle}
+        setHairStyle={setHairStyle}
+        hairLength={hairLength}
+        setHairLength={setHairLength}
+        eyeColor={eyeColor}
+        setEyeColor={setEyeColor}
+        ethnicity={ethnicity}
+        setEthnicity={setEthnicity}
+        feetType={feetType}
+        setFeetType={setFeetType}
+        loves={loves}
+        setLoves={setLoves}
+        hates={hates}
+        setHates={setHates}
+        education={education}
+        setEducation={setEducation}
+        occupation={occupation}
+        setOccupation={setOccupation}
+        politics={politics}
+        setPolitics={setPolitics}
+        religion={religion}
+        setReligion={setReligion}
+        pets={pets}
+        setPets={setPets}
+        interests={interests}
+        setInterests={setInterests}
+        music={music}
+        setMusic={setMusic}
+        foods={foods}
+        setFoods={setFoods}
+        books={books}
+        setBooks={setBooks}
+        films={films}
+        setFilms={setFilms}
+        sports={sports}
+        setSports={setSports}
+        livesWith={livesWith}
+        setLivesWith={setLivesWith}
+        roleInLife={roleInLife}
+        setRoleInLife={setRoleInLife}
+        managesEdu={managesEdu}
+        setManagesEdu={setManagesEdu}
+        hobbies={hobbies}
+        setHobbies={setHobbies}
+        marriage={marriage}
+        setMarriage={setMarriage}
+        income={income}
+        setIncome={setIncome}
+        ageOfPartner={ageOfPartner}
+        setAgeOfPartner={setAgeOfPartner}
+        traits={traits}
+        setTraits={setTraits}
+        changes={changes}
+        setChanges={setChanges}
+        relocate={relocate}
+        setRelocate={setRelocate}
+        treatSelf={treatSelf}
+        setTreatSelf={setTreatSelf}
+        sexLikes={sexLikes}
+        setSexLikes={setSexLikes}
+        sexFrequency={sexFrequency}
+        setSexFrequency={setSexFrequency}
       />
       {user.coverImage && user.coverImage.url && (
         <CropCover
@@ -1007,7 +1192,6 @@ const Profile = ({ history }) => {
           setCrop={setCrop}
           croppedCover={croppedCover}
           setCroppedCover={setCroppedCover}
-          handleSubmit={handleSubmit}
           coverImageCropped={coverImageCropped}
           setCoverImageCropped={setCoverImageCropped}
         />
@@ -1024,7 +1208,6 @@ const Profile = ({ history }) => {
             setCrop={setCrop}
             croppedProfile={croppedProfile}
             setCroppedProfile={setCroppedProfile}
-            handleSubmit={handleSubmit}
             profileImageCropped={profileImageCropped}
             setProfileImageCropped={setProfileImageCropped}
           />

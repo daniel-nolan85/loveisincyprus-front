@@ -1611,6 +1611,12 @@ select.gray {
   color: #626262;
 }
 
+.prof-update-form-box label.csv {
+  position: relative;
+  top: -5px;
+  color: var(--nav-color);
+}
+
 /* --------------- cropper --------------- */
 /* .crop-container {
   position: absolute;
@@ -2155,7 +2161,7 @@ select.decorated option:active {
   align-items: center;
 }
 
-.header-content {
+.chat-header-content {
   width: 100%;
   /* height: 100%; */
   display: flex;

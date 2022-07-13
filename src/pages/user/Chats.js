@@ -328,7 +328,7 @@ const Chats = ({ history }) => {
         <div className='chat'>
           <div className='chat-header'>
             {selectedChat && (
-              <div className='header-content'>
+              <div className='chat-header-content'>
                 <Link to={`/user/${selectedChat.users[1]._id}`}>
                   <div className='sender-avatar'>
                     <img
