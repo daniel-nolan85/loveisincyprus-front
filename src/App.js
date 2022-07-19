@@ -58,6 +58,7 @@ import Points from './pages/user/Points';
 import Chats from './pages/user/Chats';
 import Notifications from './pages/user/Notifications';
 import Event from './pages/admin/Event';
+import UserSearch from './pages/user/UserSearch';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -321,6 +322,7 @@ const App = () => {
         <UserRoute exact path='/points' component={Points} />
         <UserRoute exact path='/chats' component={Chats} />
         <UserRoute exact path='/notifications' component={Notifications} />
+        <UserRoute exact path='/search-users' component={UserSearch} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/posts' component={Posts} />
         <AdminRoute exact path='/admin/users' component={Users} />

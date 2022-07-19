@@ -328,6 +328,10 @@ nav {
   align-self: flex-start;
 }
 
+.left-sidebar.search {
+  flex-basis: 20%;
+}
+
 .left-sidebar .fa {
   margin-right: 15px;
 }
@@ -1700,6 +1704,19 @@ select.gray {
   font-size: 35px;
   margin-top: 5px;
   cursor: pointer;
+}
+
+/* --------------- advanced-search-page --------------- */
+a.ageTheyWant {
+  margin-top: 20px;
+}
+
+p.csv {
+  font-size: 12px;
+  color: var(--nav-color);
+  margin: 0;
+  position: relative;
+  bottom: 5px;
 }
 
 /* --------------- notifications-page --------------- */

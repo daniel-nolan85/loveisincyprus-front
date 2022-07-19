@@ -183,7 +183,7 @@ const ShopSearch = () => {
 
   return (
     <div className='container'>
-      <div className='left-sidebar'>
+      <div className='left-sidebar search'>
         <div className='shortcut-links'>
           <form onSubmit={handleSearch}>
             <div className='search-box'>

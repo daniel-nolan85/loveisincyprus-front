@@ -52,6 +52,8 @@ const ProfileUpdate = ({
   setHeight,
   build,
   setBuild,
+  hairColor,
+  setHairColor,
   hairStyle,
   setHairStyle,
   hairLength,
@@ -546,6 +548,22 @@ const ProfileUpdate = ({
         </select>
 
         <select
+          name='hair color'
+          onChange={(e) => setHairColor(e.target.value)}
+          value={hairColor}
+        >
+          <option value=''>What colour hair do you have?</option>
+          <option value='black'>Black</option>
+          <option value='blonde'>Blonde</option>
+          <option value='brown'>Brown</option>
+          <option value='chestnut'>Chestnut</option>
+          <option value='dyed'>Dyed</option>
+          <option value='golden'>Golden</option>
+          <option value='red'>Red</option>
+          <option value='white'>White</option>
+        </select>
+
+        <select
           name='hair style'
           onChange={(e) => setHairStyle(e.target.value)}
           value={hairStyle}
@@ -864,6 +882,7 @@ const ProfileUpdate = ({
           <option value='tutor'>A private tutor</option>
           <option value='father'>The father</option>
           <option value='mother'>The mother</option>
+          <option value='parents'>Both parents</option>
           <option value='school'>The school</option>
         </select>
 

@@ -138,3 +138,17 @@ export const getUserPointsLostData = async (authtoken) =>
       authtoken,
     },
   });
+
+export const getUsersByCount = async (count, authtoken) =>
+  await axios.get(`${process.env.REACT_APP_API}/fetch-users/${count}`, {
+    headers: {
+      authtoken,
+    },
+  });
+
+export const fetchUsersByFilter = async (arg, authtoken) =>
+  await axios.post(`${process.env.REACT_APP_API}/fetch-users/filters`, arg, {
+    headers: {
+      authtoken,
+    },
+  });

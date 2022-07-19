@@ -13,6 +13,7 @@ import {
   faToolbox,
   faCartShopping,
   faCoins,
+  faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import SettingsMenu from './SettingsMenu';
 import { useSelector, useDispatch } from 'react-redux';
@@ -124,6 +125,12 @@ const Header = () => {
                 <li className='tooltip'>
                   <FontAwesomeIcon icon={faNewspaper} className='menu-icon' />
                   <span className='tooltip-text'>Dashboard</span>
+                </li>
+              </Link>
+              <Link to='/search-users'>
+                <li className='tooltip'>
+                  <FontAwesomeIcon icon={faUsers} className='menu-icon' />
+                  <span className='tooltip-text'>Search members</span>
                 </li>
               </Link>
               <Link to='/swipe-to-match'>

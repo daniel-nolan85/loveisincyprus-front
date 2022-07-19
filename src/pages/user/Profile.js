@@ -92,6 +92,7 @@ const Profile = ({ history }) => {
   const [nationality, setNationality] = useState('');
   const [height, setHeight] = useState('');
   const [build, setBuild] = useState('');
+  const [hairColor, setHairColor] = useState('');
   const [hairStyle, setHairStyle] = useState('');
   const [hairLength, setHairLength] = useState('');
   const [eyeColor, setEyeColor] = useState('');
@@ -162,6 +163,7 @@ const Profile = ({ history }) => {
       setNationality(user.nationality);
       setHeight(user.height);
       setBuild(user.build);
+      setHairColor(user.hairColor);
       setHairStyle(user.hairStyle);
       setHairLength(user.hairLength);
       setEyeColor(user.eyeColor);
@@ -228,6 +230,7 @@ const Profile = ({ history }) => {
           nationality,
           height,
           build,
+          hairColor,
           hairStyle,
           hairLength,
           eyeColor,
@@ -1118,6 +1121,8 @@ const Profile = ({ history }) => {
         setHeight={setHeight}
         build={build}
         setBuild={setBuild}
+        hairColor={hairColor}
+        setHairColor={setHairColor}
         hairStyle={hairStyle}
         setHairStyle={setHairStyle}
         hairLength={hairLength}
