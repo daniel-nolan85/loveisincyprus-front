@@ -12,6 +12,7 @@ import {
   faCaretDown,
   faCaretUp,
   faSpinner,
+  faBrain,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
@@ -30,6 +31,7 @@ import Unfollow from '../../components/modals/Unfollow';
 import { addPoints } from '../../functions/user';
 import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
+import Analyse from '../../components/modals/Analyse';
 
 const ENDPOINT = 'http://localhost:8000';
 let socket;
@@ -61,6 +63,8 @@ const UserProfile = () => {
   const [commentEditModalIsOpen, setCommentEditModalIsOpen] = useState(false);
   const [commentToEdit, setCommentToEdit] = useState({});
   const [postOfCommentToEdit, setPostOfCommentToEdit] = useState([]);
+  const [analyseModalIsOpen, setAnalyseModalIsOpen] = useState(false);
+  const [userToAnalyse, setUserToAnalyse] = useState({});
 
   let { user } = useSelector((state) => ({ ...state }));
 
@@ -378,6 +382,11 @@ const UserProfile = () => {
     setUserToUnfollow(u);
   };
 
+  const handleAnalyse = async (u) => {
+    setAnalyseModalIsOpen(true);
+    setUserToAnalyse(u);
+  };
+
   const showLikes = (post) => {
     setCurrentPost(post);
     setLikesModalIsOpen(true);
@@ -429,16 +438,37 @@ const UserProfile = () => {
         </div>
         <div className='pd-right'>
           {user.following.includes(_id) ? (
-            <button type='button' onClick={() => handleUnfollow(thisUser)}>
+            <button
+              type='button'
+              onClick={() => handleUnfollow(thisUser)}
+              className='tooltip'
+            >
               <FontAwesomeIcon icon={faHeart} className='fa heart liked' />
+              <span className='tooltip-text'>Unlike this user</span>
             </button>
           ) : (
-            <button type='button' onClick={() => handleFollow(thisUser)}>
+            <button
+              type='button'
+              onClick={() => handleFollow(thisUser)}
+              className='tooltip'
+            >
               <FontAwesomeIcon icon={faHeart} className='fa heart' />
+              <span className='tooltip-text'>Like this user</span>
             </button>
           )}
-          <button type='button'>
-            <FontAwesomeIcon icon={faMessage} className='fa' />
+          {user.matches.includes(_id) && (
+            <button type='button' className='tooltip'>
+              <FontAwesomeIcon icon={faMessage} className='fa' />
+              <span className='tooltip-text'>Message this user</span>
+            </button>
+          )}
+          <button
+            type='button'
+            onClick={() => handleAnalyse(thisUser)}
+            className='analyse tooltip'
+          >
+            <FontAwesomeIcon icon={faBrain} className='fa analyse' />
+            <span className='tooltip-text'>Analyse compatibility</span>
           </button>
           <br />
         </div>
@@ -622,6 +652,11 @@ const UserProfile = () => {
         unfollowModalIsOpen={unfollowModalIsOpen}
         setUnfollowModalIsOpen={setUnfollowModalIsOpen}
         userToUnfollow={userToUnfollow}
+      />
+      <Analyse
+        analyseModalIsOpen={analyseModalIsOpen}
+        setAnalyseModalIsOpen={setAnalyseModalIsOpen}
+        userToAnalyse={userToAnalyse}
       />
       <ShowLikes
         likesModalIsOpen={likesModalIsOpen}

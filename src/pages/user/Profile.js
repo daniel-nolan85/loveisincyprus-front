@@ -293,6 +293,7 @@ const Profile = ({ history }) => {
               about: res.data.about,
               gender: res.data.gender,
               birthday: res.data.birthday,
+              age: res.data.age,
               location: res.data.location,
               genderWanted: res.data.genderWanted,
               relWanted: res.data.relWanted,

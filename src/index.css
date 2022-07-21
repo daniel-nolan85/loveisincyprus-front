@@ -1505,6 +1505,15 @@ select.gray {
   color: var(--nav-color);
 }
 
+.pd-right button.analyse {
+  background: #5388b4;
+  color: #000;
+}
+
+.pd-right .fa.analyse {
+  color: var(--nav-color);
+}
+
 .profile-info {
   display: flex;
   align-items: flex-start;
@@ -1619,6 +1628,68 @@ select.gray {
   position: relative;
   top: -5px;
   color: var(--nav-color);
+}
+
+.analysis-container {
+  max-height: 0;
+  transition: max-height 0.3s;
+  overflow: auto;
+}
+
+.analysis-container-show {
+  max-height: 450px;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.analysis-container-show::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.analysis-container-show {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+.analysis-container ul {
+  list-style: none;
+}
+.analysis-container li {
+  padding-bottom: 10px;
+}
+
+h1.score {
+  margin: auto;
+  font-size: 50px;
+  font-weight: bold;
+}
+
+h1.score.none {
+  color: #626262;
+}
+
+h1.score.very-low {
+  color: #6bbcd1;
+}
+
+h1.score.low {
+  color: #002947;
+}
+
+h1.score.mid {
+  color: #4fb443;
+}
+
+h1.score.high {
+  color: #fd9415;
+}
+
+h1.score.very-high {
+  color: #c70000;
+}
+
+h1.score.super {
+  color: gold;
 }
 
 /* --------------- cropper --------------- */

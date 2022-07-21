@@ -124,7 +124,7 @@ const ProfileUpdate = ({
 
   const modalStyles = {
     content: {
-      top: '50%',
+      top: '200%',
       left: '50%',
       right: 'auto',
       bottom: 'auto',
@@ -1030,7 +1030,7 @@ const ProfileUpdate = ({
       style={mobileDevice.matches ? modalStylesModal : modalStyles}
       contentLabel='Example Modal'
     >
-      <div className='prof-update-form-box '>
+      <div className='prof-update-form-box'>
         <div className='button-box'>
           <p className='form-header' style={{ paddingLeft: '50px' }}>
             Update Profile
