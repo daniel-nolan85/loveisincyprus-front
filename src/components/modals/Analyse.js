@@ -148,9 +148,7 @@ const Analyse = ({
                 />
                 <h1
                   className={`score ${
-                    points == 0
-                      ? 'none'
-                      : points > 0 && points <= 15
+                    points >= 0 && points <= 15
                       ? 'very-low'
                       : points > 15 && points <= 30
                       ? 'low'
@@ -182,9 +180,7 @@ const Analyse = ({
               </h2>
               <h3>
                 This is considered{' '}
-                {points == 0
-                  ? 'none'
-                  : points > 0 && points <= 15
+                {points >= 0 && points <= 15
                   ? 'ice cold'
                   : points > 15 && points <= 30
                   ? 'cold'
@@ -197,6 +193,11 @@ const Analyse = ({
                   : points > 100 && 'intense'}
                 !
               </h3>
+              <br />
+              <p>
+                Updating your profile fully will help you to achieve higher
+                compatibility scores
+              </p>
               <br />
               {!showAnalysis ? 'Show' : 'Hide'} Breakdown
               <FontAwesomeIcon

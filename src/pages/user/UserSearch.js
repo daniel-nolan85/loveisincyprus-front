@@ -24,7 +24,7 @@ const { SubMenu, ItemGroup } = Menu;
 
 const UserSearch = () => {
   const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
+  // const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [range, setRange] = useState([0, 0]);
   //   const [ok, setOk] = useState(false);
@@ -52,6 +52,8 @@ const UserSearch = () => {
   const [relocate, setRelocate] = useState('');
   const [sexLikes, setSexLikes] = useState('');
   const [sexFrequency, setSexFrequency] = useState('');
+
+  const filteredUsers = [];
 
   const map = {
     ageOfPartner: setAgeOfPartner,
@@ -101,9 +103,11 @@ const UserSearch = () => {
     return () => clearTimeout(delayed);
   }, [text]);
 
-  //   useEffect(() => {
-  //     fetchUsers({ field: 'gender', range });
-  //   }, [ok]);
+  // useEffect(() => {
+  //   console.log('filteredUsers => ', filteredUsers);
+  // }, [filteredUsers]);
+
+  // console.log('filteredUsers => ', filteredUsers);
 
   const loadAllUsers = () => {
     setLoading(true);
@@ -118,6 +122,9 @@ const UserSearch = () => {
     fetchUsersByFilter(arg, user.token).then((res) => {
       console.log(res.data);
       setUsers(res.data);
+      // setFilteredUsers([...users, res.data]);
+      filteredUsers.concat([users]);
+      console.log('filteredUsers => ', filteredUsers);
     });
   };
 

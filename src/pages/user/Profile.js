@@ -35,6 +35,7 @@ import ShowLikes from '../../components/modals/ShowLikes';
 import SinglePost from '../../components/modals/SinglePost';
 import PostDelete from '../../components/modals/PostDelete';
 import { getUserPointsTotal, addPoints } from '../../functions/user';
+import ProfileProgress from '../../components/modals/ProfileProgress';
 
 const Profile = ({ history }) => {
   const [email, setEmail] = useState('');
@@ -124,6 +125,8 @@ const Profile = ({ history }) => {
   const [treatSelf, setTreatSelf] = useState([]);
   const [sexLikes, setSexLikes] = useState('');
   const [sexFrequency, setSexFrequency] = useState('');
+  const [progress, setProgress] = useState({});
+  const [progressModalIsOpen, setProgressModalIsOpen] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -199,9 +202,11 @@ const Profile = ({ history }) => {
       fetchMatches();
       fetchVisitors();
       fetchUserPoints();
+      fetchProgressCompletion();
     }
   }, [user && user.token]);
 
+  console.log('progress => ', progress);
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log('birthday => ', birthday);
@@ -305,6 +310,7 @@ const Profile = ({ history }) => {
               nationality: res.data.nationality,
               height: res.data.height,
               build: res.data.build,
+              hairColor: res.data.hairColor,
               hairStyle: res.data.hairStyle,
               hairLength: res.data.hairLength,
               eyeColor: res.data.eyeColor,
@@ -513,6 +519,27 @@ const Profile = ({ history }) => {
       });
   };
 
+  const fetchProgressCompletion = () => {
+    axios
+      .post(
+        `${process.env.REACT_APP_API}/progress-completion`,
+        {
+          user,
+        },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        setProgress(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const infinity = () => {
     let postsLength = posts.length;
     if (postsLength === totalPosts) {
@@ -686,6 +713,10 @@ const Profile = ({ history }) => {
     setPostModalIsOpen(true);
   };
 
+  const showProgress = () => {
+    setProgressModalIsOpen(true);
+  };
+
   return (
     <div className='profile-container'>
       {user.coverImage && user.coverImage.url ? (
@@ -744,6 +775,11 @@ const Profile = ({ history }) => {
             <div>
               <h3>{user.name || user.email.split('@')[0]}</h3>
               <p>Member since {user.createdAt.split('T')[0]}</p>
+              <div className='tooltip progress' onClick={showProgress}>
+                <progress value={progress.percentage} max='100'></progress>
+                <span>{progress.percentage}%</span>
+                <span className='tooltip-text'>Profile completion</span>
+              </div>
             </div>
           </div>
         </div>
@@ -1252,6 +1288,11 @@ const Profile = ({ history }) => {
         fetchUserPosts={fetchUserPosts}
         fetchUserTotalPosts={fetchUserTotalPosts}
         fetchUserPoints={fetchUserPoints}
+      />
+      <ProfileProgress
+        progress={progress}
+        progressModalIsOpen={progressModalIsOpen}
+        setProgressModalIsOpen={setProgressModalIsOpen}
       />
     </div>
   );
