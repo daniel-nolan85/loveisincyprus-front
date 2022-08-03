@@ -12,6 +12,7 @@ import {
   faTags,
   faFolderOpen,
   faCalendarDays,
+  faEnvelope,
 } from '@fortawesome/free-solid-svg-icons';
 
 const LeftSidebar = () => {
@@ -29,6 +30,10 @@ const LeftSidebar = () => {
         <Link to='/admin/users'>
           <FontAwesomeIcon icon={faUsers} className='fa' />
           Users
+        </Link>
+        <Link to='/admin/mass-mail'>
+          <FontAwesomeIcon icon={faEnvelope} className='fa' />
+          Mass Mail
         </Link>
         <Link to='/admin/event'>
           <FontAwesomeIcon icon={faCalendarDays} className='fa' />

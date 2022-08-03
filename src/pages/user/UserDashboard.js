@@ -142,6 +142,15 @@ const UserDashboard = () => {
         if (res.data.matches.includes(u._id)) {
           setMatchModalIsOpen(true);
           setMatch(u);
+          addPoints(15, 'match', user.token);
+          toast.success(
+            `You matched with ${
+              u.name || u.email.split('@')[0]
+            }. You have been awarded 15 points!`,
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
         }
         toast.success(`You like ${u.name ? u.name : u.email.split('@')[0]}.`, {
           position: toast.POSITION.TOP_CENTER,
@@ -152,6 +161,8 @@ const UserDashboard = () => {
           payload: {
             ...user,
             following: res.data.following,
+            followers: res.data.followers,
+            matches: res.data.matches,
           },
         });
         let filtered = users.filter((f) => f._id !== u._id);

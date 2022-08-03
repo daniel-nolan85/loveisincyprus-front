@@ -24,7 +24,7 @@ const { SubMenu, ItemGroup } = Menu;
 
 const UserSearch = () => {
   const [users, setUsers] = useState([]);
-  // const [filteredUsers, setFilteredUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [range, setRange] = useState([0, 0]);
   //   const [ok, setOk] = useState(false);
@@ -53,7 +53,8 @@ const UserSearch = () => {
   const [sexLikes, setSexLikes] = useState('');
   const [sexFrequency, setSexFrequency] = useState('');
 
-  const filteredUsers = [];
+  // const filteredUsers = [];
+  console.table('filteredUsers => ', filteredUsers);
 
   const map = {
     ageOfPartner: setAgeOfPartner,
@@ -103,16 +104,16 @@ const UserSearch = () => {
     return () => clearTimeout(delayed);
   }, [text]);
 
-  // useEffect(() => {
-  //   console.log('filteredUsers => ', filteredUsers);
-  // }, [filteredUsers]);
+  useEffect(() => {
+    console.log('filteredUsers => ', filteredUsers);
+  }, [filteredUsers]);
 
   // console.log('filteredUsers => ', filteredUsers);
 
   const loadAllUsers = () => {
     setLoading(true);
     getUsersByCount(12, user.token).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setUsers(res.data);
       setLoading(false);
     });
@@ -120,11 +121,10 @@ const UserSearch = () => {
 
   const fetchUsers = (arg) => {
     fetchUsersByFilter(arg, user.token).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setUsers(res.data);
-      // setFilteredUsers([...users, res.data]);
-      filteredUsers.concat([users]);
-      console.log('filteredUsers => ', filteredUsers);
+      setFilteredUsers([...users, users]);
+      // filteredUsers.push(res.data);
     });
   };
 
@@ -141,7 +141,7 @@ const UserSearch = () => {
   };
 
   const handleRadio = (e) => {
-    console.log('value ==> ', e.target.value);
+    // console.log('value ==> ', e.target.value);
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
@@ -172,7 +172,7 @@ const UserSearch = () => {
   };
 
   const handleNumberInput = (e) => {
-    console.log(e);
+    // console.log(e);
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
@@ -185,7 +185,7 @@ const UserSearch = () => {
   };
 
   const handleTextInput = (e) => {
-    console.log(e);
+    // console.log(e);
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
@@ -200,7 +200,7 @@ const UserSearch = () => {
   };
 
   const handleInputArray = (e) => {
-    console.log(e);
+    // console.log(e);
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
@@ -221,7 +221,7 @@ const UserSearch = () => {
       payload: { text: '' },
     });
 
-    console.log(domEvent.target.innerText);
+    // console.log(domEvent.target.innerText);
     setTimeout(() => {
       fetchUsers({ field: item.props.title, key });
     }, 300);

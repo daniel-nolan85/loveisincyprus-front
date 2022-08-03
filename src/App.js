@@ -59,6 +59,7 @@ import Chats from './pages/user/Chats';
 import Notifications from './pages/user/Notifications';
 import Event from './pages/admin/Event';
 import UserSearch from './pages/user/UserSearch';
+import MassMail from './pages/admin/MassMail';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -153,6 +154,9 @@ const App = () => {
                 notifications: res.data.notifications,
                 featuredMember: res.data.featuredMember,
                 events: res.data.events,
+                eventsEligible: res.data.eventsEligible,
+                optIn: res.data.optIn,
+                profileComplete: res.data.profileComplete,
                 language: res.data.language,
                 maritalStatus: res.data.maritalStatus,
                 numOfChildren: res.data.numOfChildren,
@@ -195,7 +199,7 @@ const App = () => {
                 sexFrequency: res.data.sexFrequency,
               },
             });
-            // console.log('logged in user ==> ', res);
+            console.log('logged in user ==> ', res);
           })
           .catch((err) => console.log(err));
       }
@@ -223,14 +227,11 @@ const App = () => {
         console.log(`a user likes you ${f.email}`);
         setNotification([f, ...notification]);
       });
-      socket.on('follower added', (f) => {
-        console.log(`a user likes you ${f.email}`);
-        setNotification([f, ...notification]);
-      });
       socket.on('visitor added', (v, u) => {
         console.log(`a new user visited your profile ${u.email}`);
         setNotification([u, ...notification]);
       });
+      removeExpiredFeatures();
     }
   }, [user && user.token]);
 
@@ -276,6 +277,12 @@ const App = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const removeExpiredFeatures = async () => {
+    await axios
+      .put(`${process.env.REACT_APP_API}/remove-expired-features`)
+      .then((res) => console.log(res.data));
   };
 
   return (
@@ -335,6 +342,7 @@ const App = () => {
         <AdminRoute exact path='/admin/coupon' component={Coupon} />
         <AdminRoute exact path='/admin/orders' component={Orders} />
         <AdminRoute exact path='/admin/event' component={Event} />
+        <AdminRoute exact path='/admin/mass-mail' component={MassMail} />
       </Switch>
       {/* </Suspense> */}
     </>

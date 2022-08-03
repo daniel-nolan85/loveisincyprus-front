@@ -125,6 +125,24 @@ export const removePoints = async (number, reason, authtoken) => {
   );
 };
 
+export const spentPoints = async (
+  number,
+  reason,
+  authtoken,
+  user,
+  couponName
+) => {
+  await axios.put(
+    `${process.env.REACT_APP_API}/spent-points`,
+    { number, reason, user, couponName },
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
+};
+
 export const getUserPointsGainedData = async (authtoken) =>
   await axios.get(`${process.env.REACT_APP_API}/user-points-gained-data`, {
     headers: {
@@ -134,6 +152,13 @@ export const getUserPointsGainedData = async (authtoken) =>
 
 export const getUserPointsLostData = async (authtoken) =>
   await axios.get(`${process.env.REACT_APP_API}/user-points-lost-data`, {
+    headers: {
+      authtoken,
+    },
+  });
+
+export const getUserPointsSpentData = async (authtoken) =>
+  await axios.get(`${process.env.REACT_APP_API}/user-points-spent-data`, {
     headers: {
       authtoken,
     },

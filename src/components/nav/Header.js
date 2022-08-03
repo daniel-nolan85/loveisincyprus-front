@@ -104,6 +104,8 @@ const Header = () => {
                   <br />
                   <Link to='/admin/users'>Users</Link>
                   <br />
+                  <Link to='/admin/mass-mail'>Mass Mail</Link>
+                  <br />
                   <Link to='/admin/event'>Events</Link>
                   <br />
                   <Link to='/admin/geo-block'>Geo-Block</Link>

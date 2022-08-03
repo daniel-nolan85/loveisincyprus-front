@@ -5,20 +5,40 @@ import {
   getUserPointsTotal,
   getUserPointsGainedData,
   getUserPointsLostData,
+  getUserPointsSpentData,
 } from '../../functions/user';
 import { useSelector } from 'react-redux';
 import { Line } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartLine } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCashRegister,
+  faChartLine,
+  faCircleInfo,
+  faCircleQuestion,
+} from '@fortawesome/free-solid-svg-icons';
+import PointsInfo from '../../components/modals/PointsInfo';
+import PointsQuestions from '../../components/modals/PointsQuestions';
+import SpendPoints from '../../components/modals/SpendPoints';
 
 const Points = () => {
   const [points, setPoints] = useState(0);
+  const [pointsInfoModalIsOpen, setPointsInfoModalIsOpen] = useState(false);
+  const [pointsQuestionsModalIsOpen, setPointsQuestionsModalIsOpen] =
+    useState(false);
+  const [spendPointsModalIsOpen, setSpendPointsModalIsOpen] = useState(false);
+  const [pointsFeaturedModalIsOpen, setPointsFeaturedModalIsOpen] =
+    useState(false);
+  const [pointsFiveModalIsOpen, setPointsFiveModalIsOpen] = useState(false);
+  const [pointsTenModalIsOpen, setPointsTenModalIsOpen] = useState(false);
+  const [pointsEventsModalIsOpen, setPointsEventsModalIsOpen] = useState(false);
   const [pointsGainedData, setPointsGainedData] = useState([]);
-  const [pointsGainedDisplay, setPointsGainedDisplay] = useState([,]);
+  const [pointsGainedDisplay, setPointsGainedDisplay] = useState([]);
   const [pointsLostData, setPointsLostData] = useState([]);
   const [pointsLostDisplay, setPointsLostDisplay] = useState([]);
+  const [pointsSpentData, setPointsSpentData] = useState([]);
+  const [pointsSpentDisplay, setPointsSpentDisplay] = useState([]);
   const [pointsGainedGraph, setPointsGainedGraph] = useState({
     labels: '',
     datasets: [
@@ -39,8 +59,19 @@ const Points = () => {
       },
     ],
   });
+  const [pointsSpentGraph, setPointsSpentGraph] = useState({
+    labels: '',
+    datasets: [
+      {
+        label: 'Points Spent',
+        data: '',
+        backgroundColor: '#c70000',
+      },
+    ],
+  });
   const [showGainedChart, setShowGainedChart] = useState(false);
   const [showLostChart, setShowLostChart] = useState(false);
+  const [showSpentChart, setShowSpentChart] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -48,16 +79,30 @@ const Points = () => {
     fetchUserPointsTotal();
     fetchUserPointsGainedData();
     fetchUserPointsLostData();
+    fetchUserPointsSpentData();
   }, []);
 
   useEffect(() => {
     updateGainedChart();
     updateLostChart();
+    updateSpentChart();
   }, [pointsGainedDisplay]);
+
+  const handleInfo = () => {
+    setPointsInfoModalIsOpen(true);
+  };
+
+  const handleQuestions = () => {
+    setPointsQuestionsModalIsOpen(true);
+  };
+
+  const handleSpendPoints = () => {
+    setSpendPointsModalIsOpen(true);
+  };
 
   const fetchUserPointsTotal = () =>
     getUserPointsTotal(user.token).then((res) => {
-      // console.log(res.data);
+      console.log('fetchUserPointsTotal');
       setPoints(res.data);
     });
 
@@ -97,6 +142,24 @@ const Points = () => {
     });
   };
 
+  const fetchUserPointsSpentData = () => {
+    getUserPointsSpentData(user.token).then((res) => {
+      console.log('getUserPointsSpentData => ', res.data.pointsSpent);
+      setPointsSpentData(res.data.pointsSpent);
+      setPointsSpentDisplay(res.data.pointsSpent);
+      setPointsSpentGraph({
+        labels: res.data.pointsSpent.map((date) => moment(date.removed)),
+        datasets: [
+          {
+            label: 'Points Spent',
+            data: res.data.pointsSpent.map((pl) => pl.amount),
+            backgroundColor: '#c70000',
+          },
+        ],
+      });
+    });
+  };
+
   const allTime = () => {
     const now = new Date();
     const beginning = new Date(null);
@@ -108,8 +171,13 @@ const Points = () => {
       var time = new Date(d.removed).getTime();
       return beginning < time && time < now;
     });
+    const pSpent = pointsSpentData.filter((d) => {
+      var time = new Date(d.spent).getTime();
+      return beginning < time && time < now;
+    });
     setPointsGainedDisplay(pGained);
     setPointsLostDisplay(pLost);
+    setPointsSpentDisplay(pSpent);
   };
 
   const today = () => {
@@ -123,8 +191,13 @@ const Points = () => {
       var time = new Date(d.removed).getTime();
       return yesterday < time && time < now;
     });
+    const pSpent = pointsSpentData.filter((d) => {
+      var time = new Date(d.spent).getTime();
+      return yesterday < time && time < now;
+    });
     setPointsGainedDisplay(pGained);
     setPointsLostDisplay(pLost);
+    setPointsSpentDisplay(pSpent);
   };
 
   const thisWeek = () => {
@@ -138,8 +211,13 @@ const Points = () => {
       var time = new Date(d.removed).getTime();
       return lastWeek < time && time < now;
     });
+    const ps = pointsSpentData.filter((d) => {
+      var time = new Date(d.spent).getTime();
+      return lastWeek < time && time < now;
+    });
     setPointsGainedDisplay(pg);
     setPointsLostDisplay(pl);
+    setPointsSpentDisplay(ps);
   };
 
   const thisMonth = () => {
@@ -153,8 +231,13 @@ const Points = () => {
       var time = new Date(d.removed).getTime();
       return lastMonth < time && time < now;
     });
+    const ps = pointsSpentData.filter((d) => {
+      var time = new Date(d.spent).getTime();
+      return lastMonth < time && time < now;
+    });
     setPointsGainedDisplay(pg);
     setPointsLostDisplay(pl);
+    setPointsSpentDisplay(ps);
   };
 
   const updateGainedChart = () => {
@@ -187,6 +270,21 @@ const Points = () => {
     });
   };
 
+  const updateSpentChart = () => {
+    setPointsSpentGraph({
+      labels: pointsSpentDisplay.map((date) =>
+        moment(date.spent).format('MMMM Do YYYY')
+      ),
+      datasets: [
+        {
+          label: 'Points Spent',
+          data: pointsSpentDisplay.map((ps) => ps.amount),
+          backgroundColor: '#c70000',
+        },
+      ],
+    });
+  };
+
   return (
     <div className='container'>
       <LeftSidebar />
@@ -194,6 +292,32 @@ const Points = () => {
         <h1 className='center'>
           You currently have a total of {points} points
         </h1>
+        <div className='points-icons'>
+          <div className='tooltip'>
+            <FontAwesomeIcon
+              icon={faCircleInfo}
+              className='fa'
+              onClick={handleInfo}
+            />
+            <span className='tooltip-text'>Info about points</span>
+          </div>
+          <div className='tooltip'>
+            <FontAwesomeIcon
+              icon={faCircleQuestion}
+              className='fa'
+              onClick={handleQuestions}
+            />
+            <span className='tooltip-text'>Questions about points</span>
+          </div>
+          <div className='tooltip'>
+            <FontAwesomeIcon
+              icon={faCashRegister}
+              className='fa'
+              onClick={handleSpendPoints}
+            />
+            <span className='tooltip-text'>Spend your points</span>
+          </div>
+        </div>
         <div className='points-filter-btns'>
           <button className='submit-btn' onClick={allTime}>
             All
@@ -250,6 +374,9 @@ const Points = () => {
                         'A new user visited your profile'}
                       {pg.reason === 'new visit' &&
                         "You visited a new member's  profile"}
+                      {pg.reason === 'profile complete' &&
+                        'You completed 100% of your profile'}
+                      {pg.reason === 'match' && 'You matched with another user'}
                     </p>
                   </td>
                 </tr>
@@ -292,13 +419,89 @@ const Points = () => {
                     <p>-{pl.amount}</p>
                   </td>
                   <td>
-                    <p>{pl.reason === 'post' ? 'You deleted a post' : ''}</p>
+                    <p>{pl.reason === 'post' && 'You deleted a post'}</p>
+                    <p>
+                      {pl.reason === 'unmatch' &&
+                        'You unmatched with another user'}
+                    </p>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+        <div
+          className='small-container cart-page'
+          style={{ marginTop: '40px' }}
+        >
+          <div className='chart-header'>
+            <h2>Points Spent</h2>
+            <FontAwesomeIcon
+              icon={faChartLine}
+              className='fa'
+              onClick={() => setShowSpentChart(!showSpentChart)}
+            />
+          </div>
+          <Line
+            data={pointsSpentGraph}
+            style={{
+              marginBottom: '30px',
+              display: showSpentChart ? 'flex' : 'none',
+            }}
+          />
+          <table>
+            <tbody>
+              <tr>
+                <th>Time & Date</th>
+                <th>Points</th>
+                <th>Action</th>
+              </tr>
+              {pointsSpentDisplay.map((ps) => (
+                <tr key={ps._id}>
+                  <td>
+                    <p>{moment(ps.removed).format('MMMM Do YYYY')}</p>
+                  </td>
+                  <td>
+                    <p>-{ps.amount}</p>
+                  </td>
+                  <td>
+                    <p>
+                      {ps.reason === 'featured' ||
+                        (ps.reason === 'expired' &&
+                          'You became a Featured Member')}
+                      {ps.reason === 'events' &&
+                        'You became eligible for event invites'}
+                      {ps.reason === 'five' && 'You purchased a 5% coupon'}
+                    </p>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <PointsInfo
+          pointsInfoModalIsOpen={pointsInfoModalIsOpen}
+          setPointsInfoModalIsOpen={setPointsInfoModalIsOpen}
+        />
+        <PointsQuestions
+          pointsQuestionsModalIsOpen={pointsQuestionsModalIsOpen}
+          setPointsQuestionsModalIsOpen={setPointsQuestionsModalIsOpen}
+        />
+        <SpendPoints
+          spendPointsModalIsOpen={spendPointsModalIsOpen}
+          setSpendPointsModalIsOpen={setSpendPointsModalIsOpen}
+          points={points}
+          setPoints={setPoints}
+          fetchUserPointsTotal={fetchUserPointsTotal}
+          pointsFeaturedModalIsOpen={pointsFeaturedModalIsOpen}
+          setPointsFeaturedModalIsOpen={setPointsFeaturedModalIsOpen}
+          pointsFiveModalIsOpen={pointsFiveModalIsOpen}
+          setPointsFiveModalIsOpen={setPointsFiveModalIsOpen}
+          pointsTenModalIsOpen={pointsTenModalIsOpen}
+          setPointsTenModalIsOpen={setPointsTenModalIsOpen}
+          pointsEventsModalIsOpen={pointsEventsModalIsOpen}
+          setPointsEventsModalIsOpen={setPointsEventsModalIsOpen}
+        />
       </div>
       <RightSidebar />
     </div>

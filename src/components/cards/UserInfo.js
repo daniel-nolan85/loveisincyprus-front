@@ -18,7 +18,7 @@ const { Meta } = Card;
 const UserInfo = ({ u }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
-  console.log(u);
+  // console.log(u);
 
   const dispatch = useDispatch();
 

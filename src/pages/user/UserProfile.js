@@ -360,6 +360,15 @@ const UserProfile = () => {
         if (res.data.matches.includes(u._id)) {
           setMatchModalIsOpen(true);
           setMatch(u);
+          addPoints(15, 'match', user.token);
+          toast.success(
+            `You matched with ${
+              u.name || u.email.split('@')[0]
+            }. You have been awarded 15 points!`,
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
         }
         toast.success(`You like ${name ? name : email.split('@')[0]}.`, {
           position: toast.POSITION.TOP_CENTER,

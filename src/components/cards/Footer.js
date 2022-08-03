@@ -24,7 +24,7 @@ const Footer = () => {
         ) : (
           <>
             <h1>Search for your perfect partner now</h1>
-            <Link to='/#' className='submit-btn'>
+            <Link to='/search-users' className='submit-btn'>
               Find a partner
             </Link>
           </>

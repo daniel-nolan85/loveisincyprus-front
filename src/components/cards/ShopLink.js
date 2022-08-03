@@ -12,7 +12,7 @@ const ShopLink = () => {
           To become even more part of our Community, visit the Community Store
           and adopt the LoveisinCyprus style!
         </p>
-        <Link to='/#' className='submit-btn'>
+        <Link to='/shop' className='submit-btn'>
           Visit our community shop
         </Link>
       </div>

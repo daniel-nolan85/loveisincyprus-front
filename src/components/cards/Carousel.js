@@ -1,11 +1,10 @@
 import React from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
+// import { Swiper } from 'swiper/react/swiper';
+// import { SwiperSlide } from 'swiper/react/swiper-slide';
+import SwiperCore, { Autoplay, Pagination } from 'swiper';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
-// import 'swiper/css';
-// import 'swiper/css/autoplay';
-// import 'swiper/css/pagination';
 import sliderPic1 from '../../assets/sliderPic1.jpg';
 import sliderPic2 from '../../assets/sliderPic2.jpg';
 import sliderPic3 from '../../assets/sliderPic3.jpg';
@@ -16,6 +15,7 @@ import { useSelector } from 'react-redux';
 
 const Carousel = () => {
   let { user } = useSelector((state) => ({ ...state }));
+  SwiperCore.use([Autoplay, Pagination]);
 
   return (
     <div className='carousel-container'>
@@ -33,7 +33,7 @@ const Carousel = () => {
             Join LoveIsInCyprus now
           </Link>
         ) : (
-          <Link to='/#' className='submit-btn'>
+          <Link to='/search-users' className='submit-btn'>
             Find a partner
           </Link>
         )}
@@ -42,7 +42,7 @@ const Carousel = () => {
         spaceBetween={20}
         slidesPerView={1}
         loop='true'
-        autoplay='true'
+        // autoplay='true'
         grabCursor='true'
         centeredSlides='true'
         className='carousel-slider'

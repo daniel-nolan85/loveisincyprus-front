@@ -10,6 +10,7 @@ import Match from '../../components/modals/Match';
 import Unfollow from '../../components/modals/Unfollow';
 import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
+import { addPoints } from '../../functions/user';
 
 const ENDPOINT = 'http://localhost:8000';
 let socket;
@@ -50,6 +51,15 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
         if (res.data.matches.includes(u._id)) {
           setMatchModalIsOpen(true);
           setMatch(u);
+          addPoints(15, 'match', user.token);
+          toast.success(
+            `You matched with ${
+              u.name || u.email.split('@')[0]
+            }. You have been awarded 15 points!`,
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
         }
         toast.success(`You like ${u.name ? u.name : u.email.split('@')[0]}.`, {
           position: toast.POSITION.TOP_CENTER,
@@ -61,6 +71,8 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
           payload: {
             ...user,
             following: res.data.following,
+            followers: res.data.followers,
+            matches: res.data.matches,
           },
         });
       })

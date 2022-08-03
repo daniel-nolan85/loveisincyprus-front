@@ -533,7 +533,24 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
+        console.log(res.data);
+        console.log('user => ', user);
         setProgress(res.data);
+        if (res.data.percentage == 100 && user.profileComplete == false) {
+          addPoints(35, 'profile complete', user.token);
+          toast.success(
+            `You have completed 100% of your profile. You have been awarded 35 points!`,
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+        }
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+          },
+        });
       })
       .catch((err) => {
         console.log(err);

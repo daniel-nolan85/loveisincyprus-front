@@ -7,14 +7,18 @@ import {
   faNewspaper,
   faToolbox,
 } from '@fortawesome/free-solid-svg-icons';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import defaultProfile from '../../assets/defaultProfile.png';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const SettingsMenu = ({ settingsMenu, setSettingsMenu, logout }) => {
   const [darkMode, setDarkMode] = useState(false);
 
   let { user } = useSelector((state) => ({ ...state }));
+
+  let dispatch = useDispatch();
 
   useEffect(() => {
     if (localStorage.getItem('theme') === 'light') {
@@ -37,6 +41,47 @@ const SettingsMenu = ({ settingsMenu, setSettingsMenu, logout }) => {
     } else {
       localStorage.setItem('theme', 'light');
     }
+  };
+
+  const handleOptInOrOut = async () => {
+    await axios
+      .put(
+        `${process.env.REACT_APP_API}/user-opt-in-or-out`,
+        { user },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+            optIn: res.data.optIn,
+          },
+        });
+        if (res.data.optIn == true) {
+          toast.success(
+            'You will now receive occasional inbox messages from our admin team informing you about upcoming events and other exciting updates',
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+        } else {
+          toast.error(
+            'You will not receive occasional inbox messages from our admin team informing you about upcoming events and other exciting updates',
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -84,21 +129,36 @@ const SettingsMenu = ({ settingsMenu, setSettingsMenu, logout }) => {
         </div>
         <div
           className='settings-links dropdown'
-          onClick={() => setSettingsMenu(false)}
+          // onClick={() => setSettingsMenu(false)}
         >
           <FontAwesomeIcon icon={faGear} className='fa' />
-          <p>Settings</p>
+          Settings
           <div
             className='dropdown-content'
-            onClick={() => setSettingsMenu(false)}
+            // onClick={() => setSettingsMenu(false)}
           >
             {/* <FontAwesomeIcon icon={faLock} className='fa' /> */}
-            <Link to='/change/password'>Change Password</Link>
+            <Link to='/change/password' onClick={() => setSettingsMenu(false)}>
+              Change Password
+            </Link>
+            <span>
+              {user && user.optIn
+                ? 'Opt out of receiving mass-mail?'
+                : 'Opt in to receive mass-mail?'}
+
+              <div
+                id='opt-btn'
+                className={user && user.optIn ? 'opt-btn-on' : ''}
+                onClick={handleOptInOrOut}
+              >
+                <span />
+              </div>
+            </span>
           </div>
         </div>
         <div className='settings-links' onClick={logout}>
           <FontAwesomeIcon icon={faArrowRightFromBracket} className='fa' />
-          <p>Logout</p>
+          Logout
         </div>
       </div>
     </div>

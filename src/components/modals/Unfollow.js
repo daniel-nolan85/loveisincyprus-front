@@ -4,6 +4,7 @@ import defaultProfile from '../../assets/defaultProfile.png';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector, useDispatch } from 'react-redux';
+import { removePoints } from '../../functions/user';
 
 Modal.setAppElement('#root');
 
@@ -19,7 +20,17 @@ const Unfollow = ({
   const dispatch = useDispatch();
 
   const unfollowUser = async (u) => {
-    console.log('userToUnfollow => ', u);
+    if (user.matches.includes(u._id)) {
+      removePoints(15, 'unmatch', user.token);
+      toast.error(
+        `You unmatched with ${
+          u.name ? u.name : u.email.split('@')[0]
+        }. 15 points were removed`,
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+    }
     await axios
       .put(
         `${process.env.REACT_APP_API}/user-unfollow`,
@@ -31,7 +42,6 @@ const Unfollow = ({
         }
       )
       .then((res) => {
-        console.log('handle unfollow response => ', res);
         toast.error(
           `You no longer like ${u.name ? u.name : u.email.split('@')[0]}.`,
           {
@@ -43,6 +53,8 @@ const Unfollow = ({
           payload: {
             ...user,
             following: res.data.following,
+            followers: res.data.followers,
+            matches: res.data.matches,
           },
         });
         setUnfollowModalIsOpen(false);
