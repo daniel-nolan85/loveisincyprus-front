@@ -60,6 +60,8 @@ import Notifications from './pages/user/Notifications';
 import Event from './pages/admin/Event';
 import UserSearch from './pages/user/UserSearch';
 import MassMail from './pages/admin/MassMail';
+import AdSubmission from './pages/user/AdSubmission';
+import AdSubmissions from './pages/admin/AdSubmissions';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -332,6 +334,7 @@ const App = () => {
         <UserRoute exact path='/chats' component={Chats} />
         <UserRoute exact path='/notifications' component={Notifications} />
         <UserRoute exact path='/search-users' component={UserSearch} />
+        <UserRoute exact path='/ad-submission' component={AdSubmission} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/posts' component={Posts} />
         <AdminRoute exact path='/admin/users' component={Users} />
@@ -343,6 +346,7 @@ const App = () => {
         <AdminRoute exact path='/admin/orders' component={Orders} />
         <AdminRoute exact path='/admin/event' component={Event} />
         <AdminRoute exact path='/admin/mass-mail' component={MassMail} />
+        <AdminRoute exact path='/ad-submissions' component={AdSubmissions} />
       </Switch>
       {/* </Suspense> */}
     </>

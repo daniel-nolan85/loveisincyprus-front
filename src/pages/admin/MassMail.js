@@ -75,7 +75,7 @@ const MassMail = () => {
       .catch((err) => {
         console.log(err);
         setLoading(false);
-        toast.error(err.response.data.err, {
+        toast.error('Please fill in all fields', {
           position: toast.POSITION.TOP_CENTER,
         });
       });

@@ -49,6 +49,7 @@ const RightSidebar = () => {
         ))}
       <div className='sidebar-title'>
         <h4>Advertisements</h4>
+        <Link to='/ad-submission'>Submit an Ad</Link>
       </div>
       <img
         src={headphones}

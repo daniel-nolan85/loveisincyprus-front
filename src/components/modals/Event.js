@@ -25,7 +25,7 @@ const Event = ({ eventModalIsOpen, setEventModalIsOpen, currentEvent }) => {
     },
   };
 
-  console.log(currentEvent);
+  // console.log(currentEvent);
 
   return (
     <Modal

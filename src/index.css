@@ -1081,6 +1081,34 @@ nav {
   background: var(--nav-color);
 }
 
+/* --------------- advertisement-pages --------------- */
+.submit-btn.preview {
+  background: #5388b4;
+}
+
+.advert-preview {
+  width: 100%;
+}
+
+.advert-preview img {
+  width: 350px;
+}
+
+.advert-preview .no-image {
+  height: 250px;
+  background: var(--nav-color);
+  color: #fff;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+}
+
+.ad-duration {
+  border-top: 1px solid var(--body-color);
+}
+
 /* --------------- admin-pages --------------- */
 .admin-main-content {
   flex-basis: 75%;

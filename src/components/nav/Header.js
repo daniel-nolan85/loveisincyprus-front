@@ -119,6 +119,8 @@ const Header = () => {
                   <Link to='/admin/sub'>Sub-Categories</Link>
                   <br />
                   <Link to='/admin/coupon'>Coupon</Link>
+                  <br />
+                  <Link to='/ad-submissions'>Ad Submissions</Link>
                 </div>
               </div>
             )}
