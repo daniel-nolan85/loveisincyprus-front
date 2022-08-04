@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
-import { spentPoints } from '../../functions/user';
 import { toast } from 'react-toastify';
+import axios from 'axios';
+import io from 'socket.io-client';
+import { ChatState } from '../../context/ChatProvider';
+
+const ENDPOINT = 'http://localhost:8000';
+let socket;
 
 Modal.setAppElement('#root');
 
@@ -14,8 +19,32 @@ const PointsTen = ({
 }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
-  const tenPercent = async () => {
-    spentPoints(250, 'ten', user.token, user, 'NEWCOUPON10');
+  const { setSocketConnected } = ChatState();
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit('setup', user);
+    socket.on('connected', () => setSocketConnected(true));
+  }, []);
+
+  const tenPercent = async (number, reason, couponName) => {
+    await axios
+      .put(
+        `${process.env.REACT_APP_API}/spent-points`,
+        { number, reason, user, couponName },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        socket.emit('new message', res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     toast.success(
       'Congratulations! Check your inbox, you will soon receive a new message containing your coupon code.',
       {
@@ -60,7 +89,10 @@ const PointsTen = ({
           remaining.
         </p>
         <br />
-        <button className='submit-btn' onClick={tenPercent}>
+        <button
+          className='submit-btn'
+          onClick={() => tenPercent(250, 'ten', 'NEWCOUPON10')}
+        >
           Yes, I'd like to receive a 10% discount
         </button>
         <button

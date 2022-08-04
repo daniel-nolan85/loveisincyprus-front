@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import io from 'socket.io-client';
+import { ChatState } from '../../context/ChatProvider';
+
+const ENDPOINT = 'http://localhost:8000';
+let socket;
 
 Modal.setAppElement('#root');
 
@@ -13,6 +18,14 @@ const AdApprove = ({
   fetchAds,
 }) => {
   let { user } = useSelector((state) => ({ ...state }));
+
+  const { setSocketConnected } = ChatState();
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit('setup', user);
+    socket.on('connected', () => setSocketConnected(true));
+  }, []);
 
   const approveAd = async (ad) => {
     await axios
@@ -26,6 +39,8 @@ const AdApprove = ({
         }
       )
       .then((res) => {
+        console.log(res.data);
+        socket.emit('new message', res.data);
         toast.success(`You have approved this ad.`, {
           position: toast.POSITION.TOP_CENTER,
         });

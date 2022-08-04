@@ -67,6 +67,33 @@ const Header = () => {
       });
   };
 
+  const resetCount = async () => {
+    console.log('reset count');
+    await axios
+      .put(
+        `${process.env.REACT_APP_API}/reset-message-count`,
+        { user },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        // console.log(res.data);
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+            messages: res.data.messages,
+          },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   // const notifPost = (post) => {
   //   setThisPost(post);
   //   setNotifModalIsOpen(true);
@@ -245,8 +272,10 @@ const Header = () => {
                 </div>
               </li> */}
               <Link to='/chats'>
-                <li className='tooltip'>
-                  <FontAwesomeIcon icon={faMessage} className='menu-icon' />
+                <li className='tooltip' onClick={resetCount}>
+                  <Badge count={user.messages.length} offset={[-20, 0]}>
+                    <FontAwesomeIcon icon={faMessage} className='menu-icon' />
+                  </Badge>
                   <span className='tooltip-text'>Chats</span>
                 </li>
               </Link>

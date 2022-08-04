@@ -218,7 +218,7 @@ const Chats = ({ history }) => {
             }
           )
           .then((res) => {
-            // console.log('message sent ==> ', res);
+            console.log('message sent ==> ', res.data);
             socket.emit('new message', res.data);
             setMessages([...messages, res.data]);
             socket.emit('stop typing', selectedChat._id);

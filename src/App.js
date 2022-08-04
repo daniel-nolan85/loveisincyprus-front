@@ -158,6 +158,7 @@ const App = () => {
                 events: res.data.events,
                 eventsEligible: res.data.eventsEligible,
                 optIn: res.data.optIn,
+                messages: res.data.messages,
                 profileComplete: res.data.profileComplete,
                 language: res.data.language,
                 maritalStatus: res.data.maritalStatus,
@@ -210,6 +211,7 @@ const App = () => {
   }, [dispatch]);
 
   console.log(notification);
+  console.log(messages);
 
   useEffect(() => {
     if (user) {
@@ -248,20 +250,48 @@ const App = () => {
       return;
     } else {
       socket.on('message received', (newMessageReceived) => {
+        console.log('newMessageReceived => ', newMessageReceived);
         fetchChats();
         if (
           !selectedChatCompare ||
           selectedChatCompare._id != newMessageReceived.chat._id
         ) {
-          if (!notification.includes(newMessageReceived)) {
-            setNotification([newMessageReceived, ...notification]);
-          }
+          // if (!notification.includes(newMessageReceived)) {
+          //   setNotification([newMessageReceived, ...notification]);
+          // }
+          incrementNewMessages(newMessageReceived);
         } else {
           setMessages([...messages, newMessageReceived]);
         }
       });
     }
   });
+
+  const incrementNewMessages = async (message) => {
+    await axios
+      .put(
+        `${process.env.REACT_APP_API}/new-message-count`,
+        { user, message },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+            messages: res.data.messages,
+          },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const fetchChats = async () => {
     await axios
