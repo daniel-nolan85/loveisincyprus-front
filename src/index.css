@@ -553,10 +553,31 @@ nav {
   cursor: pointer;
 }
 
+.sidebar-ad {
+  border-bottom: 1px solid var(--body-color);
+  margin-bottom: 20px;
+}
+
+.sidebar-ad-content {
+  text-align: center;
+}
+
 .sidebar-ads {
   width: 100%;
   margin-bottom: 20px;
   border-radius: 4px;
+}
+
+.sidebar-ads.no-image {
+  height: 250px;
+  background: var(--nav-color);
+  color: #fff;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  text-align: center;
 }
 
 .online-list {
@@ -769,6 +790,7 @@ nav {
   padding: 20px;
   color: #626262;
   margin-bottom: 20px;
+  position: relative;
 }
 
 .user-profile span {
@@ -1092,6 +1114,12 @@ nav {
 
 .advert-preview img {
   width: 350px;
+  border-radius: 4px;
+}
+
+.advert-preview .ad-content {
+  text-align: center;
+  padding-top: 20px;
 }
 
 .advert-preview .no-image {
@@ -1107,6 +1135,63 @@ nav {
 
 .ad-duration {
   border-top: 1px solid var(--body-color);
+}
+
+.post-container .rejected,
+.post-container .approved,
+.post-container .expired {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.post-container .rejected:after,
+.post-container .approved:after,
+.post-container .expired:after {
+  position: absolute;
+  top: 30%;
+  z-index: 1;
+  font-family: Arial, sans-serif;
+  -webkit-transform: rotate(-15deg); /* Safari */
+  -moz-transform: rotate(-15deg); /* Firefox */
+  -ms-transform: rotate(-15deg); /* IE */
+  -o-transform: rotate(-15deg); /* Opera */
+  transform: rotate(-15deg);
+  font-size: 80px;
+  text-align: center;
+  padding: 10px;
+  margin: 0 auto;
+  border-radius: 5px;
+  zoom: 1;
+  filter: alpha(opacity=20);
+  opacity: 0.6;
+}
+
+.post-container .rejected:after {
+  content: 'REJECTED';
+  color: #c00;
+  border: solid 8px #c00;
+  -webkit-text-shadow: 0 0 2px #c00;
+  text-shadow: 0 0 2px #c00;
+  box-shadow: 0 0 2px #c00;
+}
+
+.post-container .approved:after {
+  content: 'APPROVED';
+  color: #07bc0c;
+  border: solid 8px #07bc0c;
+  -webkit-text-shadow: 0 0 2px #07bc0c;
+  text-shadow: 0 0 2px #07bc0c;
+  box-shadow: 0 0 2px #07bc0c;
+}
+
+.post-container .expired:after {
+  content: 'EXPIRED';
+  color: #5388b4;
+  border: solid 8px #5388b4;
+  -webkit-text-shadow: 0 0 2px #5388b4;
+  text-shadow: 0 0 2px #5388b4;
+  box-shadow: 0 0 2px #5388b4;
 }
 
 /* --------------- admin-pages --------------- */
@@ -3373,6 +3458,15 @@ button:hover {
   }
   .admin-cards {
     justify-content: center;
+  }
+
+  .post-container .rejected:after,
+  .post-container .approved:after,
+  .post-container .expired:after {
+    font-size: 40px;
+    border-width: 4px;
+    padding: 5px;
+    top: 40%;
   }
 }
 

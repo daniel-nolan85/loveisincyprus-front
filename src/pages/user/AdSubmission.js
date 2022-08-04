@@ -108,7 +108,7 @@ const AdSubmission = () => {
           value={duration}
         >
           <option value='one day'>One day</option>
-          <option value='one week'>Every day</option>
+          <option value='one week'>One week</option>
           <option value='two weeks'>Two weeks</option>
           <option value='one month'>One month</option>
         </select>

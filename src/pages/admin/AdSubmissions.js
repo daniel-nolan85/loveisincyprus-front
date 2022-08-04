@@ -67,7 +67,7 @@ const Posts = () => {
       <LeftSidebar />
       <div className='admin-main-content'>
         <div className='admin-cards'>
-          {ads &&
+          {ads.length > 0 ? (
             ads.map((ad) => (
               <div className='post-container' key={ad._id}>
                 <div className='post-row'>
@@ -124,7 +124,7 @@ const Posts = () => {
                     src={ad.image.url}
                     alt={`${
                       ad.postedBy.name || ad.postedBy.email.split('@')[0]
-                    }'s post`}
+                    }'s advertisement`}
                     className='post-img'
                   />
                 )}
@@ -134,8 +134,18 @@ const Posts = () => {
                     ad.postedBy.name || ad.postedBy.email.split('@')[0]
                   } would like this ad to be displayed for ${ad.duration}`}
                 </div>
+                <div
+                  className={`${ad.status === 'rejected' && 'rejected'} ${
+                    ad.status === 'approved' && 'approved'
+                  } ${ad.status === 'expired' && 'expired'}`}
+                ></div>
               </div>
-            ))}
+            ))
+          ) : (
+            <h1 className='center'>
+              There are not currently any ad submissions to review.
+            </h1>
+          )}
         </div>
         <AdDisapprove
           adDisapproveModalIsOpen={adDisapproveModalIsOpen}
@@ -143,11 +153,13 @@ const Posts = () => {
           currentAd={currentAd}
           reason={reason}
           setReason={setReason}
+          fetchAds={fetchAds}
         />
         <AdApprove
           adApproveModalIsOpen={adApproveModalIsOpen}
           setAdApproveModalIsOpen={setAdApproveModalIsOpen}
           currentAd={currentAd}
+          fetchAds={fetchAds}
         />
       </div>
     </div>

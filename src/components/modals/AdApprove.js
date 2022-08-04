@@ -10,6 +10,7 @@ const AdApprove = ({
   adApproveModalIsOpen,
   setAdApproveModalIsOpen,
   currentAd,
+  fetchAds,
 }) => {
   let { user } = useSelector((state) => ({ ...state }));
 
@@ -28,6 +29,7 @@ const AdApprove = ({
         toast.success(`You have approved this ad.`, {
           position: toast.POSITION.TOP_CENTER,
         });
+        fetchAds();
         setAdApproveModalIsOpen(false);
       })
       .catch((err) => console.log(err));
@@ -42,6 +44,16 @@ const AdApprove = ({
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
       width: '400px',
+    },
+    overlay: {
+      position: 'fixed',
+      display: 'flex',
+      justifyContent: 'center',
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: '100%',
+      zIndex: '1000',
     },
   };
 

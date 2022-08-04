@@ -234,6 +234,7 @@ const App = () => {
         setNotification([u, ...notification]);
       });
       removeExpiredFeatures();
+      handleExpiredAds();
     }
   }, [user && user.token]);
 
@@ -284,6 +285,12 @@ const App = () => {
   const removeExpiredFeatures = async () => {
     await axios
       .put(`${process.env.REACT_APP_API}/remove-expired-features`)
+      .then((res) => console.log(res.data));
+  };
+
+  const handleExpiredAds = async () => {
+    await axios
+      .put(`${process.env.REACT_APP_API}/expired-ad`)
       .then((res) => console.log(res.data));
   };
 

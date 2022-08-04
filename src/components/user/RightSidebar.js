@@ -1,22 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import headphones from '../../assets/headphones.jpg';
-import trainers from '../../assets/trainers.jpg';
 import { useSelector } from 'react-redux';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import Event from '../modals/Event';
+import axios from 'axios';
 
 const RightSidebar = () => {
   const [eventModalIsOpen, setEventModalIsOpen] = useState(false);
   const [currentEvent, setCurrentEvent] = useState({});
+  const [ads, setAds] = useState([]);
 
   const { user } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    if (user && user.token) {
+      fetchApprovedAds();
+    }
+  }, [user && user.token]);
 
   const showEventDetails = (event) => {
     setEventModalIsOpen(true);
     setCurrentEvent(event);
+  };
+
+  const fetchApprovedAds = async () => {
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/fetch-approved-ads`,
+        { user },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        setAds(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -51,16 +77,30 @@ const RightSidebar = () => {
         <h4>Advertisements</h4>
         <Link to='/ad-submission'>Submit an Ad</Link>
       </div>
-      <img
-        src={headphones}
-        alt='advertisement for headphones'
-        className='sidebar-ads'
-      />
-      <img
-        src={trainers}
-        alt='advertisement for trainers'
-        className='sidebar-ads'
-      />
+      {ads.length > 0 ? (
+        ads.map((ad) => (
+          <div key={ad._id}>
+            {ad.image ? (
+              <div className='sidebar-ad'>
+                <img
+                  src={ad.image.url}
+                  // alt={`${
+                  //   ad.postedBy.name || ad.postedBy.email.split('@')[0]
+                  // }'s advertisement`}
+                  className='sidebar-ads'
+                />
+                <p className='sidebar-ad-content'>{ad.content}</p>
+              </div>
+            ) : (
+              <div className='sidebar-ads no-image'>
+                <p>{ad.content}</p>
+              </div>
+            )}
+          </div>
+        ))
+      ) : (
+        <p>There are no ads to display right now</p>
+      )}
       {/* <div className='sidebar-title'>
         <h4>Conversation</h4>
         <Link to='#'>Hide Chat</Link>

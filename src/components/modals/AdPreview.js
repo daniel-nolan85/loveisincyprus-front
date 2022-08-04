@@ -37,7 +37,8 @@ const AdPreview = ({
         {image.url ? (
           <>
             <img src={image.url} alt='Your advertisement image' />
-            <p>{content}</p>
+            <br />
+            <p className='ad-content'>{content}</p>
           </>
         ) : (
           <div className='no-image'>
