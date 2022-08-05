@@ -202,7 +202,7 @@ const App = () => {
                 sexFrequency: res.data.sexFrequency,
               },
             });
-            console.log('logged in user ==> ', res);
+            // console.log('logged in user ==> ', res);
           })
           .catch((err) => console.log(err));
       }
@@ -210,8 +210,8 @@ const App = () => {
     return () => unsubscribe();
   }, [dispatch]);
 
-  console.log(notification);
-  console.log(messages);
+  // console.log(notification);
+  // console.log(messages);
 
   useEffect(() => {
     if (user) {
@@ -313,15 +313,13 @@ const App = () => {
   };
 
   const removeExpiredFeatures = async () => {
-    await axios
-      .put(`${process.env.REACT_APP_API}/remove-expired-features`)
-      .then((res) => console.log(res.data));
+    await axios.put(`${process.env.REACT_APP_API}/remove-expired-features`);
+    // .then((res) => console.log(res.data));
   };
 
   const handleExpiredAds = async () => {
-    await axios
-      .put(`${process.env.REACT_APP_API}/expired-ad`)
-      .then((res) => console.log(res.data));
+    await axios.put(`${process.env.REACT_APP_API}/expired-ad`);
+    // .then((res) => console.log(res.data));
   };
 
   return (

@@ -1,6 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import {
+  faMagnifyingGlass,
+  faPaperPlane,
+} from '@fortawesome/free-solid-svg-icons';
 import defaultProfile from '../../assets/defaultProfile.png';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -31,10 +34,9 @@ const Chats = ({ history }) => {
   // const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [lastMessage, setLastMessage] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
-
-  const messagesEndRef = useRef(null);
 
   const {
     selectedChat,
@@ -70,10 +72,11 @@ const Chats = ({ history }) => {
     });
     const usersToSort = [];
     chats.map((c) => {
-      usersToSort.push(c.users[1]);
+      usersToSort.push(c.users.filter((u) => u._id !== user._id));
     });
-    setUsers(usersToSort);
-  }, [chats]);
+    var sorted = [].concat.apply([], usersToSort);
+    setUsers(sorted);
+  }, [chats, messages]);
 
   // console.log('notification => ', notification);
 
@@ -112,19 +115,12 @@ const Chats = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log('users ==> ', res.data);
+        // console.log('users ==> ', res.data);
         setUsers(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
-  };
-
-  const sortUsers = () => {
-    chats.sort(function (a, b) {
-      return new Date(b.updatedAt) - new Date(a.updatedAt);
-    });
-    // console.log('chats => ', chats);
   };
 
   const accessChat = async (u) => {
@@ -144,6 +140,7 @@ const Chats = ({ history }) => {
           setChats([res.data, ...chats]);
         }
         setSelectedChat(res.data);
+        // scrollToBottom();
         // console.log('selectedChat => ', res.data);
       })
       .catch((err) => {
@@ -189,6 +186,7 @@ const Chats = ({ history }) => {
           // console.log('messages => ', res.data);
           // console.log('selectedChat => ', selectedChat);
           socket.emit('join chat', selectedChat._id);
+          scrollToBottom();
         })
         .catch((err) => {
           console.log(err);
@@ -204,7 +202,6 @@ const Chats = ({ history }) => {
     e.preventDefault();
     if (newMessage) {
       setNewMessage('');
-      sortUsers();
 
       try {
         await axios
@@ -218,7 +215,7 @@ const Chats = ({ history }) => {
             }
           )
           .then((res) => {
-            console.log('message sent ==> ', res.data);
+            // console.log('message sent ==> ', res.data);
             socket.emit('new message', res.data);
             setMessages([...messages, res.data]);
             socket.emit('stop typing', selectedChat._id);
@@ -257,11 +254,13 @@ const Chats = ({ history }) => {
     }, timerLength);
   };
 
-  const scrollToBottom = () =>
-    messagesEndRef.current.scrollIntoView({
-      behavior: 'auto',
-      block: 'end',
-    });
+  const scrollToBottom = () => {
+    const element = document.getElementById('lastMessage');
+    element.scrollIntoView();
+  };
+
+  const otherUser =
+    selectedChat && selectedChat.users.filter((u) => u._id !== user._id);
 
   return (
     <div className='main'>
@@ -285,7 +284,6 @@ const Chats = ({ history }) => {
                 className='ms-a'
                 key={u._id}
                 onClick={() => {
-                  scrollToBottom();
                   accessChat(u);
                 }}
               >
@@ -329,26 +327,24 @@ const Chats = ({ history }) => {
           <div className='chat-header'>
             {selectedChat && (
               <div className='chat-header-content'>
-                <Link to={`/user/${selectedChat.users[1]._id}`}>
+                <Link to={`/user/${otherUser[0]._id}`}>
                   <div className='sender-avatar'>
                     <img
                       src={
-                        selectedChat.users[1].profileImage
-                          ? selectedChat.users[1].profileImage.url
+                        otherUser[0].profileImage
+                          ? otherUser[0].profileImage.url
                           : defaultProfile
                       }
                       alt={`${
-                        selectedChat.users[1].name ||
-                        selectedChat.users[1].email.split('@')[0]
+                        otherUser[0].name || otherUser[0].email.split('@')[0]
                       }'s profile picture`}
                     />
                   </div>
                 </Link>
                 <div className='sender-action'>
-                  <Link to={`/user/${selectedChat.users[1]._id}`}>
+                  <Link to={`/user/${otherUser[0]._id}`}>
                     <h3>
-                      {selectedChat.users[1].name ||
-                        selectedChat.users[1].email.split('@')[0]}
+                      {otherUser[0].name || otherUser[0].email.split('@')[0]}
                     </h3>
                   </Link>
                 </div>
@@ -360,7 +356,7 @@ const Chats = ({ history }) => {
           <div className='chat-body'>
             {/* <ScrollableFeed> */}
             {messages &&
-              messages.map((m, i) => (
+              messages.map((m, i, { length }) => (
                 <div className='message-sender' key={m._id}>
                   {(isSameSender(messages, m, i, user._id) ||
                     isLastMessage(messages, i, user._id)) && (
@@ -387,7 +383,11 @@ const Chats = ({ history }) => {
                       marginTop: isSameUser(messages, m, i, user._id) ? 3 : 10,
                     }}
                   >
-                    <p>{m.content}</p>
+                    {i + 1 === length ? (
+                      <p id='lastMessage'>{m.content}</p>
+                    ) : (
+                      <p>{m.content}</p>
+                    )}
                   </div>
                 </div>
               ))}
@@ -409,22 +409,25 @@ const Chats = ({ history }) => {
                 />
               </div>
             )}
-
-            <form onSubmit={sendMessage}>
-              <div className='message-box'>
-                <div className='message-box-aria'>
-                  <input
-                    type='text'
-                    placeholder='Type a message...'
-                    onChange={typingHandler}
-                    value={newMessage}
-                  />
-                  <i className='far fa-smile' />
-                </div>
-              </div>
-            </form>
-            <div ref={messagesEndRef} />
           </div>
+
+          <form onSubmit={sendMessage}>
+            <div className='message-box'>
+              <div className='message-box-aria'>
+                <input
+                  type='text'
+                  placeholder='Type a message...'
+                  onChange={typingHandler}
+                  value={newMessage}
+                />
+                <FontAwesomeIcon
+                  icon={faPaperPlane}
+                  onClick={sendMessage}
+                  className='fa send-message'
+                />
+              </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>
