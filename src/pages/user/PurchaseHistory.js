@@ -7,6 +7,8 @@ import { toast } from 'react-toastify';
 import ShowPaymentInfo from '../../components/cards/ShowPaymentInfo';
 import Invoice from '../../components/cards/Invoice';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import LeftSidebar from '../../components/user/LeftSidebar';
+import RightSidebar from '../../components/user/RightSidebar';
 
 const PurchaseHistory = () => {
   const [orders, setOrders] = useState([]);
@@ -33,7 +35,7 @@ const PurchaseHistory = () => {
     ));
 
   const showOrderInTable = (order) => (
-    <table>
+    <table className='product-info'>
       <thead>
         <tr>
           <th>Product</th>
@@ -64,11 +66,15 @@ const PurchaseHistory = () => {
   );
 
   return (
-    <div>
-      <h1 className='center'>
-        {orders.length > 0 ? 'User Purchase Orders' : 'No Purchase Orders'}
-      </h1>
-      {showOrders()}
+    <div className='container'>
+      <LeftSidebar />
+      <div className='main-content'>
+        <h1 className='center'>
+          {orders.length > 0 ? 'User Purchase Orders' : 'No Purchase Orders'}
+        </h1>
+        {showOrders()}
+      </div>
+      <RightSidebar />
     </div>
   );
 };

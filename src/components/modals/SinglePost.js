@@ -112,7 +112,7 @@ const SinglePost = ({
           <Link to={`/user/profile/${user._id}`}>
             <img
               src={user.profileImage ? user.profileImage.url : defaultProfile}
-              alt={`${user.name || user.email.split('@')[0]}'s profile picture`}
+              alt={`${user.name || user.email.split('@')[0]}'s profile pic`}
             />
           </Link>
           <Link to={`/user/profile/${user._id}`}>
@@ -135,9 +135,9 @@ const SinglePost = ({
             <div className='add-post-links'>
               <label>
                 {image && image.url ? (
-                  <img src={image.url} />
+                  <img src={image.url} alt='uploaded' />
                 ) : post.image && post.image.url ? (
-                  <img src={post.image.url} />
+                  <img src={post.image.url} alt='uploaded' />
                 ) : (
                   <FontAwesomeIcon icon={faCamera} className='fa' />
                 )}

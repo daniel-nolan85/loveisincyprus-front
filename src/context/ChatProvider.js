@@ -7,7 +7,7 @@ const ChatProvider = ({ children }) => {
   const [chats, setChats] = useState([]);
   const [notification, setNotification] = useState([]);
   const [messages, setMessages] = useState([]);
-  // const [isTyping, setIsTyping] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const [socketConnected, setSocketConnected] = useState(false);
   // const [thisPost, setThisPost] = useState({});
   // const [notifModalIsOpen, setNotifModalIsOpen] = useState(false);
@@ -23,8 +23,8 @@ const ChatProvider = ({ children }) => {
         setNotification,
         messages,
         setMessages,
-        // isTyping,
-        // setIsTyping,
+        isTyping,
+        setIsTyping,
         socketConnected,
         setSocketConnected,
         // thisPost,

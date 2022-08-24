@@ -19,12 +19,12 @@ const Checkout = ({ history }) => {
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
   const [address, setAddress] = useState({
-    firstLine: '',
+    firstLine: '400 Sunkist',
     secondLine: '',
-    city: '',
-    state: '',
-    zip: '',
-    country: '',
+    city: 'Anaheim',
+    state: 'California',
+    zip: '92833',
+    country: 'USA',
   });
   const [addressSaved, setAddressSaved] = useState(false);
   const [coupon, setCoupon] = useState('');

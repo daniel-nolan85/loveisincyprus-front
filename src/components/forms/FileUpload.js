@@ -102,6 +102,7 @@ const FileUpload = ({ values, setValues }) => {
             <img
               src={image.url}
               style={{ marginTop: '5px', marginLeft: '10px' }}
+              alt='uploaded'
             />
           </div>
         ))}

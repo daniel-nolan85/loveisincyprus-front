@@ -3,6 +3,7 @@ import { getOrders, changeStatus } from '../../functions/admin';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import OrdersList from '../../components/lists/OrdersList';
+import LeftSidebar from '../../components/admin/LeftSidebar';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -29,8 +30,13 @@ const Orders = () => {
   };
 
   return (
-    <div>
-      <OrdersList orders={orders} handleStatusChange={handleStatusChange} />
+    <div className='container'>
+      <LeftSidebar />
+      <div className='admin-main-content'>
+        <div>
+          <OrdersList orders={orders} handleStatusChange={handleStatusChange} />
+        </div>
+      </div>
     </div>
   );
 };

@@ -28,7 +28,7 @@ const ProductInfo = ({ product, wishlist, handleRemove }) => {
       }
       cart.push({ ...product, count: 1 });
       let unique = _.uniqWith(cart, _.isEqual);
-      console.log('unique => ', unique);
+      // console.log('unique => ', unique);
       localStorage.setItem('cart', JSON.stringify(unique));
       dispatch({
         type: 'ADD_TO_CART',

@@ -1,20 +1,11 @@
 import React from 'react';
-import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
-import StripeCheckout from '../../components/cards/StripeCheckout';
-
-// load stripe outside of components render to avoid recreating stripe object on every render
-const promise = loadStripe(process.env.REACT_APP_STRIPE_KEY);
+import CardinityCheckout from '../../components/cards/CardinityCheckout';
 
 const Payment = () => {
   return (
     <div>
       <h4>Complete your purchase</h4>
-      <Elements stripe={promise}>
-        <div>
-          <StripeCheckout />
-        </div>
-      </Elements>
+      <CardinityCheckout />
     </div>
   );
 };

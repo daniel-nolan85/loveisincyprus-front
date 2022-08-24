@@ -71,8 +71,6 @@ const UserDashboard = () => {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.emit('setup', user);
-    socket.on('connected', () => setSocketConnected(true));
   }, []);
 
   const followersPostsNum = async () => {

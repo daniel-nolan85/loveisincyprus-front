@@ -40,6 +40,7 @@ const UsersToSelect = ({
   };
 
   console.log(values);
+  console.log(optIns);
 
   return (
     <Modal

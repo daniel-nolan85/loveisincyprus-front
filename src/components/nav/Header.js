@@ -94,6 +94,33 @@ const Header = () => {
       });
   };
 
+  const resetNotifCount = async () => {
+    console.log('reset count');
+    await axios
+      .put(
+        `${process.env.REACT_APP_API}/reset-notification-count`,
+        { user },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        // console.log(res.data);
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+            newNotifs: res.data.newNotifs,
+          },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   // const notifPost = (post) => {
   //   setThisPost(post);
   //   setNotifModalIsOpen(true);
@@ -176,101 +203,6 @@ const Header = () => {
                   <span className='tooltip-text'>Points</span>
                 </li>
               </Link>
-              <Link to='/notifications'>
-                <li className='tooltip'>
-                  <Badge count={notification.length} offset={[-20, 0]}>
-                    <FontAwesomeIcon icon={faBell} className='menu-icon' />
-                  </Badge>
-                  <span className='tooltip-text'>Notifications</span>
-                </li>
-              </Link>
-              {/* <li>
-                <div className='settings-links dropdown'>
-                  <Badge count={notification.length} offset={[-20, 0]}>
-                    <FontAwesomeIcon icon={faBell} className='menu-icon' />
-                  </Badge>
-                  <div className='dropdown-content information'>
-                    {!notification.length && 'No new notifications'}
-                    {notification.map((notif) => (
-                      <div key={notif._id}>
-                        {notif.chat ? (
-                          <p
-                            onClick={() => {
-                              history.push('/chats');
-                              setNotification(
-                                notification.filter((n) => n !== notif)
-                              );
-                            }}
-                          >
-                            You received a new chat message from{' '}
-                            {notif.chat.users[1].email.split('@')[0]}
-                          </p>
-                        ) : notif.likes ? (
-                          <p
-                            onClick={() => {
-                              notifPost(notif);
-                              setNotification(
-                                notification.filter((n) => n !== notif)
-                              );
-                            }}
-                          >
-                            {
-                              notif.likes[notif.likes.length - 1].email.split(
-                                '@'
-                              )[0]
-                            }{' '}
-                            liked your post
-                          </p>
-                        ) : notif.following &&
-                          notif.following[notif.following.length - 1]._id ===
-                            user._id ? (
-                          <p
-                            onClick={() => {
-                              history.push(`/user/profile/${notif._id}`);
-                              setNotification(
-                                notification.filter((n) => n !== notif)
-                              );
-                            }}
-                          >
-                            {notif.email.split('@')[0]} likes you
-                          </p>
-                        ) : notif.email && notif._id !== user._id ? (
-                          <p
-                            onClick={() => {
-                              history.push(`/user/profile/${notif._id}`);
-                              setNotification(
-                                notification.filter((n) => n !== notif)
-                              );
-                            }}
-                          >
-                            {notif.email.split('@')[0]} visited your profile
-                          </p>
-                        ) : notif.some((obj) =>
-                            Object.keys(obj).includes('text')
-                          ) ? (
-                          <p
-                            onClick={() => {
-                              notifPost(notif);
-                              setNotification(
-                                notification.filter((n) => n !== notif)
-                              );
-                            }}
-                          >
-                            {
-                              notif[notif.length - 1].postedBy.email.split(
-                                '@'
-                              )[0]
-                            }{' '}
-                            commented on your post
-                          </p>
-                        ) : (
-                          ''
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </li> */}
               <Link to='/chats'>
                 <li className='tooltip' onClick={resetCount}>
                   <Badge count={user.messages.length} offset={[-20, 0]}>
@@ -280,6 +212,27 @@ const Header = () => {
                 </li>
               </Link>
             </ul>
+            <div className='settings-links dropdown'>
+              <Link to='/notifications'>
+                <Badge count={user.newNotifs.length} offset={[-20, 0]}>
+                  <FontAwesomeIcon
+                    icon={faBell}
+                    className='menu-icon'
+                    onClick={resetNotifCount}
+                  />
+                </Badge>
+              </Link>
+              <div className='dropdown-content information'>
+                {user.newNotifs.length > 0
+                  ? user.newNotifs.map((n, i) => (
+                      <div key={i}>
+                        {n}
+                        <br />
+                      </div>
+                    ))
+                  : 'No new notifications'}
+              </div>
+            </div>
           </>
         )}
         <Link to='/shop'>

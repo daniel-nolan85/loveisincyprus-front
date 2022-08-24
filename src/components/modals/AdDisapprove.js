@@ -25,8 +25,6 @@ const AdDisapprove = ({
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.emit('setup', user);
-    socket.on('connected', () => setSocketConnected(true));
   }, []);
 
   const disapproveAd = async (ad) => {

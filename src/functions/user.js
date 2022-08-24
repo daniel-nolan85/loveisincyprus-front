@@ -47,10 +47,10 @@ export const applyUserCoupon = async (coupon, authtoken) =>
     }
   );
 
-export const createOrder = async (stripeResponse, authtoken) =>
+export const createOrder = async (cardinityResponse, authtoken) =>
   await axios.post(
     `${process.env.REACT_APP_API}/order`,
-    { stripeResponse },
+    { cardinityResponse },
     {
       headers: {
         authtoken,
@@ -132,16 +132,15 @@ export const spentPoints = async (
   user,
   couponName
 ) => {
-  await axios
-    .put(
-      `${process.env.REACT_APP_API}/spent-points`,
-      { number, reason, user, couponName },
-      {
-        headers: {
-          authtoken,
-        },
-      }
-    )
+  await axios.put(
+    `${process.env.REACT_APP_API}/spent-points`,
+    { number, reason, user, couponName },
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
 };
 
 export const getUserPointsGainedData = async (authtoken) =>

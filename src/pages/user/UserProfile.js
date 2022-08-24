@@ -76,8 +76,6 @@ const UserProfile = () => {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.emit('setup', user);
-    socket.on('connected', () => setSocketConnected(true));
   }, []);
 
   useEffect(() => {

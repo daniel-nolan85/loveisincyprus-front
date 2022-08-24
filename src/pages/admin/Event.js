@@ -26,6 +26,11 @@ import defaultProfile from '../../assets/defaultProfile.png';
 import EventCancel from '../../components/modals/EventCancel';
 import EventEdit from '../../components/modals/EventEdit';
 import moment from 'moment';
+import io from 'socket.io-client';
+import { ChatState } from '../../context/ChatProvider';
+
+const ENDPOINT = 'http://localhost:8000';
+let socket;
 
 const initialState = {
   name: '',
@@ -50,13 +55,19 @@ const Events = () => {
 
   const { user } = useSelector((state) => ({ ...state }));
 
+  const { setSocketConnected } = ChatState();
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+  }, []);
+
   useEffect(() => {
     loadEvents();
   }, []);
 
   const loadEvents = () =>
     getEvents().then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setEvents(res.data);
     });
 
@@ -90,13 +101,14 @@ const Events = () => {
     setLoading(true);
     createEvent(values, user.token)
       .then((res) => {
-        console.log(res);
+        // console.log(res);
         setLoading(false);
         setValues(initialState);
         toast.success(`${res.data.name} has been created`, {
           position: toast.POSITION.TOP_CENTER,
         });
         loadEvents();
+        socket.emit('new event', res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -112,7 +124,7 @@ const Events = () => {
   };
 
   const removeInvitee = (u) => {
-    console.log(u);
+    // console.log(u);
     for (var i = 0; i < values.invitees.length; i++) {
       if (values.invitees[i]._id == u._id) {
         values.invitees.splice(i, 1);

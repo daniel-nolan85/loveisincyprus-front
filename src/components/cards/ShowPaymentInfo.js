@@ -1,13 +1,15 @@
 import React from 'react';
+import moment from 'moment';
 
 const ShowPaymentInfo = ({ order }) => {
+  console.log('order => ', order);
   return (
     <div>
       <p>
         <span>Order ID: {order.paymentIntent.id}</span>{' '}
         <span>
-          Total Paid:{' '}
-          {(order.paymentIntent.amount / 100).toLocaleString('en-US', {
+          Total Paid: €
+          {order.paymentIntent.amount.toLocaleString('en-US', {
             style: 'currency',
             currency: 'EUR',
           })}
@@ -16,7 +18,8 @@ const ShowPaymentInfo = ({ order }) => {
         <span>Payment: {order.paymentIntent.status.toUpperCase()}</span>{' '}
         <span>
           Ordered on:{' '}
-          {new Date(order.paymentIntent.created * 1000).toLocaleString()}
+          {moment(order.paymentIntent.created).format('MMMM Do YYYY')}
+          {/* {new Date(order.paymentIntent.created * 1000).toLocaleString()} */}
         </span>{' '}
         <span>Order Status: {order.orderStatus}</span>
       </p>

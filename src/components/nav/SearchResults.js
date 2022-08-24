@@ -29,8 +29,6 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.emit('setup', user);
-    socket.on('connected', () => setSocketConnected(true));
   }, []);
 
   const handleFollow = async (u) => {

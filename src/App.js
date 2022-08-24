@@ -62,6 +62,7 @@ import UserSearch from './pages/user/UserSearch';
 import MassMail from './pages/admin/MassMail';
 import AdSubmission from './pages/user/AdSubmission';
 import AdSubmissions from './pages/admin/AdSubmissions';
+import Events from './pages/user/Events';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -114,8 +115,8 @@ const App = () => {
     setNotification,
     messages,
     setMessages,
-    // isTyping,
-    // setIsTyping,
+    isTyping,
+    setIsTyping,
     socketConnected,
     setSocketConnected,
   } = ChatState();
@@ -159,6 +160,7 @@ const App = () => {
                 eventsEligible: res.data.eventsEligible,
                 optIn: res.data.optIn,
                 messages: res.data.messages,
+                newNotifs: res.data.newNotifs,
                 profileComplete: res.data.profileComplete,
                 language: res.data.language,
                 maritalStatus: res.data.maritalStatus,
@@ -218,22 +220,23 @@ const App = () => {
       socket = io(ENDPOINT);
       socket.emit('setup', user);
       socket.on('connected', () => setSocketConnected(true));
+      socket.on('typing', () => setIsTyping(true));
+      socket.on('stop typing', () => setIsTyping(false));
 
       socket.on('post liked', (post) => {
-        console.log(`a user liked your post ${post.content}`);
-        setNotification([post, ...notification]);
+        incrementNewNotifications(post, 'like');
       });
       socket.on('comment added', (p) => {
-        console.log(`a user commented on your post ${p.content}`);
-        setNotification([p.comments, ...notification]);
+        incrementNewNotifications(p, 'comment');
       });
       socket.on('follower added', (f) => {
-        console.log(`a user likes you ${f.email}`);
-        setNotification([f, ...notification]);
+        incrementNewNotifications(f, 'follower');
       });
-      socket.on('visitor added', (v, u) => {
-        console.log(`a new user visited your profile ${u.email}`);
-        setNotification([u, ...notification]);
+      socket.on('visitor added', (v) => {
+        incrementNewNotifications(v, 'visitor');
+      });
+      socket.on('event added', (e) => {
+        incrementNewNotifications(e, 'event');
       });
       removeExpiredFeatures();
       handleExpiredAds();
@@ -250,7 +253,7 @@ const App = () => {
       return;
     } else {
       socket.on('message received', (newMessageReceived) => {
-        console.log('newMessageReceived => ', newMessageReceived);
+        // console.log('newMessageReceived => ', newMessageReceived);
         fetchChats();
         if (
           !selectedChatCompare ||
@@ -266,6 +269,32 @@ const App = () => {
       });
     }
   });
+
+  const incrementNewNotifications = async (notif, reason) => {
+    await axios
+      .put(
+        `${process.env.REACT_APP_API}/new-notification-count`,
+        { user, notif, reason },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+            newNotifs: res.data.newNotifs,
+          },
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const incrementNewMessages = async (message) => {
     await axios
@@ -370,6 +399,7 @@ const App = () => {
         <UserRoute exact path='/notifications' component={Notifications} />
         <UserRoute exact path='/search-users' component={UserSearch} />
         <UserRoute exact path='/ad-submission' component={AdSubmission} />
+        <UserRoute exact path='/events' component={Events} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/posts' component={Posts} />
         <AdminRoute exact path='/admin/users' component={Users} />

@@ -36,8 +36,6 @@ const Followers = ({ history }) => {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.emit('setup', user);
-    socket.on('connected', () => setSocketConnected(true));
   }, []);
 
   const fetchFollowers = async () => {

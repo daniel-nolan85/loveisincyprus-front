@@ -39,7 +39,7 @@ const UsersToInvite = ({
     },
   };
 
-  console.log(values);
+  // console.log(values);
 
   return (
     <Modal
@@ -73,6 +73,9 @@ const UsersToInvite = ({
                     return accumulator + object.amount;
                   }, 0) -
                     u.pointsLost.reduce((accumulator, object) => {
+                      return accumulator + object.amount;
+                    }, 0) -
+                    u.pointsSpent.reduce((accumulator, object) => {
                       return accumulator + object.amount;
                     }, 0)}
                 </p>

@@ -37,7 +37,6 @@ const RightSidebar = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setAds(res.data);
       })
       .catch((err) => {
@@ -47,14 +46,13 @@ const RightSidebar = () => {
 
   return (
     <div className='right-sidebar'>
+      <div className='sidebar-title'>
+        <h4>Events</h4>
+        <Link to='/events'>All Events</Link>
+      </div>
       {user.events &&
         user.events.map((e) => (
           <div key={e._id}>
-            <div className='sidebar-title'>
-              <h4>Events</h4>
-              <Link to='/events'>All Events</Link>
-            </div>
-
             <div className='events'>
               <div className='left-event'>
                 <h3>{moment(e.when).format('DD')}</h3>

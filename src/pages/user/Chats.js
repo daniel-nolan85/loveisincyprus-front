@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faMagnifyingGlass,
@@ -33,10 +33,12 @@ const Chats = ({ history }) => {
   const [newMessage, setNewMessage] = useState('');
   // const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
+  // const [isTyping, setIsTyping] = useState(false);
   const [lastMessage, setLastMessage] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
+
+  const isFirstRun = useRef(true);
 
   const {
     selectedChat,
@@ -47,8 +49,8 @@ const Chats = ({ history }) => {
     setNotification,
     messages,
     setMessages,
-    // isTyping,
-    // setIsTyping,
+    isTyping,
+    setIsTyping,
     socketConnected,
     setSocketConnected,
   } = ChatState();
@@ -67,6 +69,15 @@ const Chats = ({ history }) => {
   }, [selectedChat]);
 
   useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      messages.length > 0 && scrollToBottom();
+    }
+  }, [messages]);
+
+  useEffect(() => {
     chats.sort(function (a, b) {
       return new Date(b.updatedAt) - new Date(a.updatedAt);
     });
@@ -82,10 +93,6 @@ const Chats = ({ history }) => {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.emit('setup', user);
-    socket.on('connected', () => setSocketConnected(true));
-    socket.on('typing', () => setIsTyping(true));
-    socket.on('stop typing', () => setIsTyping(false));
   }, []);
 
   // useEffect(() => {
@@ -186,7 +193,6 @@ const Chats = ({ history }) => {
           // console.log('messages => ', res.data);
           // console.log('selectedChat => ', selectedChat);
           socket.emit('join chat', selectedChat._id);
-          scrollToBottom();
         })
         .catch((err) => {
           console.log(err);

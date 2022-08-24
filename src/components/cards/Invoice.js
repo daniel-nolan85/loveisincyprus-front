@@ -7,6 +7,7 @@ import {
   TableBody,
   DataTableCell,
 } from '@david.kucsai/react-pdf-table';
+import moment from 'moment';
 
 const Invoice = ({ order }) => (
   <Document>
@@ -36,7 +37,8 @@ const Invoice = ({ order }) => (
       <Text style={styles.text}>
         <Text>
           Date: {'               '}
-          {new Date(order.paymentIntent.created * 1000).toLocaleString()}
+          {moment(order.paymentIntent.created).format('MMMM Do YYYY')}
+          {/* {new Date(order.paymentIntent.created * 1000).toLocaleString()} */}
         </Text>
         {'\n'}
         <Text>

@@ -1,13 +1,11 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import ProductInCheckout from '../../components/cards/ProductInCheckout';
 import { userCart } from '../../functions/user';
 
 const Cart = ({ history }) => {
   const { user, cart } = useSelector((state) => ({ ...state }));
-
-  const dispatch = useDispatch();
 
   const showCartItems = () => (
     <table>

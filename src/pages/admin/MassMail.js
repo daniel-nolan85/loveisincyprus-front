@@ -9,16 +9,17 @@ import {
   faCalendarPlus,
   faCalendarMinus,
   faStar,
-  faBan,
-  faEdit,
-  faMagnifyingGlass,
   faCoins,
 } from '@fortawesome/free-solid-svg-icons';
 import UsersToSelect from '../../components/modals/UsersToSelect';
 import axios from 'axios';
 import defaultProfile from '../../assets/defaultProfile.png';
-import moment from 'moment';
 import { sendMassMail } from '../../functions/chat';
+import io from 'socket.io-client';
+import { ChatState } from '../../context/ChatProvider';
+
+const ENDPOINT = 'http://localhost:8000';
+let socket;
 
 const initialState = {
   content: 'hello there everybody',
@@ -33,6 +34,12 @@ const MassMail = () => {
     useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
+
+  const { setSocketConnected } = ChatState();
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+  }, []);
 
   useEffect(() => {
     if (user && user.token) {
@@ -68,6 +75,7 @@ const MassMail = () => {
         console.log(res);
         setLoading(false);
         setValues(initialState);
+        socket.emit('new message', res.data);
         toast.success('Your message has been sent', {
           position: toast.POSITION.TOP_CENTER,
         });

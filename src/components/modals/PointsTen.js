@@ -23,8 +23,6 @@ const PointsTen = ({
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.emit('setup', user);
-    socket.on('connected', () => setSocketConnected(true));
   }, []);
 
   const tenPercent = async (number, reason, couponName) => {

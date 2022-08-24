@@ -60,8 +60,6 @@ const Notifications = () => {
 
   useEffect(() => {
     socket = io(ENDPOINT);
-    socket.emit('setup', user);
-    socket.on('connected', () => setSocketConnected(true));
   }, []);
 
   const fetchNotifications = async () => {
@@ -244,7 +242,7 @@ const Notifications = () => {
       .then((res) => {
         // console.log(res.data);
         if (res.data.postedBy !== user._id) {
-          socket.emit('like post', res.data);
+          // socket.emit('like post', res.data);
         }
         fetchNotifications();
       })
