@@ -21,7 +21,6 @@ import Lottie from 'react-lottie';
 import animationData from '../../assets/animations/typingIndicator.json';
 import moment from 'moment';
 
-const ENDPOINT = 'http://localhost:8000';
 let socket, selectedChatCompare;
 
 const Chats = ({ history }) => {
@@ -92,7 +91,11 @@ const Chats = ({ history }) => {
   // console.log('notification => ', notification);
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    socket = io(
+      process.env.REACT_APP_SOCKET_IO,
+      { path: '/socket.io' },
+      { reconnection: true }
+    );
   }, []);
 
   // useEffect(() => {

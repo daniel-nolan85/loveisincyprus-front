@@ -1103,6 +1103,16 @@ nav {
   background: var(--nav-color);
 }
 
+.popup-links {
+  color: var(--nav-color);
+  cursor: pointer;
+}
+
+.popup-links:hover {
+  font-weight: bold;
+  color: var(--nav-color);
+}
+
 /* --------------- advertisement-pages --------------- */
 .submit-btn.preview {
   background: #5388b4;
@@ -1698,6 +1708,22 @@ select.gray {
   cursor: pointer;
 }
 
+.pd-right .ant-ribbon {
+  padding: 10px;
+  height: 45px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.pd-right .ant-ribbon-text {
+  font-size: 25px;
+}
+
+.pd-right .verifying,
+.pd-right .verified {
+  cursor: default;
+}
+
 .pd-right button img {
   height: 15px;
   margin-right: 10px;
@@ -1743,6 +1769,20 @@ select.gray {
 }
 
 .pd-right .fa.analyse {
+  color: var(--nav-color);
+}
+
+label.verif-upload {
+  font-size: 35px;
+  cursor: pointer;
+}
+
+label.verif-upload img {
+  height: 50px;
+  width: 50px;
+}
+
+label.verif-upload .fa {
   color: var(--nav-color);
 }
 

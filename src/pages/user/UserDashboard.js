@@ -17,7 +17,6 @@ import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
 // import NotifPost from '../../components/modals/NotifPost';
 
-const ENDPOINT = 'http://localhost:8000';
 let socket;
 
 const UserDashboard = () => {
@@ -70,7 +69,11 @@ const UserDashboard = () => {
   }, [page]);
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    socket = io(
+      process.env.REACT_APP_SOCKET_IO,
+      { path: '/socket.io' },
+      { reconnection: true }
+    );
   }, []);
 
   const followersPostsNum = async () => {

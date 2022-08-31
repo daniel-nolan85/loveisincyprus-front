@@ -13,7 +13,6 @@ import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
 import { addPoints } from '../../functions/user';
 
-const ENDPOINT = 'http://localhost:8000';
 let socket;
 
 const Visitors = ({ history }) => {
@@ -30,7 +29,11 @@ const Visitors = ({ history }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    socket = io(
+      process.env.REACT_APP_SOCKET_IO,
+      { path: '/socket.io' },
+      { reconnection: true }
+    );
   }, []);
 
   useEffect(() => {

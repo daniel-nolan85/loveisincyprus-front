@@ -29,7 +29,6 @@ import moment from 'moment';
 import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
 
-const ENDPOINT = 'http://localhost:8000';
 let socket;
 
 const initialState = {
@@ -58,7 +57,11 @@ const Events = () => {
   const { setSocketConnected } = ChatState();
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    socket = io(
+      process.env.REACT_APP_SOCKET_IO,
+      { path: '/socket.io' },
+      { reconnection: true }
+    );
   }, []);
 
   useEffect(() => {

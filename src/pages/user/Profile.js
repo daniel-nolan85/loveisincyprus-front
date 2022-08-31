@@ -17,6 +17,7 @@ import {
   faSignsPost,
   faPeopleArrows,
   faCoins,
+  faUserShield,
 } from '@fortawesome/free-solid-svg-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import ProfileUpdate from '../../components/modals/ProfileUpdate';
@@ -26,7 +27,7 @@ import defaultProfile from '../../assets/defaultProfile.png';
 import CropCover from '../../components/modals/CropCover';
 import CropProfilePic from '../../components/modals/CropProfilePic';
 import LargeImage from '../../components/modals/LargeImage';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import moment from 'moment';
 import Comments from '../../components/cards/Comments';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -36,6 +37,11 @@ import SinglePost from '../../components/modals/SinglePost';
 import PostDelete from '../../components/modals/PostDelete';
 import { getUserPointsTotal, addPoints } from '../../functions/user';
 import ProfileProgress from '../../components/modals/ProfileProgress';
+import { Badge } from 'antd';
+import Verify from '../../components/modals/Verify';
+import { ChatState } from '../../context/ChatProvider';
+
+const { Ribbon } = Badge;
 
 const Profile = ({ history }) => {
   const [email, setEmail] = useState('');
@@ -46,7 +52,8 @@ const Profile = ({ history }) => {
   const [coverImage, setCoverImage] = useState({});
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  // const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [verifyModalIsOpen, setVerifyModalIsOpen] = useState(false);
   const [cropCoverModalIsOpen, setCropCoverModalIsOpen] = useState(false);
   const [cropModalIsOpen, setCropModalIsOpen] = useState(false);
   const [imageModalIsOpen, setImageModalIsOpen] = useState(false);
@@ -127,10 +134,21 @@ const Profile = ({ history }) => {
   const [sexFrequency, setSexFrequency] = useState('');
   const [progress, setProgress] = useState({});
   const [progressModalIsOpen, setProgressModalIsOpen] = useState(false);
+  const [verifImg, setVerifImg] = useState({});
+
+  const { modalIsOpen, setModalIsOpen } = ChatState();
 
   const { user } = useSelector((state) => ({ ...state }));
 
   let dispatch = useDispatch();
+
+  const locate = useLocation();
+
+  useEffect(() => {
+    if (locate.state?.clickedfromPopup) {
+      setModalIsOpen(true);
+    }
+  }, [locate.state?.clickedfromPopup]);
 
   useEffect(() => {
     if (user && user.token) {
@@ -206,7 +224,7 @@ const Profile = ({ history }) => {
     }
   }, [user && user.token]);
 
-  console.log('progress => ', progress);
+  // console.log('progress => ', progress);
   const handleSubmit = async (e) => {
     e.preventDefault();
     // console.log('birthday => ', birthday);
@@ -808,6 +826,24 @@ const Profile = ({ history }) => {
               onClick={() => setModalIsOpen(true)}
             />
           </button>
+          {user.verified === 'false' ? (
+            <div onClick={() => setVerifyModalIsOpen(true)}>
+              <Ribbon text='Verify me' color={'#ef5b85'}></Ribbon>
+            </div>
+          ) : user.verified === 'pending' ? (
+            <Ribbon
+              text='Verifying...'
+              color={'#ef5b85'}
+              className='verifying'
+            ></Ribbon>
+          ) : (
+            user.verified === 'true' && (
+              <button className='tooltip'>
+                <FontAwesomeIcon icon={faUserShield} className='fa verified' />
+                <span className='tooltip-text'>You are a verified member</span>
+              </button>
+            )
+          )}
         </div>
       </div>
       <div className='profile-info'>
@@ -1310,6 +1346,14 @@ const Profile = ({ history }) => {
         progress={progress}
         progressModalIsOpen={progressModalIsOpen}
         setProgressModalIsOpen={setProgressModalIsOpen}
+      />
+      <Verify
+        verifyModalIsOpen={verifyModalIsOpen}
+        setVerifyModalIsOpen={setVerifyModalIsOpen}
+        uploading={uploading}
+        setUploading={setUploading}
+        verifImg={verifImg}
+        setVerifImg={setVerifImg}
       />
     </div>
   );

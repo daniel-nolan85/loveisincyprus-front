@@ -12,7 +12,6 @@ import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
 import { addPoints } from '../../functions/user';
 
-const ENDPOINT = 'http://localhost:8000';
 let socket;
 
 const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
@@ -28,7 +27,11 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    socket = io(
+      process.env.REACT_APP_SOCKET_IO,
+      { path: '/socket.io' },
+      { reconnection: true }
+    );
   }, []);
 
   const handleFollow = async (u) => {

@@ -175,6 +175,8 @@ const Header = () => {
                   <Link to='/admin/coupon'>Coupon</Link>
                   <br />
                   <Link to='/ad-submissions'>Ad Submissions</Link>
+                  <br />
+                  <Link to='/verif-submissions'>Verified User Submissions</Link>
                 </div>
               </div>
             )}

@@ -21,12 +21,14 @@ import {
 import PointsInfo from '../../components/modals/PointsInfo';
 import PointsQuestions from '../../components/modals/PointsQuestions';
 import SpendPoints from '../../components/modals/SpendPoints';
+import { useLocation } from 'react-router-dom';
+import { ChatState } from '../../context/ChatProvider';
 
 const Points = () => {
   const [points, setPoints] = useState(0);
   const [pointsInfoModalIsOpen, setPointsInfoModalIsOpen] = useState(false);
-  const [pointsQuestionsModalIsOpen, setPointsQuestionsModalIsOpen] =
-    useState(false);
+  // const [pointsQuestionsModalIsOpen, setPointsQuestionsModalIsOpen] =
+  //   useState(false);
   const [spendPointsModalIsOpen, setSpendPointsModalIsOpen] = useState(false);
   const [pointsFeaturedModalIsOpen, setPointsFeaturedModalIsOpen] =
     useState(false);
@@ -73,7 +75,18 @@ const Points = () => {
   const [showLostChart, setShowLostChart] = useState(false);
   const [showSpentChart, setShowSpentChart] = useState(false);
 
+  const { pointsQuestionsModalIsOpen, setPointsQuestionsModalIsOpen } =
+    ChatState();
+
   const { user } = useSelector((state) => ({ ...state }));
+
+  const locate = useLocation();
+
+  useEffect(() => {
+    if (locate.state?.clickedfromPopup) {
+      setPointsQuestionsModalIsOpen(true);
+    }
+  }, [locate.state?.clickedfromPopup]);
 
   useEffect(() => {
     fetchUserPointsTotal();

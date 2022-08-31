@@ -63,6 +63,8 @@ import MassMail from './pages/admin/MassMail';
 import AdSubmission from './pages/user/AdSubmission';
 import AdSubmissions from './pages/admin/AdSubmissions';
 import Events from './pages/user/Events';
+import VerifSubmissions from './pages/admin/VerifSubmissions';
+import Popup from './components/modals/Popup';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -96,10 +98,11 @@ import Events from './pages/user/Events';
 // const Photos = lazy(() => import('./pages/user/Photos'));
 // const GeoBlock = lazy(() => import('./pages/admin/GeoBlock'));
 
-const ENDPOINT = 'http://localhost:8000';
 let socket, selectedChatCompare;
 
 const App = () => {
+  const [popupModalIsOpen, setPopupModalIsOpen] = useState(false);
+
   const { user } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
@@ -159,6 +162,7 @@ const App = () => {
                 events: res.data.events,
                 eventsEligible: res.data.eventsEligible,
                 optIn: res.data.optIn,
+                verified: res.data.verified,
                 messages: res.data.messages,
                 newNotifs: res.data.newNotifs,
                 profileComplete: res.data.profileComplete,
@@ -204,7 +208,7 @@ const App = () => {
                 sexFrequency: res.data.sexFrequency,
               },
             });
-            // console.log('logged in user ==> ', res);
+            console.log('logged in user ==> ', res);
           })
           .catch((err) => console.log(err));
       }
@@ -212,12 +216,22 @@ const App = () => {
     return () => unsubscribe();
   }, [dispatch]);
 
-  // console.log(notification);
-  // console.log(messages);
+  useEffect(() => {
+    if (user && user.profileComplete === false) {
+      const timer = setTimeout(() => {
+        setPopupModalIsOpen(true);
+      }, 20000);
+      return () => clearTimeout(timer);
+    }
+  }, [user && user.token]);
 
   useEffect(() => {
     if (user) {
-      socket = io(ENDPOINT);
+      socket = io(
+        process.env.REACT_APP_SOCKET_IO,
+        { path: '/socket.io' },
+        { reconnection: true }
+      );
       socket.emit('setup', user);
       socket.on('connected', () => setSocketConnected(true));
       socket.on('typing', () => setIsTyping(true));
@@ -363,6 +377,10 @@ const App = () => {
       <Header />
       <SideDrawer />
       <ToastContainer />
+      <Popup
+        popupModalIsOpen={popupModalIsOpen}
+        setPopupModalIsOpen={setPopupModalIsOpen}
+      />
       <Switch>
         <Route exact path='/' component={Home} />
         <Route exact path='/authentication' component={LoginAndRegister} />
@@ -412,6 +430,11 @@ const App = () => {
         <AdminRoute exact path='/admin/event' component={Event} />
         <AdminRoute exact path='/admin/mass-mail' component={MassMail} />
         <AdminRoute exact path='/ad-submissions' component={AdSubmissions} />
+        <AdminRoute
+          exact
+          path='/verif-submissions'
+          component={VerifSubmissions}
+        />
       </Switch>
       {/* </Suspense> */}
     </>

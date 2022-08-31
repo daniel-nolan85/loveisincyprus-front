@@ -15,7 +15,7 @@ import { createOrUpdateUser } from '../../functions/auth';
 import { addPoints } from '../../functions/user';
 
 const Login = () => {
-  const [email, setEmail] = useState('danielnolan85@yahoo.com');
+  const [email, setEmail] = useState('loveisincyprus@gmail.com');
   const [password, setPassword] = useState('123456');
   const [emailLoading, setEmailLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
@@ -89,6 +89,7 @@ const Login = () => {
               events: res.data.events,
               eventsEligible: res.data.eventsEligible,
               optIn: res.data.optIn,
+              verified: res.data.verified,
               messages: res.data.messages,
               newNotifs: res.data.newNotifs,
               profileComplete: res.data.profileComplete,
@@ -219,6 +220,7 @@ const Login = () => {
                 events: res.data.events,
                 eventsEligible: res.data.eventsEligible,
                 optIn: res.data.optIn,
+                verified: res.data.verified,
                 messages: res.data.messages,
                 newNotifs: res.data.newNotifs,
                 profileComplete: res.data.profileComplete,

@@ -10,13 +10,13 @@ let socket;
 
 Modal.setAppElement('#root');
 
-const AdDisapprove = ({
-  adDisapproveModalIsOpen,
-  setAdDisapproveModalIsOpen,
-  currentAd,
+const VerifDisapprove = ({
+  verifDisapproveModalIsOpen,
+  setVerifDisapproveModalIsOpen,
+  currentVerif,
   reason,
   setReason,
-  fetchAds,
+  fetchVerifs,
 }) => {
   let { user } = useSelector((state) => ({ ...state }));
 
@@ -30,11 +30,11 @@ const AdDisapprove = ({
     );
   }, []);
 
-  const disapproveAd = async (ad) => {
+  const disapproveVerif = async (verif) => {
     await axios
       .put(
-        `${process.env.REACT_APP_API}/disapprove-ad`,
-        { user, ad, reason },
+        `${process.env.REACT_APP_API}/disapprove-verif`,
+        { verif, reason },
         {
           headers: {
             authtoken: user.token,
@@ -44,11 +44,11 @@ const AdDisapprove = ({
       .then((res) => {
         console.log(res.data);
         socket.emit('new message', res.data);
-        toast.error(`You have rejected this ad.`, {
+        toast.error(`You have rejected this verification.`, {
           position: toast.POSITION.TOP_CENTER,
         });
-        fetchAds();
-        setAdDisapproveModalIsOpen(false);
+        fetchVerifs();
+        setVerifDisapproveModalIsOpen(false);
       })
       .catch((err) => console.log(err));
   };
@@ -75,19 +75,17 @@ const AdDisapprove = ({
     },
   };
 
-  const { content, image, postedBy } = currentAd;
+  const { image, postedBy } = currentVerif;
 
   return (
     <Modal
-      isOpen={adDisapproveModalIsOpen}
-      onRequestClose={() => setAdDisapproveModalIsOpen(false)}
+      isOpen={verifDisapproveModalIsOpen}
+      onRequestClose={() => setVerifDisapproveModalIsOpen(false)}
       style={modalStyles}
       contentLabel='Example Modal'
     >
       <div className='match'>
-        <h1>Are you sure you want to reject approval on this ad?</h1>
-        <br />
-        <p>{content}</p>
+        <h1>Are you sure you want to reject approval on this verification?</h1>
         <br />
         {image && (
           <div className='match-images'>
@@ -105,12 +103,15 @@ const AdDisapprove = ({
           value={reason}
           onChange={(e) => setReason(e.target.value)}
         />
-        <button className='submit-btn' onClick={() => disapproveAd(currentAd)}>
+        <button
+          className='submit-btn'
+          onClick={() => disapproveVerif(currentVerif)}
+        >
           Yes, reject
         </button>
         <button
           className='submit-btn trash'
-          onClick={() => setAdDisapproveModalIsOpen(false)}
+          onClick={() => setVerifDisapproveModalIsOpen(false)}
         >
           No, cancel
         </button>
@@ -119,4 +120,4 @@ const AdDisapprove = ({
   );
 };
 
-export default AdDisapprove;
+export default VerifDisapprove;

@@ -11,6 +11,9 @@ const ChatProvider = ({ children }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   // const [thisPost, setThisPost] = useState({});
   // const [notifModalIsOpen, setNotifModalIsOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [pointsQuestionsModalIsOpen, setPointsQuestionsModalIsOpen] =
+    useState(false);
 
   return (
     <ChatContext.Provider
@@ -31,6 +34,10 @@ const ChatProvider = ({ children }) => {
         // setThisPost,
         // notifModalIsOpen,
         // setNotifModalIsOpen,
+        modalIsOpen,
+        setModalIsOpen,
+        pointsQuestionsModalIsOpen,
+        setPointsQuestionsModalIsOpen,
       }}
     >
       {children}

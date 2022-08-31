@@ -96,6 +96,7 @@ const RegisterComplete = ({ history }) => {
                 events: res.data.events,
                 eventsEligible: res.data.eventsEligible,
                 optIn: res.data.optIn,
+                verified: res.data.verified,
                 messages: res.data.messages,
                 newNotifs: res.data.newNotifs,
                 profileComplete: res.data.profileComplete,

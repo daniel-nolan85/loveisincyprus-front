@@ -13,6 +13,7 @@ import {
   faCaretUp,
   faSpinner,
   faBrain,
+  faUserShield,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
@@ -33,7 +34,6 @@ import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
 import Analyse from '../../components/modals/Analyse';
 
-const ENDPOINT = 'http://localhost:8000';
 let socket;
 
 const UserProfile = () => {
@@ -75,7 +75,11 @@ const UserProfile = () => {
   let dispatch = useDispatch();
 
   useEffect(() => {
-    socket = io(ENDPOINT);
+    socket = io(
+      process.env.REACT_APP_SOCKET_IO,
+      { path: '/socket.io' },
+      { reconnection: true }
+    );
   }, []);
 
   useEffect(() => {
@@ -409,6 +413,7 @@ const UserProfile = () => {
     createdAt,
     following,
     _id,
+    verified,
   } = thisUser;
 
   return (
@@ -477,6 +482,12 @@ const UserProfile = () => {
             <FontAwesomeIcon icon={faBrain} className='fa analyse' />
             <span className='tooltip-text'>Analyse compatibility</span>
           </button>
+          {verified === 'true' && (
+            <button className='tooltip'>
+              <FontAwesomeIcon icon={faUserShield} className='fa verified' />
+              <span className='tooltip-text'>Verified member</span>
+            </button>
+          )}
           <br />
         </div>
       </div>

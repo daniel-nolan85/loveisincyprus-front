@@ -20,8 +20,8 @@ const ProfileProgress = ({
 }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
-  console.log('user => ', user);
-  console.log('progress => ', progress);
+  // console.log('user => ', user);
+  // console.log('progress => ', progress);
 
   const modalStyles = {
     content: {

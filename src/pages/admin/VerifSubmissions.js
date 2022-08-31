@@ -14,28 +14,29 @@ import {
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import defaultProfile from '../../assets/defaultProfile.png';
-import AdDisapprove from '../../components/modals/AdDisapprove';
-import AdApprove from '../../components/modals/AdApprove';
+import VerifDisapprove from '../../components/modals/VerifDisapprove';
+import VerifApprove from '../../components/modals/VerifApprove';
 
-const AdSubmissions = () => {
-  const [ads, setAds] = useState([]);
-  const [adDisapproveModalIsOpen, setAdDisapproveModalIsOpen] = useState(false);
-  const [adApproveModalIsOpen, setAdApproveModalIsOpen] = useState(false);
-  const [currentAd, setCurrentAd] = useState({});
+const VerifSubmissions = () => {
+  const [verifs, setVerifs] = useState([]);
+  const [verifDisapproveModalIsOpen, setVerifDisapproveModalIsOpen] =
+    useState(false);
+  const [verifApproveModalIsOpen, setVerifApproveModalIsOpen] = useState(false);
+  const [currentVerif, setCurrentVerif] = useState({});
   const [reason, setReason] = useState('');
 
   const { user } = useSelector((state) => ({ ...state }));
 
   useEffect(() => {
     if (user && user.token) {
-      fetchAds();
+      fetchVerifs();
     }
   }, [user && user.token]);
 
-  const fetchAds = async () => {
+  const fetchVerifs = async () => {
     await axios
       .post(
-        `${process.env.REACT_APP_API}/fetch-ads`,
+        `${process.env.REACT_APP_API}/fetch-verifs`,
         { user },
         {
           headers: {
@@ -45,21 +46,21 @@ const AdSubmissions = () => {
       )
       .then((res) => {
         console.log(res.data);
-        setAds(res.data);
+        setVerifs(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
 
-  const handleDisapprove = (ad) => {
-    setAdDisapproveModalIsOpen(true);
-    setCurrentAd(ad);
+  const handleDisapprove = (verif) => {
+    setVerifDisapproveModalIsOpen(true);
+    setCurrentVerif(verif);
   };
 
-  const handleApprove = (ad) => {
-    setAdApproveModalIsOpen(true);
-    setCurrentAd(ad);
+  const handleApprove = (verif) => {
+    setVerifApproveModalIsOpen(true);
+    setCurrentVerif(verif);
   };
 
   return (
@@ -67,103 +68,93 @@ const AdSubmissions = () => {
       <LeftSidebar />
       <div className='admin-main-content'>
         <div className='admin-cards'>
-          {ads.length > 0 ? (
-            ads.map((ad) => (
-              <div className='post-container' key={ad._id}>
+          {verifs.length > 0 ? (
+            verifs.map((verif) => (
+              <div className='post-container' key={verif._id}>
                 <div className='post-row'>
                   <div className='user-profile'>
                     <Link
                       to={
-                        user._id === ad.postedBy._id
+                        user._id === verif.postedBy._id
                           ? `/user/profile/${user._id}`
-                          : `/user/${ad.postedBy._id}`
+                          : `/user/${verif.postedBy._id}`
                       }
                     >
                       <img
                         src={
-                          ad.postedBy.profileImage
-                            ? ad.postedBy.profileImage.url
+                          verif.postedBy.profileImage
+                            ? verif.postedBy.profileImage.url
                             : defaultProfile
                         }
                         alt={`${
-                          ad.postedBy.name || ad.postedBy.email.split('@')[0]
+                          verif.postedBy.name ||
+                          verif.postedBy.email.split('@')[0]
                         }'s profile picture`}
                       />
                     </Link>
                     <div>
                       <Link
                         to={
-                          user._id === ad.postedBy._id
+                          user._id === verif.postedBy._id
                             ? `/user/profile/${user._id}`
-                            : `/user/${ad.postedBy._id}`
+                            : `/user/${verif.postedBy._id}`
                         }
                       >
                         <p>
-                          {ad.postedBy.name || ad.postedBy.email.split('@')[0]}
+                          {verif.postedBy.name ||
+                            verif.postedBy.email.split('@')[0]}
                         </p>
                       </Link>
-                      <span>{moment(ad.createdAt).fromNow()}</span>
+                      <span>{moment(verif.createdAt).fromNow()}</span>
                     </div>
                   </div>
                   <div className='post-icons'>
                     <FontAwesomeIcon
                       icon={faThumbsDown}
                       className='fa trash'
-                      onClick={() => handleDisapprove(ad)}
+                      onClick={() => handleDisapprove(verif)}
                     />
                     <FontAwesomeIcon
                       icon={faThumbsUp}
                       className='fa edit'
-                      onClick={() => handleApprove(ad)}
+                      onClick={() => handleApprove(verif)}
                     />
                   </div>
                 </div>
-                <p className='post-text'>{ad.content}</p>
-                {ad.image && (
+                {verif.image && (
                   <img
-                    src={ad.image.url}
+                    src={verif.image.url}
                     alt={`${
-                      ad.postedBy.name || ad.postedBy.email.split('@')[0]
+                      verif.postedBy.name || verif.postedBy.email.split('@')[0]
                     }'s advertisement`}
                     className='post-img'
                   />
                 )}
-                <div className='ad-duration'>
-                  <br />
-                  {`${
-                    ad.postedBy.name || ad.postedBy.email.split('@')[0]
-                  } would like this ad to be displayed for ${ad.duration}`}
-                </div>
-                <div
-                  className={`${ad.status === 'rejected' && 'rejected'} ${
-                    ad.status === 'approved' && 'approved'
-                  } ${ad.status === 'expired' && 'expired'}`}
-                ></div>
               </div>
             ))
           ) : (
             <h1 className='center'>
-              There are not currently any ad submissions to review.
+              There are not currently any verification submissions to review.
             </h1>
           )}
         </div>
-        <AdDisapprove
-          adDisapproveModalIsOpen={adDisapproveModalIsOpen}
-          setAdDisapproveModalIsOpen={setAdDisapproveModalIsOpen}
-          currentAd={currentAd}
+        <VerifDisapprove
+          verifDisapproveModalIsOpen={verifDisapproveModalIsOpen}
+          setVerifDisapproveModalIsOpen={setVerifDisapproveModalIsOpen}
+          currentVerif={currentVerif}
           reason={reason}
           setReason={setReason}
-          fetchAds={fetchAds}
+          fetchVerifs={fetchVerifs}
         />
-        <AdApprove
-          adApproveModalIsOpen={adApproveModalIsOpen}
-          setAdApproveModalIsOpen={setAdApproveModalIsOpen}
-          currentAd={currentAd}
-          fetchAds={fetchAds}
+        <VerifApprove
+          verifApproveModalIsOpen={verifApproveModalIsOpen}
+          setVerifApproveModalIsOpen={setVerifApproveModalIsOpen}
+          currentVerif={currentVerif}
+          fetchVerifs={fetchVerifs}
         />
       </div>
     </div>
   );
 };
 
-export default AdSubmissions;
+export default VerifSubmissions;
