@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 const ShopLink = () => {
   return (
     <div className='shop-link-container'>
-      <img src={tshirt} alt='' />
+      <img src={tshirt} alt='LIIC tshirt' />
       <div className='shop-link-text'>
         <h1>Visit our online store</h1>
         <p>

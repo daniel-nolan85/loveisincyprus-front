@@ -1,4 +1,5 @@
 import React from 'react';
+import AdLink from '../components/cards/AdLink';
 import Carousel from '../components/cards/Carousel';
 import FeaturedMembers from '../components/cards/FeaturedMembers';
 import Footer from '../components/cards/Footer';
@@ -12,6 +13,7 @@ const Home = () => {
       <Carousel />
       <FeaturedMembers />
       <ShopLink />
+      <AdLink />
       <Footer />
     </div>
   );

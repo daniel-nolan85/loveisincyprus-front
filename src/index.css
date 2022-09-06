@@ -407,6 +407,27 @@ nav {
   text-decoration: none;
 }
 
+.ad-link-container {
+  position: relative;
+  text-align: center;
+}
+
+.ad-link-container img {
+  width: 100%;
+}
+
+.ad-link-text {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  /* z-index: 10; */
+}
+
+.ad-link-text .submit-btn {
+  width: fit-content;
+}
+
 .container {
   display: flex;
   justify-content: space-between;
@@ -720,7 +741,8 @@ nav {
 }
 
 .post-input-container textarea,
-.comment-input-container textarea {
+.comment-input-container textarea,
+.ad-input-container textarea {
   width: 100%;
   border: 0;
   outline: 0;
@@ -1149,7 +1171,8 @@ nav {
 
 .post-container .rejected,
 .post-container .approved,
-.post-container .expired {
+.post-container .expired,
+.post-container .paid {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1157,7 +1180,8 @@ nav {
 
 .post-container .rejected:after,
 .post-container .approved:after,
-.post-container .expired:after {
+.post-container .expired:after,
+.post-container .paid:after {
   position: absolute;
   top: 30%;
   z-index: 1;
@@ -1188,11 +1212,11 @@ nav {
 
 .post-container .approved:after {
   content: 'APPROVED';
-  color: #07bc0c;
-  border: solid 8px #07bc0c;
-  -webkit-text-shadow: 0 0 2px #07bc0c;
-  text-shadow: 0 0 2px #07bc0c;
-  box-shadow: 0 0 2px #07bc0c;
+  color: var(--nav-color);
+  border: solid 8px var(--nav-color);
+  -webkit-text-shadow: 0 0 2px var(--nav-color);
+  text-shadow: 0 0 2px var(--nav-color);
+  box-shadow: 0 0 2px var(--nav-color);
 }
 
 .post-container .expired:after {
@@ -1202,6 +1226,27 @@ nav {
   -webkit-text-shadow: 0 0 2px #5388b4;
   text-shadow: 0 0 2px #5388b4;
   box-shadow: 0 0 2px #5388b4;
+}
+
+.post-container .paid:after {
+  content: 'PAID';
+  color: #07bc0c;
+  border: solid 8px #07bc0c;
+  -webkit-text-shadow: 0 0 2px #07bc0c;
+  text-shadow: 0 0 2px #07bc0c;
+  box-shadow: 0 0 2px #07bc0c;
+}
+
+.form-box.ad-contact {
+  height: 250px;
+  margin-top: 0;
+  width: 100%;
+}
+
+.form-box.ad-payment {
+  height: 300px;
+  margin-top: 0;
+  width: 100%;
 }
 
 /* --------------- admin-pages --------------- */
@@ -1608,6 +1653,20 @@ nav {
 
 select.gray {
   background: var(--body-color);
+}
+
+.submissioner-info .fa {
+  cursor: pointer;
+  font-size: 25px;
+  color: var(--nav-color);
+}
+
+.submissioner-info .fa.user {
+  margin-right: 15px;
+}
+
+.submissioner-info .fa.payment {
+  margin-left: 15px;
 }
 
 /* --------------- profile-page --------------- */
@@ -3169,7 +3228,7 @@ table.product-info tbody {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* margin-top: 30px; */
+  margin-top: 50px;
 }
 
 .contact-container .contact-info {
@@ -3310,6 +3369,10 @@ table.product-info tbody {
     width: 100%;
   }
 
+  .ad-link-container .lg-screen {
+    display: none;
+  }
+
   .add-post-links {
     flex-wrap: wrap;
   }
@@ -3354,6 +3417,26 @@ table.product-info tbody {
   }
 }
 
+@media (max-width: 700px) {
+  .ad-link-text p {
+    display: none;
+  }
+}
+
+@media (max-width: 550px) {
+  .ad-link-text {
+    top: 45%;
+  }
+
+  .ad-link-text h1 {
+    font-size: 18px;
+  }
+
+  .ad-link-text .submit-btn {
+    margin-top: 0;
+  }
+}
+
 /* --------------- media query for admin pages --------------- */
 @media (max-width: 650px) {
   .admin-main-content {
@@ -3384,7 +3467,8 @@ table.product-info tbody {
 
   .post-container .rejected:after,
   .post-container .approved:after,
-  .post-container .expired:after {
+  .post-container .expired:after,
+  .post-container .paid:after {
     font-size: 40px;
     border-width: 4px;
     padding: 5px;

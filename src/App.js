@@ -216,14 +216,14 @@ const App = () => {
     return () => unsubscribe();
   }, [dispatch]);
 
-  useEffect(() => {
-    if (user && user.profileComplete === false) {
-      const timer = setTimeout(() => {
-        setPopupModalIsOpen(true);
-      }, 20000);
-      return () => clearTimeout(timer);
-    }
-  }, [user && user.token]);
+  // useEffect(() => {
+  //   if (user && user.profileComplete === false) {
+  //     const timer = setTimeout(() => {
+  //       setPopupModalIsOpen(true);
+  //     }, 20000);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [user && user.token]);
 
   useEffect(() => {
     if (user) {
@@ -398,6 +398,7 @@ const App = () => {
         <Route exact path='/sub/:slug' component={SubHome} />
         <Route exact path='/shop/search' component={ShopSearch} />
         <Route exact path='/cart' component={Cart} />
+        <Route exact path='/ad-submission' component={AdSubmission} />
         <UserRoute exact path='/change/password' component={ChangePassword} />
         <UserRoute exact path='/user/dashboard' component={UserDashboard} />
         <UserRoute exact path='/user/profile/:userId' component={Profile} />
@@ -416,7 +417,6 @@ const App = () => {
         <UserRoute exact path='/chats' component={Chats} />
         <UserRoute exact path='/notifications' component={Notifications} />
         <UserRoute exact path='/search-users' component={UserSearch} />
-        <UserRoute exact path='/ad-submission' component={AdSubmission} />
         <UserRoute exact path='/events' component={Events} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/posts' component={Posts} />

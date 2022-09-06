@@ -82,9 +82,7 @@ const RightSidebar = () => {
               <div className='sidebar-ad'>
                 <img
                   src={ad.image.url}
-                  // alt={`${
-                  //   ad.postedBy.name || ad.postedBy.email.split('@')[0]
-                  // }'s advertisement`}
+                  alt={`${ad.contactInfo.name}'s advertisement`}
                   className='sidebar-ads'
                 />
                 <p className='sidebar-ad-content'>{ad.content}</p>

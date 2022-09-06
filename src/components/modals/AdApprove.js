@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
-import io from 'socket.io-client';
-import { ChatState } from '../../context/ChatProvider';
-
-let socket;
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 Modal.setAppElement('#root');
 
@@ -15,20 +13,13 @@ const AdApprove = ({
   setAdApproveModalIsOpen,
   currentAd,
   fetchAds,
+  loading,
+  setLoading,
 }) => {
   let { user } = useSelector((state) => ({ ...state }));
 
-  const { setSocketConnected } = ChatState();
-
-  useEffect(() => {
-    socket = io(
-      process.env.REACT_APP_SOCKET_IO,
-      { path: '/socket.io' },
-      { reconnection: true }
-    );
-  }, []);
-
   const approveAd = async (ad) => {
+    setLoading(true);
     await axios
       .put(
         `${process.env.REACT_APP_API}/approve-ad`,
@@ -40,15 +31,21 @@ const AdApprove = ({
         }
       )
       .then((res) => {
+        setLoading(false);
         console.log(res.data);
-        socket.emit('new message', res.data);
-        toast.success(`You have approved this ad.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
+        toast.success(
+          `You have approved this ad. A confirmation email has been sent to the user.`,
+          {
+            position: toast.POSITION.TOP_CENTER,
+          }
+        );
         fetchAds();
         setAdApproveModalIsOpen(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
   };
 
   const modalStyles = {
@@ -73,7 +70,7 @@ const AdApprove = ({
     },
   };
 
-  const { content, image, postedBy } = currentAd;
+  const { content, image, contactInfo, status } = currentAd;
 
   return (
     <Modal
@@ -89,15 +86,22 @@ const AdApprove = ({
         <br />
         {image && (
           <div className='match-images'>
-            <img
-              src={image.url}
-              //   alt={`${postedBy.name || postedBy.email.split('@')[0]}'s post`}
-            />
+            <img src={image.url} alt={`${contactInfo.name}'s post`} />
           </div>
         )}
         <br />
-        <button className='submit-btn' onClick={() => approveAd(currentAd)}>
-          Yes, I approve
+        <button
+          className='submit-btn'
+          onClick={() => approveAd(currentAd)}
+          disabled={status !== 'paid'}
+        >
+          {status !== 'paid' ? (
+            'Payment pending'
+          ) : loading ? (
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+          ) : (
+            'Yes, I approve'
+          )}
         </button>
         <button
           className='submit-btn trash'

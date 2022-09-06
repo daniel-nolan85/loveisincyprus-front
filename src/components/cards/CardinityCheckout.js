@@ -26,6 +26,7 @@ const CardinityCheckout = () => {
   useEffect(() => {
     calcFinalAmount();
     setUserAgent(window.navigator.userAgent);
+    console.log(window.navigator.userAgent);
   }, []);
 
   const calcFinalAmount = async () => {

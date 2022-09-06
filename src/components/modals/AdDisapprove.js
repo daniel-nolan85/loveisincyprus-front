@@ -1,12 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
-import io from 'socket.io-client';
-import { ChatState } from '../../context/ChatProvider';
-
-let socket;
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 Modal.setAppElement('#root');
 
@@ -17,20 +15,13 @@ const AdDisapprove = ({
   reason,
   setReason,
   fetchAds,
+  loading,
+  setLoading,
 }) => {
   let { user } = useSelector((state) => ({ ...state }));
 
-  const { setSocketConnected } = ChatState();
-
-  useEffect(() => {
-    socket = io(
-      process.env.REACT_APP_SOCKET_IO,
-      { path: '/socket.io' },
-      { reconnection: true }
-    );
-  }, []);
-
   const disapproveAd = async (ad) => {
+    setLoading(true);
     await axios
       .put(
         `${process.env.REACT_APP_API}/disapprove-ad`,
@@ -42,15 +33,21 @@ const AdDisapprove = ({
         }
       )
       .then((res) => {
+        setLoading(false);
         console.log(res.data);
-        socket.emit('new message', res.data);
-        toast.error(`You have rejected this ad.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
+        toast.error(
+          `You have rejected this ad. A confirmation email has been sent to the user.`,
+          {
+            position: toast.POSITION.TOP_CENTER,
+          }
+        );
         fetchAds();
         setAdDisapproveModalIsOpen(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
   };
 
   const modalStyles = {
@@ -75,7 +72,7 @@ const AdDisapprove = ({
     },
   };
 
-  const { content, image, postedBy } = currentAd;
+  const { content, image, contactInfo } = currentAd;
 
   return (
     <Modal
@@ -91,10 +88,7 @@ const AdDisapprove = ({
         <br />
         {image && (
           <div className='match-images'>
-            <img
-              src={image.url}
-              //   alt={`${postedBy.name || postedBy.email.split('@')[0]}'s post`}
-            />
+            <img src={image.url} alt={`${contactInfo.name}'s post`} />
           </div>
         )}
         <br />
@@ -106,7 +100,11 @@ const AdDisapprove = ({
           onChange={(e) => setReason(e.target.value)}
         />
         <button className='submit-btn' onClick={() => disapproveAd(currentAd)}>
-          Yes, reject
+          {loading ? (
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+          ) : (
+            'Yes, reject'
+          )}
         </button>
         <button
           className='submit-btn trash'
