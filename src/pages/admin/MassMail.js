@@ -161,17 +161,22 @@ const MassMail = () => {
                     <FontAwesomeIcon icon={faStar} className='fa star gold' />
                   </span>
                 )}
-                <span>
-                  <FontAwesomeIcon icon={faCoins} className='fa points' />
-                  <p className='points'>
-                    {s.pointsGained.reduce((accumulator, object) => {
-                      return accumulator + object.amount;
-                    }, 0) -
-                      s.pointsLost.reduce((accumulator, object) => {
+                {s.pointsGained && (
+                  <span>
+                    <FontAwesomeIcon icon={faCoins} className='fa points' />
+                    <p className='points'>
+                      {s.pointsGained.reduce((accumulator, object) => {
                         return accumulator + object.amount;
-                      }, 0)}
-                  </p>
-                </span>
+                      }, 0) -
+                        s.pointsLost.reduce((accumulator, object) => {
+                          return accumulator + object.amount;
+                        }, 0) -
+                        s.pointsSpent.reduce((accumulator, object) => {
+                          return accumulator + object.amount;
+                        }, 0)}
+                    </p>
+                  </span>
+                )}
                 <span>
                   <FontAwesomeIcon
                     icon={faCalendarMinus}

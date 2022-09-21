@@ -15,6 +15,7 @@ import Match from '../../components/modals/Match';
 import { addPoints } from '../../functions/user';
 import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
+import BecomePaid from '../../components/cards/BecomePaid';
 // import NotifPost from '../../components/modals/NotifPost';
 
 let socket;
@@ -364,11 +365,19 @@ const UserDashboard = () => {
     setPostOfCommentToEdit(postId);
   };
 
+  {
+    console.log('posts => ', posts);
+  }
+
   return (
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
-        <Users users={users} handleFollow={handleFollow} />
+        {user.membership.paid ? (
+          <Users users={users} handleFollow={handleFollow} />
+        ) : (
+          <BecomePaid />
+        )}
         <PostForm
           content={content}
           setContent={setContent}
@@ -377,7 +386,6 @@ const UserDashboard = () => {
           handleImage={handleImage}
           image={image}
         />
-        {}
         <InfiniteScroll
           dataLength={posts.length}
           next={infinity}

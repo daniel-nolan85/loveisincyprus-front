@@ -240,6 +240,7 @@ const NotifPost = ({
                   setCommentEditModalIsOpen={setCommentEditModalIsOpen}
                   commentToEdit={commentToEdit}
                   postOfCommentToEdit={postOfCommentToEdit}
+                  notifModalIsOpen={notifModalIsOpen}
                   setNotifModalIsOpen={setNotifModalIsOpen}
                 />
               </div>

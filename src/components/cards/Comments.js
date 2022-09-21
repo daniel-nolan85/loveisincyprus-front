@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import CommentDelete from '../../components/modals/CommentDelete';
 import CommentEdit from '../../components/modals/CommentEdit';
+import EventCommentDelete from '../../components/modals/EventCommentDelete';
+import EventCommentEdit from '../../components/modals/EventCommentEdit';
 
 const Comments = ({
   post,
@@ -23,7 +25,13 @@ const Comments = ({
   setCommentEditModalIsOpen,
   commentToEdit,
   postOfCommentToEdit,
+  notifModalIsOpen,
   setNotifModalIsOpen,
+  eventCommentDeleteModalIsOpen,
+  setEventCommentDeleteModalIsOpen,
+  eventCommentEditModalIsOpen,
+  setEventCommentEditModalIsOpen,
+  fetchEvent,
 }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -76,7 +84,7 @@ const Comments = ({
                   className='fa trash'
                   onClick={() => {
                     removeComment(post._id, c);
-                    setNotifModalIsOpen(false);
+                    notifModalIsOpen && setNotifModalIsOpen(false);
                   }}
                 />
                 <FontAwesomeIcon
@@ -84,7 +92,7 @@ const Comments = ({
                   className='fa edit'
                   onClick={() => {
                     editComment(post._id, c);
-                    setNotifModalIsOpen(false);
+                    notifModalIsOpen && setNotifModalIsOpen(false);
                   }}
                 />
               </div>
@@ -128,6 +136,20 @@ const Comments = ({
         newsFeed={newsFeed}
         fetchThisUsersPosts={fetchThisUsersPosts}
         postOfCommentToEdit={postOfCommentToEdit}
+      />
+      <EventCommentDelete
+        eventCommentDeleteModalIsOpen={eventCommentDeleteModalIsOpen}
+        setEventCommentDeleteModalIsOpen={setEventCommentDeleteModalIsOpen}
+        commentToDelete={commentToDelete}
+        postOfCommentToDelete={postOfCommentToDelete}
+        fetchEvent={fetchEvent}
+      />
+      <EventCommentEdit
+        eventCommentEditModalIsOpen={eventCommentEditModalIsOpen}
+        setEventCommentEditModalIsOpen={setEventCommentEditModalIsOpen}
+        commentToEdit={commentToEdit}
+        postOfCommentToEdit={postOfCommentToEdit}
+        fetchEvent={fetchEvent}
       />
     </>
   );

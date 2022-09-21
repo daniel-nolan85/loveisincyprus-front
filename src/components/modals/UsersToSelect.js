@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -9,7 +9,10 @@ import {
   faCalendarPlus,
   faCoins,
   faStar,
+  faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import { fetchUsersByFilter } from '../../functions/user';
 
 Modal.setAppElement('#root');
 
@@ -21,7 +24,37 @@ const UsersToSelect = ({
   setValues,
   removeSelected,
 }) => {
+  const [searches, setSearches] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const { user } = useSelector((state) => ({ ...state }));
+
+  useEffect(() => {
+    fetchSearches();
+  }, []);
+
+  const fetchSearches = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-user-searches`)
+      .then((res) => {
+        setSearches(res.data);
+      });
+  };
+
+  const userSearch = async (arg) => {
+    console.log('arg => ', arg);
+    fetchUsersByFilter(arg, user.token).then((res) => {
+      const filtered = res.data.filter((u) => u.optIn);
+      filtered.map((u) => {
+        setValues((prevValues) => ({
+          ...prevValues,
+          selected: [...prevValues.selected, u],
+        }));
+        // };
+      });
+    });
+    setSelectedUsersModalIsOpen(false);
+  };
 
   const addSelected = (o) => {
     setValues({ ...values, selected: [...values.selected, o] });
@@ -49,6 +82,23 @@ const UsersToSelect = ({
       style={modalStyles}
       contentLabel='Example Modal'
     >
+      {values.selected.length === 0 &&
+        searches &&
+        searches.map((s) => (
+          <button
+            onClick={() => userSearch(s.params)}
+            type='button'
+            className='submit-btn'
+            key={s._id}
+          >
+            {loading ? (
+              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+            ) : (
+              <FontAwesomeIcon icon={faCalendarPlus} className='fa' />
+            )}
+            {s.name}
+          </button>
+        ))}
       {optIns.length > 0
         ? optIns.map((o) => (
             <div className='invitees-container' key={o._id}>

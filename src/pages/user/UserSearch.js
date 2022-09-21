@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getUsersByCount, fetchUsersByFilter } from '../../functions/user';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSpinner,
   faMagnifyingGlass,
+  faFloppyDisk,
+  faUndo,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
@@ -19,12 +21,13 @@ import {
   Input,
 } from 'antd';
 import UserInfo from '../../components/cards/UserInfo';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const { SubMenu, ItemGroup } = Menu;
 
 const UserSearch = () => {
   const [users, setUsers] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [range, setRange] = useState([0, 0]);
   //   const [ok, setOk] = useState(false);
@@ -52,9 +55,10 @@ const UserSearch = () => {
   const [relocate, setRelocate] = useState('');
   const [sexLikes, setSexLikes] = useState('');
   const [sexFrequency, setSexFrequency] = useState('');
-
-  // const filteredUsers = [];
-  console.table('filteredUsers => ', filteredUsers);
+  const [searchName, setSearchName] = useState('');
+  const [params, setParams] = useState([]);
+  const [loadingSave, setLoadingSave] = useState(false);
+  const [loadingSearch, setLoadingSearch] = useState(false);
 
   const map = {
     ageOfPartner: setAgeOfPartner,
@@ -90,30 +94,35 @@ const UserSearch = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
+  const isFirstRun = useRef(true);
+
   useEffect(() => {
     loadAllUsers();
   }, []);
 
   useEffect(() => {
-    const delayed = setTimeout(() => {
-      fetchUsers({ query: text });
-      if (!text) {
-        loadAllUsers();
-      }
-    }, 300);
-    return () => clearTimeout(delayed);
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      const delayed = setTimeout(() => {
+        fetchUsers({ query: text });
+        console.log('called');
+        if (!text) {
+          loadAllUsers();
+        }
+      }, 300);
+      return () => clearTimeout(delayed);
+    }
   }, [text]);
 
   useEffect(() => {
-    console.log('filteredUsers => ', filteredUsers);
-  }, [filteredUsers]);
-
-  // console.log('filteredUsers => ', filteredUsers);
+    console.log('params => ', params);
+  }, [params]);
 
   const loadAllUsers = () => {
     setLoading(true);
     getUsersByCount(12, user.token).then((res) => {
-      // console.log(res.data);
       setUsers(res.data);
       setLoading(false);
     });
@@ -121,10 +130,9 @@ const UserSearch = () => {
 
   const fetchUsers = (arg) => {
     fetchUsersByFilter(arg, user.token).then((res) => {
-      // console.log(res.data);
+      console.log('users => ', users);
+      console.log('res.data => ', res.data);
       setUsers(res.data);
-      setFilteredUsers([...users, users]);
-      // filteredUsers.push(res.data);
     });
   };
 
@@ -141,12 +149,14 @@ const UserSearch = () => {
   };
 
   const handleRadio = (e) => {
-    // console.log('value ==> ', e.target.value);
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
     });
-    fetchUsers({ type: 'radio', field: e.target.name, lookUp: e.target.value });
+    setParams((prevParams) => [
+      ...prevParams,
+      { type: 'radio', field: e.target.name, lookUp: e.target.value },
+    ]);
   };
 
   const handleAgeSlider = (value) => {
@@ -156,7 +166,7 @@ const UserSearch = () => {
     });
     setRange(value);
     setTimeout(() => {
-      fetchUsers({ field: 'age', range });
+      setParams((prevParams) => [...prevParams, { field: 'age', range }]);
     }, 300);
   };
 
@@ -167,63 +177,59 @@ const UserSearch = () => {
     });
     setRange(value);
     setTimeout(() => {
-      fetchUsers({ field: 'income', range });
+      setParams((prevParams) => [...prevParams, { field: 'income', range }]);
     }, 300);
   };
 
   const handleNumberInput = (e) => {
-    // console.log(e);
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
     });
-    fetchUsers({
-      type: 'number',
-      field: e.target.name,
-      entry: e.target.value,
-    });
+    setParams((prevParams) => [
+      ...prevParams,
+      { type: 'number', field: e.target.name, entry: e.target.value },
+    ]);
   };
 
   const handleTextInput = (e) => {
-    // console.log(e);
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
     });
     setTimeout(() => {
-      fetchUsers({
-        type: 'string',
-        field: e.target.name,
-        entry: e.target.value,
-      });
+      setParams((prevParams) => [
+        ...prevParams,
+        { type: 'string', field: e.target.name, entry: e.target.value },
+      ]);
     }, 300);
   };
 
   const handleInputArray = (e) => {
-    // console.log(e);
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
     });
     const arr = e.target.value.split(',');
     setTimeout(() => {
-      fetchUsers({
-        type: 'array',
-        field: e.target.name,
-        entry: arr,
-      });
+      setParams((prevParams) => [
+        ...prevParams,
+        { type: 'array', field: e.target.name, entry: arr },
+      ]);
     }, 300);
   };
 
-  const handleDropdown = ({ key, item, domEvent }) => {
+  const handleDropdown = ({ key, item }) => {
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
     });
 
-    // console.log(domEvent.target.innerText);
     setTimeout(() => {
-      fetchUsers({ field: item.props.title, key });
+      setParams((prevParams) => [
+        ...prevParams,
+        { field: item.props.title, key },
+      ]);
     }, 300);
 
     const string = key[0].toUpperCase() + key.substring(1);
@@ -1598,6 +1604,83 @@ const UserSearch = () => {
     />
   );
 
+  const searchMembers = () => {
+    setLoadingSearch(true);
+    const unique = Object.values(
+      params.reduce((a, item) => {
+        a[item.field] = item;
+        return a;
+      }, {})
+    );
+    // setParams(unique);
+    fetchUsers(unique);
+    setLoadingSearch(false);
+  };
+
+  const saveSearch = async () => {
+    setLoadingSave(true);
+    const unique = Object.values(
+      params.reduce((a, item) => {
+        a[item.field] = item;
+        return a;
+      }, {})
+    );
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/save-search`,
+        { searchName, unique },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        setLoadingSave(false);
+        toast.success(`${searchName} saved successfully.`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        console.log(res.data);
+      })
+      .catch((err) => {
+        setLoadingSave(false);
+        console.log(err);
+      });
+  };
+
+  const resetSearch = () => {
+    setParams([]);
+    setUsers([]);
+    setRange([0, 0]);
+    setAgeOfPartner('');
+    setRelWanted('');
+    setLocation('');
+    setLanguage('');
+    setNationality('');
+    setEthnicity('');
+    setMaritalStatus('');
+    setHeight('');
+    setBuild('');
+    setEyeColor('');
+    setHairColor('');
+    setHairLength('');
+    setHairStyle('');
+    setFeetType('');
+    setDrinks('');
+    setSmokes('');
+    setEducation('');
+    setPolitics('');
+    setReligion('');
+    setFoods('');
+    setLivesWith('');
+    setRelocate('');
+    setSexLikes('');
+    setSexFrequency('');
+    setSearchName('');
+    setLoadingSearch(false);
+    setLoadingSave(false);
+  };
+
   return (
     <div className='container'>
       <div className='left-sidebar search'>
@@ -1891,6 +1974,58 @@ const UserSearch = () => {
               </Radio.Group>
             </SubMenu>
           </Menu>
+
+          {user.role === 'admin' && (
+            <div className='form-box search'>
+              <div className='button-box'>
+                <p className='form-header'>Save Search</p>
+              </div>
+              <form>
+                <input
+                  type='text'
+                  className='input-field'
+                  placeholder='Give this search a name'
+                  value={searchName}
+                  onChange={(e) => setSearchName(e.target.value)}
+                />
+                <button
+                  onClick={saveSearch}
+                  type='submit'
+                  className='submit-btn'
+                  disabled={loadingSave || !searchName || !params}
+                >
+                  {loadingSave ? (
+                    <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                  ) : (
+                    <FontAwesomeIcon icon={faFloppyDisk} className='fa' />
+                  )}
+                  Save
+                </button>
+              </form>
+            </div>
+          )}
+          <button
+            onClick={searchMembers}
+            type='submit'
+            className='submit-btn'
+            disabled={loadingSearch}
+          >
+            {loadingSearch ? (
+              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+            ) : (
+              <FontAwesomeIcon icon={faMagnifyingGlass} className='fa' />
+            )}
+            Search
+          </button>
+          <button
+            type='button'
+            className='submit-btn reset'
+            onClick={resetSearch}
+            // disabled={!products.length || loading}
+          >
+            <FontAwesomeIcon icon={faUndo} className='fa' />
+            Reset
+          </button>
         </div>
       </div>
       <div className='admin-main-content'>

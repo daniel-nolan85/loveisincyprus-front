@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -9,7 +9,10 @@ import {
   faCalendarPlus,
   faCoins,
   faStar,
+  faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import { fetchUsersByFilter } from '../../functions/user';
 
 Modal.setAppElement('#root');
 
@@ -21,7 +24,42 @@ const UsersToInvite = ({
   setValues,
   removeInvitee,
 }) => {
+  const [searches, setSearches] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const { user } = useSelector((state) => ({ ...state }));
+
+  console.log('values => ', values);
+
+  useEffect(() => {
+    fetchSearches();
+  }, []);
+
+  const fetchSearches = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-user-searches`)
+      .then((res) => {
+        console.log(res.data);
+        setSearches(res.data);
+      });
+  };
+
+  const userSearch = async (arg) => {
+    console.log('arg => ', arg);
+    fetchUsersByFilter(arg, user.token).then((res) => {
+      const filtered = res.data.filter((u) => u.eventsEligible);
+      console.log('res.data => ', res.data);
+      console.log('filtered => ', filtered);
+      filtered.map((u) => {
+        setValues((prevValues) => ({
+          ...prevValues,
+          invitees: [...prevValues.invitees, u],
+        }));
+        // };
+      });
+    });
+    setUsersToInviteModalIsOpen(false);
+  };
 
   const addInvitee = (u) => {
     setValues({ ...values, invitees: [...values.invitees, u] });
@@ -37,6 +75,16 @@ const UsersToInvite = ({
       transform: 'translate(-50%, -50%)',
       width: '400px',
     },
+    overlay: {
+      position: 'fixed',
+      display: 'flex',
+      justifyContent: 'center',
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: '100%',
+      zIndex: '1000',
+    },
   };
 
   // console.log(values);
@@ -48,6 +96,23 @@ const UsersToInvite = ({
       style={modalStyles}
       contentLabel='Example Modal'
     >
+      {values.invitees.length === 0 &&
+        searches &&
+        searches.map((s) => (
+          <button
+            onClick={() => userSearch(s.params)}
+            type='button'
+            className='submit-btn'
+            key={s._id}
+          >
+            {loading ? (
+              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+            ) : (
+              <FontAwesomeIcon icon={faCalendarPlus} className='fa' />
+            )}
+            {s.name}
+          </button>
+        ))}
       {users.map((u) => (
         <div className='invitees-container' key={u._id}>
           <div className='user-profile'>

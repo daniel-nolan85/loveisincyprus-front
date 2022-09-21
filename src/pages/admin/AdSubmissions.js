@@ -88,16 +88,16 @@ const AdSubmissions = () => {
   const preparePayment = (ad) => {
     console.log('preparing => ', ad);
     if (ad.duration === 'one day') {
-      setPayable('30.00');
+      setPayable('5.00');
     }
     if (ad.duration === 'one week') {
-      setPayable('200.00');
+      setPayable('20.00');
     }
     if (ad.duration === 'two weeks') {
-      setPayable('350.00');
+      setPayable('30.00');
     }
     if (ad.duration === 'one month') {
-      setPayable('600.00');
+      setPayable('50.00');
     }
     setUserAgent(window.navigator.userAgent);
   };

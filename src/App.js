@@ -63,8 +63,11 @@ import MassMail from './pages/admin/MassMail';
 import AdSubmission from './pages/user/AdSubmission';
 import AdSubmissions from './pages/admin/AdSubmissions';
 import Events from './pages/user/Events';
+import EventInfo from './pages/user/EventInfo';
 import VerifSubmissions from './pages/admin/VerifSubmissions';
 import Popup from './components/modals/Popup';
+import BecomePaid from './pages/user/BecomePaid';
+import MembershipStatus from './pages/user/MembershipStatus';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -206,6 +209,7 @@ const App = () => {
                 treatSelf: res.data.treatSelf,
                 sexLikes: res.data.sexLikes,
                 sexFrequency: res.data.sexFrequency,
+                membership: res.data.membership,
               },
             });
             console.log('logged in user ==> ', res);
@@ -418,6 +422,13 @@ const App = () => {
         <UserRoute exact path='/notifications' component={Notifications} />
         <UserRoute exact path='/search-users' component={UserSearch} />
         <UserRoute exact path='/events' component={Events} />
+        <UserRoute exact path='/event/:eventId' component={EventInfo} />
+        <UserRoute exact path='/become-paid-member' component={BecomePaid} />
+        <UserRoute
+          exact
+          path='/membership-status'
+          component={MembershipStatus}
+        />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/posts' component={Posts} />
         <AdminRoute exact path='/admin/users' component={Users} />

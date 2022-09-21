@@ -13,3 +13,16 @@ export const createAdPayment = (values, payable, userAgent, authtoken, _id) =>
     { values, payable, userAgent, _id },
     { headers: { authtoken } }
   );
+
+export const createMembershipPayment = (
+  values,
+  payable,
+  userAgent,
+  user,
+  authtoken
+) =>
+  axios.post(
+    `${process.env.REACT_APP_API}/create-membership-payment`,
+    { values, payable, userAgent, user },
+    { headers: { authtoken } }
+  );

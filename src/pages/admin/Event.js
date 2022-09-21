@@ -19,6 +19,7 @@ import {
   faEdit,
   faMagnifyingGlass,
   faCoins,
+  faCamera,
 } from '@fortawesome/free-solid-svg-icons';
 import UsersToInvite from '../../components/modals/UsersToInvite';
 import axios from 'axios';
@@ -32,8 +33,10 @@ import { ChatState } from '../../context/ChatProvider';
 let socket;
 
 const initialState = {
+  mainImage: {},
   name: '',
   location: '',
+  link: '',
   when: '',
   notes: '',
   invitees: [],
@@ -41,8 +44,10 @@ const initialState = {
 
 const Events = () => {
   const [users, setUsers] = useState([]);
+  // const [mainImage, setMainImage] = useState({});
   const [values, setValues] = useState(initialState);
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [events, setEvents] = useState([]);
   const [eventCancelModalIsOpen, setEventCancelModalIsOpen] = useState(false);
   const [eventToCancel, setEventToCancel] = useState({});
@@ -96,6 +101,36 @@ const Events = () => {
       })
       .catch((err) => {
         console.log(err);
+      });
+  };
+
+  const handleMainImage = async (e) => {
+    const file = e.target.files[0];
+    let formData = new FormData();
+    formData.append('image', file);
+    setUploading(true);
+
+    await axios
+      .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
+        headers: {
+          authtoken: user.token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        // setMainImage({
+        //   url: res.data.url,
+        //   public_id: res.data.public_id,
+        // });
+        setValues({
+          ...values,
+          mainImage: { url: res.data.url, public_id: res.data.public_id },
+        });
+        setUploading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setUploading(false);
       });
   };
 
@@ -155,7 +190,7 @@ const Events = () => {
     // e.name.toLowerCase().includes(query) ||
     e.location.toLowerCase().includes(query) || e.when.includes(query);
 
-  const { name, location, when, notes, invitees } = values;
+  const { mainImage, name, location, link, when, notes, invitees } = values;
 
   const eventForm = () => (
     <div className='form-box event'>
@@ -163,6 +198,23 @@ const Events = () => {
         <p className='form-header'>Create Event</p>
       </div>
       <form>
+        <div className='add-post-links'>
+          <label>
+            {uploading ? (
+              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+            ) : mainImage && mainImage.url ? (
+              <img src={mainImage.url} />
+            ) : (
+              <FontAwesomeIcon icon={faCamera} className='fa' />
+            )}
+            <input
+              onChange={handleMainImage}
+              type='file'
+              accept='images/*'
+              hidden
+            />
+          </label>
+        </div>
         <input
           type='text'
           name='name'
@@ -180,6 +232,15 @@ const Events = () => {
           className='input-field'
           placeholder='Location'
           value={location}
+          onChange={handleChange}
+          required
+        />
+        <input
+          type='text'
+          name='link'
+          className='input-field'
+          placeholder='Paste a link to maps'
+          value={link}
           onChange={handleChange}
           required
         />
@@ -241,17 +302,22 @@ const Events = () => {
                     <FontAwesomeIcon icon={faStar} className='fa star gold' />
                   </span>
                 )}
-                <span>
-                  <FontAwesomeIcon icon={faCoins} className='fa points' />
-                  <p className='points'>
-                    {i.pointsGained.reduce((accumulator, object) => {
-                      return accumulator + object.amount;
-                    }, 0) -
-                      i.pointsLost.reduce((accumulator, object) => {
+                {i.pointsGained && (
+                  <span>
+                    <FontAwesomeIcon icon={faCoins} className='fa points' />
+                    <p className='points'>
+                      {i.pointsGained.reduce((accumulator, object) => {
                         return accumulator + object.amount;
-                      }, 0)}
-                  </p>
-                </span>
+                      }, 0) -
+                        i.pointsLost.reduce((accumulator, object) => {
+                          return accumulator + object.amount;
+                        }, 0) -
+                        i.pointsSpent.reduce((accumulator, object) => {
+                          return accumulator + object.amount;
+                        }, 0)}
+                    </p>
+                  </span>
+                )}
                 <span>
                   <FontAwesomeIcon
                     icon={faCalendarMinus}

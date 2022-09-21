@@ -133,6 +133,7 @@ const Login = () => {
               treatSelf: res.data.treatSelf,
               sexLikes: res.data.sexLikes,
               sexFrequency: res.data.sexFrequency,
+              membership: res.data.membership,
             },
           });
           roleBasedRedirect(res);
@@ -264,6 +265,7 @@ const Login = () => {
                 treatSelf: res.data.treatSelf,
                 sexLikes: res.data.sexLikes,
                 sexFrequency: res.data.sexFrequency,
+                membership: res.data.membership,
               },
             });
             roleBasedRedirect(res);

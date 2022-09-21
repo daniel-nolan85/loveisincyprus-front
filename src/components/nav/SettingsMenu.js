@@ -154,6 +154,12 @@ const SettingsMenu = ({ settingsMenu, setSettingsMenu, logout }) => {
                 <span />
               </div>
             </span>
+            <Link
+              to='/membership-status'
+              onClick={() => setSettingsMenu(false)}
+            >
+              Membership Status
+            </Link>
           </div>
         </div>
         <div className='settings-links' onClick={logout}>
