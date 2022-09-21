@@ -65,9 +65,12 @@ import AdSubmissions from './pages/admin/AdSubmissions';
 import Events from './pages/user/Events';
 import EventInfo from './pages/user/EventInfo';
 import VerifSubmissions from './pages/admin/VerifSubmissions';
-import Popup from './components/modals/Popup';
 import BecomePaid from './pages/user/BecomePaid';
-import MembershipStatus from './pages/user/MembershipStatus';
+import MembershipCard from './pages/user/MembershipCard';
+// modals
+import Popup from './components/modals/Popup';
+import Expiring from './components/modals/Expiring';
+import Expired from './components/modals/Expired';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -105,6 +108,8 @@ let socket, selectedChatCompare;
 
 const App = () => {
   const [popupModalIsOpen, setPopupModalIsOpen] = useState(false);
+  const [expiringModalIsOpen, setExpiringModalIsOpen] = useState(false);
+  const [expiredModalIsOpen, setExpiredModalIsOpen] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -258,6 +263,7 @@ const App = () => {
       });
       removeExpiredFeatures();
       handleExpiredAds();
+      handleExpiredMemberships();
     }
   }, [user && user.token]);
 
@@ -369,6 +375,28 @@ const App = () => {
     // .then((res) => console.log(res.data));
   };
 
+  const handleExpiredMemberships = async () => {
+    await axios
+      .put(`${process.env.REACT_APP_API}/expired-membership`, {
+        user,
+      })
+      .then((res) => {
+        if (res.data.soon) {
+          setExpiringModalIsOpen(true);
+        }
+        if (res.data._id === user._id) {
+          setExpiredModalIsOpen(true);
+          dispatch({
+            type: 'LOGGED_IN_USER',
+            payload: {
+              ...user,
+              membership: res.data.membership,
+            },
+          });
+        }
+      });
+  };
+
   return (
     // <Suspense
     //   fallback={
@@ -384,6 +412,14 @@ const App = () => {
       <Popup
         popupModalIsOpen={popupModalIsOpen}
         setPopupModalIsOpen={setPopupModalIsOpen}
+      />
+      <Expiring
+        expiringModalIsOpen={expiringModalIsOpen}
+        setExpiringModalIsOpen={setExpiringModalIsOpen}
+      />
+      <Expired
+        expiredModalIsOpen={expiredModalIsOpen}
+        setExpiredModalIsOpen={setExpiredModalIsOpen}
       />
       <Switch>
         <Route exact path='/' component={Home} />
@@ -424,11 +460,7 @@ const App = () => {
         <UserRoute exact path='/events' component={Events} />
         <UserRoute exact path='/event/:eventId' component={EventInfo} />
         <UserRoute exact path='/become-paid-member' component={BecomePaid} />
-        <UserRoute
-          exact
-          path='/membership-status'
-          component={MembershipStatus}
-        />
+        <UserRoute exact path='/membership-card' component={MembershipCard} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/posts' component={Posts} />
         <AdminRoute exact path='/admin/users' component={Users} />
