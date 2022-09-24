@@ -137,16 +137,16 @@ const Login = () => {
             },
           });
           roleBasedRedirect(res);
-          addPoints(1, 'login', idTokenResult.token);
+          // addPoints(1, 'login', idTokenResult.token);
 
-          // addPoints(1, 'login', idTokenResult.token).then(
-          //   toast.success(
-          //     `Welcome to Love is in Cyprus. You have been awarded 1 point!`,
-          //     {
-          //       position: toast.POSITION.TOP_CENTER,
-          //     }
-          //   )
-          // );
+          addPoints(1, 'login', idTokenResult.token).then(
+            toast.success(
+              `Welcome to Love is in Cyprus. You have been awarded 1 point!`,
+              {
+                position: toast.POSITION.TOP_CENTER,
+              }
+            )
+          );
 
           // var hours = 24;
           // var now = new Date().getTime();
@@ -269,7 +269,15 @@ const Login = () => {
               },
             });
             roleBasedRedirect(res);
-            addPoints(1, 'login', idTokenResult.token);
+            // addPoints(1, 'login', idTokenResult.token);
+            addPoints(1, 'login', idTokenResult.token).then(
+              toast.success(
+                `Welcome to Love is in Cyprus. You have been awarded 1 point!`,
+                {
+                  position: toast.POSITION.TOP_CENTER,
+                }
+              )
+            );
           })
           .catch((err) => console.log(err));
       })
