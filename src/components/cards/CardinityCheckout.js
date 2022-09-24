@@ -54,7 +54,7 @@ const CardinityCheckout = () => {
 
   const handleSubmit = async (values) => {
     setProcessing(true);
-    createPayment(values, payable, userAgent, user.token).then((res) => {
+    createPayment(values, payable, userAgent, user.token, user).then((res) => {
       console.log('create payment', res.data);
       if (res.data.errors) {
         toast.error(res.data.errors[0].message, {
@@ -140,6 +140,7 @@ const CardinityCheckout = () => {
         handleSubmit={handleSubmit}
         processing={processing}
         succeeded={succeeded}
+        cartTotal={cartTotal}
       />
     </>
   );

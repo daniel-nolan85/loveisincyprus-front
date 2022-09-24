@@ -27,7 +27,10 @@ const PointsQuestions = ({
       contentLabel='Example Modal'
     >
       <div className='points-info'>
-        <h2>How can I spend my accumulated points?</h2>
+        <h2>
+          Paid subscribers can spend their accumulated points in the following
+          ways.
+        </h2>
         <table>
           <tbody>
             <tr>

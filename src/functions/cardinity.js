@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-export const createPayment = (values, payable, userAgent, authtoken) =>
+export const createPayment = (values, payable, userAgent, user, authtoken) =>
   axios.post(
     `${process.env.REACT_APP_API}/create-payment`,
-    { values, payable, userAgent },
+    { values, payable, userAgent, user },
     { headers: { authtoken } }
   );
 

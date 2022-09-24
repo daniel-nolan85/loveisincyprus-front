@@ -35,3 +35,15 @@ export const currentAdmin = async (authtoken) => {
     }
   );
 };
+
+export const currentSubscriber = async (authtoken) => {
+  return await axios.post(
+    `${process.env.REACT_APP_API}/current-subscriber`,
+    {},
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
+};

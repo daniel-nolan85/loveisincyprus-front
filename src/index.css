@@ -1428,6 +1428,95 @@ nav {
   font-size: 0.9em;
 }
 
+/* --------------- payment-success-page --------------- */
+.ps-card {
+  background: #16181a;
+  border-radius: 14px;
+  max-width: 300px;
+  display: block;
+  margin: 10px auto;
+  padding-top: 60px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 30px;
+  box-shadow: 2px 10px 40px black;
+  z-index: 99;
+}
+
+.ps-logo-card {
+  max-width: 50px;
+  margin-bottom: 15px;
+  margin-top: -19px;
+}
+
+.ps-number-expiry,
+.ps-name-cvc {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ps-label {
+  display: flex;
+  font-size: 10px;
+  color: white;
+  opacity: 0.4;
+}
+
+.ps-input {
+  color: #dbdce0;
+  display: block;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.ps-cvc {
+  margin-right: 25px;
+}
+
+.ps-receipt {
+  border-radius: 4px;
+  padding: 5%;
+  padding-top: 230px;
+  max-width: 600px;
+  display: block;
+  margin: auto;
+  margin-top: -180px;
+  z-index: -999;
+  position: relative;
+}
+
+.ps-col {
+  width: 50%;
+  float: left;
+}
+
+.ps-bought-items {
+  margin-top: -3px;
+}
+
+.ps-cost {
+  color: var(--nav-color);
+}
+
+.ps-description {
+  font-size: 13px;
+}
+.ps-price {
+  font-size: 12px;
+}
+.ps-comprobe {
+  text-align: center;
+}
+
+@media (max-width: 600px) {
+  .ps-col {
+    display: block;
+    margin: auto;
+    width: 100%;
+    text-align: center;
+  }
+}
+
 /* --------------- events-pages --------------- */
 .product-cards.event {
   cursor: pointer;

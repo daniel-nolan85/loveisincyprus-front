@@ -10,7 +10,7 @@ const TsAndCs = () => {
       <div className='info-white-bg shadow'>
         <div className='info-content'>
           <h2>Dating Services Terms of Use</h2>
-          <p>(Terms of Use revised on February 22nd, 2020)</p>
+          <p>(Terms of Use revised on April 4th, 2022)</p>
           <h3>Preamble</h3>
           <p>
             These Terms of Use are entered into between Loveisincyprus.com
@@ -119,7 +119,7 @@ const TsAndCs = () => {
             “Visitor” refers to a user who visits the Website without
             registering or without connecting to his/her Account.
           </p>
-          <h3>Article 2. Access, Registration and Subscription</h3>
+          <h3>Article 2. Access, registration and Subscription</h3>
           <h4>
             2.1. Procedure and terms of access and registration to the Services
           </h4>
@@ -137,11 +137,11 @@ const TsAndCs = () => {
             To register and thus become a Member, every Visitor who is
             interested in the Services must be at least 18 years old, meet the
             conditions for registration or access to the relevant Services, have
-            the requisite legal capacity to enter into a contract, read these
-            Terms of Use, the Cookie Policy and the Privacy Policy and complete
-            the mandatory fields in the registration form. It is specified that
-            a Member cannot create more than one Account with the same email
-            address.
+            the requisite legal capacity to enter into a contract, read and
+            fully agree with these Terms of Use, the Cookie Policy and the
+            Privacy Policy and complete the mandatory fields in the registration
+            form. It is specified that a Member cannot create more than one
+            Account with the same email address.
           </p>
           <br />
           <p>
@@ -194,8 +194,9 @@ const TsAndCs = () => {
             informed that he/she has fourteen days from the purchase of a
             Subscription to exercise his/her right to cancel, without incurring
             any liability and without giving a reason, by filling out the
-            cancellation form available here or by sending a clear statement
-            requesting this to the e-mail address:
+            cancellation form available{' '}
+            <Link to='/cancel-subscription'>here</Link> or by sending a clear
+            statement requesting this to the e-mail address:
             customercare@loveisincyprus.com. Only requests relating to the
             exercise of this right to cancel will be processed from these
             contact addresses. In order for the cancellation to be effectively
@@ -318,6 +319,15 @@ const TsAndCs = () => {
           <div className='bullets'>
             <ul>
               <li>
+                Agree with and conform to the preservation of the thematic, the
+                character, the nature and the spirit of Love is in Cyprus (as
+                described in the About Us section) and of the longstanding
+                specifics of the majority of the residents of the Republic of
+                Cyprus; and thus should either refrain from registering to Love
+                is in Cyprus in the case he/she does not fit with, or delete
+                his/her profile if already registered;
+              </li>
+              <li>
                 Conduct his/herself in an honest manner towards Love is in
                 Cyprus and other Members or Subscribers;
               </li>
@@ -334,6 +344,17 @@ const TsAndCs = () => {
               </li>
             </ul>
           </div>
+          <br />
+          <p>
+            In the event of inappropriate profile on the Website and Services,
+            not meeting any and all of the General Obligations, Love is in
+            Cyprus reserves the right to permanently delete the relevant
+            Member's or Subscriber's Account(s) on the Website and Services
+            without prior notice, without any consequence to any and all
+            possible monies paid by the Subscriber (if applicable), and without
+            prejudice to the provisions described in 9.4 of the present Terms of
+            Use.
+          </p>
           <br />
           <h4>5.2.2. Essential obligations:</h4>
           <p>
@@ -353,9 +374,9 @@ const TsAndCs = () => {
                 (advertising, soliciting clients etc.) or generally non-personal
                 purposes;
               </li>
+              <li>Not use the Services for solicitation or prostitution;</li>
               <li>
-                Not use the Services for solicitation or prostitution; • Not
-                post, display or disseminate, in any form whatsoever, false
+                Not post, display or disseminate, in any form whatsoever, false
                 information or content;
               </li>
               <li>
@@ -386,8 +407,9 @@ const TsAndCs = () => {
                 communications between Members and/or Subscribers through the
                 Services, such as software, viruses, logic bombs, mass mailing,
                 etc. Love is in Cyprus reserves the right to delete mass
-                messages sent by a Member or a Subscriber in order to preserve
-                the quality of normal use of the Services.
+                messages sent by a Member or a Subscriber, and thus the right to
+                delete such Member of Subscriber, in order to preserve the
+                quality of normal use of the Services.
               </li>
               <li>
                 Not post, display or disseminate, in any form whatsoever,
@@ -416,15 +438,16 @@ const TsAndCs = () => {
           <br />
           <p>
             Without prejudice to the provisions of Article 9 below, in the event
-            of breach by a Member or Subscriber of one or more of these
-            Essential Obligations, Love is in Cyprus may terminate the contract
-            and permanently delete the relevant Member's or Subscriber's
-            Account(s) on the Website and Services. In the event of breach by a
-            Member or Subscriber of one or more of the General and/or Essential
-            Obligations, and namely in the event of inappropriate behaviour on
-            the Website and Services, Love is in Cyprus may permanently or
-            temporarily prohibit all access or subscription of the relevant
-            Member or Subscriber to one or more Events or Activities.
+            of breach by a Member or Subscriber of one or more of the General
+            Obligations or the Essential Obligations, Love is in Cyprus may
+            terminate the relation and permanently delete the relevant Member's
+            or Subscriber's Account(s) on the Website and Services. In the event
+            of breach by a Member or Subscriber of one or more of the General
+            and/or Essential Obligations, and namely in the event of
+            inappropriate behaviour on the Website and Services, Love is in
+            Cyprus may permanently or temporarily prohibit all access or
+            subscription of the relevant Member or Subscriber to any or all
+            parts of the Website.
           </p>
           <h3>Article 6. Fees, terms of payment and renewal</h3>
           <h4>6.1. Fees and terms of payment of Paid Services</h4>
@@ -448,12 +471,12 @@ const TsAndCs = () => {
             Services is an incentive granted to the first 1,000 Members but in
             no way and under no circumstances can be deemed as a lifetime
             membership or as a lifetime free of charge membership. This Free
-            Membership incentive will expire at the time and once the Website
-            loveisincyprus.com accounts for 1,000 (one thousand) Members from
-            which the said members will have to renew their Membership at the
-            prevailing respective prices for the selected periods (one month,
-            six months or a year) should they wish to keep on using the
-            Services.
+            Membership incentive will expire at the time and once the Website{' '}
+            <Link to='/'>loveisincyprus.com</Link> accounts for 1,000 (one
+            thousand) Members from which the said members will have to renew
+            their Membership at the prevailing respective prices for the
+            selected periods (one month, six months or a year) should they wish
+            to keep on using the Services.
           </p>
           <br />
           <h4>6.2. Subscription renewal terms</h4>
@@ -700,7 +723,7 @@ const TsAndCs = () => {
             damage caused by Love is in Cyprus, if Love is in Cyprus fails to
             comply with these Terms of Use or to use reasonable care and skill.
             Loss or damage is foreseeable if either it is obvious that it will
-            happen or if, at the time the membership contract was made both Love
+            happen or if, at the time the membership relation was made both Love
             is in Cyprus and the Member or Subscriber knew it might happen.
           </p>
           <br />
@@ -798,16 +821,17 @@ const TsAndCs = () => {
           <p>
             Without prejudice to the other provisions of the Terms of Use, in
             the event of a serious breach by a Subscriber or Member, especially
-            in the event of breach of the Essential Obligations, Love is in
-            Cyprus may permanently remove the Account(s) of the relevant Member
-            or Subscriber from all the Website and Services, without prior
-            notice. This removal will not give a right of reimbursement to the
-            Subscriber. The Member or Subscriber will be informed by email about
-            the closure of his/her Account. This closure will take effect
-            without prejudice to any damages and interest which may be claimed
-            by Love is in Cyprus from the Member or Subscriber or his/her
-            successors and legal representatives as restitution for the losses
-            incurred by Love is in Cyprus as a result of these breaches.
+            in the event of breach of either the General Obligations or the
+            Essential Obligations, Love is in Cyprus may permanently remove the
+            Account(s) of the relevant Member or Subscriber from all the Website
+            and Services, without prior notice. This removal will not give a
+            right of reimbursement to the Subscriber. The Member or Subscriber
+            will be informed by email about the closure of his/her Account. This
+            closure will take effect without prejudice to any damages and
+            interest which may be claimed by Love is in Cyprus from the Member
+            or Subscriber or his/her successors and legal representatives as
+            restitution for the losses incurred by Love is in Cyprus as a result
+            of these breaches.
           </p>
           <h3>Article 10. Events and Activities</h3>
           <p>
@@ -899,8 +923,8 @@ const TsAndCs = () => {
             subscription, you can cancel the automatic renewal in 'My account
             settings'. For every request or claim relevant to a subscription,
             the Member or Subscriber may contact Love is in Cyprus by completing
-            the contact f'rm, ensuring that he/she indicates his/her username,
-            customer number and email address.
+            the <Link to='/contact-us'>contact form</Link>, ensuring that he/she
+            indicates his/her username, customer number and email address.
           </p>
           <br />
           <p>The Member or Subscriber may also contact the Customer Care</p>
@@ -935,7 +959,7 @@ const TsAndCs = () => {
             Subscribers pursuant to these Terms of Use are offered by Aquilion
             Limited, a private limited company incorporated in England and Wales
             with registered company number 4230150 (VAT number 797 4066 80)
-            whose address is Apex House, Grand Arcade, Tally Ho Corner , London
+            whose address is Apex House, Grand Arcade, Tally Ho Corner, London
             N12 0EH, United Kingdom. The Website is hosted on Love is in
             Cyprus's server(s).
           </p>

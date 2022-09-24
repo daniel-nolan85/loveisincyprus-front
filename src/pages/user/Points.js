@@ -322,14 +322,16 @@ const Points = () => {
             />
             <span className='tooltip-text'>Questions about points</span>
           </div>
-          <div className='tooltip'>
-            <FontAwesomeIcon
-              icon={faCashRegister}
-              className='fa'
-              onClick={handleSpendPoints}
-            />
-            <span className='tooltip-text'>Spend your points</span>
-          </div>
+          {user.membership.paid && (
+            <div className='tooltip'>
+              <FontAwesomeIcon
+                icon={faCashRegister}
+                className='fa'
+                onClick={handleSpendPoints}
+              />
+              <span className='tooltip-text'>Spend your points</span>
+            </div>
+          )}
         </div>
         <div className='points-filter-btns'>
           <button className='submit-btn' onClick={allTime}>

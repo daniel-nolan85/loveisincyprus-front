@@ -193,26 +193,30 @@ const Header = () => {
                   <span className='tooltip-text'>Search members</span>
                 </li>
               </Link>
-              <Link to='/swipe-to-match'>
-                <li className='tooltip'>
-                  <FontAwesomeIcon icon={faBolt} className='menu-icon' />
-                  <span className='tooltip-text'>Swipe</span>
-                </li>
-              </Link>
+              {user.membership.paid && (
+                <Link to='/swipe-to-match'>
+                  <li className='tooltip'>
+                    <FontAwesomeIcon icon={faBolt} className='menu-icon' />
+                    <span className='tooltip-text'>Swipe</span>
+                  </li>
+                </Link>
+              )}
               <Link to='/points'>
                 <li className='tooltip'>
                   <FontAwesomeIcon icon={faCoins} className='menu-icon' />
                   <span className='tooltip-text'>Points</span>
                 </li>
               </Link>
-              <Link to='/chats'>
-                <li className='tooltip' onClick={resetCount}>
-                  <Badge count={user.messages.length} offset={[-20, 0]}>
-                    <FontAwesomeIcon icon={faMessage} className='menu-icon' />
-                  </Badge>
-                  <span className='tooltip-text'>Chats</span>
-                </li>
-              </Link>
+              {user.membership.paid && (
+                <Link to='/chats'>
+                  <li className='tooltip' onClick={resetCount}>
+                    <Badge count={user.messages.length} offset={[-20, 0]}>
+                      <FontAwesomeIcon icon={faMessage} className='menu-icon' />
+                    </Badge>
+                    <span className='tooltip-text'>Chats</span>
+                  </li>
+                </Link>
+              )}
             </ul>
             <div className='settings-links dropdown'>
               <Link to='/notifications'>

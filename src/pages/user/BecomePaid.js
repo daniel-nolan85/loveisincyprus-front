@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import { useSelector, useDispatch } from 'react-redux';
@@ -19,10 +19,13 @@ const BecomePaid = ({ history }) => {
   const [userAgent, setUserAgent] = useState('');
   const [payable, setPayable] = useState('10.00');
   const [daysLeft, setDaysLeft] = useState(0);
+  const [userBankDetails, setUserBankDetails] = useState({});
 
   const { user } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
+
+  const isFirstRun = useRef(true);
 
   useEffect(() => {
     setUserAgent(window.navigator.userAgent);
@@ -34,19 +37,32 @@ const BecomePaid = ({ history }) => {
     setDaysLeft(dayDifference);
   }, []);
 
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      console.log(userBankDetails);
+      history.push({
+        pathname: '/payment-successful',
+        state: { userBankDetails, payable },
+      });
+    }
+  }, [userBankDetails]);
+
   const handleSubmit = async (values) => {
     setProcessing(true);
     console.log('payable => ', payable);
     createMembershipPayment(values, payable, userAgent, user, user.token).then(
       (res) => {
         console.log('create payment', res.data);
-        if (res.data.errors) {
-          toast.error(res.data.errors[0].message, {
+        if (res.data.response.errors) {
+          toast.error(res.data.response.errors[0].message, {
             position: toast.POSITION.TOP_CENTER,
           });
           setProcessing(false);
         }
-        if (res.data._id === user._id) {
+        if (res.data.response.status === 'approved') {
           toast.success(
             `Payment successful. Your paid membership will last for ${
               payable === '10.00'
@@ -65,18 +81,32 @@ const BecomePaid = ({ history }) => {
             type: 'LOGGED_IN_USER',
             payload: {
               ...user,
-              membership: res.data.membership,
+              membership: res.data.amendMembership.membership,
+              bankDetails: res.data.amendMembership.bankDetails,
             },
           });
-          history.push('/user/dashboard');
+          const result = res.data.amendMembership.bankDetails.filter((obj) => {
+            return (
+              obj.cardBrand ===
+                res.data.response.payment_instrument.card_brand &&
+              obj.cardHolder === res.data.response.payment_instrument.holder &&
+              obj.cardNumber.slice(-4) ===
+                res.data.response.payment_instrument.pan &&
+              parseInt(obj.expiry.slice(0, 2)) ===
+                res.data.response.payment_instrument.exp_month &&
+              parseInt(obj.expiry.slice(-4)) ===
+                res.data.response.payment_instrument.exp_year
+            );
+          });
+          setUserBankDetails(result);
         }
-        if (res.data.status === 'pending') {
+        if (res.data.response.status === 'pending') {
           toast.warning(`Payment pending.`, {
             position: toast.POSITION.TOP_CENTER,
           });
           setProcessing(false);
         }
-        if (res.data.status === 'declined') {
+        if (res.data.response.status === 'declined') {
           toast.error(`Payment declined.`, {
             position: toast.POSITION.TOP_CENTER,
           });

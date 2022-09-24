@@ -19,6 +19,7 @@ import ForgotPassword from './components/forms/ForgotPassword';
 import { currentUser } from './functions/auth';
 import UserRoute from './components/routes/UserRoute';
 import AdminRoute from './components/routes/AdminRoute';
+import SubscriberRoute from './components/routes/SubscriberRoute';
 import ChangePassword from './components/forms/ChangePassword';
 import UserDashboard from './pages/user/UserDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
@@ -71,6 +72,7 @@ import MembershipCard from './pages/user/MembershipCard';
 import Popup from './components/modals/Popup';
 import Expiring from './components/modals/Expiring';
 import Expired from './components/modals/Expired';
+import PaymentSuccess from './pages/user/PaymentSuccess';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -447,20 +449,25 @@ const App = () => {
         <UserRoute exact path='/my-matches' component={Matches} />
         <UserRoute exact path='/users-who-visited-me' component={Visitors} />
         <UserRoute exact path='/user/:userId' component={UserProfile} />
-        <UserRoute exact path='/swipe-to-match' component={Swipe} />
         <UserRoute exact path='/photos/:userId' component={Photos} />
         <UserRoute exact path='/checkout' component={Checkout} />
         <UserRoute exact path='/payment' component={Payment} />
         <UserRoute exact path='/purchase/history' component={PurchaseHistory} />
         <UserRoute exact path='/wishlist' component={Wishlist} />
         <UserRoute exact path='/points' component={Points} />
-        <UserRoute exact path='/chats' component={Chats} />
         <UserRoute exact path='/notifications' component={Notifications} />
         <UserRoute exact path='/search-users' component={UserSearch} />
         <UserRoute exact path='/events' component={Events} />
         <UserRoute exact path='/event/:eventId' component={EventInfo} />
         <UserRoute exact path='/become-paid-member' component={BecomePaid} />
         <UserRoute exact path='/membership-card' component={MembershipCard} />
+        <UserRoute
+          exact
+          path='/payment-successful'
+          component={PaymentSuccess}
+        />
+        <SubscriberRoute exact path='/swipe-to-match' component={Swipe} />
+        <SubscriberRoute exact path='/chats' component={Chats} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/posts' component={Posts} />
         <AdminRoute exact path='/admin/users' component={Users} />

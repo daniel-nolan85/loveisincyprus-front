@@ -14,7 +14,7 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const PaymentForm = ({ handleSubmit, processing, succeeded }) => {
+const PaymentForm = ({ handleSubmit, processing, succeeded, cartTotal }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
   const validate = yup.object({
@@ -97,12 +97,16 @@ const PaymentForm = ({ handleSubmit, processing, succeeded }) => {
                 Reset
               </button>
             </div>
-            <p
-              className={succeeded ? 'result-message' : 'result-message hidden'}
-            >
-              Thanks for your purchase.{' '}
-              <Link to='purchase/history'>View purchase history</Link>
-            </p>
+            {cartTotal && (
+              <p
+                className={
+                  succeeded ? 'result-message' : 'result-message hidden'
+                }
+              >
+                Thanks for your purchase.{' '}
+                <Link to='purchase/history'>View purchase history</Link>
+              </p>
+            )}
           </Form>
         </div>
       )}
