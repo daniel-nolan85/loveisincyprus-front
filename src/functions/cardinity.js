@@ -26,3 +26,10 @@ export const createMembershipPayment = (
     { values, payable, userAgent, user },
     { headers: { authtoken } }
   );
+
+export const refundSubscription = (user, authtoken) =>
+  axios.post(
+    `${process.env.REACT_APP_API}/refund-subscription`,
+    { user },
+    { headers: { authtoken } }
+  );

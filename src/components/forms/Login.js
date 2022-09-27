@@ -134,6 +134,7 @@ const Login = () => {
               sexLikes: res.data.sexLikes,
               sexFrequency: res.data.sexFrequency,
               membership: res.data.membership,
+              clearPhoto: res.data.clearPhoto,
             },
           });
           roleBasedRedirect(res);
@@ -266,6 +267,7 @@ const Login = () => {
                 sexLikes: res.data.sexLikes,
                 sexFrequency: res.data.sexFrequency,
                 membership: res.data.membership,
+                clearPhoto: res.data.clearPhoto,
               },
             });
             roleBasedRedirect(res);

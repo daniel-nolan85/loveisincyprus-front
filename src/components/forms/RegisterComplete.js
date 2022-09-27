@@ -141,6 +141,7 @@ const RegisterComplete = ({ history }) => {
                 sexLikes: res.data.sexLikes,
                 sexFrequency: res.data.sexFrequency,
                 membership: res.data.membership,
+                clearPhoto: res.data.clearPhoto,
               },
             });
             roleBasedRedirect(res);

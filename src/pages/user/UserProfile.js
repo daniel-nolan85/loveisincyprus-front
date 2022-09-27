@@ -414,6 +414,8 @@ const UserProfile = () => {
     following,
     _id,
     verified,
+    clearPhoto,
+    membership,
   } = thisUser;
 
   return (
@@ -520,7 +522,11 @@ const UserProfile = () => {
                     <img
                       src={p}
                       alt=''
-                      className={visitorPhotos < 2 ? 'blur' : ''}
+                      className={
+                        visitorPhotos < 2 || !clearPhoto || !membership.paid
+                          ? 'blur'
+                          : ''
+                      }
                     />
                   </div>
                 ))}

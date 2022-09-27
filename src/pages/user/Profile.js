@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import defaultCover from '../../assets/defaultCover.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -40,6 +40,7 @@ import ProfileProgress from '../../components/modals/ProfileProgress';
 import { Badge } from 'antd';
 import Verify from '../../components/modals/Verify';
 import { ChatState } from '../../context/ChatProvider';
+import * as faceapi from 'face-api.js';
 
 const { Ribbon } = Badge;
 
@@ -135,6 +136,7 @@ const Profile = ({ history }) => {
   const [progress, setProgress] = useState({});
   const [progressModalIsOpen, setProgressModalIsOpen] = useState(false);
   const [verifImg, setVerifImg] = useState({});
+  const [faces, setFaces] = useState([]);
 
   const { modalIsOpen, setModalIsOpen } = ChatState();
 
@@ -143,6 +145,9 @@ const Profile = ({ history }) => {
   let dispatch = useDispatch();
 
   const locate = useLocation();
+
+  const isFirstRun = useRef(true);
+  const profileImgRef = useRef();
 
   useEffect(() => {
     if (locate.state?.clickedfromPopup) {
@@ -156,6 +161,15 @@ const Profile = ({ history }) => {
       fetchUserTotalPosts();
     }
   }, [user && user.token, page]);
+
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      hasClearProfileImage();
+    }
+  }, [faces]);
 
   useEffect(() => {
     if (user && user.token) {
@@ -363,11 +377,46 @@ const Profile = ({ history }) => {
             },
           });
         }
+        Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri('/models')])
+          .then(detectfaces)
+          .catch((err) => console.log(err));
         setModalIsOpen(false);
       })
       .catch((err) => {
         setLoading(false);
         console.log(err);
+      });
+  };
+
+  const detectfaces = async () => {
+    const detections = await faceapi.detectAllFaces(
+      profileImgRef.current,
+      new faceapi.TinyFaceDetectorOptions()
+    );
+    console.log('detections => ', detections);
+    setFaces(detections);
+  };
+
+  const hasClearProfileImage = async () => {
+    await axios
+      .put(
+        `${process.env.REACT_APP_API}/clear-profile-image`,
+        { user, faces },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+            clearPhoto: res.data.clearPhoto,
+          },
+        });
       });
   };
 
@@ -785,6 +834,8 @@ const Profile = ({ history }) => {
             {user.profileImage && user.profileImage.url ? (
               <>
                 <img
+                  ref={profileImgRef}
+                  crossOrigin='anonymous'
                   src={user.profileImage.url}
                   alt={`${
                     user.name || user.email.split('@'[0])

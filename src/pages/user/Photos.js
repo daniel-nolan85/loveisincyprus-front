@@ -25,6 +25,14 @@ const Photos = () => {
     visitorPhotosCount();
   }, [userId]);
 
+  useEffect(() => {
+    if (user && user.token) {
+      if (!user.clearPhoto || !user.membership.paid) {
+        setDeniedModalIsOpen(true);
+      }
+    }
+  }, [user && user.token]);
+
   const fetchUser = async () => {
     await axios
       .post(
@@ -38,6 +46,9 @@ const Photos = () => {
       )
       .then((res) => {
         setThisUser(res.data);
+        if (!res.data.clearPhoto || !res.data.membership.paid) {
+          setDeniedModalIsOpen(true);
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -92,7 +103,7 @@ const Photos = () => {
     }
   };
 
-  const { name, email } = thisUser;
+  const { name, email, clearPhoto, membership } = thisUser;
 
   // console.log('photos => ', photos);
 
@@ -132,7 +143,11 @@ const Photos = () => {
                     getThisImage(photo);
                     setImageModalIsOpen(true);
                   }}
-                  className={visitorPhotos < 2 ? 'blur' : ''}
+                  className={
+                    visitorPhotos < 2 || !clearPhoto || !membership.paid
+                      ? 'blur'
+                      : ''
+                  }
                 />
               </div>
             ))}
@@ -176,6 +191,8 @@ const Photos = () => {
           deniedModalIsOpen={deniedModalIsOpen}
           setDeniedModalIsOpen={setDeniedModalIsOpen}
           visitorPhotos={visitorPhotos}
+          thisUser={thisUser}
+          user={user}
         />
       </div>
       <RightSidebar />

@@ -10,6 +10,11 @@ import { ChatState } from './context/ChatProvider';
 import io from 'socket.io-client';
 import axios from 'axios';
 
+// modals
+import Popup from './components/modals/Popup';
+import Expiring from './components/modals/Expiring';
+import Expired from './components/modals/Expired';
+
 import Header from './components/nav/Header';
 import SideDrawer from './components/drawer/SideDrawer';
 import Home from './pages/Home';
@@ -68,11 +73,8 @@ import EventInfo from './pages/user/EventInfo';
 import VerifSubmissions from './pages/admin/VerifSubmissions';
 import BecomePaid from './pages/user/BecomePaid';
 import MembershipCard from './pages/user/MembershipCard';
-// modals
-import Popup from './components/modals/Popup';
-import Expiring from './components/modals/Expiring';
-import Expired from './components/modals/Expired';
 import PaymentSuccess from './pages/user/PaymentSuccess';
+import UserSettings from './pages/user/UserSettings';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -217,6 +219,7 @@ const App = () => {
                 sexLikes: res.data.sexLikes,
                 sexFrequency: res.data.sexFrequency,
                 membership: res.data.membership,
+                clearPhoto: res.data.clearPhoto,
               },
             });
             console.log('logged in user ==> ', res);
@@ -466,6 +469,7 @@ const App = () => {
           path='/payment-successful'
           component={PaymentSuccess}
         />
+        <UserRoute exact path='/user-settings' component={UserSettings} />
         <SubscriberRoute exact path='/swipe-to-match' component={Swipe} />
         <SubscriberRoute exact path='/chats' component={Chats} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />

@@ -7,6 +7,8 @@ const ImagesDenied = ({
   deniedModalIsOpen,
   setDeniedModalIsOpen,
   visitorPhotos,
+  thisUser,
+  user,
 }) => {
   const modalStyles = {
     content: {
@@ -20,6 +22,8 @@ const ImagesDenied = ({
     },
   };
 
+  const { name, email, clearPhoto, membership } = thisUser;
+
   return (
     <Modal
       isOpen={deniedModalIsOpen}
@@ -28,20 +32,67 @@ const ImagesDenied = ({
       contentLabel='Example Modal'
     >
       <div className='images-denied'>
-        <h1>
-          To view other member's photos you first need to upload some of your
-          own
-        </h1>
-        <div>
-          <h3>
-            You have currently uploaded <span>{visitorPhotos}</span>
-          </h3>
-        </div>
-        <div>
-          <h3>
-            Please upload <span>{visitorPhotos === 1 ? '1' : '2'}</span> more
-          </h3>
-        </div>
+        {visitorPhotos < 2 ? (
+          <>
+            <h1>
+              To view other member's photos you first need to upload some of
+              your own
+            </h1>
+            <div>
+              <h3>
+                You have currently uploaded <span>{visitorPhotos}</span>
+              </h3>
+            </div>
+            <div>
+              <h3>
+                Please upload <span>{visitorPhotos === 1 ? '1' : '2'}</span>{' '}
+                more
+              </h3>
+            </div>
+          </>
+        ) : !clearPhoto ? (
+          <>
+            <h1>
+              {/* {name || email.split('@')[0]} is not using a clear image of their */}
+              This user is not using a clear image of their face as their
+              profile picture.
+            </h1>
+            <div>
+              <h3>As a result their uploaded images cannot be viewed.</h3>
+            </div>
+          </>
+        ) : !membership.paid ? (
+          <>
+            <h1>
+              {/* {name || email.split('@')[0]} is not currently a paid subsciber to */}
+              This user is not currently a paid subsciber to Love Is In Cyprus.
+            </h1>
+            <div>
+              <h3>As a result their uploaded images cannot be viewed.</h3>
+            </div>
+          </>
+        ) : !user.clearPhoto ? (
+          <>
+            <h1>
+              You are not currently using a clear image of your face as your
+              profile picture.
+            </h1>
+            <div>
+              <h3>As a result you cannot view other member's photos.</h3>
+            </div>
+          </>
+        ) : (
+          !user.membership.paid && (
+            <>
+              <h1>
+                You are not currently a paid subscriber to Love Is In Cyprus.
+              </h1>
+              <div>
+                <h3>As a result you cannot view other member's photos.</h3>
+              </div>
+            </>
+          )
+        )}
       </div>
     </Modal>
   );

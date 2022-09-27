@@ -10,7 +10,7 @@ const TsAndCs = () => {
       <div className='info-white-bg shadow'>
         <div className='info-content'>
           <h2>Dating Services Terms of Use</h2>
-          <p>(Terms of Use revised on April 4th, 2022)</p>
+          <p>(Terms of Use revised on September 25th, 2022)</p>
           <h3>Preamble</h3>
           <p>
             These Terms of Use are entered into between Loveisincyprus.com
@@ -79,7 +79,7 @@ const TsAndCs = () => {
           <br />
           <p>
             “Paid Services” refers to all paid Services available to
-            Subscribers, including the Upgrades.
+            Subscribers.
           </p>
           <br />
           <p>
@@ -112,8 +112,6 @@ const TsAndCs = () => {
             “Third-party Websites” refers to any third-party Internet websites
             or mobile application.
           </p>
-          <br />
-          <p>“Upgrade” refers to any Paid Service other than a Subscription</p>
           <br />
           <p>
             “Visitor” refers to a user who visits the Website without
@@ -174,18 +172,18 @@ const TsAndCs = () => {
           <br />
           <h4>2.2. Procedure and conditions for Subscription</h4>
           <p>
-            Subscription to the Services, with or without an Upgrade, is paid
-            for. The Member may purchase a Subscription and, thus, become a
-            Subscriber and benefit from the functionalities of his/her
-            Subscription. In order to do this, the Member must first identify
-            him/herself using his/her email address, his/her mobile number and
-            his/her confidential password. After choosing his/her Subscription
-            and way of payment, the Member must submit his/her payment. This
-            last step formally concludes the membership contract to the Paid
-            Services and the complete, unreserved acceptance of the Terms of
-            Use. Once the payment has been submitted, the Subscriber is directed
-            to a payment confirmation page. Love is in Cyprus acknowledges
-            receipt of the purchase of a Subscription by sending an email.
+            Subscription to the Services is paid for. The Member may purchase a
+            Subscription and, thus, become a Subscriber and benefit from the
+            functionalities of his/her Subscription. In order to do this, the
+            Member must first identify him/herself using his/her email address,
+            his/her mobile number and his/her confidential password. After
+            choosing his/her Subscription and way of payment, the Member must
+            submit his/her payment. This last step formally concludes the
+            membership contract to the Paid Services and the complete,
+            unreserved acceptance of the Terms of Use. Once the payment has been
+            submitted, the Subscriber is directed to a payment confirmation
+            page. Love is in Cyprus acknowledges receipt of the purchase of a
+            Subscription by sending an email.
           </p>
           <h3>Article 3. Right to cancel</h3>
           <p>
@@ -193,19 +191,17 @@ const TsAndCs = () => {
             Cancellation and Additional Charges) Regulations 2013, the Member is
             informed that he/she has fourteen days from the purchase of a
             Subscription to exercise his/her right to cancel, without incurring
-            any liability and without giving a reason, by filling out the
-            cancellation form available{' '}
-            <Link to='/cancel-subscription'>here</Link> or by sending a clear
-            statement requesting this to the e-mail address:
-            customercare@loveisincyprus.com. Only requests relating to the
-            exercise of this right to cancel will be processed from these
-            contact addresses. In order for the cancellation to be effectively
-            exercised, the Subscriber must send his/her request within the
-            fourteen-day cancellation period. The Subscriber may, if he/she
-            wishes to, access the Paid Services immediately without waiting for
-            the end of the cancellation period, according to article 36 (1) of
-            the Consumer Contracts (Information, Cancellation and Additional
-            Charges) Regulations 2013.
+            any liability and without giving a reason from within the user
+            settings menu, or by sending a clear statement requesting this to
+            the e-mail address: customercare@loveisincyprus.com. Only requests
+            relating to the exercise of this right to cancel will be processed
+            from these contact addresses. In order for the cancellation to be
+            effectively exercised, the Subscriber must send his/her request
+            within the fourteen-day cancellation period. The Subscriber may, if
+            he/she wishes to, access the Paid Services immediately without
+            waiting for the end of the cancellation period, according to article
+            36 (1) of the Consumer Contracts (Information, Cancellation and
+            Additional Charges) Regulations 2013.
           </p>
           <br />
           <p>
@@ -222,21 +218,17 @@ const TsAndCs = () => {
           <p>
             In any event, immediate access to the Services does not deprive the
             Subscriber from his/her right to cancel, which remains valid until
-            the expiry of the fourteen-day period. However, the Subscriber who
-            has requested to benefit from the Paid Services before the end of
-            the cancellation period must pay a pro-rated amount for his/her use
-            of the Services. Love is in Cyprus shall, therefore, reimburse the
-            Subscriber for the cost of the Subscription by deducting the amount
-            equivalent to the days which have passed between the date he/she
-            first used the Subscription and the date Love is in Cyprus received
-            the request to cancel, provided that every day used shall be
-            payable. The reimbursement shall be made within 14 days from the
-            date Love is in Cyprus was informed of the Subscriber's decision to
-            cancel, by the same means of payment which was used by the
-            Subscriber for the initial transaction, save for any instruction
-            from the latter to the contrary. The Subscriber will find additional
-            information on the Help/Contact us page about the scope and
-            application of the right to cancel.
+            the expiry of the fourteen-day period. Once their Subscription is
+            paid, if the Subscriber does not access any of the Paid Services
+            within the next 14 days, the Subscriber will be refunded and will
+            have limited access to the Website features as unpaid user. The
+            reimbursement shall be made within 14 days from the date Love is in
+            Cyprus was informed of the Subscriber's decision to cancel, by the
+            same means of payment which was used by the Subscriber for the
+            initial transaction, save for any instruction from the latter to the
+            contrary. The Subscriber will find additional information on the
+            Help/Contact us page about the scope and application of the right to
+            cancel.
           </p>
           <h3>Article 4. Service features</h3>
           <h4>4.1 Free features available to Members</h4>
@@ -249,21 +241,19 @@ const TsAndCs = () => {
             temporary or conditional circumstances. Depending on the Services
             and subject to restrictions set by Members if any, free features
             notably include the creation of the Profile, certain search
-            features, consultation of other Members' Profiles and registration
-            for Events and Activities. Communication with other Members
-            generally requires a Subscription. Every Member can control, through
-            his/her Account, the options which allow him/her to be visible or
-            not on the Website and thus able to be contacted, if applicable,
-            through those. A Member may access the Website provided that he/she
-            satisfies the conditions applicable to Members of the Website.
+            features, and consultation of other Members' Profiles. Communication
+            with other Members generally requires a Subscription. Every Member
+            can control, through his/her Account, the options which allow
+            him/her to be visible or not on the Website and thus able to be
+            contacted, if applicable, through those. A Member may access the
+            Website provided that he/she satisfies the conditions applicable to
+            Members of the Website.
           </p>
           <br />
           <h4>4.2 Paid features available only to Subscribers</h4>
           <p>
             Purchase of a Subscription allows access to the features described
-            on the Website. Additional Upgrades may be purchased by the
-            Subscriber. All features of these Upgrades will be described on the
-            Website.
+            on the Website.
           </p>
           <h3>Article 5. Services</h3>
           <h4>5.1 Love is in Cyprus obligations in relation to the Services</h4>
@@ -456,13 +446,7 @@ const TsAndCs = () => {
             Members may pay either by bank card (on the internet or through a
             mobile service) or by using an online payment service (Direct Debit
             etc.) according to the options given on the relevant Website. The
-            fees are indicated in Euros EUR (inclusive of all taxes). The
-            Subscriber may also purchase one or more Upgrades after purchasing
-            his/her Subscription according to the conditions set out above and
-            benefit from the features offered by the purchased Upgrade
-            immediately. The Subscriber is, therefore, charged on a prorated
-            basis for the period from the day the Upgrade is purchased until the
-            end of the current Subscription.
+            fees are indicated in Euros EUR (inclusive of all taxes)
           </p>
           <br />
           <h4>6.1.1. Free Membership for the First 1,000 Users</h4>
@@ -486,13 +470,12 @@ const TsAndCs = () => {
             terminated by the Subscriber in accordance with the terms and
             conditions in article 9 below. In particular cases, shorter renewal
             periods may apply as identified on the Website at the time of
-            Subscription. Once renewed, the Subscription, including any Upgrades
-            (if any), will be charged to the Subscriber at the standard
-            (non-discounted) rate. In addition, information on the duration of
-            the Subscriber's Subscription is available to Subscribers in the “My
-            Account” section, which allows a Subscriber to manage his/her
-            Subscription and, if applicable, the termination of the automatic
-            renewal.
+            Subscription. Once renewed, the Subscription will be charged to the
+            Subscriber at the standard (non-discounted) rate. In addition,
+            information on the duration of the Subscriber's Subscription is
+            available to Subscribers in the “My Account” section, which allows a
+            Subscriber to manage his/her Subscription and, if applicable, the
+            termination of the automatic renewal.
           </p>
           <br />
           <h4>6.3. Other services by third parties</h4>
@@ -712,8 +695,8 @@ const TsAndCs = () => {
             governed by their conditions of use, and that such consultation and
             use will be made under the Member's or Subscriber's full liability.
             Any issues relating to a link must be reported to Love is in Cyprus
-            using the contact details or the contact Form included in “About
-            Us”.
+            using the contact details or the{' '}
+            <Link to='/contact-us'>contact Form</Link>.
           </p>
           <br />
           <h4>8.4 Liability and Indemnity</h4>
@@ -786,8 +769,8 @@ const TsAndCs = () => {
             of his/her Profile, namely through the 'My Account' section
             dedicated to this purpose, in order to no longer be visible on the
             Website nor receive notifications. This suspension is temporary and
-            does not interrupt the Subscription and any current Upgrades. The
-            Member or Subscriber may reactivate his/her Profile at any moment.
+            does not interrupt the Subscription. The Member or Subscriber may
+            reactivate his/her Profile at any moment.
           </p>
           <br />
           <h4>9.2 Account closure</h4>
@@ -797,13 +780,16 @@ const TsAndCs = () => {
             the closure of his/her Account from Love is in Cyprus, without
             further charges other than those connected to the transmission of
             his/her request and without reason, namely through the 'My Account'
-            section, by email, using the contact form or by any means which may
+            section, by email, using the{' '}
+            <Link to='/contact-us'>contact form</Link> or by any means which may
             be indicated in this section. This request shall be deemed made on
             the working day following the one the request for closure of the
             relevant Account is received by Love is in Cyprus and the Subscriber
-            may no longer use his/her Subscription and any current Upgrades. The
-            Member or Subscriber will be informed by email about the closure of
-            his/her Account.
+            may no longer use his/her Subscription. The Member or Subscriber
+            will be informed by email about the closure of his/her Account. Once
+            past the 14-day trial period after the date of subscription, all
+            charges and purchases are nonrefundable, there are no refunds or
+            credits for partially used periods.
           </p>
           <br />
           <h4>9.3 Non-renewal/Subscription termination by the Subscriber</h4>
@@ -914,16 +900,16 @@ const TsAndCs = () => {
             You get a 14-day cooling-off period on any subscription purchase. To
             request a refund or exchange, just ask our Customer Care team.
             Please note that refunds are available for purchases of first-time
-            subscriptions and upgrades, and the refund total is calculated on a
-            pro-rata basis. No refunds will be given for renewals, Boosts or
-            Incognito purchases. We are unable to offer reimbursement beyond the
-            initial 14 days. Once this time has passed, we're here to help you
-            make the most of your subscription by taking full advantage of the
-            service features. If you don't want to continue with your
-            subscription, you can cancel the automatic renewal in 'My account
-            settings'. For every request or claim relevant to a subscription,
-            the Member or Subscriber may contact Love is in Cyprus by completing
-            the <Link to='/contact-us'>contact form</Link>, ensuring that he/she
+            subscriptions, and the refund total is calculated on a pro-rata
+            basis. No refunds will be given for renewals, Boosts or Incognito
+            purchases. We are unable to offer reimbursement beyond the initial
+            14 days. Once this time has passed, we're here to help you make the
+            most of your subscription by taking full advantage of the service
+            features. If you don't want to continue with your subscription, you
+            can cancel the automatic renewal in 'My account settings'. For every
+            request or claim relevant to a subscription, the Member or
+            Subscriber may contact Love is in Cyprus by completing the{' '}
+            <Link to='/contact-us'>contact form</Link>, ensuring that he/she
             indicates his/her username, customer number and email address.
           </p>
           <br />
