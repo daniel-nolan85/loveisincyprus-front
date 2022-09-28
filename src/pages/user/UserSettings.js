@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import CancelSubscription from '../../components/modals/CancelSubscription';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
@@ -14,17 +14,6 @@ const UserSettings = () => {
   const { user } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    //passing getData method to the lifecycle method
-    getData();
-  }, []);
-
-  const getData = async () => {
-    const res = await axios.get('https://geolocation-db.com/json/');
-    console.log(res.data);
-    // setIP(res.data.IPv4);
-  };
 
   const handleOptInOrOut = async () => {
     await axios

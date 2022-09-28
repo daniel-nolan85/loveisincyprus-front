@@ -23,6 +23,7 @@
     "formik": "^2.2.9",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
+    "node-ipinfo": "^3.1.1",
     "react": "^17.0.2",
     "react-chartjs-2": "^4.1.0",
     "react-countup": "^6.1.1",

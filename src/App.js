@@ -75,6 +75,7 @@ import BecomePaid from './pages/user/BecomePaid';
 import MembershipCard from './pages/user/MembershipCard';
 import PaymentSuccess from './pages/user/PaymentSuccess';
 import UserSettings from './pages/user/UserSettings';
+import IPBlock from './pages/admin/IPBlock';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -476,6 +477,7 @@ const App = () => {
         <AdminRoute exact path='/admin/posts' component={Posts} />
         <AdminRoute exact path='/admin/users' component={Users} />
         <AdminRoute exact path='/admin/geo-block' component={GeoBlock} />
+        <AdminRoute exact path='/admin/ip-block' component={IPBlock} />
         <AdminRoute exact path='/admin/category' component={Category} />
         <AdminRoute exact path='/admin/sub' component={Sub} />
         <AdminRoute exact path='/admin/product' component={Products} />

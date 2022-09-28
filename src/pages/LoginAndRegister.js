@@ -3,13 +3,51 @@ import Login from '../components/forms/Login';
 import Register from '../components/forms/Register';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const LoginAndRegister = ({ history }) => {
   const [whitelist, setWhitelist] = useState([]);
+  const [blacklist, setBlacklist] = useState([]);
+  const [ip, setIp] = useState('');
 
   // const { user } = useSelector((state) => ({ ...state }));
 
   const isFirstRun = useRef(true);
+
+  useEffect(() => {
+    getThisIP();
+    getBlacklist();
+  }, []);
+
+  useEffect(() => {
+    if (blacklist.some((b) => b.ip === ip)) {
+      toast.error(
+        'Access to LoveIsInCyprus from this IP address has been denied',
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+      history.push('/');
+    }
+  }, [blacklist && ip]);
+
+  const getThisIP = async () => {
+    const res = await axios.get('https://geolocation-db.com/json/');
+    console.log(res.data);
+    setIp(res.data.IPv4);
+  };
+
+  const getBlacklist = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-ips`)
+      .then((res) => {
+        console.log(res.data);
+        setBlacklist(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   // useEffect(() => {
   //   let intended = history.location.state;

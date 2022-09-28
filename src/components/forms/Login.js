@@ -148,26 +148,6 @@ const Login = () => {
               }
             )
           );
-
-          // var hours = 24;
-          // var now = new Date().getTime();
-          // var setupTime = localStorage.getItem('setupTime');
-          // if (setupTime == null) {
-          //   localStorage.setItem('setupTime', now);
-          // } else {
-          //   if (now - setupTime > hours * 60 * 60 * 1000) {
-          //     addPoints(1, 'login', idTokenResult.token).then(
-          //       toast.success(
-          //         `Welcome to Love is in Cyprus. You have been awarded 1 point!`,
-          //         {
-          //           position: toast.POSITION.TOP_CENTER,
-          //         }
-          //       )
-          //     );
-          //     localStorage.removeItem('setupTime');
-          //     localStorage.setItem('setupTime', now);
-          //   }
-          // }
         })
         .catch((err) => console.log(err));
     } catch (err) {

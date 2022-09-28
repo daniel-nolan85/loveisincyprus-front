@@ -2106,6 +2106,15 @@ select.gray {
   margin-left: 15px;
 }
 
+.ip-info {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ip-field {
+  font-weight: bold;
+}
+
 /* --------------- profile-page --------------- */
 .profile-container {
   padding: 20px 15%;

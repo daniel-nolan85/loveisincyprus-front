@@ -15,6 +15,7 @@ import {
   faEnvelope,
   faRectangleAd,
   faShieldBlank,
+  faDesktop,
 } from '@fortawesome/free-solid-svg-icons';
 
 const LeftSidebar = () => {
@@ -44,6 +45,10 @@ const LeftSidebar = () => {
         <Link to='/admin/geo-block'>
           <FontAwesomeIcon icon={faEarthAmericas} className='fa' />
           Geo-Block
+        </Link>
+        <Link to='/admin/ip-block'>
+          <FontAwesomeIcon icon={faDesktop} className='fa' />
+          IP-Block
         </Link>
         <Link to='/admin/orders'>
           <FontAwesomeIcon icon={faFolderOpen} className='fa' />
