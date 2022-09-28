@@ -1,8 +1,8 @@
 import React from 'react';
 import Modal from 'react-modal';
-import axios from 'axios';
 import { refundSubscription } from '../../functions/cardinity';
 import { useSelector, useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 Modal.setAppElement('#root');
 
@@ -37,9 +37,22 @@ const CancelSubscription = ({
   };
 
   const cancelSubscription = async () => {
-    refundSubscription(user)
+    refundSubscription(user, user.token)
       .then((res) => {
         console.log(res.data);
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+            membership: res.data.membership,
+          },
+        });
+        toast.success(
+          `Your subscription has been cancelled and your money has been refunded.`,
+          {
+            position: toast.POSITION.TOP_CENTER,
+          }
+        );
       })
       .catch((err) => {
         console.log(err);
