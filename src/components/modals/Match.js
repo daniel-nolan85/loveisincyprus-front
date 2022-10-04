@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 Modal.setAppElement('#root');
 
 const Match = ({ matchModalIsOpen, setMatchModalIsOpen, match }) => {
-  const { user } = useSelector((state) => ({ ...state }));
+  const { profileImage, name, email } = useSelector((state) => state.user);
 
   const modalStyles = {
     content: {
@@ -38,8 +38,8 @@ const Match = ({ matchModalIsOpen, setMatchModalIsOpen, match }) => {
             // alt={`${match.name || match.email.split('@')[0]}'s profile picture`}
           />
           <img
-            src={user.profileImage ? user.profileImage.url : defaultProfile}
-            alt={`${user.name || user.email.split('@')[0]}'s profile picture`}
+            src={profileImage ? profileImage.url : defaultProfile}
+            alt={`${name || email.split('@')[0]}'s profile picture`}
           />
         </div>
         <br />

@@ -16,11 +16,11 @@ const ProductDelete = ({
   setLoading,
   loadAllProducts,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user);
 
   const deleteProduct = async (product) => {
     setLoading(true);
-    removeProduct(product.slug, user.token)
+    removeProduct(product.slug, token)
       .then((res) => {
         setLoading(false);
         toast.error(`${res.data.title} has been deleted`, {

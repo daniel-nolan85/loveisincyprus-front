@@ -26,12 +26,13 @@ const { TabPane } = Tabs;
 
 const SingleProduct = ({ product, onStarClick, star }) => {
   const [wishlist, setWishlist] = useState([]);
+
   const { user, cart } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    loadWishlist();
+    if (user && user.token) loadWishlist();
   }, [wishlist]);
 
   const loadWishlist = () =>

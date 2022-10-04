@@ -44,7 +44,7 @@ const EventPostList = ({
   const [likesModalIsOpen, setLikesModalIsOpen] = useState(false);
   const [postModalIsOpen, setPostModalIsOpen] = useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token, _id } = useSelector((state) => state.user);
 
   const showLikes = (post) => {
     setCurrentPost(post);
@@ -70,8 +70,8 @@ const EventPostList = ({
               <div className='user-profile'>
                 <Link
                   to={
-                    user._id === post.postedBy._id
-                      ? `/user/profile/${user._id}`
+                    _id === post.postedBy._id
+                      ? `/user/profile/${_id}`
                       : `/user/${post.postedBy._id}`
                   }
                 >
@@ -89,8 +89,8 @@ const EventPostList = ({
                 <div>
                   <Link
                     to={
-                      user._id === post.postedBy._id
-                        ? `/user/profile/${user._id}`
+                      _id === post.postedBy._id
+                        ? `/user/profile/${_id}`
                         : `/user/${post.postedBy._id}`
                     }
                   >
@@ -101,7 +101,7 @@ const EventPostList = ({
                   <span>{moment(post.createdAt).fromNow()}</span>
                 </div>
               </div>
-              {user && user._id === post.postedBy._id && (
+              {token && _id === post.postedBy._id && (
                 <div className='post-icons'>
                   <FontAwesomeIcon
                     icon={faTrashCan}
@@ -130,7 +130,7 @@ const EventPostList = ({
               <div className='activity-icons'>
                 <div>
                   {/* {post.likes.includes(user._id) ? ( */}
-                  {post.likes.some((e) => e._id === user._id) ? (
+                  {post.likes.some((e) => e._id === _id) ? (
                     <FontAwesomeIcon
                       icon={faHeart}
                       className='fa liked'

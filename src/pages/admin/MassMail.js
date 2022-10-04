@@ -32,7 +32,7 @@ const MassMail = () => {
   const [selectedUsersModalIsOpen, setSelectedUsersModalIsOpen] =
     useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token, _id } = useSelector((state) => state.user);
 
   const { setSocketConnected } = ChatState();
 
@@ -45,19 +45,19 @@ const MassMail = () => {
   }, []);
 
   useEffect(() => {
-    if (user && user.token) {
+    if (token) {
       fetchOptIns();
     }
-  }, [user && user.token]);
+  }, [token]);
 
   const fetchOptIns = async () => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/fetch-optins`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -73,7 +73,7 @@ const MassMail = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    sendMassMail(values, user.token)
+    sendMassMail(values, token)
       .then((res) => {
         console.log(res);
         setLoading(false);

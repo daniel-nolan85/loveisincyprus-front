@@ -24,8 +24,9 @@ const EventCommentEdit = ({
   const [text, setText] = useState(commentToEdit.text);
   const [uploading, setUploading] = useState(false);
   const [image, setImage] = useState({});
+  const [loadingImg, setLoadingImg] = useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { _id, token } = useSelector((state) => state.user);
 
   const updateComment = async (postId, comment) => {
     setUploading(true);
@@ -33,10 +34,10 @@ const EventCommentEdit = ({
     await axios
       .put(
         `${process.env.REACT_APP_API}/update-event-comment`,
-        { postId, comment, text, image, user },
+        { postId, comment, text, image, _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -64,12 +65,12 @@ const EventCommentEdit = ({
     const file = e.target.files[0];
     let formData = new FormData();
     formData.append('image', file);
-    setUploading(true);
+    setLoadingImg(true);
 
     await axios
       .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
         headers: {
-          authtoken: user.token,
+          authtoken: token,
         },
       })
       .then((res) => {
@@ -77,11 +78,11 @@ const EventCommentEdit = ({
           url: res.data.url,
           public_id: res.data.public_id,
         });
-        setUploading(false);
+        setLoadingImg(false);
       })
       .catch((err) => {
         console.log(err);
-        setUploading(false);
+        setLoadingImg(false);
       });
   };
 
@@ -116,21 +117,25 @@ const EventCommentEdit = ({
           </form>
           <div className='write-post-footer'>
             <div className='add-post-links'>
-              <label>
-                {image && image.url ? (
-                  <img src={image.url} />
-                ) : commentToEdit.image && commentToEdit.image.url ? (
-                  <img src={commentToEdit.image.url} />
-                ) : (
-                  <FontAwesomeIcon icon={faCamera} className='fa' />
-                )}
-                <input
-                  onChange={handleImage}
-                  type='file'
-                  accept='images/*'
-                  hidden
-                />
-              </label>
+              {loadingImg ? (
+                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+              ) : (
+                <label>
+                  {image && image.url ? (
+                    <img src={image.url} />
+                  ) : commentToEdit.image && commentToEdit.image.url ? (
+                    <img src={commentToEdit.image.url} />
+                  ) : (
+                    <FontAwesomeIcon icon={faCamera} className='fa' />
+                  )}
+                  <input
+                    onChange={handleImage}
+                    type='file'
+                    accept='images/*'
+                    hidden
+                  />
+                </label>
+              )}
             </div>
             <button
               onClick={() => updateComment(postOfCommentToEdit, commentToEdit)}

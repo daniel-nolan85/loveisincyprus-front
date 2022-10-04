@@ -25,8 +25,11 @@ const SinglePost = ({
   const [content, setContent] = useState(post.content);
   const [uploading, setUploading] = useState(false);
   const [image, setImage] = useState({});
+  const [loadingImg, setLoadingImg] = useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token, _id, name, email, profileImage } = useSelector(
+    (state) => state.user
+  );
 
   const postSubmit = async (e) => {
     e.preventDefault();
@@ -35,10 +38,10 @@ const SinglePost = ({
     await axios
       .put(
         `${process.env.REACT_APP_API}/update-post/${post._id}`,
-        { post, content, image, user },
+        { post, content, image, _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -67,12 +70,12 @@ const SinglePost = ({
     const file = e.target.files[0];
     let formData = new FormData();
     formData.append('image', file);
-    setUploading(true);
+    setLoadingImg(true);
 
     await axios
       .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
         headers: {
-          authtoken: user.token,
+          authtoken: token,
         },
       })
       .then((res) => {
@@ -80,11 +83,11 @@ const SinglePost = ({
           url: res.data.url,
           public_id: res.data.public_id,
         });
-        setUploading(false);
+        setLoadingImg(false);
       })
       .catch((err) => {
         console.log(err);
-        setUploading(false);
+        setLoadingImg(false);
       });
   };
 
@@ -109,14 +112,14 @@ const SinglePost = ({
     >
       <div className='write-post-container'>
         <div className='user-profile'>
-          <Link to={`/user/profile/${user._id}`}>
+          <Link to={`/user/profile/${_id}`}>
             <img
-              src={user.profileImage ? user.profileImage.url : defaultProfile}
-              alt={`${user.name || user.email.split('@')[0]}'s profile pic`}
+              src={profileImage ? profileImage.url : defaultProfile}
+              alt={`${name || email.split('@')[0]}'s profile pic`}
             />
           </Link>
-          <Link to={`/user/profile/${user._id}`}>
-            <p>{user.name || (user.email && user.email.split('@')[0])}</p>
+          <Link to={`/user/profile/${_id}`}>
+            <p>{name || (email && email.split('@')[0])}</p>
           </Link>
         </div>
         <div className='post-input-container'>
@@ -125,29 +128,31 @@ const SinglePost = ({
               defaultValue={post.content}
               onChange={(e) => setContent(e.target.value)}
               placeholder={`What's on your mind, ${
-                user.name
-                  ? user.name.split(' ')[0]
-                  : user.email && user.email.split('@')[0]
+                name ? name.split(' ')[0] : email && email.split('@')[0]
               }?`}
             />
           </form>
           <div className='write-post-footer'>
             <div className='add-post-links'>
-              <label>
-                {image && image.url ? (
-                  <img src={image.url} alt='uploaded' />
-                ) : post.image && post.image.url ? (
-                  <img src={post.image.url} alt='uploaded' />
-                ) : (
-                  <FontAwesomeIcon icon={faCamera} className='fa' />
-                )}
-                <input
-                  onChange={handleImage}
-                  type='file'
-                  accept='images/*'
-                  hidden
-                />
-              </label>
+              {loadingImg ? (
+                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+              ) : (
+                <label>
+                  {image && image.url ? (
+                    <img src={image.url} alt='uploaded' />
+                  ) : post.image && post.image.url ? (
+                    <img src={post.image.url} alt='uploaded' />
+                  ) : (
+                    <FontAwesomeIcon icon={faCamera} className='fa' />
+                  )}
+                  <input
+                    onChange={handleImage}
+                    type='file'
+                    accept='images/*'
+                    hidden
+                  />
+                </label>
+              )}
             </div>
             <button
               onClick={postSubmit}

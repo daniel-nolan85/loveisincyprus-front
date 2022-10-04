@@ -235,7 +235,7 @@ const App = () => {
   //   if (user && user.profileComplete === false) {
   //     const timer = setTimeout(() => {
   //       setPopupModalIsOpen(true);
-  //     }, 20000);
+  //     }, 5000);
   //     return () => clearTimeout(timer);
   //   }
   // }, [user && user.token]);

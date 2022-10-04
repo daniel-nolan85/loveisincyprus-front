@@ -16,7 +16,7 @@ const VerifApprove = ({
   currentVerif,
   fetchVerifs,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user);
 
   const { setSocketConnected } = ChatState();
 
@@ -35,7 +35,7 @@ const VerifApprove = ({
         { verif },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )

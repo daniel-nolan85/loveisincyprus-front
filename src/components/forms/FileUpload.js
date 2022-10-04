@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 const FileUpload = ({ values, setValues }) => {
   const [loading, setLoading] = useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user);
 
   const fileUploadAndResize = (e) => {
     let files = e.target.files;
@@ -30,7 +30,7 @@ const FileUpload = ({ values, setValues }) => {
                 `${process.env.REACT_APP_API}/upload-images`,
                 { image: uri },
                 {
-                  headers: { authtoken: user ? user.token : '' },
+                  headers: { authtoken: token ? token : '' },
                 }
               )
               .then((res) => {
@@ -57,7 +57,7 @@ const FileUpload = ({ values, setValues }) => {
         `${process.env.REACT_APP_API}/remove-image`,
         { public_id },
         {
-          headers: { authtoken: user ? user.token : '' },
+          headers: { authtoken: token ? token : '' },
         }
       )
       .then((res) => {

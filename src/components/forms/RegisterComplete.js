@@ -8,7 +8,7 @@ import {
   faEye,
   faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { createOrUpdateUser } from '../../functions/auth';
 
 const RegisterComplete = ({ history }) => {
@@ -16,8 +16,6 @@ const RegisterComplete = ({ history }) => {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
-  const { user } = useSelector((state) => ({ ...state }));
 
   let dispatch = useDispatch();
 

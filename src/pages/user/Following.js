@@ -13,21 +13,20 @@ const Following = ({ history }) => {
   const [userToUnfollow, setUserToUnfollow] = useState({});
   const [unfollowModalIsOpen, setUnfollowModalIsOpen] = useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token, _id } = useSelector((state) => state.user);
 
   useEffect(() => {
-    console.log(user);
-    if (user && user.token) fetchFollowing();
-  }, [user && user.token]);
+    if (token) fetchFollowing();
+  }, [token]);
 
   const fetchFollowing = async () => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/liked-users`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )

@@ -18,12 +18,12 @@ const CategoryEdit = ({
 }) => {
   const [name, setName] = useState(categoryToEdit.name);
 
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user);
 
   const editCategory = async (e, category) => {
     e.preventDefault();
     setLoading(true);
-    updateCategory(category.slug, { name }, user.token)
+    updateCategory(category.slug, { name }, token)
       .then((res) => {
         setLoading(false);
         toast.success(`${res.data.name} has been updated`, {

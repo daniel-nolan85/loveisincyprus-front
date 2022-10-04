@@ -137,6 +137,9 @@ const Profile = ({ history }) => {
   const [progressModalIsOpen, setProgressModalIsOpen] = useState(false);
   const [verifImg, setVerifImg] = useState({});
   const [faces, setFaces] = useState([]);
+  const [loadingImg, setLoadingImg] = useState(false);
+  const [loadingCoverImg, setLoadingCoverImg] = useState(false);
+  const [loadingProfileImg, setLoadingProfileImg] = useState(false);
 
   const { modalIsOpen, setModalIsOpen } = ChatState();
 
@@ -424,7 +427,7 @@ const Profile = ({ history }) => {
     const file = e.target.files[0];
     let formData = new FormData();
     formData.append('image', file);
-    setUploading(true);
+    setLoadingProfileImg(true);
 
     await axios
       .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
@@ -437,11 +440,11 @@ const Profile = ({ history }) => {
           url: res.data.url,
           public_id: res.data.public_id,
         });
-        setUploading(false);
+        setLoadingProfileImg(false);
       })
       .catch((err) => {
         console.log(err);
-        setUploading(false);
+        setLoadingProfileImg(false);
       });
   };
 
@@ -449,7 +452,7 @@ const Profile = ({ history }) => {
     const file = e.target.files[0];
     let formData = new FormData();
     formData.append('image', file);
-    setUploading(true);
+    setLoadingCoverImg(true);
 
     await axios
       .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
@@ -462,11 +465,11 @@ const Profile = ({ history }) => {
           url: res.data.url,
           public_id: res.data.public_id,
         });
-        setUploading(false);
+        setLoadingCoverImg(false);
       })
       .catch((err) => {
         console.log(err);
-        setUploading(false);
+        setLoadingCoverImg(false);
       });
   };
 
@@ -678,7 +681,7 @@ const Profile = ({ history }) => {
     const file = e.target.files[0];
     let formData = new FormData();
     formData.append('image', file);
-    setUploading(true);
+    setLoadingImg(true);
 
     await axios
       .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
@@ -691,11 +694,11 @@ const Profile = ({ history }) => {
           url: res.data.url,
           public_id: res.data.public_id,
         });
-        setUploading(false);
+        setLoadingImg(false);
       })
       .catch((err) => {
         console.log(err);
-        setUploading(false);
+        setLoadingImg(false);
       });
   };
 
@@ -1031,19 +1034,23 @@ const Profile = ({ history }) => {
               </form>
               <div className='write-post-footer'>
                 <div className='add-post-links'>
-                  <label>
-                    {image && image.url ? (
-                      <img src={image.url} />
-                    ) : (
-                      <FontAwesomeIcon icon={faCamera} className='fa' />
-                    )}
-                    <input
-                      onChange={handleImage}
-                      type='file'
-                      accept='images/*'
-                      hidden
-                    />
-                  </label>
+                  {loadingImg ? (
+                    <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                  ) : (
+                    <label>
+                      {image && image.url ? (
+                        <img src={image.url} />
+                      ) : (
+                        <FontAwesomeIcon icon={faCamera} className='fa' />
+                      )}
+                      <input
+                        onChange={handleImage}
+                        type='file'
+                        accept='images/*'
+                        hidden
+                      />
+                    </label>
+                  )}
                 </div>
                 <button
                   onClick={postSubmit}
@@ -1326,6 +1333,8 @@ const Profile = ({ history }) => {
         setSexLikes={setSexLikes}
         sexFrequency={sexFrequency}
         setSexFrequency={setSexFrequency}
+        loadingCoverImg={loadingCoverImg}
+        loadingProfileImg={loadingProfileImg}
       />
       {user.coverImage && user.coverImage.url && (
         <CropCover
@@ -1373,6 +1382,7 @@ const Profile = ({ history }) => {
         addComment={addComment}
         image={image}
         handleImage={handleImage}
+        loadingImg={loadingImg}
       />
       <SinglePost
         postModalIsOpen={postModalIsOpen}
@@ -1405,6 +1415,8 @@ const Profile = ({ history }) => {
         setUploading={setUploading}
         verifImg={verifImg}
         setVerifImg={setVerifImg}
+        loadingImg={loadingImg}
+        setLoadingImg={setLoadingImg}
       />
     </div>
   );

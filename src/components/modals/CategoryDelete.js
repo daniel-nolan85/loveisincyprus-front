@@ -16,11 +16,11 @@ const CategoryDelete = ({
   setLoading,
   loadCategories,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user);
 
   const deleteCategory = async (category) => {
     setLoading(true);
-    removeCategory(category.slug, user.token)
+    removeCategory(category.slug, token)
       .then((res) => {
         setLoading(false);
         toast.error(`${res.data.name} has been deleted`, {

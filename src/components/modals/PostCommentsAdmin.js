@@ -20,7 +20,7 @@ const PostCommentsAdmin = ({
   postOfCommentToDelete,
   newsFeed,
 }) => {
-  const { user } = useSelector((state) => ({ ...state }));
+  const { _id } = useSelector((state) => state.user);
 
   const modalStyles = {
     content: {
@@ -61,8 +61,8 @@ const PostCommentsAdmin = ({
               <div className='user-profile'>
                 <Link
                   to={
-                    c.postedBy._id === user._id
-                      ? `/user/profile/${user._id}`
+                    c.postedBy._id === _id
+                      ? `/user/profile/${_id}`
                       : `/user/${c.postedBy._id}`
                   }
                 >
@@ -80,8 +80,8 @@ const PostCommentsAdmin = ({
                 </Link>
                 <Link
                   to={
-                    c.postedBy._id === user._id
-                      ? `/user/profile/${user._id}`
+                    c.postedBy._id === _id
+                      ? `/user/profile/${_id}`
                       : `/user/${c.postedBy._id}`
                   }
                 >

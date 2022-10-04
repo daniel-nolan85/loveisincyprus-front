@@ -7,7 +7,7 @@ import defaultProfile from '../../assets/defaultProfile.png';
 Modal.setAppElement('#root');
 
 const Declined = ({ declinedModalIsOpen, setDeclinedModalIsOpen, post }) => {
-  const { user } = useSelector((state) => ({ ...state }));
+  const { _id } = useSelector((state) => state.user);
 
   const modalStyles = {
     content: {
@@ -35,11 +35,7 @@ const Declined = ({ declinedModalIsOpen, setDeclinedModalIsOpen, post }) => {
           <div className='likes-container' key={d._id}>
             <div className='user-profile'>
               <Link
-                to={
-                  d._id === user._id
-                    ? `/user/profile/${user._id}`
-                    : `/user/${d._id}`
-                }
+                to={d._id === _id ? `/user/profile/${_id}` : `/user/${d._id}`}
               >
                 <img
                   src={d.profileImage ? d.profileImage.url : defaultProfile}
@@ -47,11 +43,7 @@ const Declined = ({ declinedModalIsOpen, setDeclinedModalIsOpen, post }) => {
                 />
               </Link>
               <Link
-                to={
-                  user._id === d._id
-                    ? `/user/profile/${user._id}`
-                    : `/user/${d._id}`
-                }
+                to={_id === d._id ? `/user/profile/${_id}` : `/user/${d._id}`}
               >
                 <p>{d.name ? d.name : d.email.split('@')[0]}</p>
               </Link>

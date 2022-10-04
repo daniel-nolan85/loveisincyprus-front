@@ -33,7 +33,7 @@ const Comments = ({
   setEventCommentEditModalIsOpen,
   fetchEvent,
 }) => {
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token, _id } = useSelector((state) => state.user);
 
   return (
     <>
@@ -44,8 +44,8 @@ const Comments = ({
             <div className='user-profile'>
               <Link
                 to={
-                  user._id === c.postedBy._id
-                    ? `/user/profile/${user._id}`
+                  _id === c.postedBy._id
+                    ? `/user/profile/${_id}`
                     : `/user/${c.postedBy._id}`
                 }
               >
@@ -63,8 +63,8 @@ const Comments = ({
               <div>
                 <Link
                   to={
-                    user._id === c.postedBy._id
-                      ? `/user/profile/${user._id}`
+                    _id === c.postedBy._id
+                      ? `/user/profile/${_id}`
                       : `/user/${c.postedBy._id}`
                   }
                 >
@@ -77,7 +77,7 @@ const Comments = ({
                 <span>{moment(c.created).fromNow()}</span>
               </div>
             </div>
-            {(user && user._id === c.postedBy._id && (
+            {(token && _id === c.postedBy._id && (
               <div className='post-icons'>
                 <FontAwesomeIcon
                   icon={faTrashCan}
@@ -97,7 +97,7 @@ const Comments = ({
                 />
               </div>
             )) ||
-              (user && user._id === post.postedBy._id && (
+              (token && _id === post.postedBy._id && (
                 <div className='post-icons'>
                   <FontAwesomeIcon
                     icon={faTrashCan}

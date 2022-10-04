@@ -57,7 +57,7 @@ const Events = () => {
     useState(false);
   const [query, setQuery] = useState('');
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token, _id } = useSelector((state) => state.user);
 
   const { setSocketConnected } = ChatState();
 
@@ -80,19 +80,19 @@ const Events = () => {
     });
 
   useEffect(() => {
-    if (user && user.token) {
+    if (token) {
       fetchUsers();
     }
-  }, [user && user.token]);
+  }, [token]);
 
   const fetchUsers = async () => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/users`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -113,7 +113,7 @@ const Events = () => {
     await axios
       .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
         headers: {
-          authtoken: user.token,
+          authtoken: token,
         },
       })
       .then((res) => {
@@ -137,7 +137,7 @@ const Events = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    createEvent(values, user.token)
+    createEvent(values, token)
       .then((res) => {
         // console.log(res);
         setLoading(false);
@@ -395,6 +395,9 @@ const Events = () => {
           loading={loading}
           setLoading={setLoading}
           loadEvents={loadEvents}
+          uploading={uploading}
+          setUploading={setUploading}
+          // handleMainImage={handleMainImage}
         />
       </div>
     </div>

@@ -14,9 +14,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 const LeftSidebar = () => {
-  const { user, search } = useSelector((state) => ({ ...state }));
+  const { token, following, followers, matches } = useSelector(
+    (state) => state.user
+  );
+  const { search } = useSelector((state) => ({ ...state }));
   const { text } = search;
-  // const { search } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
   const history = useHistory();
@@ -35,7 +37,7 @@ const LeftSidebar = () => {
 
   return (
     <div className='left-sidebar'>
-      {user && (
+      {token && (
         <div className='imp-links'>
           <Link to='/user/dashboard'>
             <FontAwesomeIcon icon={faNewspaper} className='fa' />
@@ -44,32 +46,17 @@ const LeftSidebar = () => {
           <Link to='/liked-users'>
             <FontAwesomeIcon icon={faFaceGrinHearts} className='fa' />
             People I Like
-            <span>
-              {user &&
-                user.token &&
-                user.following.length > 0 &&
-                user.following.length}
-            </span>
+            <span>{token && following.length > 0 && following.length}</span>
           </Link>
           <Link to='/users-who-like-me'>
             <FontAwesomeIcon icon={faFaceGrinStars} className='fa' />
             People Who Like Me
-            <span>
-              {user &&
-                user.token &&
-                user.followers.length > 0 &&
-                user.followers.length}
-            </span>
+            <span>{token && followers.length > 0 && followers.length}</span>
           </Link>
           <Link to='/my-matches'>
             <FontAwesomeIcon icon={faPeopleArrows} className='fa' />
             My Matches
-            <span>
-              {user &&
-                user.token &&
-                user.matches.length > 0 &&
-                user.matches.length}
-            </span>
+            <span>{token && matches.length > 0 && matches.length}</span>
           </Link>
         </div>
       )}
@@ -87,7 +74,7 @@ const LeftSidebar = () => {
           </div>
           <input type='submit' hidden />
         </form>
-        {user && (
+        {token && (
           <>
             <Link to='/purchase/history'>
               <FontAwesomeIcon icon={faBagShopping} className='fa' />

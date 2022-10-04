@@ -16,11 +16,11 @@ const SubDelete = ({
   setLoading,
   loadSubs,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user);
 
   const deleteSub = async (sub) => {
     setLoading(true);
-    removeSub(sub.slug, user.token)
+    removeSub(sub.slug, token)
       .then((res) => {
         setLoading(false);
         toast.error(`${res.data.name} has been deleted`, {

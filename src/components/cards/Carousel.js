@@ -14,7 +14,8 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const Carousel = () => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user) || {};
+
   SwiperCore.use([Autoplay, Pagination]);
 
   return (
@@ -28,7 +29,7 @@ const Carousel = () => {
           In a few minutes you could make your first encounter. So what are you
           waiting for?
         </h2>
-        {!user ? (
+        {!token ? (
           <Link to='/authentication' className='submit-btn'>
             Join LoveIsInCyprus now
           </Link>

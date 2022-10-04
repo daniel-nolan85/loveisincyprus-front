@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -8,25 +8,22 @@ Modal.setAppElement('#root');
 const Expiring = ({ expiringModalIsOpen, setExpiringModalIsOpen }) => {
   const [daysLeft, setDaysLeft] = useState(0);
 
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token, membership } = useSelector((state) => state.user) || {};
 
   const history = useHistory();
 
-  const isFirstRun = useRef(true);
-
   useEffect(() => {
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      return;
-    } else {
-      const date1 = Date.now();
-      const date2 = new Date(user.membership.expiry);
-      console.log(date2.getTime());
-      const timeDifference = date2.getTime() - date1;
-      const dayDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
-      setDaysLeft(dayDifference);
-    }
-  }, [user && user.token]);
+    membership && token && getDaysLeft();
+  }, [membership && token]);
+
+  const getDaysLeft = () => {
+    const date1 = Date.now();
+    const date2 = new Date(membership.expiry);
+    console.log(date2.getTime());
+    const timeDifference = date2.getTime() - date1;
+    const dayDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
+    setDaysLeft(dayDifference);
+  };
 
   const modalStyles = {
     content: {

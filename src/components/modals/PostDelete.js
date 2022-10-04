@@ -20,21 +20,21 @@ const PostDelete = ({
   // deleteNotif,
   // notifToDelete,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { _id, token } = useSelector((state) => state.user);
 
   const deletePost = async (post) => {
     await axios
       .put(
         `${process.env.REACT_APP_API}/delete-post/${post._id}`,
-        { user, post },
+        { _id, post },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
       .then((res) => {
-        removePoints(3, 'post', user.token);
+        removePoints(3, 'post', token);
         toast.error('Post deleted. 3 points were removed', {
           position: toast.POSITION.TOP_CENTER,
         });

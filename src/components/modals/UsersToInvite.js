@@ -27,7 +27,7 @@ const UsersToInvite = ({
   const [searches, setSearches] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user);
 
   console.log('values => ', values);
 
@@ -46,7 +46,7 @@ const UsersToInvite = ({
 
   const userSearch = async (arg) => {
     console.log('arg => ', arg);
-    fetchUsersByFilter(arg, user.token).then((res) => {
+    fetchUsersByFilter(arg, token).then((res) => {
       const filtered = res.data.filter((u) => u.eventsEligible);
       console.log('res.data => ', res.data);
       console.log('filtered => ', filtered);

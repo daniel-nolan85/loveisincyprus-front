@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Formik, Form } from 'formik';
 import { Input } from './TextFields';
 import * as yup from 'yup';
-import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSpinner,
@@ -10,13 +9,9 @@ import {
   faFloppyDisk,
   faMoneyCheck,
 } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 const PaymentForm = ({ handleSubmit, processing, succeeded, cartTotal }) => {
-  const { user } = useSelector((state) => ({ ...state }));
-
   const validate = yup.object({
     cardHolder: yup.string().required('Please enter your full name'),
     cardNumber: yup.string().required('Please enter your card number'),

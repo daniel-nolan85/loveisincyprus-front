@@ -27,7 +27,7 @@ const IPBlock = () => {
   const [ipToLookup, setIpToLookup] = useState({});
   const [ipToBan, setIpToBan] = useState({});
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user);
 
   const isFirstRun = useRef(true);
 
@@ -41,7 +41,7 @@ const IPBlock = () => {
       isFirstRun.current = false;
       return;
     } else {
-      banIp(ipToBan, user.token)
+      banIp(ipToBan, token)
         .then((res) => {
           setLoading(false);
           setAddress('');
@@ -88,7 +88,7 @@ const IPBlock = () => {
   };
 
   const deleteIp = () => {
-    removeIp(ipToRemove._id, user.token)
+    removeIp(ipToRemove._id, token)
       .then((res) => {
         console.log(res);
         toast.success(`${res.data.ip} has been removed from the blacklist`, {

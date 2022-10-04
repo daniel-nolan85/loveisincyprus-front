@@ -45,6 +45,7 @@ const UserDashboard = () => {
   const [commentToEdit, setCommentToEdit] = useState({});
   const [postOfCommentToEdit, setPostOfCommentToEdit] = useState([]);
   const [followersPosts, setFollowersPosts] = useState(0);
+  const [loadingImg, setLoadingImg] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -250,7 +251,7 @@ const UserDashboard = () => {
     const file = e.target.files[0];
     let formData = new FormData();
     formData.append('image', file);
-    setUploading(true);
+    setLoadingImg(true);
 
     await axios
       .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
@@ -263,11 +264,11 @@ const UserDashboard = () => {
           url: res.data.url,
           public_id: res.data.public_id,
         });
-        setUploading(false);
+        setLoadingImg(false);
       })
       .catch((err) => {
         console.log(err);
-        setUploading(false);
+        setLoadingImg(false);
       });
   };
 
@@ -385,6 +386,7 @@ const UserDashboard = () => {
           uploading={uploading}
           handleImage={handleImage}
           image={image}
+          loadingImg={loadingImg}
         />
         <InfiniteScroll
           dataLength={posts.length}
@@ -430,6 +432,7 @@ const UserDashboard = () => {
           addComment={addComment}
           image={image}
           handleImage={handleImage}
+          loadingImg={loadingImg}
         />
         <Match
           matchModalIsOpen={matchModalIsOpen}

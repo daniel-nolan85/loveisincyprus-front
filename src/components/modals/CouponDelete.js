@@ -16,12 +16,12 @@ const CouponDelete = ({
   setLoading,
   loadCoupons,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user);
 
   const deleteCoupon = async (coupon) => {
     console.log(coupon);
     setLoading(true);
-    removeCoupon(coupon._id, user.token)
+    removeCoupon(coupon._id, token)
       .then((res) => {
         setLoading(false);
         toast.error(`${res.data.name} has been deleted`, {

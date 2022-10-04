@@ -25,22 +25,22 @@ const Posts = () => {
     useState(false);
   const [postOfCommentToDelete, setPostOfCommentToDelete] = useState([]);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { _id, token } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (user && user.token) {
+    if (token) {
       newsFeed();
     }
-  }, [user && user.token]);
+  }, [token]);
 
   const newsFeed = async () => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/posts`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -59,10 +59,10 @@ const Posts = () => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/admin/search-posts/${query}`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )

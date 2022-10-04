@@ -27,7 +27,7 @@ const Sub = () => {
   const [subToEdit, setSubToEdit] = useState({});
   const [query, setQuery] = useState('');
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user);
 
   useEffect(() => {
     loadCategories();
@@ -42,7 +42,7 @@ const Sub = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    createSub({ name, parent: category }, user.token)
+    createSub({ name, parent: category }, token)
       .then((res) => {
         setLoading(false);
         setName('');

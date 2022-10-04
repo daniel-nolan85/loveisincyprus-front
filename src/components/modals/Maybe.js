@@ -7,7 +7,7 @@ import defaultProfile from '../../assets/defaultProfile.png';
 Modal.setAppElement('#root');
 
 const Maybe = ({ maybeModalIsOpen, setMaybeModalIsOpen, post }) => {
-  const { user } = useSelector((state) => ({ ...state }));
+  const { _id } = useSelector((state) => state.user);
 
   const modalStyles = {
     content: {
@@ -35,11 +35,7 @@ const Maybe = ({ maybeModalIsOpen, setMaybeModalIsOpen, post }) => {
           <div className='likes-container' key={m._id}>
             <div className='user-profile'>
               <Link
-                to={
-                  m._id === user._id
-                    ? `/user/profile/${user._id}`
-                    : `/user/${m._id}`
-                }
+                to={m._id === _id ? `/user/profile/${_id}` : `/user/${m._id}`}
               >
                 <img
                   src={m.profileImage ? m.profileImage.url : defaultProfile}
@@ -47,11 +43,7 @@ const Maybe = ({ maybeModalIsOpen, setMaybeModalIsOpen, post }) => {
                 />
               </Link>
               <Link
-                to={
-                  user._id === m._id
-                    ? `/user/profile/${user._id}`
-                    : `/user/${m._id}`
-                }
+                to={_id === m._id ? `/user/profile/${_id}` : `/user/${m._id}`}
               >
                 <p>{m.name ? m.name : m.email.split('@')[0]}</p>
               </Link>

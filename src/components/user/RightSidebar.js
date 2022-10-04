@@ -12,13 +12,13 @@ const RightSidebar = () => {
   const [currentEvent, setCurrentEvent] = useState({});
   const [ads, setAds] = useState([]);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { _id, token, events } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (user && user.token) {
+    if (token) {
       fetchApprovedAds();
     }
-  }, [user && user.token]);
+  }, [token]);
 
   const showEventDetails = (event) => {
     setEventModalIsOpen(true);
@@ -29,10 +29,10 @@ const RightSidebar = () => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/fetch-approved-ads`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -50,8 +50,8 @@ const RightSidebar = () => {
         <h4>Events</h4>
         <Link to='/events'>All Events</Link>
       </div>
-      {user.events &&
-        user.events.map((e) => (
+      {events &&
+        events.map((e) => (
           <div key={e._id}>
             <div className='events'>
               <div className='left-event'>

@@ -23,9 +23,9 @@ const SpendPoints = ({
   pointsEventsModalIsOpen,
   setPointsEventsModalIsOpen,
 }) => {
-  const { user } = useSelector((state) => ({ ...state }));
+  const { featuredMember, eventsEligible } = useSelector((state) => state.user);
 
-  const featuredMember = () => {
+  const becomeFeatured = () => {
     setPointsFeaturedModalIsOpen(true);
   };
 
@@ -65,8 +65,8 @@ const SpendPoints = ({
         <br />
         <button
           className='submit-btn'
-          onClick={featuredMember}
-          disabled={points < 100 || user.featuredMember == true}
+          onClick={becomeFeatured}
+          disabled={points < 100 || featuredMember == true}
         >
           Become a Featured Member
         </button>
@@ -87,7 +87,7 @@ const SpendPoints = ({
         <button
           className='submit-btn'
           onClick={eventInvites}
-          disabled={points < 300 || user.eventsEligible == true}
+          disabled={points < 300 || eventsEligible == true}
         >
           Become eligible for event invites
         </button>

@@ -13,21 +13,20 @@ const Matches = ({ history }) => {
   const [userToUnfollow, setUserToUnfollow] = useState({});
   const [unfollowModalIsOpen, setUnfollowModalIsOpen] = useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token, _id, following } = useSelector((state) => state.user);
 
   useEffect(() => {
-    console.log(user);
-    if (user && user.token) fetchMatches();
-  }, [user && user.token]);
+    if (token) fetchMatches();
+  }, [token]);
 
   const fetchMatches = async () => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/my-matches`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -66,7 +65,7 @@ const Matches = ({ history }) => {
               }}
               onClick={() => history.push(`/user/${u._id}`)}
             >
-              {user.following.includes(u._id) ? (
+              {following.includes(u._id) ? (
                 <>
                   <FontAwesomeIcon
                     icon={faHeart}

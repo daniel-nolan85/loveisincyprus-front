@@ -16,7 +16,9 @@ import { toast } from 'react-toastify';
 const SettingsMenu = ({ settingsMenu, setSettingsMenu, logout }) => {
   const [darkMode, setDarkMode] = useState(false);
 
-  let { user } = useSelector((state) => ({ ...state }));
+  let { _id, name, email, profileImage, role } = useSelector(
+    (state) => state.user
+  );
 
   let dispatch = useDispatch();
 
@@ -57,19 +59,17 @@ const SettingsMenu = ({ settingsMenu, setSettingsMenu, logout }) => {
         <span />
       </div>
       <div className='settings-menu-inner'>
-        <Link to={`/user/profile/${user._id}`}>
+        <Link to={`/user/profile/${_id}`}>
           <div className='user-profile' onClick={() => setSettingsMenu(false)}>
             <img
-              src={user.profileImage ? user.profileImage.url : defaultProfile}
-              alt={`${user.name || user.email.split('@')[0]}'s profile picture`}
+              src={profileImage ? profileImage.url : defaultProfile}
+              alt={`${name || email.split('@')[0]}'s profile picture`}
             />
-            <div>
-              {user.name ? user.name : user.email && user.email.split('@')[0]}
-            </div>
+            <div>{name ? name : email && email.split('@')[0]}</div>
           </div>
         </Link>
         <hr />
-        {user.role === 'admin' && (
+        {role === 'admin' && (
           <div
             className='settings-links'
             onClick={() => setSettingsMenu(false)}

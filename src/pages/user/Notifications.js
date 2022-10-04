@@ -37,6 +37,7 @@ const Notifications = () => {
   const [postOfCommentToEdit, setPostOfCommentToEdit] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [loadingImg, setLoadingImg] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -210,7 +211,7 @@ const Notifications = () => {
     const file = e.target.files[0];
     let formData = new FormData();
     formData.append('image', file);
-    setUploading(true);
+    setLoadingImg(true);
 
     await axios
       .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
@@ -223,11 +224,11 @@ const Notifications = () => {
           url: res.data.url,
           public_id: res.data.public_id,
         });
-        setUploading(false);
+        setLoadingImg(false);
       })
       .catch((err) => {
         console.log(err);
-        setUploading(false);
+        setLoadingImg(false);
       });
   };
 
@@ -456,6 +457,7 @@ const Notifications = () => {
           addComment={addComment}
           image={image}
           handleImage={handleImage}
+          loadingImg={loadingImg}
         />
         <NotifPost
           notifModalIsOpen={notifModalIsOpen}

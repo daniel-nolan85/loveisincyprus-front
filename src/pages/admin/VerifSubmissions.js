@@ -25,22 +25,22 @@ const VerifSubmissions = () => {
   const [currentVerif, setCurrentVerif] = useState({});
   const [reason, setReason] = useState('');
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token, _id } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (user && user.token) {
+    if (token) {
       fetchVerifs();
     }
-  }, [user && user.token]);
+  }, [token]);
 
   const fetchVerifs = async () => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/fetch-verifs`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -75,8 +75,8 @@ const VerifSubmissions = () => {
                   <div className='user-profile'>
                     <Link
                       to={
-                        user._id === verif.postedBy._id
-                          ? `/user/profile/${user._id}`
+                        _id === verif.postedBy._id
+                          ? `/user/profile/${_id}`
                           : `/user/${verif.postedBy._id}`
                       }
                     >
@@ -95,8 +95,8 @@ const VerifSubmissions = () => {
                     <div>
                       <Link
                         to={
-                          user._id === verif.postedBy._id
-                            ? `/user/profile/${user._id}`
+                          _id === verif.postedBy._id
+                            ? `/user/profile/${_id}`
                             : `/user/${verif.postedBy._id}`
                         }
                       >

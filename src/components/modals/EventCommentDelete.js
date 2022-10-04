@@ -14,16 +14,16 @@ const EventCommentDelete = ({
   fetchEvent,
   setCommentsModalIsOpen,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token, _id } = useSelector((state) => state.user);
 
   const deleteComment = async (postId, comment) => {
     await axios
       .put(
         `${process.env.REACT_APP_API}/remove-event-comment`,
-        { postId, comment, user },
+        { postId, comment, _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )

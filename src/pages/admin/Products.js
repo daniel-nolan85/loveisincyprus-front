@@ -48,7 +48,7 @@ const Product = () => {
   const [productToEdit, setProductToEdit] = useState({});
   const [query, setQuery] = useState('');
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user);
 
   useEffect(() => {
     loadCategories();
@@ -72,7 +72,7 @@ const Product = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    createProduct(values, user.token)
+    createProduct(values, token)
       .then((res) => {
         console.log(res);
         setLoading(false);

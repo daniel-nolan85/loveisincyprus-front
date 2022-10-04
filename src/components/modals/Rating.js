@@ -9,13 +9,13 @@ import { useHistory, useParams } from 'react-router-dom';
 const Rating = ({ children }) => {
   const [ratingModalIsOpen, setRatingModalIsOpen] = useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user) || {};
 
   const history = useHistory();
   const { slug } = useParams();
 
   const handleModal = () => {
-    if (user && user.token) {
+    if (token) {
       setRatingModalIsOpen(true);
     } else {
       history.push({
@@ -31,7 +31,7 @@ const Rating = ({ children }) => {
         <div className='tooltip'>
           <FontAwesomeIcon icon={faStar} className='fa star' />,
           <span className='tooltip-text'>
-            {user ? 'Leave a Rating' : 'Login to Leave a Rating'}
+            {token ? 'Leave a Rating' : 'Login to Leave a Rating'}
           </span>
         </div>
       </div>

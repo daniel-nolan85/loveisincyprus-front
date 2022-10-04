@@ -34,7 +34,7 @@ const AdSubmissions = () => {
   const [payable, setPayable] = useState('');
   const [userAgent, setUserAgent] = useState('');
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user);
 
   const isFirstRun = useRef(true);
 
@@ -105,43 +105,39 @@ const AdSubmissions = () => {
   const runPayment = async (ad) => {
     console.log('running => ', ad);
     setProcessing(true);
-    createAdPayment(
-      ad.accountInfo,
-      payable,
-      userAgent,
-      user.token,
-      ad._id
-    ).then((res) => {
-      console.log('create payment', res.data);
-      if (res.data.errors) {
-        toast.error(res.data.errors[0].message, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setProcessing(false);
+    createAdPayment(ad.accountInfo, payable, userAgent, token, ad._id).then(
+      (res) => {
+        console.log('create payment', res.data);
+        if (res.data.errors) {
+          toast.error(res.data.errors[0].message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+        }
+        if (res.data.status === 'approved') {
+          toast.success(`Payment successful.`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+          setSucceeded(true);
+          setPayable('');
+          setUserAgent('');
+          fetchAds();
+        }
+        if (res.data.status === 'pending') {
+          toast.warning(`Payment pending.`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+        }
+        if (res.data.status === 'declined') {
+          toast.error(`Payment declined.`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+        }
       }
-      if (res.data.status === 'approved') {
-        toast.success(`Payment successful.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setProcessing(false);
-        setSucceeded(true);
-        setPayable('');
-        setUserAgent('');
-        fetchAds();
-      }
-      if (res.data.status === 'pending') {
-        toast.warning(`Payment pending.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setProcessing(false);
-      }
-      if (res.data.status === 'declined') {
-        toast.error(`Payment declined.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setProcessing(false);
-      }
-    });
+    );
   };
 
   return (

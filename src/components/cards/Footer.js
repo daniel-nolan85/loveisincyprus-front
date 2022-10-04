@@ -9,12 +9,12 @@ import {
 } from '@fortawesome/free-brands-svg-icons';
 
 const Footer = () => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user) || {};
 
   return (
     <div className='footer'>
       <div className='footer-overlay'>
-        {!user ? (
+        {!token ? (
           <>
             <h1>Sign up to LoveIsInCyprus now and find your partner</h1>
             <Link to='/authentication' className='submit-btn'>

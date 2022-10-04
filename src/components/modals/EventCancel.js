@@ -16,11 +16,11 @@ const EventCancel = ({
   setLoading,
   loadEvents,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user);
 
   const abandonEvent = async (event) => {
     setLoading(true);
-    cancelEvent(event._id, user.token)
+    cancelEvent(event._id, token)
       .then((res) => {
         setLoading(false);
         toast.error(`${res.data.name} has been cancelled`, {

@@ -116,6 +116,8 @@ const ProfileUpdate = ({
   setSexLikes,
   sexFrequency,
   setSexFrequency,
+  loadingProfileImg,
+  loadingCoverImg,
 }) => {
   const [showAboutMe, setShowAboutMe] = useState(true);
   const [showBackground, setShowBackground] = useState(false);
@@ -204,36 +206,56 @@ const ProfileUpdate = ({
     showAboutMe && (
       <>
         <div className='add-post-links update-form'>
-          <label>
-            <small>Cover Image: </small>
-            {coverImage && coverImage.url ? (
-              <img src={coverImage.url} />
-            ) : (
-              <FontAwesomeIcon icon={faCamera} className='fa'></FontAwesomeIcon>
-            )}
-            <input
-              onChange={handleCoverImage}
-              type='file'
-              accept='images/*'
-              hidden
-            />
-          </label>
+          {loadingCoverImg ? (
+            <label>
+              <small>Cover Image: </small>
+              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+            </label>
+          ) : (
+            <label>
+              <small>Cover Image: </small>
+              {coverImage && coverImage.url ? (
+                <img src={coverImage.url} />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faCamera}
+                  className='fa'
+                ></FontAwesomeIcon>
+              )}
+              <input
+                onChange={handleCoverImage}
+                type='file'
+                accept='images/*'
+                hidden
+              />
+            </label>
+          )}
         </div>
         <div className='add-post-links update-form'>
-          <label>
-            <small>Profile Image: </small>
-            {profileImage && profileImage.url ? (
-              <img src={profileImage.url} />
-            ) : (
-              <FontAwesomeIcon icon={faCamera} className='fa'></FontAwesomeIcon>
-            )}
-            <input
-              onChange={handleProfileImage}
-              type='file'
-              accept='images/*'
-              hidden
-            />
-          </label>
+          {loadingProfileImg ? (
+            <label>
+              <small>Profile Image: </small>
+              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+            </label>
+          ) : (
+            <label>
+              <small>Profile Image: </small>
+              {profileImage && profileImage.url ? (
+                <img src={profileImage.url} />
+              ) : (
+                <FontAwesomeIcon
+                  icon={faCamera}
+                  className='fa'
+                ></FontAwesomeIcon>
+              )}
+              <input
+                onChange={handleProfileImage}
+                type='file'
+                accept='images/*'
+                hidden
+              />
+            </label>
+          )}
         </div>
       </>
     );

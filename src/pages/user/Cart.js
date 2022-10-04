@@ -5,7 +5,8 @@ import ProductInCheckout from '../../components/cards/ProductInCheckout';
 import { userCart } from '../../functions/user';
 
 const Cart = ({ history }) => {
-  const { user, cart } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user) || {};
+  const { cart } = useSelector((state) => ({ ...state }));
 
   const showCartItems = () => (
     <table>
@@ -29,7 +30,7 @@ const Cart = ({ history }) => {
   };
 
   const saveOrderToDb = () => {
-    userCart(cart, user.token)
+    userCart(cart, token)
       .then((res) => {
         console.log('CART POST RES', res);
         if (res.data.ok) history.push('/checkout');
@@ -65,7 +66,7 @@ const Cart = ({ history }) => {
               </tbody>
             </table>
           </div>
-          {user ? (
+          {token ? (
             <button
               onClick={saveOrderToDb}
               type='submit'

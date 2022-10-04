@@ -11,16 +11,11 @@ import { Link } from 'react-router-dom';
 import { Card } from 'antd';
 import { showAverage } from '../../functions/rating';
 import _ from 'lodash';
-import { useSelector, useDispatch } from 'react-redux';
 
 const { Meta } = Card;
 
 const UserInfo = ({ u }) => {
-  const { user } = useSelector((state) => ({ ...state }));
-
   // console.log(u);
-
-  const dispatch = useDispatch();
 
   const { _id, name, email, profileImage, age, about } = u;
 

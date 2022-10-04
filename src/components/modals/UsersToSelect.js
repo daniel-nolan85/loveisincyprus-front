@@ -27,7 +27,7 @@ const UsersToSelect = ({
   const [searches, setSearches] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user);
 
   useEffect(() => {
     fetchSearches();
@@ -43,7 +43,7 @@ const UsersToSelect = ({
 
   const userSearch = async (arg) => {
     console.log('arg => ', arg);
-    fetchUsersByFilter(arg, user.token).then((res) => {
+    fetchUsersByFilter(arg, token).then((res) => {
       const filtered = res.data.filter((u) => u.optIn);
       filtered.map((u) => {
         setValues((prevValues) => ({

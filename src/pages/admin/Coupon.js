@@ -33,7 +33,7 @@ const Coupon = () => {
   const [couponEditModalIsOpen, setCouponEditModalIsOpen] = useState(false);
   const [couponToEdit, setCouponToEdit] = useState({});
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user);
 
   useEffect(() => {
     loadCoupons();
@@ -44,7 +44,7 @@ const Coupon = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    createCoupon({ name, expiry, discount }, user.token)
+    createCoupon({ name, expiry, discount }, token)
       .then((res) => {
         setLoading(false);
         setName('');
@@ -106,7 +106,10 @@ const Coupon = () => {
         <DatePicker
           selected={new Date()}
           value={expiry}
-          onChange={(date) => setExpiry(date)}
+          onChange={(date) => {
+            console.log('date => ', date);
+            setExpiry(date);
+          }}
           dateFormat='dd/MM/yyyy'
           minDate={new Date('01-01-1900')}
           showMonthDropdown

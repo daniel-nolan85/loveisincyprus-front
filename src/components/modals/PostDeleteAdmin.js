@@ -13,16 +13,16 @@ const PostDelete = ({
   newsFeed,
   fetchUserPosts,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { _id, token } = useSelector((state) => state.user);
 
   const deletePost = async (post) => {
     await axios
       .put(
         `${process.env.REACT_APP_API}/admin/delete-post/${post._id}`,
-        { user, post },
+        { _id, post },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )

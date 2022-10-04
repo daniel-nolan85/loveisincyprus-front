@@ -21,7 +21,7 @@ const Login = () => {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user) || {};
 
   let dispatch = useDispatch();
   let history = useHistory();
@@ -31,9 +31,9 @@ const Login = () => {
     if (intended) {
       return;
     } else {
-      if (user && user.token) history.push('/');
+      if (token) history.push('/');
     }
-  }, [user, history]);
+  }, [token, history]);
 
   const roleBasedRedirect = (res) => {
     if (intended) {

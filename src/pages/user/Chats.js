@@ -35,7 +35,7 @@ const Chats = ({ history }) => {
   // const [isTyping, setIsTyping] = useState(false);
   const [lastMessage, setLastMessage] = useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { _id, token } = useSelector((state) => state.user);
 
   const isFirstRun = useRef(true);
 
@@ -56,11 +56,11 @@ const Chats = ({ history }) => {
 
   useEffect(() => {
     // console.log(user);
-    if (user && user.token) {
+    if (token) {
       fetchChats();
       fetchMatches();
     }
-  }, [user && user.token]);
+  }, [token]);
 
   useEffect(() => {
     fetchMessages();
@@ -82,7 +82,7 @@ const Chats = ({ history }) => {
     });
     const usersToSort = [];
     chats.map((c) => {
-      usersToSort.push(c.users.filter((u) => u._id !== user._id));
+      usersToSort.push(c.users.filter((u) => u._id !== _id));
     });
     var sorted = [].concat.apply([], usersToSort);
     setUsers(sorted);
@@ -117,10 +117,10 @@ const Chats = ({ history }) => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/my-matches`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -138,10 +138,10 @@ const Chats = ({ history }) => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/access-chat`,
-        { user, u },
+        { _id, u },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -162,10 +162,10 @@ const Chats = ({ history }) => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/fetch-chats`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -188,7 +188,7 @@ const Chats = ({ history }) => {
       await axios
         .get(`${process.env.REACT_APP_API}/chats/${selectedChat._id}`, {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         })
         .then((res) => {
@@ -216,10 +216,10 @@ const Chats = ({ history }) => {
         await axios
           .post(
             `${process.env.REACT_APP_API}/send-message`,
-            { user, content: newMessage, chatId: selectedChat._id },
+            { _id, content: newMessage, chatId: selectedChat._id },
             {
               headers: {
-                authtoken: user.token,
+                authtoken: token,
               },
             }
           )
@@ -269,7 +269,7 @@ const Chats = ({ history }) => {
   };
 
   const otherUser =
-    selectedChat && selectedChat.users.filter((u) => u._id !== user._id);
+    selectedChat && selectedChat.users.filter((u) => u._id !== _id);
 
   return (
     <div className='main'>
@@ -367,8 +367,8 @@ const Chats = ({ history }) => {
             {messages &&
               messages.map((m, i, { length }) => (
                 <div className='message-sender' key={m._id}>
-                  {(isSameSender(messages, m, i, user._id) ||
-                    isLastMessage(messages, i, user._id)) && (
+                  {(isSameSender(messages, m, i, _id) ||
+                    isLastMessage(messages, i, _id)) && (
                     <div className='message-sender-avatar'>
                       <img
                         src={
@@ -386,10 +386,10 @@ const Chats = ({ history }) => {
                     className='message-sender-message'
                     style={{
                       backgroundColor: `${
-                        m.sender._id === user._id ? '#bee3f8' : '#b9f5d0'
+                        m.sender._id === _id ? '#bee3f8' : '#b9f5d0'
                       }`,
-                      marginLeft: isSameSenderMargin(messages, m, i, user._id),
-                      marginTop: isSameUser(messages, m, i, user._id) ? 3 : 10,
+                      marginLeft: isSameSenderMargin(messages, m, i, _id),
+                      marginTop: isSameUser(messages, m, i, _id) ? 3 : 10,
                     }}
                   >
                     {i + 1 === length ? (

@@ -14,7 +14,7 @@ const FeaturedMembers = () => {
   const [featuredMembers, setFeaturedMembers] = useState([]);
   SwiperCore.use([Autoplay, EffectCoverflow]);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token, _id } = useSelector((state) => state.user) || {};
 
   useEffect(() => {
     fetchFeaturedMembers();
@@ -55,13 +55,9 @@ const FeaturedMembers = () => {
         {featuredMembers &&
           featuredMembers.map((f) => (
             <SwiperSlide key={f._id}>
-              {user ? (
+              {token ? (
                 <Link
-                  to={
-                    user._id === f._id
-                      ? `/user/profile/${user._id}`
-                      : `/user/${f._id}`
-                  }
+                  to={_id === f._id ? `/user/profile/${_id}` : `/user/${f._id}`}
                 >
                   <img
                     src={f.profileImage ? f.profileImage.url : defaultProfile}

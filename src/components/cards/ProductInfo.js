@@ -16,7 +16,7 @@ import { useSelector, useDispatch } from 'react-redux';
 const { Meta } = Card;
 
 const ProductInfo = ({ product, wishlist, handleRemove }) => {
-  const { user, cart } = useSelector((state) => ({ ...state }));
+  const { cart } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
 

@@ -9,7 +9,7 @@ import { ChatState } from '../../context/ChatProvider';
 Modal.setAppElement('#root');
 
 const Popup = ({ popupModalIsOpen, setPopupModalIsOpen }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token, _id } = useSelector((state) => state.user) || {};
 
   const { setModalIsOpen, setPointsQuestionsModalIsOpen } = ChatState();
 
@@ -54,16 +54,16 @@ const Popup = ({ popupModalIsOpen, setPopupModalIsOpen }) => {
           exciting ways.
         </h2>
         <br />
-        {user && (
+        {token && (
           <>
             <p
               onClick={() => {
                 if (
                   window.location.href !==
-                  `${process.env.REACT_APP_POPUP}/user/profile/${user._id}`
+                  `${process.env.REACT_APP_POPUP}/user/profile/${_id}`
                 ) {
                   history.push({
-                    pathname: `/user/profile/${user._id}`,
+                    pathname: `/user/profile/${_id}`,
                     state: { clickedfromPopup: true },
                   });
                 } else {

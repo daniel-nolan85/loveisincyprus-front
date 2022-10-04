@@ -18,20 +18,21 @@ const PostForm = ({
   handleImage,
   image,
   update,
+  loadingImg,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { _id, profileImage, name, email } = useSelector((state) => state.user);
 
   return (
     <div className='write-post-container'>
       <div className='user-profile'>
-        <Link to={`/user/profile/${user._id}`}>
+        <Link to={`/user/profile/${_id}`}>
           <img
-            src={user.profileImage ? user.profileImage.url : defaultProfile}
-            alt={`${user.name || user.email.split('@')[0]}'s profile picture`}
+            src={profileImage ? profileImage.url : defaultProfile}
+            alt={`${name || email.split('@')[0]}'s profile picture`}
           />
         </Link>
-        <Link to={`/user/profile/${user._id}`}>
-          <p>{user.name || (user.email && user.email.split('@')[0])}</p>
+        <Link to={`/user/profile/${_id}`}>
+          <p>{name || (email && email.split('@')[0])}</p>
         </Link>
       </div>
       <div className='post-input-container'>
@@ -40,27 +41,29 @@ const PostForm = ({
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder={`What's on your mind, ${
-              user.name
-                ? user.name.split(' ')[0]
-                : user.email && user.email.split('@')[0]
+              name ? name.split(' ')[0] : email && email.split('@')[0]
             }?`}
           />
         </form>
         <div className='write-post-footer'>
           <div className='add-post-links'>
-            <label>
-              {image && image.url ? (
-                <img src={image.url} />
-              ) : (
-                <FontAwesomeIcon icon={faCamera} className='fa' />
-              )}
-              <input
-                onChange={handleImage}
-                type='file'
-                accept='images/*'
-                hidden
-              />
-            </label>
+            {loadingImg ? (
+              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+            ) : (
+              <label>
+                {image && image.url ? (
+                  <img src={image.url} />
+                ) : (
+                  <FontAwesomeIcon icon={faCamera} className='fa' />
+                )}
+                <input
+                  onChange={handleImage}
+                  type='file'
+                  accept='images/*'
+                  hidden
+                />
+              </label>
+            )}
           </div>
           <button
             onClick={postSubmit}

@@ -11,15 +11,12 @@ import {
   faUndo,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
 import ReCaptchaV2 from 'react-google-recaptcha';
 
 const ContactForm = () => {
   const [loading, setLoading] = useState(false);
   const [token, setToken] = useState(null);
   const [human, setHuman] = useState(false);
-
-  const { user } = useSelector((state) => ({ ...state }));
 
   const validate = yup.object({
     name: yup.string().required('Please enter your name'),

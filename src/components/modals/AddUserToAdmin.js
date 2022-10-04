@@ -12,16 +12,16 @@ const AddUserToAdmin = ({
   userToAddToAdmin,
   fetchUsers,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user);
 
   const addToAdmin = async (u) => {
     await axios
       .put(
         `${process.env.REACT_APP_API}/admin/add-user-to-admin`,
-        { u, user },
+        { u },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )

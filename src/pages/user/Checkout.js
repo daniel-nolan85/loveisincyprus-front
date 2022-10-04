@@ -32,14 +32,14 @@ const Checkout = ({ history }) => {
   const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
   const [discountError, setDiscountError] = useState('');
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
   const isFirstRun = useRef(true);
 
   useEffect(() => {
-    getUserCart(user.token).then((res) => {
+    getUserCart(token).then((res) => {
       // console.log('user cart res => ', JSON.stringify(res.data, null, 4));
       setProducts(res.data.products);
       setTotal(res.data.cartTotal);
@@ -51,7 +51,7 @@ const Checkout = ({ history }) => {
       isFirstRun.current = false;
       return;
     } else {
-      saveUserAddress(address, user.token).then((res) => {
+      saveUserAddress(address, token).then((res) => {
         if (res.data.ok) {
           setAddressSaved(true);
           toast.success(`Your address has been saved.`, {
@@ -157,7 +157,7 @@ const Checkout = ({ history }) => {
 
   const applyCoupon = (e) => {
     e.preventDefault();
-    applyUserCoupon(coupon, user.token).then((res) => {
+    applyUserCoupon(coupon, token).then((res) => {
       console.log('response on coupon applied', res.data);
       if (res.data) {
         setTotalAfterDiscount(res.data);
@@ -190,7 +190,7 @@ const Checkout = ({ history }) => {
       type: 'ADD_TO_CART',
       payload: [],
     });
-    emptyUserCart(user.token).then((res) => {
+    emptyUserCart(token).then((res) => {
       setProducts([]);
       setTotal(0);
       setTotalAfterDiscount(0);

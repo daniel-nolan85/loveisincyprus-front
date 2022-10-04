@@ -1,15 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import Modal from 'react-modal';
-import defaultProfile from '../../assets/defaultProfile.png';
-import { useSelector } from 'react-redux';
-import axios from 'axios';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSpinner,
-  faArrowsLeftRight,
-  faCaretUp,
-  faCaretDown,
-} from '@fortawesome/free-solid-svg-icons';
 
 Modal.setAppElement('#root');
 
@@ -18,11 +8,6 @@ const ProfileProgress = ({
   setProgressModalIsOpen,
   progress,
 }) => {
-  const { user } = useSelector((state) => ({ ...state }));
-
-  // console.log('user => ', user);
-  // console.log('progress => ', progress);
-
   const modalStyles = {
     content: {
       position: 'fixed',

@@ -30,7 +30,7 @@ const Category = () => {
   const [categoryToEdit, setCategoryToEdit] = useState({});
   const [query, setQuery] = useState('');
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user);
 
   useEffect(() => {
     loadCategories();
@@ -42,7 +42,7 @@ const Category = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    createCategory({ name }, user.token)
+    createCategory({ name }, token)
       .then((res) => {
         setLoading(false);
         setName('');

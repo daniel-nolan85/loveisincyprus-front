@@ -22,12 +22,12 @@ const SubEdit = ({
   const [name, setName] = useState(subToEdit.name);
   const [parent, setParent] = useState(subToEdit.parent);
 
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user);
 
   const editSub = async (e, sub) => {
     e.preventDefault();
     setLoading(true);
-    updateSub(sub.slug, { name, parent: category }, user.token)
+    updateSub(sub.slug, { name, parent: category }, token)
       .then((res) => {
         setLoading(false);
         toast.success(`${res.data.name} has been updated`, {

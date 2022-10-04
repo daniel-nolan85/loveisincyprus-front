@@ -15,7 +15,7 @@ const GeoBlock = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [locations, setLocations] = useState([]);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token, _id } = useSelector((state) => state.user);
 
   useEffect(() => {
     fetchLocations();
@@ -25,10 +25,10 @@ const GeoBlock = () => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/admin/fetch-locations`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -45,10 +45,10 @@ const GeoBlock = () => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/admin/search-locations`,
-        { user, query },
+        { _id, query },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -98,10 +98,10 @@ const GeoBlock = () => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/admin/handle-whitelist`,
-        { user, l },
+        { _id, l },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )

@@ -16,17 +16,17 @@ const AdApprove = ({
   loading,
   setLoading,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user);
 
   const approveAd = async (ad) => {
     setLoading(true);
     await axios
       .put(
         `${process.env.REACT_APP_API}/approve-ad`,
-        { user, ad },
+        { ad },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )

@@ -38,7 +38,7 @@ const ProductEdit = ({
   const [categories, setCategories] = useState([]);
   const [arrayOfSubs, setArrayOfSubs] = useState([]);
 
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user);
 
   const isFirstRun = useRef(true);
 
@@ -76,7 +76,7 @@ const ProductEdit = ({
 
     values.subs = arrayOfSubs;
 
-    updateProduct(productToEdit, values, user.token)
+    updateProduct(productToEdit, values, token)
       .then((res) => {
         setLoading(false);
         toast.success(`${res.data.title} has been updated`, {

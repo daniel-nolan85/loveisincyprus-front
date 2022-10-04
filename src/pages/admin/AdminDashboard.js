@@ -15,16 +15,16 @@ import defaultProfile from '../../assets/defaultProfile.png';
 const AdminDashboard = () => {
   const [recentUsers, setRecentUsers] = useState([]);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { _id, token } = useSelector((state) => state.user);
 
   useEffect(() => {
     axios
       .post(
         `${process.env.REACT_APP_API}/recent-users`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -164,8 +164,8 @@ const AdminDashboard = () => {
                       <td>
                         <Link
                           to={
-                            u._id === user._id
-                              ? `/user/profile/${user._id}`
+                            u._id === _id
+                              ? `/user/profile/${_id}`
                               : `/user/${u._id}`
                           }
                         >
@@ -184,8 +184,8 @@ const AdminDashboard = () => {
                       <td>
                         <Link
                           to={
-                            u._id === user._id
-                              ? `/user/profile/${user._id}`
+                            u._id === _id
+                              ? `/user/profile/${_id}`
                               : `/user/${u._id}`
                           }
                         >

@@ -1,8 +1,5 @@
 import React from 'react';
 import Modal from 'react-modal';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import defaultProfile from '../../assets/defaultProfile.png';
 
 Modal.setAppElement('#root');
 
@@ -12,8 +9,6 @@ const AdPreview = ({
   content,
   image,
 }) => {
-  const { user } = useSelector((state) => ({ ...state }));
-
   const modalStyles = {
     content: {
       top: '50%',

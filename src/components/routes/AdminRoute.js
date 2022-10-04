@@ -6,11 +6,11 @@ import { currentAdmin } from '../../functions/auth';
 const AdminRoute = ({ children, ...rest }) => {
   const [ok, setOk] = useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user) || {};
 
   useEffect(() => {
-    if (user && user.token) {
-      currentAdmin(user.token)
+    if (token) {
+      currentAdmin(token)
         .then((res) => {
           setOk(true);
         })
@@ -19,7 +19,7 @@ const AdminRoute = ({ children, ...rest }) => {
           setOk(false);
         });
     }
-  }, [user]);
+  }, [token]);
 
   return ok && <Route {...rest} />;
 };

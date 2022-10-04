@@ -15,16 +15,16 @@ const CommentDeleteAdmin = ({
   setCommentsModalIsOpen,
   fetchUserPosts,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user);
 
   const deleteComment = async (postId, comment) => {
     await axios
       .put(
         `${process.env.REACT_APP_API}/admin-remove-comment`,
-        { postId, comment, user },
+        { postId, comment },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )

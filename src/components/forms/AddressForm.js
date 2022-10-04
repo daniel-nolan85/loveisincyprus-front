@@ -9,13 +9,9 @@ import {
   faUndo,
   faFloppyDisk,
 } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
 
 const AddressForm = ({ address, saveAddressToDb }) => {
   const [loading, setLoading] = useState(false);
-
-  const { user } = useSelector((state) => ({ ...state }));
 
   const validate = yup.object({
     firstLine: yup

@@ -19,6 +19,8 @@ const Verify = ({
   setUploading,
   verifImg,
   setVerifImg,
+  loadingImg,
+  setLoadingImg,
 }) => {
   let { user } = useSelector((state) => ({ ...state }));
 
@@ -28,7 +30,7 @@ const Verify = ({
     const file = e.target.files[0];
     let formData = new FormData();
     formData.append('image', file);
-    setUploading(true);
+    setLoadingImg(true);
 
     await axios
       .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
@@ -41,11 +43,11 @@ const Verify = ({
           url: res.data.url,
           public_id: res.data.public_id,
         });
-        setUploading(false);
+        setLoadingImg(false);
       })
       .catch((err) => {
         console.log(err);
-        setUploading(false);
+        setLoadingImg(false);
       });
   };
 
@@ -132,19 +134,23 @@ const Verify = ({
         <br />
         <div>
           <div>
-            <label className='verif-upload'>
-              {verifImg && verifImg.url ? (
-                <img src={verifImg.url} />
-              ) : (
-                <FontAwesomeIcon icon={faCamera} className='fa' />
-              )}
-              <input
-                onChange={handleImage}
-                type='file'
-                accept='images/*'
-                hidden
-              />
-            </label>
+            {loadingImg ? (
+              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+            ) : (
+              <label className='verif-upload'>
+                {verifImg && verifImg.url ? (
+                  <img src={verifImg.url} />
+                ) : (
+                  <FontAwesomeIcon icon={faCamera} className='fa' />
+                )}
+                <input
+                  onChange={handleImage}
+                  type='file'
+                  accept='images/*'
+                  hidden
+                />
+              </label>
+            )}
           </div>
           <button
             onClick={getVerified}

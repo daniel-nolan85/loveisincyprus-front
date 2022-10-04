@@ -3,8 +3,13 @@ import Modal from 'react-modal';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import {
+  faSpinner,
+  faPaperPlane,
+  faCamera,
+} from '@fortawesome/free-solid-svg-icons';
 import { getEvent } from '../../functions/event';
+import axios from 'axios';
 
 Modal.setAppElement('#root');
 
@@ -24,10 +29,13 @@ const EventEdit = ({
   loading,
   setLoading,
   loadEvents,
+  uploading,
+  setUploading,
+  // handleMainImage,
 }) => {
   const [values, setValues] = useState(initialState);
 
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user);
 
   useEffect(() => {
     loadEvent();
@@ -40,10 +48,40 @@ const EventEdit = ({
     });
   };
 
+  const handleMainImage = async (e) => {
+    const file = e.target.files[0];
+    let formData = new FormData();
+    formData.append('image', file);
+    setUploading(true);
+
+    await axios
+      .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
+        headers: {
+          authtoken: token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        // setMainImage({
+        //   url: res.data.url,
+        //   public_id: res.data.public_id,
+        // });
+        setValues({
+          ...values,
+          mainImage: { url: res.data.url, public_id: res.data.public_id },
+        });
+        setUploading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setUploading(false);
+      });
+  };
+
   const editEvent = async (e) => {
     e.preventDefault();
     setLoading(true);
-    updateEvent(values, user.token)
+    updateEvent(values, token)
       .then((res) => {
         console.log(res.data);
         setLoading(false);
@@ -68,7 +106,7 @@ const EventEdit = ({
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const { name, location, when, notes, invitees } = values;
+  const { mainImage, name, location, when, notes, invitees } = values;
 
   const eventForm = () => (
     <div className='form-box event update'>
@@ -76,6 +114,23 @@ const EventEdit = ({
         <p className='form-header'>Update Event</p>
       </div>
       <form>
+        <div className='add-post-links'>
+          <label>
+            {uploading ? (
+              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+            ) : mainImage && mainImage.url ? (
+              <img src={mainImage.url} />
+            ) : (
+              <FontAwesomeIcon icon={faCamera} className='fa' />
+            )}
+            <input
+              onChange={handleMainImage}
+              type='file'
+              accept='images/*'
+              hidden
+            />
+          </label>
+        </div>
         <input
           type='text'
           name='name'

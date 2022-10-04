@@ -12,16 +12,16 @@ const RemoveUserFromFeaturedMembers = ({
   userToRemoveFromFeaturedMembers,
   fetchUsers,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { token } = useSelector((state) => state.user);
 
   const removeFromFeaturedMembers = async (u) => {
     await axios
       .put(
         `${process.env.REACT_APP_API}/admin/remove-user-from-featured-members`,
-        { u, user },
+        { u },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )

@@ -42,22 +42,22 @@ const Users = () => {
     setRemoveFromFeaturedMembersModalIsOpen,
   ] = useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token, _id } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (user && user.token) {
+    if (token) {
       fetchUsers();
     }
-  }, [user && user.token]);
+  }, [token]);
 
   const fetchUsers = async () => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/users`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -76,10 +76,10 @@ const Users = () => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/admin/search-users/${query}`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -144,11 +144,7 @@ const Users = () => {
             users.map((u) => (
               <div className='admin-card' key={u._id}>
                 <Link
-                  to={
-                    user._id === u._id
-                      ? `/user/profile/${user._id}`
-                      : `/user/${u._id}`
-                  }
+                  to={_id === u._id ? `/user/profile/${_id}` : `/user/${u._id}`}
                 >
                   <img
                     src={u.profileImage ? u.profileImage.url : defaultProfile}
@@ -157,11 +153,7 @@ const Users = () => {
                   />
                 </Link>
                 <Link
-                  to={
-                    user._id === u._id
-                      ? `/user/profile/${user._id}`
-                      : `/user/${u._id}`
-                  }
+                  to={_id === u._id ? `/user/profile/${_id}` : `/user/${u._id}`}
                 >
                   <p>{u.name || u.email.split('@')[0]}</p>
                 </Link>

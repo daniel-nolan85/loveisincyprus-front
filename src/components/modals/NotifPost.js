@@ -70,7 +70,9 @@ const NotifPost = ({
   const [maybeModalIsOpen, setMaybeModalIsOpen] = useState(false);
   const [declinedModalIsOpen, setDeclinedModalIsOpen] = useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token, _id, name, email, profileImage } = useSelector(
+    (state) => state.user
+  );
 
   const editPost = (post) => {
     setCurrentPost(post);
@@ -118,18 +120,16 @@ const NotifPost = ({
       style={modalStyles}
       contentLabel='Example Modal'
     >
-      {post.notif && user && post.notif.content ? (
+      {post.notif && token && post.notif.content ? (
         <div className='post-container'>
           <div className='post-row'>
             <div className='user-profile'>
               <img
-                src={user.profileImage ? user.profileImage.url : defaultProfile}
-                alt={`${
-                  user.name || user.email.split('@')[0]
-                }'s profile picture`}
+                src={profileImage ? profileImage.url : defaultProfile}
+                alt={`${name || email.split('@')[0]}'s profile picture`}
               />
               <div>
-                <p>{user.name || user.email.split('@')[0]}</p>
+                <p>{name || email.split('@')[0]}</p>
                 <span>{moment(post.notif.createdAt).fromNow()}</span>
               </div>
             </div>
@@ -155,7 +155,7 @@ const NotifPost = ({
           {post.notif.image && (
             <img
               src={post.notif.image.url}
-              alt={`${user.name || user.email.split('@')[0]}'s post`}
+              alt={`${name || email.split('@')[0]}'s post`}
               className='post-img'
             />
           )}
@@ -163,7 +163,7 @@ const NotifPost = ({
             <div className='activity-icons'>
               {post.notif.likes && (
                 <div>
-                  {post.notif.likes.some((e) => e._id === user._id) ? (
+                  {post.notif.likes.some((e) => e._id === _id) ? (
                     <FontAwesomeIcon
                       icon={faHeart}
                       className='fa liked'
@@ -265,7 +265,7 @@ const NotifPost = ({
               onClick={() => acceptInvite(post)}
               type='button'
               className='submit-btn'
-              disabled={post.notif.accepted.some((a) => a._id === user._id)}
+              disabled={post.notif.accepted.some((a) => a._id === _id)}
             >
               {loading ? (
                 <FontAwesomeIcon icon={faSpinner} className='fa' spin />
@@ -288,7 +288,7 @@ const NotifPost = ({
               onClick={() => maybe(post)}
               type='button'
               className='submit-btn maybe'
-              disabled={post.notif.maybe.some((a) => a._id === user._id)}
+              disabled={post.notif.maybe.some((a) => a._id === _id)}
             >
               {loading ? (
                 <FontAwesomeIcon icon={faSpinner} className='fa' spin />
@@ -311,7 +311,7 @@ const NotifPost = ({
               onClick={() => declineInvite(post)}
               type='button'
               className='submit-btn decline'
-              disabled={post.notif.declined.some((a) => a._id === user._id)}
+              disabled={post.notif.declined.some((a) => a._id === _id)}
             >
               {loading ? (
                 <FontAwesomeIcon icon={faSpinner} className='fa' spin />

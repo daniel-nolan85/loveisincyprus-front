@@ -6,11 +6,11 @@ import { currentSubscriber } from '../../functions/auth';
 const SubscriberRoute = ({ children, ...rest }) => {
   const [ok, setOk] = useState(false);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user) || {};
 
   useEffect(() => {
-    if (user && user.token) {
-      currentSubscriber(user.token)
+    if (token) {
+      currentSubscriber(token)
         .then((res) => {
           setOk(true);
         })
@@ -19,7 +19,7 @@ const SubscriberRoute = ({ children, ...rest }) => {
           setOk(false);
         });
     }
-  }, [user]);
+  }, [token]);
 
   return ok && <Route {...rest} />;
 };

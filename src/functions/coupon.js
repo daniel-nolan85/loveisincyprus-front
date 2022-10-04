@@ -21,5 +21,11 @@ export const removeCoupon = async (couponId, authtoken) =>
     },
   });
 
-export const updateCoupon = async (couponId, authtoken) =>
-  console.log(couponId);
+export const updateCoupon = async (couponId, coupon, authtoken) =>
+  await axios.put(
+    `${process.env.REACT_APP_API}/coupon/${couponId}`,
+    { coupon },
+    {
+      headers: { authtoken },
+    }
+  );

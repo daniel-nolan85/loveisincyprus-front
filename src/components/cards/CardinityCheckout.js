@@ -19,7 +19,8 @@ const CardinityCheckout = () => {
   const [payable, setPayable] = useState(0);
   const [userAgent, setUserAgent] = useState('');
 
-  const { user, coupon } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user);
+  const { coupon } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
 
@@ -35,11 +36,10 @@ const CardinityCheckout = () => {
         `${process.env.REACT_APP_API}/calculate-final-amount`,
         {
           coupon,
-          user,
         },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -54,7 +54,7 @@ const CardinityCheckout = () => {
 
   const handleSubmit = async (values) => {
     setProcessing(true);
-    createPayment(values, payable, userAgent, user, user.token).then((res) => {
+    createPayment(values, payable, userAgent, token).then((res) => {
       console.log('create payment', res.data);
       if (res.data.errors) {
         toast.error(res.data.errors[0].message, {
@@ -66,7 +66,7 @@ const CardinityCheckout = () => {
         toast.success(`Payment successful.`, {
           position: toast.POSITION.TOP_CENTER,
         });
-        createOrder(res.data, user.token).then((response) => {
+        createOrder(res.data, token).then((response) => {
           console.log('createOrder response => ', response);
           if (response.data.ok) {
             if (typeof window !== 'undefined') localStorage.removeItem('cart');
@@ -78,7 +78,7 @@ const CardinityCheckout = () => {
               type: 'COUPON_APPLIED',
               payload: false,
             });
-            emptyUserCart(user.token);
+            emptyUserCart(token);
           }
         });
         setProcessing(false);

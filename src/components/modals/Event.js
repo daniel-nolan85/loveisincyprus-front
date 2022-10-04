@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner, faHandshakeAngle } from '@fortawesome/free-solid-svg-icons';
 import defaultProfile from '../../assets/defaultProfile.png';
@@ -10,8 +8,6 @@ Modal.setAppElement('#root');
 
 const Event = ({ eventModalIsOpen, setEventModalIsOpen, currentEvent }) => {
   const [loading, setLoading] = useState(false);
-
-  //   let { user } = useSelector((state) => ({ ...state }));
 
   const modalStyles = {
     content: {

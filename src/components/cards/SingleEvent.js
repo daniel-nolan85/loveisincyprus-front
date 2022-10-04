@@ -10,13 +10,9 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import defaultEvent from '../../assets/defaultEvent.jpg';
 import { Card } from 'antd';
-import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import moment from 'moment';
 
 const SingleEvent = ({ event }) => {
-  const { user } = useSelector((state) => ({ ...state }));
-
   const {
     invitees,
     accepted,
@@ -56,14 +52,16 @@ const SingleEvent = ({ event }) => {
           <Card>
             <h1>{name}</h1>
             <h4>{moment(when).format('MMMM Do YYYY')}</h4>
-            <Link
-              to={{
-                pathname: link,
-              }}
-              target='_blank'
-            >
-              Link
-            </Link>
+            {link && (
+              <Link
+                to={{
+                  pathname: link,
+                }}
+                target='_blank'
+              >
+                View location
+              </Link>
+            )}
           </Card>
         </div>
       </div>

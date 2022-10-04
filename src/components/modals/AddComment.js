@@ -18,6 +18,7 @@ const AddComment = ({
   addComment,
   image,
   handleImage,
+  loadingImg,
 }) => {
   const modalStyles = {
     content: {
@@ -50,22 +51,26 @@ const AddComment = ({
           </form>
           <div className='write-post-footer'>
             <div className='add-post-links'>
-              <label>
-                {image && image.url ? (
-                  <img src={image.url} />
-                ) : (
-                  <FontAwesomeIcon
-                    icon={faCamera}
-                    className='fa'
-                  ></FontAwesomeIcon>
-                )}
-                <input
-                  onChange={handleImage}
-                  type='file'
-                  accept='images/*'
-                  hidden
-                />
-              </label>
+              {loadingImg ? (
+                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+              ) : (
+                <label>
+                  {image && image.url ? (
+                    <img src={image.url} />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faCamera}
+                      className='fa'
+                    ></FontAwesomeIcon>
+                  )}
+                  <input
+                    onChange={handleImage}
+                    type='file'
+                    accept='images/*'
+                    hidden
+                  />
+                </label>
+              )}
             </div>
             <button
               onClick={addComment}

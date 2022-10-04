@@ -65,6 +65,7 @@ const UserProfile = () => {
   const [postOfCommentToEdit, setPostOfCommentToEdit] = useState([]);
   const [analyseModalIsOpen, setAnalyseModalIsOpen] = useState(false);
   const [userToAnalyse, setUserToAnalyse] = useState({});
+  const [loadingImg, setLoadingImg] = useState(false);
 
   let { user } = useSelector((state) => ({ ...state }));
 
@@ -323,7 +324,7 @@ const UserProfile = () => {
     const file = e.target.files[0];
     let formData = new FormData();
     formData.append('image', file);
-    setUploading(true);
+    setLoadingImg(true);
 
     await axios
       .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
@@ -336,11 +337,11 @@ const UserProfile = () => {
           url: res.data.url,
           public_id: res.data.public_id,
         });
-        setUploading(false);
+        setLoadingImg(false);
       })
       .catch((err) => {
         console.log(err);
-        setUploading(false);
+        setLoadingImg(false);
       });
   };
 
@@ -666,6 +667,7 @@ const UserProfile = () => {
         addComment={addComment}
         image={image}
         handleImage={handleImage}
+        loadingImg={loadingImg}
       />
       <Match
         matchModalIsOpen={matchModalIsOpen}

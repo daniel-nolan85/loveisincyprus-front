@@ -7,7 +7,7 @@ import defaultProfile from '../../assets/defaultProfile.png';
 Modal.setAppElement('#root');
 
 const ShowLikes = ({ likesModalIsOpen, setLikesModalIsOpen, post }) => {
-  const { user } = useSelector((state) => ({ ...state }));
+  const { _id } = useSelector((state) => state.user);
 
   const modalStyles = {
     content: {
@@ -34,8 +34,8 @@ const ShowLikes = ({ likesModalIsOpen, setLikesModalIsOpen, post }) => {
             <div className='user-profile'>
               <Link
                 to={
-                  like._id === user._id
-                    ? `/user/profile/${user._id}`
+                  like._id === _id
+                    ? `/user/profile/${_id}`
                     : `/user/${like._id}`
                 }
               >
@@ -50,8 +50,8 @@ const ShowLikes = ({ likesModalIsOpen, setLikesModalIsOpen, post }) => {
               </Link>
               <Link
                 to={
-                  user._id === like._id
-                    ? `/user/profile/${user._id}`
+                  _id === like._id
+                    ? `/user/profile/${_id}`
                     : `/user/${like._id}`
                 }
               >

@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Login from '../components/forms/Login';
 import Register from '../components/forms/Register';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -9,10 +8,6 @@ const LoginAndRegister = ({ history }) => {
   const [whitelist, setWhitelist] = useState([]);
   const [blacklist, setBlacklist] = useState([]);
   const [ip, setIp] = useState('');
-
-  // const { user } = useSelector((state) => ({ ...state }));
-
-  const isFirstRun = useRef(true);
 
   useEffect(() => {
     getThisIP();
@@ -48,15 +43,6 @@ const LoginAndRegister = ({ history }) => {
         console.log(err);
       });
   };
-
-  // useEffect(() => {
-  //   let intended = history.location.state;
-  //   if (intended) {
-  //     return;
-  //   } else {
-  //     if (user && user.token) history.push('/');
-  //   }
-  // }, [user]);
 
   // useEffect(() => {
   //   axios

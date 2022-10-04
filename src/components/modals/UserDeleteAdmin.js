@@ -13,16 +13,16 @@ const UserDeleteAdmin = ({
   userToDelete,
   fetchUsers,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  let { _id, token } = useSelector((state) => state.user);
 
   const deleteUser = async (u) => {
     await axios
       .put(
         `${process.env.REACT_APP_API}/admin/delete-user/${u._id}`,
-        { u, user },
+        { u, _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )

@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
+import DatePicker from 'react-datepicker';
 
 Modal.setAppElement('#root');
 
@@ -14,32 +15,36 @@ const CouponEdit = ({
   updateCoupon,
   loading,
   setLoading,
-  loadCategories,
+  loadCoupons,
 }) => {
   const [name, setName] = useState(couponToEdit.name);
+  const [discount, setDiscount] = useState(couponToEdit.discount);
+  const [expiry, setExpiry] = useState(couponToEdit.expiry);
 
-  let { user } = useSelector((state) => ({ ...state }));
+  console.log(couponToEdit);
+  console.log(name, discount, expiry);
+
+  let { token } = useSelector((state) => state.user);
 
   const editCoupon = async (e, coupon) => {
+    console.log(e);
     e.preventDefault();
     setLoading(true);
-    updateCoupon(coupon.slug, { name }, user.token)
+    updateCoupon(coupon._id, { name, discount, expiry }, token)
       .then((res) => {
         setLoading(false);
         toast.success(`${res.data.name} has been updated`, {
           position: toast.POSITION.TOP_CENTER,
         });
         setCouponEditModalIsOpen(false);
-        loadCategories();
+        loadCoupons();
       })
       .catch((err) => {
         console.log(err);
         setLoading(false);
-        if (err.response.status === 400) {
-          toast.error(err.response.data, {
-            position: toast.POSITION.TOP_CENTER,
-          });
-        }
+        toast.error('Create coupon failed', {
+          position: toast.POSITION.TOP_CENTER,
+        });
       });
   };
 
@@ -54,10 +59,35 @@ const CouponEdit = ({
           className='input-field'
           placeholder='Name'
           defaultValue={couponToEdit.name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            console.log(e);
+            setName(e.target.value);
+          }}
           autoFocus
           required
           // disabled={loading}
+        />
+        <input
+          type='text'
+          className='input-field'
+          placeholder='Discount'
+          defaultValue={couponToEdit.discount}
+          onChange={(e) => setDiscount(e.target.value)}
+          required
+          // disabled={loading}
+        />
+        <DatePicker
+          selected={new Date()}
+          defaultValue={couponToEdit.expiry}
+          onChange={(date) => setExpiry(date)}
+          dateFormat='dd/MM/yyyy'
+          minDate={new Date('01-01-1900')}
+          showMonthDropdown
+          showYearDropdown
+          scrollableMonthDropdown
+          scrollableYearDropdown
+          yearDropdownItemNumber={100}
+          placeholderText='Expiry date'
         />
         <button
           onClick={(e) => editCoupon(e, couponToEdit)}

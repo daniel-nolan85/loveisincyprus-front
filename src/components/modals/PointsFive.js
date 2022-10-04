@@ -16,7 +16,7 @@ const PointsFive = ({
   points,
   fetchUserPointsTotal,
 }) => {
-  const { user } = useSelector((state) => ({ ...state }));
+  const { _id, token } = useSelector((state) => state.user);
 
   const { setSocketConnected } = ChatState();
 
@@ -32,10 +32,10 @@ const PointsFive = ({
     await axios
       .put(
         `${process.env.REACT_APP_API}/spent-points`,
-        { number, reason, user, couponName },
+        { number, reason, _id, couponName },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )

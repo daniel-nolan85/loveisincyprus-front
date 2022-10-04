@@ -13,24 +13,24 @@ const Events = ({ history }) => {
   const [prevEvents, setPrevEvents] = useState([]);
   const [comingEvents, setComingEvents] = useState([]);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { _id, token } = useSelector((state) => state.user);
 
   useEffect(() => {
-    if (user && user.token) {
+    if (token) {
       fetchUserEvents();
       fetchPrevEvents();
       fetchComingEvents();
     }
-  }, [user && user.token]);
+  }, [token]);
 
   const fetchUserEvents = async () => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/fetch-user-events`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -47,10 +47,10 @@ const Events = ({ history }) => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/fetch-prev-events`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )
@@ -67,10 +67,10 @@ const Events = ({ history }) => {
     await axios
       .post(
         `${process.env.REACT_APP_API}/fetch-coming-events`,
-        { user },
+        { _id },
         {
           headers: {
-            authtoken: user.token,
+            authtoken: token,
           },
         }
       )

@@ -8,20 +8,20 @@ import LeftSidebar from '../../components/admin/LeftSidebar';
 const Orders = () => {
   const [orders, setOrders] = useState([]);
 
-  const { user } = useSelector((state) => ({ ...state }));
+  const { token } = useSelector((state) => state.user);
 
   useEffect(() => {
     loadOrders();
   }, []);
 
   const loadOrders = () =>
-    getOrders(user.token).then((res) => {
+    getOrders(token).then((res) => {
       console.log(JSON.stringify(res.data, null, 4));
       setOrders(res.data);
     });
 
   const handleStatusChange = (orderId, orderStatus) => {
-    changeStatus(orderId, orderStatus, user.token).then((res) => {
+    changeStatus(orderId, orderStatus, token).then((res) => {
       toast.success(`Order status has been successfully updated.`, {
         position: toast.POSITION.TOP_CENTER,
       });
