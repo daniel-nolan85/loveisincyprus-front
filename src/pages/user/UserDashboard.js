@@ -392,7 +392,11 @@ const UserDashboard = () => {
           dataLength={posts.length}
           next={infinity}
           hasMore={morePosts}
-          loader={<FontAwesomeIcon icon={faSpinner} className='fa' spin />}
+          loader={
+            <div className='loader'>
+              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+            </div>
+          }
           endMessage={
             <p style={{ textAlign: 'center' }}>
               <b>You're up to date</b>

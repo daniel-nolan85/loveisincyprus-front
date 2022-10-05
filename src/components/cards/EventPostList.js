@@ -165,7 +165,7 @@ const EventPostList = ({
               <div>
                 <FontAwesomeIcon
                   icon={showComments !== i ? faCaretDown : faCaretUp}
-                  className='fa center'
+                  className='fa center caret'
                   onClick={() => {
                     showComments === i
                       ? setShowComments(-1)

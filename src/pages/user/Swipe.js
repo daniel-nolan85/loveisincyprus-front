@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,7 +11,7 @@ import { toast } from 'react-toastify';
 import Match from '../../components/modals/Match';
 import { addPoints } from '../../functions/user';
 
-const Swipe = () => {
+const Swipe = ({ history }) => {
   const [users, setUsers] = useState([]);
   const [match, setMatch] = useState({});
   const [matchModalIsOpen, setMatchModalIsOpen] = useState(false);
@@ -39,6 +39,7 @@ const Swipe = () => {
       )
       .then((res) => {
         setUsers(res.data);
+        console.log('users rendered');
       })
       .catch((err) => {
         console.log(err);
@@ -122,6 +123,8 @@ const Swipe = () => {
       });
   };
 
+  let triggerTime;
+
   return (
     <div className='container'>
       <LeftSidebar />
@@ -146,8 +149,22 @@ const Swipe = () => {
                         ? `url(${u.profileImage.url})`
                         : `url(${defaultProfile})`,
                     }}
+                    onClick={(e) => {
+                      if (triggerTime > 300) return;
+                      else history.push(`/user/${u._id}`);
+                    }}
+                    onMouseDown={() => {
+                      triggerTime = new Date().getTime();
+                    }}
+                    onMouseUp={() => {
+                      let thisMoment = new Date().getTime();
+                      triggerTime = thisMoment - triggerTime;
+                    }}
                   >
-                    <h3>{u.name || u.email.split('@')[0]}</h3>
+                    <div className='tinder-card-info'>
+                      <h3>{u.name || u.email.split('@')[0]}</h3>
+                      <h3>{u.age}</h3>
+                    </div>
                   </div>
                 </TinderCard>
               ))}

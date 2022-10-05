@@ -855,6 +855,7 @@ const Profile = ({ history }) => {
               </>
             ) : (
               <img
+                ref={profileImgRef}
                 src={defaultProfile}
                 alt='Default profile picture'
                 className='pd-image'
@@ -863,7 +864,9 @@ const Profile = ({ history }) => {
 
             <div>
               <h3>{user.name || user.email.split('@')[0]}</h3>
-              <p>Member since {user.createdAt.split('T')[0]}</p>
+              <p>
+                Member since {moment(user.createdAt).format('MMMM Do YYYY')}
+              </p>
               <div className='tooltip progress' onClick={showProgress}>
                 <progress value={progress.percentage} max='100'></progress>
                 <span>{progress.percentage}%</span>
@@ -1073,7 +1076,11 @@ const Profile = ({ history }) => {
             dataLength={posts.length}
             next={infinity}
             hasMore={morePosts}
-            loader={<FontAwesomeIcon icon={faSpinner} className='fa' spin />}
+            loader={
+              <div className='loader'>
+                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+              </div>
+            }
             endMessage={
               <p style={{ textAlign: 'center' }}>
                 <b>You're up to date</b>
@@ -1189,7 +1196,7 @@ const Profile = ({ history }) => {
                     <div>
                       <FontAwesomeIcon
                         icon={showComments !== i ? faCaretDown : faCaretUp}
-                        className='fa center'
+                        className='fa center caret'
                         onClick={() => {
                           showComments === i
                             ? setShowComments(-1)

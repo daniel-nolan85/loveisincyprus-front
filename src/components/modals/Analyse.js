@@ -202,7 +202,7 @@ const Analyse = ({
               {!showAnalysis ? 'Show' : 'Hide'} Breakdown
               <FontAwesomeIcon
                 icon={showAnalysis ? faCaretUp : faCaretDown}
-                className='fa center'
+                className='fa center caret'
                 onClick={() => setShowAnalysis(!showAnalysis)}
               />
               <div

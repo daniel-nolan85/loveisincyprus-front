@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import LeftSidebar from '../../components/admin/LeftSidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCashRegister,
+  faMessage,
   faMoneyBill1Wave,
   faSignsPost,
   faUsers,
@@ -11,14 +11,73 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 import defaultProfile from '../../assets/defaultProfile.png';
+import moment from 'moment';
 
 const AdminDashboard = () => {
+  const [numPosts, setNumPosts] = useState(0);
+  const [numUsers, setNumUsers] = useState(0);
+  const [numMessages, setNumMessages] = useState(0);
+  const [incomeTaken, setIncomeTaken] = useState(0);
+  const [recentOrders, setRecentOrders] = useState([]);
   const [recentUsers, setRecentUsers] = useState([]);
 
   const { _id, token } = useSelector((state) => state.user);
 
   useEffect(() => {
-    axios
+    fetchNumOfPosts();
+    fetchNumOfUsers();
+    fetchNumOfMessages();
+    fetchIncomeTaken();
+    fetchRecentOrders();
+    fetchRecentUsers();
+  }, []);
+
+  const fetchNumOfPosts = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/total-posts`)
+      .then((res) => setNumPosts(res.data));
+  };
+
+  const fetchNumOfUsers = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/total-users`)
+      .then((res) => setNumUsers(res.data));
+  };
+
+  const fetchNumOfMessages = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/total-messages`)
+      .then((res) => setNumMessages(res.data));
+  };
+
+  const fetchIncomeTaken = async () => {
+    await axios.get(`${process.env.REACT_APP_API}/income-taken`).then((res) => {
+      console.log('income => ', res.data);
+      setIncomeTaken(res.data);
+    });
+  };
+
+  const fetchRecentOrders = async () => {
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/recent-orders`,
+        { _id },
+        {
+          headers: {
+            authtoken: token,
+          },
+        }
+      )
+      .then((res) => {
+        setRecentOrders(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const fetchRecentUsers = async () => {
+    await axios
       .post(
         `${process.env.REACT_APP_API}/recent-users`,
         { _id },
@@ -34,7 +93,7 @@ const AdminDashboard = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  };
 
   return (
     <div className='container'>
@@ -43,7 +102,7 @@ const AdminDashboard = () => {
         <div className='admin-cards'>
           <div className='admin-card'>
             <div>
-              <h1>2194</h1>
+              <h1>{numPosts}</h1>
               <h3>Posts</h3>
             </div>
             <FontAwesomeIcon icon={faSignsPost} className='fa' />
@@ -51,7 +110,7 @@ const AdminDashboard = () => {
 
           <div className='admin-card'>
             <div>
-              <h1>705</h1>
+              <h1>{numUsers}</h1>
               <h3>Users</h3>
             </div>
             <FontAwesomeIcon icon={faUsers} className='fa' />
@@ -59,15 +118,15 @@ const AdminDashboard = () => {
 
           <div className='admin-card'>
             <div>
-              <h1>587</h1>
-              <h3>Purchases</h3>
+              <h1>{numMessages}</h1>
+              <h3>Messages</h3>
             </div>
-            <FontAwesomeIcon icon={faCashRegister} className='fa' />
+            <FontAwesomeIcon icon={faMessage} className='fa' />
           </div>
 
           <div className='admin-card'>
             <div>
-              <h1>€25,000</h1>
+              <h1>€{incomeTaken.toFixed(2)}</h1>
               <h3>Income</h3>
             </div>
             <FontAwesomeIcon icon={faMoneyBill1Wave} className='fa' />
@@ -77,69 +136,30 @@ const AdminDashboard = () => {
         <div className='admin-info'>
           <div className='recent-payments'>
             <div className='title'>
-              <h2>Recent Payments</h2>
-              <Link to='#' className='submit-btn'>
+              <h2>Recent Orders</h2>
+              <Link to='/admin/orders' className='submit-btn'>
                 View All
               </Link>
             </div>
             <table>
               <thead>
                 <tr>
-                  <th>Name</th>
                   <th>Invoice #</th>
+                  <th>Date</th>
                   <th>Amount</th>
-                  <th>Option</th>
+                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>John Doe</td>
-                  <td>0123456789</td>
-                  <td>€120</td>
-                  <td>
-                    <Link to='#'>View</Link>
-                  </td>
-                </tr>
-                <tr>
-                  <td>John Doe</td>
-                  <td>0123456789</td>
-                  <td>€120</td>
-                  <td>
-                    <Link to='#'>View</Link>
-                  </td>
-                </tr>
-                <tr>
-                  <td>John Doe</td>
-                  <td>0123456789</td>
-                  <td>€120</td>
-                  <td>
-                    <Link to='#'>View</Link>
-                  </td>
-                </tr>
-                <tr>
-                  <td>John Doe</td>
-                  <td>0123456789</td>
-                  <td>€120</td>
-                  <td>
-                    <Link to='#'>View</Link>
-                  </td>
-                </tr>
-                <tr>
-                  <td>John Doe</td>
-                  <td>0123456789</td>
-                  <td>€120</td>
-                  <td>
-                    <Link to='#'>View</Link>
-                  </td>
-                </tr>
-                <tr>
-                  <td>John Doe</td>
-                  <td>0123456789</td>
-                  <td>€120</td>
-                  <td>
-                    <Link to='#'>View</Link>
-                  </td>
-                </tr>
+                {recentOrders &&
+                  recentOrders.map((o) => (
+                    <tr key={o._id}>
+                      <td>{o.paymentIntent.id}</td>
+                      <td>{moment(o.createdAt).format('L')}</td>
+                      <td>{o.paymentIntent.amount}</td>
+                      <td>{o.orderStatus}</td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

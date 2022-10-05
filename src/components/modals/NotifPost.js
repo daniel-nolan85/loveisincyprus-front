@@ -215,7 +215,7 @@ const NotifPost = ({
             <div>
               <FontAwesomeIcon
                 icon={showComments ? faCaretDown : faCaretUp}
-                className='fa center'
+                className='fa center caret'
                 onClick={() => {
                   setShowComments(!showComments);
                 }}

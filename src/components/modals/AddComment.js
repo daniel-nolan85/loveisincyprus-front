@@ -47,6 +47,7 @@ const AddComment = ({
               onChange={(e) => setComment(e.target.value)}
               placeholder='Write a comment...'
               rows={3}
+              autoFocus
             />
           </form>
           <div className='write-post-footer'>

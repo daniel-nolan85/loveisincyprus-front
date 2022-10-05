@@ -800,6 +800,10 @@ nav {
   margin: 10px 0 0 0;
 }
 
+.caret {
+  font-size: 20px;
+}
+
 .comment-input-container .submit-btn {
   margin: 10px 0 0 0;
   padding: 0;
@@ -909,6 +913,14 @@ nav {
 
 .comments-container-inner {
   margin-bottom: 20px;
+}
+
+.loader {
+  text-align: center;
+}
+
+.loader .fa {
+  font-size: 20px;
 }
 
 .footer {
@@ -2676,10 +2688,13 @@ span.link {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
-.tinder-card > h3 {
+.tinder-card h3 {
+  color: var(--nav-color);
+}
+
+.tinder-card-info {
   position: absolute;
   bottom: 10px;
-  color: var(--nav-color);
 }
 
 .swipe-buttons {
@@ -2848,6 +2863,7 @@ span.link {
 }
 
 .submit-btn:disabled,
+.submit-btn.trash:disabled,
 .input-field:disabled {
   cursor: not-allowed;
   background: #ccc;

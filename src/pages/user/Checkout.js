@@ -159,24 +159,25 @@ const Checkout = ({ history }) => {
     e.preventDefault();
     applyUserCoupon(coupon, token).then((res) => {
       console.log('response on coupon applied', res.data);
-      if (res.data) {
-        setTotalAfterDiscount(res.data);
-        // toast.success('Discount applied!', {
-        //   position: toast.POSITION.TOP_CENTER,
-        // });
-        dispatch({
-          type: 'COUPON_APPLIED',
-          payload: true,
-        });
-      }
       if (res.data.err) {
         setDiscountError(res.data.err);
-        // toast.error(res.data.err, {
-        //   position: toast.POSITION.TOP_CENTER,
-        // });
+        toast.error(res.data.err, {
+          position: toast.POSITION.TOP_CENTER,
+        });
         dispatch({
           type: 'COUPON_APPLIED',
           payload: false,
+        });
+        return;
+      }
+      if (res.data) {
+        setTotalAfterDiscount(res.data);
+        toast.success('Discount applied!', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        dispatch({
+          type: 'COUPON_APPLIED',
+          payload: true,
         });
       }
     });

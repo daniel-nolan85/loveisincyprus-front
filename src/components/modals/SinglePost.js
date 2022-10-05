@@ -158,7 +158,7 @@ const SinglePost = ({
               onClick={postSubmit}
               type='submit'
               className='submit-btn'
-              disabled={uploading}
+              disabled={uploading || !content}
             >
               {uploading ? (
                 <FontAwesomeIcon icon={faSpinner} className='fa' spin />

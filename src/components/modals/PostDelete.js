@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { removePoints } from '../../functions/user';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 Modal.setAppElement('#root');
 
@@ -20,9 +22,12 @@ const PostDelete = ({
   // deleteNotif,
   // notifToDelete,
 }) => {
+  const [deleting, setDeleting] = useState(false);
+
   let { _id, token } = useSelector((state) => state.user);
 
   const deletePost = async (post) => {
+    setDeleting(true);
     await axios
       .put(
         `${process.env.REACT_APP_API}/delete-post/${post._id}`,
@@ -38,6 +43,7 @@ const PostDelete = ({
         toast.error('Post deleted. 3 points were removed', {
           position: toast.POSITION.TOP_CENTER,
         });
+        setDeleting(false);
         setPostDeleteModalIsOpen(false);
         newsFeed && newsFeed();
         fetchUserPosts && fetchUserPosts();
@@ -48,7 +54,10 @@ const PostDelete = ({
         // deleteNotif && deleteNotif(notifToDelete);
         setNotifModalIsOpen(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setDeleting(false);
+        console.log(err);
+      });
   };
 
   const modalStyles = {
@@ -87,11 +96,16 @@ const PostDelete = ({
         )}
         <br />
         <button className='submit-btn' onClick={() => deletePost(postToDelete)}>
-          Yes, delete
+          {deleting ? (
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+          ) : (
+            'Yes, delete'
+          )}
         </button>
         <button
           className='submit-btn trash'
           onClick={() => setPostDeleteModalIsOpen(false)}
+          disabled={deleting}
         >
           No, cancel
         </button>

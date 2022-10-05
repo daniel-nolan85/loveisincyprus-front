@@ -447,7 +447,7 @@ const UserProfile = () => {
 
             <div>
               <h3>{name || (email && email.split('@')[0])}</h3>
-              <p>Member since {createdAt}</p>
+              <p>Member since {moment(createdAt).format('MMMM Do YYYY')}</p>
             </div>
           </div>
         </div>
@@ -540,7 +540,11 @@ const UserProfile = () => {
             dataLength={posts.length}
             next={infinity}
             hasMore={morePosts}
-            loader={<FontAwesomeIcon icon={faSpinner} className='fa' spin />}
+            loader={
+              <div className='loader'>
+                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+              </div>
+            }
             endMessage={
               <p style={{ textAlign: 'center' }}>
                 <b>You're up to date</b>
@@ -613,7 +617,7 @@ const UserProfile = () => {
                     <div>
                       <FontAwesomeIcon
                         icon={showComments !== i ? faCaretDown : faCaretUp}
-                        className='fa center'
+                        className='fa center caret'
                         onClick={() => {
                           showComments === i
                             ? setShowComments(-1)
