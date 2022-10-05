@@ -30,6 +30,7 @@ const PurchaseHistory = () => {
       <div key={i}>
         <ShowPaymentInfo order={order} />
         {showOrderInTable(order)}
+        {showDeliveryAddress(order.deliveryAddress)}
         <div>{showDownloadLink(order)}</div>
       </div>
     ));
@@ -53,6 +54,17 @@ const PurchaseHistory = () => {
         ))}
       </tbody>
     </table>
+  );
+
+  const showDeliveryAddress = (address) => (
+    <div>
+      <p>{address.firstLine}</p>
+      <p>{address.secondLine}</p>
+      <p>{address.city}</p>
+      <p>{address.state}</p>
+      <p>{address.zip}</p>
+      <p>{address.country}</p>
+    </div>
   );
 
   const showDownloadLink = (order) => (

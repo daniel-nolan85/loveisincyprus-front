@@ -8,11 +8,17 @@ import {
   faSpinner,
   faUndo,
   faFloppyDisk,
+  faTruck,
+  faHouse,
 } from '@fortawesome/free-solid-svg-icons';
 
-const AddressForm = ({ address, saveAddressToDb }) => {
-  const [loading, setLoading] = useState(false);
-
+const AddressForm = ({
+  userAddress,
+  saveAddressToDb,
+  changeAddress,
+  address,
+  loadingAddress,
+}) => {
   const validate = yup.object({
     firstLine: yup
       .string()
@@ -30,15 +36,8 @@ const AddressForm = ({ address, saveAddressToDb }) => {
 
   return (
     <Formik
-      //   initialValues={{
-      //     firstLine: '',
-      //     secondLine: '',
-      //     city: '',
-      //     state: '',
-      //     zip: '',
-      //     country: '',
-      //   }}
-      initialValues={address}
+      enableReinitialize={true}
+      initialValues={userAddress}
       validationSchema={validate}
       onSubmit={(values) => {
         saveAddress(values);
@@ -93,26 +92,29 @@ const AddressForm = ({ address, saveAddressToDb }) => {
               placeholder='Country'
             />
             <div className='contact-form-btns'>
-              {loading ? (
-                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-              ) : (
-                <button type='submit' className='submit-btn'>
-                  {loading ? (
-                    <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-                  ) : (
-                    <FontAwesomeIcon icon={faFloppyDisk} className='fa' />
-                  )}
-                  Save
+              <button
+                type='submit'
+                className='submit-btn'
+                disabled={!formik.isValid || loadingAddress}
+              >
+                {loadingAddress ? (
+                  <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                ) : (
+                  <FontAwesomeIcon icon={faTruck} className='fa' />
+                )}
+                Deliver here
+              </button>
+              {address && address.length > 1 && (
+                <button
+                  type='button'
+                  className='submit-btn reset'
+                  disabled={loadingAddress}
+                  onClick={changeAddress}
+                >
+                  <FontAwesomeIcon icon={faHouse} className='fa' />
+                  Select other
                 </button>
               )}
-              <button
-                type='reset'
-                className='submit-btn reset'
-                disabled={loading}
-              >
-                <FontAwesomeIcon icon={faUndo} className='fa' />
-                Reset
-              </button>
             </div>
           </Form>
         </div>

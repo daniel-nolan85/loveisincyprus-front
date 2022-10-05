@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import ProductInCheckout from '../../components/cards/ProductInCheckout';
 import { userCart } from '../../functions/user';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPaperPlane, faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 const Cart = ({ history }) => {
+  const [loading, setLoading] = useState(false);
+
   const { token } = useSelector((state) => state.user) || {};
   const { cart } = useSelector((state) => ({ ...state }));
 
@@ -30,12 +34,17 @@ const Cart = ({ history }) => {
   };
 
   const saveOrderToDb = () => {
+    setLoading(true);
     userCart(cart, token)
       .then((res) => {
+        setLoading(false);
         console.log('CART POST RES', res);
         if (res.data.ok) history.push('/checkout');
       })
-      .catch((err) => console.log('cart save err', err));
+      .catch((err) => {
+        setLoading(false);
+        console.log('cart save err', err);
+      });
   };
 
   return (
@@ -73,11 +82,11 @@ const Cart = ({ history }) => {
               className='submit-btn'
               disabled={!cart.length}
             >
-              {/* {uploading ? (
-              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-            ) : (
-              <FontAwesomeIcon icon={faPaperPlane} className='fa' />
-            )} */}
+              {loading ? (
+                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+              ) : (
+                <FontAwesomeIcon icon={faPaperPlane} className='fa' />
+              )}
               Proceed to Checkout
             </button>
           ) : (

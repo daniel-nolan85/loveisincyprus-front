@@ -2864,6 +2864,7 @@ span.link {
 
 .submit-btn:disabled,
 .submit-btn.trash:disabled,
+.submit-btn.reset:disabled,
 .input-field:disabled {
   cursor: not-allowed;
   background: #ccc;
@@ -3749,6 +3750,28 @@ table.product-info tbody {
 }
 
 /* --------------- modals --------------- */
+.address-list {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  padding: 10px 0px;
+}
+
+.select {
+  position: absolute;
+  right: 10px;
+}
+
+.select input,
+.select label {
+  display: block;
+}
+
+.select input {
+  margin: auto;
+}
+
 /* .comment-modal {
   width: 400px;
 } */

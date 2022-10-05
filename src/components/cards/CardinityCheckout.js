@@ -11,7 +11,7 @@ import PaymentForm from '../forms/PaymentForm';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const CardinityCheckout = () => {
+const CardinityCheckout = ({ userAddress }) => {
   const [succeeded, setSucceeded] = useState(false);
   const [processing, setProcessing] = useState('');
   const [cartTotal, setCartTotal] = useState(0);
@@ -66,7 +66,7 @@ const CardinityCheckout = () => {
         toast.success(`Payment successful.`, {
           position: toast.POSITION.TOP_CENTER,
         });
-        createOrder(res.data, token).then((response) => {
+        createOrder(res.data, token, userAddress).then((response) => {
           console.log('createOrder response => ', response);
           if (response.data.ok) {
             if (typeof window !== 'undefined') localStorage.removeItem('cart');

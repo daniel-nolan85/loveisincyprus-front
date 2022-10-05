@@ -17,7 +17,7 @@ const Invoice = ({ order }) => (
       </Text>
       <Text style={styles.title}>Order Invoice</Text>
       <Text style={styles.author}>Love is in Cyprus</Text>
-      <Text style={styles.subtitle}>Order Summary</Text>
+      <Text style={styles.subtitle}>Products Summary:</Text>
 
       <Table>
         <TableHeader>
@@ -34,6 +34,22 @@ const Invoice = ({ order }) => (
         </TableBody>
       </Table>
 
+      <Text style={styles.subtitle}>Delivery Address:</Text>
+      <Text style={styles.text}>
+        <Text>{order.deliveryAddress.firstLine}</Text>
+        {'\n'}
+        <Text>{order.deliveryAddress.secondLine}</Text>
+        {'\n'}
+        <Text>{order.deliveryAddress.city}</Text>
+        {'\n'}
+        <Text>{order.deliveryAddress.state}</Text>
+        {'\n'}
+        <Text>{order.deliveryAddress.zip}</Text>
+        {'\n'}
+        <Text>{order.deliveryAddress.country}</Text>
+      </Text>
+
+      <Text style={styles.subtitle}>Order Details:</Text>
       <Text style={styles.text}>
         <Text>
           Date: {'               '}
@@ -51,6 +67,7 @@ const Invoice = ({ order }) => (
           {order.orderStatus}
         </Text>
         {'\n'}
+
         <Text>
           Total Paid: {'       '}€{order.paymentIntent.amount}
         </Text>

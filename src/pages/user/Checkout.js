@@ -14,58 +14,77 @@ import {
   faUndo,
 } from '@fortawesome/free-solid-svg-icons';
 import AddressForm from '../../components/forms/AddressForm';
+import AddressList from '../../components/modals/AddressList';
 
 const Checkout = ({ history }) => {
   const [products, setProducts] = useState([]);
   const [total, setTotal] = useState(0);
-  const [address, setAddress] = useState({
-    firstLine: '400 Sunkist',
+  const [userAddress, setUserAddress] = useState({
+    firstLine: '',
     secondLine: '',
-    city: 'Anaheim',
-    state: 'California',
-    zip: '92833',
-    country: 'USA',
+    city: '',
+    state: '',
+    zip: '',
+    country: '',
   });
   const [addressSaved, setAddressSaved] = useState(false);
   const [coupon, setCoupon] = useState('');
   const [loading, setLoading] = useState(false);
   const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
   const [discountError, setDiscountError] = useState('');
+  const [addressListModalIsOpen, setAddressListModalIsOpen] = useState(false);
+  const [loadingAddress, setLoadingAddress] = useState(false);
+  const [loadingCoupon, setLoadingCoupon] = useState(false);
 
-  const { token } = useSelector((state) => state.user);
+  const { token, address } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
   const isFirstRun = useRef(true);
 
   useEffect(() => {
+    fetchUserCart();
+    fetchUserAddress();
+  }, []);
+
+  // useEffect(() => {
+  //   if (isFirstRun.current) {
+  //     isFirstRun.current = false;
+  //     return;
+  //   } else {
+
+  //   }
+  // }, [userAddress]);
+
+  const fetchUserAddress = () => {
+    if (address && address.length > 0) {
+      setUserAddress(address.slice(-1)[0]);
+    }
+  };
+
+  const fetchUserCart = () => {
     getUserCart(token).then((res) => {
-      // console.log('user cart res => ', JSON.stringify(res.data, null, 4));
       setProducts(res.data.products);
       setTotal(res.data.cartTotal);
     });
-  }, []);
-
-  useEffect(() => {
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      return;
-    } else {
-      saveUserAddress(address, token).then((res) => {
-        if (res.data.ok) {
-          setAddressSaved(true);
-          toast.success(`Your address has been saved.`, {
-            position: toast.POSITION.TOP_CENTER,
-          });
-        }
-      });
-    }
-  }, [address]);
+  };
 
   const saveAddressToDb = (values) => {
-    setAddress((prevState) => {
-      return { ...prevState, ...values };
+    setLoadingAddress(true);
+    setUserAddress((prevState) => ({ ...prevState, ...values }));
+    saveUserAddress(userAddress, token).then((res) => {
+      if (res.data.ok) {
+        setLoadingAddress(false);
+        setAddressSaved(true);
+        toast.success(`Your address has been saved.`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      }
     });
+  };
+
+  const changeAddress = () => {
+    setAddressListModalIsOpen(true);
   };
 
   const showProductSummary = () => (
@@ -99,7 +118,15 @@ const Checkout = ({ history }) => {
           <button
             type='submit'
             className='submit-btn'
-            onClick={() => history.push('/payment')}
+            onClick={
+              () =>
+                // history.push({ pathName: '/payment', state: userAddress })
+                history.push({
+                  pathname: '/payment',
+                  state: { userAddress },
+                })
+              // history.push('/payment')
+            }
             disabled={!addressSaved || !products.length || loading}
           >
             {loading ? (
@@ -140,11 +167,11 @@ const Checkout = ({ history }) => {
           }}
           autoFocus
           required
-          // disabled={loading}
+          disabled={loadingCoupon}
         />
         {discountError && <p>{discountError}</p>}
         <button onClick={applyCoupon} type='submit' className='submit-btn'>
-          {loading ? (
+          {loadingCoupon ? (
             <FontAwesomeIcon icon={faSpinner} className='fa' spin />
           ) : (
             <FontAwesomeIcon icon={faPaperPlane} className='fa' />
@@ -157,9 +184,11 @@ const Checkout = ({ history }) => {
 
   const applyCoupon = (e) => {
     e.preventDefault();
+    setLoadingCoupon(true);
     applyUserCoupon(coupon, token).then((res) => {
       console.log('response on coupon applied', res.data);
       if (res.data.err) {
+        setLoadingCoupon(false);
         setDiscountError(res.data.err);
         toast.error(res.data.err, {
           position: toast.POSITION.TOP_CENTER,
@@ -171,6 +200,7 @@ const Checkout = ({ history }) => {
         return;
       }
       if (res.data) {
+        setLoadingCoupon(false);
         setTotalAfterDiscount(res.data);
         toast.success('Discount applied!', {
           position: toast.POSITION.TOP_CENTER,
@@ -208,9 +238,12 @@ const Checkout = ({ history }) => {
         <div className='contact-container'>
           <br />
           <AddressForm
-            address={address}
-            setAddress={setAddress}
+            userAddress={userAddress}
+            setUserAddress={setUserAddress}
             saveAddressToDb={saveAddressToDb}
+            changeAddress={changeAddress}
+            address={address}
+            loadingAddress={loadingAddress}
           />
           <div>
             <br />
@@ -218,6 +251,12 @@ const Checkout = ({ history }) => {
             {showProductSummary()}
           </div>
         </div>
+        <AddressList
+          addressListModalIsOpen={addressListModalIsOpen}
+          setAddressListModalIsOpen={setAddressListModalIsOpen}
+          address={address}
+          setUserAddress={setUserAddress}
+        />
       </div>
     </>
   );

@@ -25,6 +25,17 @@ const OrdersList = ({ orders, handleStatusChange }) => {
     </table>
   );
 
+  const showDeliveryAddress = (address) => (
+    <div>
+      <p>{address.firstLine}</p>
+      <p>{address.secondLine}</p>
+      <p>{address.city}</p>
+      <p>{address.state}</p>
+      <p>{address.zip}</p>
+      <p>{address.country}</p>
+    </div>
+  );
+
   return (
     <>
       {orders.map((order) => (
@@ -47,6 +58,7 @@ const OrdersList = ({ orders, handleStatusChange }) => {
             </div>
           </div>
           {showOrderInTable(order)}
+          {showDeliveryAddress(order.deliveryAddress)}
         </div>
       ))}
     </>

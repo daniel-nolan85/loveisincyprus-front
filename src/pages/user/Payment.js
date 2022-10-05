@@ -1,11 +1,13 @@
 import React from 'react';
 import CardinityCheckout from '../../components/cards/CardinityCheckout';
 
-const Payment = () => {
+const Payment = (props) => {
+  const { userAddress } = props.location.state;
+
   return (
     <div>
       <h4>Complete your purchase</h4>
-      <CardinityCheckout />
+      <CardinityCheckout userAddress={userAddress} />
     </div>
   );
 };
