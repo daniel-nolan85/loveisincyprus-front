@@ -92,7 +92,7 @@ const PaymentForm = ({ handleSubmit, processing, succeeded, cartTotal }) => {
                 Reset
               </button>
             </div>
-            {cartTotal && (
+            {/* {cartTotal && (
               <p
                 className={
                   succeeded ? 'result-message' : 'result-message hidden'
@@ -101,7 +101,7 @@ const PaymentForm = ({ handleSubmit, processing, succeeded, cartTotal }) => {
                 Thanks for your purchase.{' '}
                 <Link to='purchase/history'>View purchase history</Link>
               </p>
-            )}
+            )} */}
           </Form>
         </div>
       )}

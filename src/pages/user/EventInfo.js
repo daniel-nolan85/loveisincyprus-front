@@ -239,7 +239,7 @@ const EventInfo = () => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
-        <SingleEvent event={event} />
+        <SingleEvent event={event} fetchEvent={fetchEvent} />
         <PostForm
           content={content}
           setContent={setContent}

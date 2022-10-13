@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createPayment } from '../../functions/cardinity';
 import { createOrder, emptyUserCart } from '../../functions/user';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Card } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEuroSign, faCheck } from '@fortawesome/free-solid-svg-icons';
@@ -11,24 +11,41 @@ import PaymentForm from '../forms/PaymentForm';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const CardinityCheckout = ({ userAddress }) => {
+const CardinityCheckout = ({ deliverTo, userAddress }) => {
   const [succeeded, setSucceeded] = useState(false);
   const [processing, setProcessing] = useState('');
   const [cartTotal, setCartTotal] = useState(0);
   const [totalAfterDiscount, setTotalAfterDiscount] = useState(0);
   const [payable, setPayable] = useState(0);
   const [userAgent, setUserAgent] = useState('');
+  const [order, setOrder] = useState({});
 
   const { token } = useSelector((state) => state.user);
   const { coupon } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
 
+  let history = useHistory();
+
+  const isFirstRun = useRef(true);
+
   useEffect(() => {
     calcFinalAmount();
     setUserAgent(window.navigator.userAgent);
     console.log(window.navigator.userAgent);
   }, []);
+
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      history.push({
+        pathname: '/order-successful',
+        state: { order },
+      });
+    }
+  }, [order]);
 
   const calcFinalAmount = async () => {
     await axios
@@ -66,21 +83,25 @@ const CardinityCheckout = ({ userAddress }) => {
         toast.success(`Payment successful.`, {
           position: toast.POSITION.TOP_CENTER,
         });
-        createOrder(res.data, token, userAddress).then((response) => {
-          console.log('createOrder response => ', response);
-          if (response.data.ok) {
-            if (typeof window !== 'undefined') localStorage.removeItem('cart');
-            dispatch({
-              type: 'ADD_TO_CART',
-              payload: [],
-            });
-            dispatch({
-              type: 'COUPON_APPLIED',
-              payload: false,
-            });
-            emptyUserCart(token);
+        createOrder(res.data, token, deliverTo, userAddress).then(
+          (response) => {
+            console.log('createOrder response => ', response);
+            if (response.data.paymentIntent.status === 'approved') {
+              if (typeof window !== 'undefined')
+                localStorage.removeItem('cart');
+              dispatch({
+                type: 'ADD_TO_CART',
+                payload: [],
+              });
+              dispatch({
+                type: 'COUPON_APPLIED',
+                payload: false,
+              });
+              emptyUserCart(token);
+              setOrder(response.data);
+            }
           }
-        });
+        );
         setProcessing(false);
         setSucceeded(true);
       }

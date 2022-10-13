@@ -18,6 +18,8 @@ const AddressForm = ({
   changeAddress,
   address,
   loadingAddress,
+  deliverTo,
+  addressSaved,
 }) => {
   const validate = yup.object({
     firstLine: yup
@@ -95,7 +97,12 @@ const AddressForm = ({
               <button
                 type='submit'
                 className='submit-btn'
-                disabled={!formik.isValid || loadingAddress}
+                disabled={
+                  !formik.isValid ||
+                  loadingAddress ||
+                  !deliverTo ||
+                  addressSaved
+                }
               >
                 {loadingAddress ? (
                   <FontAwesomeIcon icon={faSpinner} className='fa' spin />

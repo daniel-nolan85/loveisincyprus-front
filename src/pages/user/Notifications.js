@@ -46,12 +46,10 @@ const Notifications = () => {
   useEffect(() => {
     fetchNotifications();
     populateNotifications();
-    console.log(user);
   }, []);
 
   useEffect(() => {
     popPostNotifs();
-    console.log(data);
   }, [data]);
 
   useEffect(() => {
@@ -113,7 +111,7 @@ const Notifications = () => {
         }
       }
     }
-    console.log(notifications);
+    // console.log(notifications);
     setPopulatedNotifs(notifications);
   };
 
@@ -134,7 +132,7 @@ const Notifications = () => {
   };
 
   const viewNotif = async (n) => {
-    console.log(n);
+    // console.log(n);
     await axios
       .post(
         `${process.env.REACT_APP_API}/mark-notif-as-read`,
@@ -148,7 +146,7 @@ const Notifications = () => {
       .then((res) => {
         fetchNotifications();
       });
-    console.log(n);
+    // console.log(n);
     setNotifModalIsOpen(true);
     setPost(n);
     // setNotifToDelete(n);
@@ -279,6 +277,7 @@ const Notifications = () => {
     toast.success(`Great! We can't wait to see you there!`, {
       position: toast.POSITION.TOP_CENTER,
     });
+    setNotifModalIsOpen(false);
     await axios
       .post(
         `${process.env.REACT_APP_API}/accept-invite`,
@@ -292,6 +291,7 @@ const Notifications = () => {
       .then((res) => {
         console.log(res.data);
         fetchNotifications();
+        populateNotifications();
       })
       .catch((err) => {
         console.log(err);
@@ -303,6 +303,7 @@ const Notifications = () => {
     toast.success(`Ok, we'll keep our fingers crossed!`, {
       position: toast.POSITION.TOP_CENTER,
     });
+    setNotifModalIsOpen(false);
     await axios
       .post(
         `${process.env.REACT_APP_API}/maybe`,
@@ -316,6 +317,7 @@ const Notifications = () => {
       .then((res) => {
         console.log(res.data);
         fetchNotifications();
+        populateNotifications();
       })
       .catch((err) => {
         console.log(err);
@@ -327,6 +329,7 @@ const Notifications = () => {
     toast.success(`Too bad! We hope to see you at the next one!`, {
       position: toast.POSITION.TOP_CENTER,
     });
+    setNotifModalIsOpen(false);
     await axios
       .post(
         `${process.env.REACT_APP_API}/decline-invite`,
@@ -340,6 +343,7 @@ const Notifications = () => {
       .then((res) => {
         console.log(res.data);
         fetchNotifications();
+        populateNotifications();
       })
       .catch((err) => {
         console.log(err);

@@ -44,7 +44,7 @@ const BecomePaid = ({ history }) => {
     } else {
       console.log(userBankDetails);
       history.push({
-        pathname: '/payment-successful',
+        pathname: '/subscription-successful',
         state: { userBankDetails, payable },
       });
     }

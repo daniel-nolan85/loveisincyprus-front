@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getUserOrders } from '../../functions/user';
-import { useSelector, useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faClose, faCheck } from '@fortawesome/free-solid-svg-icons';
-import { toast } from 'react-toastify';
-import ShowPaymentInfo from '../../components/cards/ShowPaymentInfo';
-import Invoice from '../../components/cards/Invoice';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+import { useSelector } from 'react-redux';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
+import SingleOrder from '../../components/cards/SingleOrder';
 
 const PurchaseHistory = () => {
   const [orders, setOrders] = useState([]);
@@ -28,54 +23,9 @@ const PurchaseHistory = () => {
   const showOrders = () =>
     orders.map((order, i) => (
       <div key={i}>
-        <ShowPaymentInfo order={order} />
-        {showOrderInTable(order)}
-        {showDeliveryAddress(order.deliveryAddress)}
-        <div>{showDownloadLink(order)}</div>
+        <SingleOrder order={order} />
       </div>
     ));
-
-  const showOrderInTable = (order) => (
-    <table className='product-info'>
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Price</th>
-          <th>Quantity</th>
-        </tr>
-      </thead>
-      <tbody>
-        {order.products.map((p, i) => (
-          <tr key={i}>
-            <td>{p.product.title}</td>
-            <td>{p.product.price}</td>
-            <td>{p.count}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-
-  const showDeliveryAddress = (address) => (
-    <div>
-      <p>{address.firstLine}</p>
-      <p>{address.secondLine}</p>
-      <p>{address.city}</p>
-      <p>{address.state}</p>
-      <p>{address.zip}</p>
-      <p>{address.country}</p>
-    </div>
-  );
-
-  const showDownloadLink = (order) => (
-    <PDFDownloadLink
-      document={<Invoice order={order} />}
-      fileName='invoice.pdf'
-      className='submit-btn'
-    >
-      Download PDF
-    </PDFDownloadLink>
-  );
 
   return (
     <div className='container'>

@@ -20,6 +20,7 @@ const Events = ({ history }) => {
       fetchUserEvents();
       fetchPrevEvents();
       fetchComingEvents();
+      console.log('events => ', events);
     }
   }, [token]);
 
@@ -121,13 +122,25 @@ const Events = ({ history }) => {
                 ))}
               {prevEvents &&
                 prevEvents.map((prevEvent) => (
-                  <div className='product-card prev' key={prevEvent._id}>
+                  <div
+                    className='product-card prev'
+                    key={prevEvent._id}
+                    onClick={() => {
+                      history.push(`/event/${prevEvent._id}`);
+                    }}
+                  >
                     <EventCard event={prevEvent} />
                   </div>
                 ))}
               {comingEvents &&
                 comingEvents.map((comingEvent) => (
-                  <div className='product-card coming' key={comingEvent._id}>
+                  <div
+                    className='product-card coming'
+                    key={comingEvent._id}
+                    onClick={() => {
+                      history.push(`/event/${comingEvent._id}`);
+                    }}
+                  >
                     <EventCard event={comingEvent} />
                   </div>
                 ))}

@@ -35,6 +35,7 @@ const Checkout = ({ history }) => {
   const [addressListModalIsOpen, setAddressListModalIsOpen] = useState(false);
   const [loadingAddress, setLoadingAddress] = useState(false);
   const [loadingCoupon, setLoadingCoupon] = useState(false);
+  const [deliverTo, setDeliverTo] = useState('');
 
   const { token, address } = useSelector((state) => state.user);
 
@@ -47,14 +48,21 @@ const Checkout = ({ history }) => {
     fetchUserAddress();
   }, []);
 
-  // useEffect(() => {
-  //   if (isFirstRun.current) {
-  //     isFirstRun.current = false;
-  //     return;
-  //   } else {
-
-  //   }
-  // }, [userAddress]);
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      saveUserAddress(userAddress, token).then((res) => {
+        if (res.data.ok) {
+          setLoadingAddress(false);
+          toast.success(`Your order is ready to be placed.`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+        }
+      });
+    }
+  }, [addressSaved]);
 
   const fetchUserAddress = () => {
     if (address && address.length > 0) {
@@ -69,23 +77,35 @@ const Checkout = ({ history }) => {
     });
   };
 
-  const saveAddressToDb = (values) => {
+  const saveAddressToDb = async (values) => {
     setLoadingAddress(true);
     setUserAddress((prevState) => ({ ...prevState, ...values }));
-    saveUserAddress(userAddress, token).then((res) => {
-      if (res.data.ok) {
-        setLoadingAddress(false);
-        setAddressSaved(true);
-        toast.success(`Your address has been saved.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-      }
-    });
+    setAddressSaved(true);
   };
 
   const changeAddress = () => {
     setAddressListModalIsOpen(true);
   };
+
+  const showDeliverTo = () => (
+    <div className='form-box deliver-to'>
+      <div className='button-box'>
+        <p className='form-header'>Deliver To</p>
+      </div>
+      <input
+        type='text'
+        className='input-field'
+        placeholder="Enter recipient's name"
+        value={deliverTo}
+        onChange={(e) => {
+          setDeliverTo(e.target.value);
+        }}
+        autoFocus
+        required
+        disabled={loading}
+      />
+    </div>
+  );
 
   const showProductSummary = () => (
     <div className='small-container checkout-page'>
@@ -123,11 +143,13 @@ const Checkout = ({ history }) => {
                 // history.push({ pathName: '/payment', state: userAddress })
                 history.push({
                   pathname: '/payment',
-                  state: { userAddress },
+                  state: { deliverTo, userAddress },
                 })
               // history.push('/payment')
             }
-            disabled={!addressSaved || !products.length || loading}
+            disabled={
+              !addressSaved || !products.length || loading || loadingAddress
+            }
           >
             {loading ? (
               <FontAwesomeIcon icon={faSpinner} className='fa' spin />
@@ -165,7 +187,6 @@ const Checkout = ({ history }) => {
             setCoupon(e.target.value);
             setDiscountError('');
           }}
-          autoFocus
           required
           disabled={loadingCoupon}
         />
@@ -235,18 +256,23 @@ const Checkout = ({ history }) => {
   return (
     <>
       <div>
+        <br />
+        <h1 className='center'>Please confirm recipient's name and address</h1>
         <div className='contact-container'>
-          <br />
-          <AddressForm
-            userAddress={userAddress}
-            setUserAddress={setUserAddress}
-            saveAddressToDb={saveAddressToDb}
-            changeAddress={changeAddress}
-            address={address}
-            loadingAddress={loadingAddress}
-          />
           <div>
-            <br />
+            {showDeliverTo()}
+            <AddressForm
+              userAddress={userAddress}
+              setUserAddress={setUserAddress}
+              saveAddressToDb={saveAddressToDb}
+              changeAddress={changeAddress}
+              address={address}
+              loadingAddress={loadingAddress}
+              deliverTo={deliverTo}
+              addressSaved={addressSaved}
+            />
+          </div>
+          <div>
             {showApplyCoupon()}
             {showProductSummary()}
           </div>

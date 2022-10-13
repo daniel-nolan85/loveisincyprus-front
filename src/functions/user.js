@@ -50,11 +50,12 @@ export const applyUserCoupon = async (coupon, authtoken) =>
 export const createOrder = async (
   cardinityResponse,
   authtoken,
+  deliverTo,
   deliveryAddress
 ) =>
   await axios.post(
     `${process.env.REACT_APP_API}/order`,
-    { cardinityResponse, deliveryAddress },
+    { cardinityResponse, deliverTo, deliveryAddress },
     {
       headers: {
         authtoken,

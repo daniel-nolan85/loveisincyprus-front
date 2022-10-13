@@ -79,7 +79,7 @@ const Cart = ({ history }) => {
             <button
               onClick={saveOrderToDb}
               type='submit'
-              className='submit-btn'
+              className='submit-btn cart'
               disabled={!cart.length}
             >
               {loading ? (
@@ -90,7 +90,7 @@ const Cart = ({ history }) => {
               Proceed to Checkout
             </button>
           ) : (
-            <button type='submit' className='submit-btn'>
+            <button type='submit' className='submit-btn cart'>
               <Link
                 to={{
                   pathname: '/authentication',

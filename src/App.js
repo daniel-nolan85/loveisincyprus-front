@@ -73,7 +73,8 @@ import EventInfo from './pages/user/EventInfo';
 import VerifSubmissions from './pages/admin/VerifSubmissions';
 import BecomePaid from './pages/user/BecomePaid';
 import MembershipCard from './pages/user/MembershipCard';
-import PaymentSuccess from './pages/user/PaymentSuccess';
+import SubscriptionSuccess from './pages/user/SubscriptionSuccess';
+import OrderSuccess from './pages/user/OrderSuccess';
 import UserSettings from './pages/user/UserSettings';
 import IPBlock from './pages/admin/IPBlock';
 
@@ -270,6 +271,7 @@ const App = () => {
       removeExpiredFeatures();
       handleExpiredAds();
       handleExpiredMemberships();
+      handleExpiredEvents();
     }
   }, [user && user.token]);
 
@@ -403,6 +405,10 @@ const App = () => {
       });
   };
 
+  const handleExpiredEvents = async () => {
+    await axios.put(`${process.env.REACT_APP_API}/expired-event`, { user });
+  };
+
   return (
     // <Suspense
     //   fallback={
@@ -467,9 +473,10 @@ const App = () => {
         <UserRoute exact path='/membership-card' component={MembershipCard} />
         <UserRoute
           exact
-          path='/payment-successful'
-          component={PaymentSuccess}
+          path='/subscription-successful'
+          component={SubscriptionSuccess}
         />
+        <UserRoute exact path='/order-successful' component={OrderSuccess} />
         <UserRoute exact path='/user-settings' component={UserSettings} />
         <SubscriberRoute exact path='/swipe-to-match' component={Swipe} />
         <SubscriberRoute exact path='/chats' component={Chats} />

@@ -21,7 +21,7 @@ const Declined = ({ declinedModalIsOpen, setDeclinedModalIsOpen, post }) => {
     },
   };
 
-  console.log(post);
+  // console.log(post);
 
   return (
     <Modal
@@ -46,6 +46,27 @@ const Declined = ({ declinedModalIsOpen, setDeclinedModalIsOpen, post }) => {
                 to={_id === d._id ? `/user/profile/${_id}` : `/user/${d._id}`}
               >
                 <p>{d.name ? d.name : d.email.split('@')[0]}</p>
+              </Link>
+            </div>
+            <br />
+          </div>
+        ))
+      ) : post.declined && post.declined.length > 0 ? (
+        post.declined.map((a) => (
+          <div className='likes-container' key={a._id}>
+            <div className='user-profile'>
+              <Link
+                to={a._id === _id ? `/user/profile/${_id}` : `/user/${a._id}`}
+              >
+                <img
+                  src={a.profileImage ? a.profileImage.url : defaultProfile}
+                  alt={`${a.name || a.email.split('@'[0])}'s profile picture`}
+                />
+              </Link>
+              <Link
+                to={_id === a._id ? `/user/profile/${_id}` : `/user/${a._id}`}
+              >
+                <p>{a.name ? a.name : a.email.split('@')[0]}</p>
               </Link>
             </div>
             <br />

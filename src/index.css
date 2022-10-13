@@ -29,6 +29,15 @@ body {
   color: #626262;
 }
 
+.link {
+  color: var(--nav-color);
+}
+
+.link:hover {
+  font-weight: bold;
+  color: var(--nav-color);
+}
+
 nav {
   display: flex;
   align-items: center;
@@ -1457,7 +1466,7 @@ nav {
   padding-right: 20px;
   padding-bottom: 30px;
   box-shadow: 2px 10px 40px black;
-  z-index: 99;
+  /* z-index: 99; */
 }
 
 .ps-logo-card {
@@ -1498,7 +1507,7 @@ nav {
   display: block;
   margin: auto;
   margin-top: -180px;
-  z-index: -999;
+  /* z-index: -999; */
   position: relative;
 }
 
@@ -1532,6 +1541,32 @@ nav {
     width: 100%;
     text-align: center;
   }
+}
+
+/* --------------- orders-pages --------------- */
+.order-summary .order-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: var(--nav-color);
+}
+
+.order-info {
+  margin-bottom: 45px;
+}
+
+.order-line {
+  display: flex;
+  justify-content: space-between;
+}
+
+.order-title,
+.order-detail {
+  width: 50%;
+}
+
+.submit-btn.pdf {
+  width: fit-content;
+  color: #fff;
 }
 
 /* --------------- events-pages --------------- */
@@ -1582,6 +1617,33 @@ nav {
   transform: scale(0);
   position: absolute;
   transition: 0.5s;
+}
+
+.submit-btn.response {
+  width: fit-content;
+  color: #fff;
+}
+
+.event-invitees {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+.event-invitees .fa {
+  font-size: 35px;
+}
+
+.event-invitees .fa.accepted {
+  color: var(--nav-color);
+}
+
+.event-invitees .fa.maybe {
+  color: #5388b4;
+}
+
+.event-invitees .fa.declined {
+  color: #c70000;
 }
 
 /* --------------- advertisement-pages --------------- */
@@ -2081,8 +2143,13 @@ nav {
   height: 580px;
 }
 
+.form-box.deliver-to {
+  height: 180px;
+  margin: 0 100px 0 0;
+}
+
 .form-box.coupon {
-  height: 550px;
+  height: 300px;
   margin: 0 auto;
 }
 
@@ -3623,6 +3690,11 @@ table.product-info {
 
 table.product-info tbody {
   text-align: center;
+}
+
+.submit-btn.cart {
+  width: fit-content;
+  color: #fff;
 }
 
 /* --------------- information pages --------------- */
