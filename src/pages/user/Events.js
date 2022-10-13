@@ -117,7 +117,10 @@ const Events = ({ history }) => {
                       history.push(`/event/${event._id}`);
                     }}
                   >
-                    <EventCard event={event} />
+                    <EventCard
+                      event={event}
+                      fetchUserEvents={fetchUserEvents}
+                    />
                   </div>
                 ))}
               {prevEvents &&
@@ -129,7 +132,10 @@ const Events = ({ history }) => {
                       history.push(`/event/${prevEvent._id}`);
                     }}
                   >
-                    <EventCard event={prevEvent} />
+                    <EventCard
+                      event={prevEvent}
+                      fetchPrevEvents={fetchPrevEvents}
+                    />
                   </div>
                 ))}
               {comingEvents &&
@@ -141,7 +147,10 @@ const Events = ({ history }) => {
                       history.push(`/event/${comingEvent._id}`);
                     }}
                   >
-                    <EventCard event={comingEvent} />
+                    <EventCard
+                      event={comingEvent}
+                      fetchComingEvents={fetchComingEvents}
+                    />
                   </div>
                 ))}
             </div>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChartLine } from '@fortawesome/free-solid-svg-icons';
@@ -40,6 +40,8 @@ const Notifications = () => {
   const [loadingImg, setLoadingImg] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
+
+  const dispatch = useDispatch();
 
   const { socketConnected, setSocketConnected } = ChatState();
 
@@ -292,6 +294,13 @@ const Notifications = () => {
         console.log(res.data);
         fetchNotifications();
         populateNotifications();
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+            events: res.data.events,
+          },
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -318,6 +327,13 @@ const Notifications = () => {
         console.log(res.data);
         fetchNotifications();
         populateNotifications();
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+            events: res.data.events,
+          },
+        });
       })
       .catch((err) => {
         console.log(err);
@@ -344,6 +360,13 @@ const Notifications = () => {
         console.log(res.data);
         fetchNotifications();
         populateNotifications();
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+            events: res.data.events,
+          },
+        });
       })
       .catch((err) => {
         console.log(err);

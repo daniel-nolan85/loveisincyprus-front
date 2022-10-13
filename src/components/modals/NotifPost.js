@@ -247,7 +247,9 @@ const NotifPost = ({
             </div>
           )}
         </div>
-      ) : post.notif && post.notif.location ? (
+      ) : post.notif &&
+        post.notif.location &&
+        post.notif.invitees.some((e) => e._id === _id) ? (
         <div className='post-container'>
           <h1>{post.notif.name}</h1>
           <h2>
@@ -332,7 +334,7 @@ const NotifPost = ({
         </div>
       ) : (
         <div className='post-container'>
-          <p>This post has been deleted</p>
+          <p>This content has been deleted</p>
         </div>
       )}
       <PostDelete

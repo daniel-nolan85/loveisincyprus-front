@@ -1646,6 +1646,15 @@ nav {
   color: #c70000;
 }
 
+.event-card {
+  position: relative;
+}
+
+.event-card .fa {
+  position: absolute;
+  right: 5px;
+}
+
 /* --------------- advertisement-pages --------------- */
 .submit-btn.preview {
   background: #5388b4;
