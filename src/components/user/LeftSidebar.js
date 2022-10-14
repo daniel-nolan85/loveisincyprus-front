@@ -15,7 +15,7 @@ import { useHistory } from 'react-router-dom';
 
 const LeftSidebar = () => {
   const { token, following, followers, matches } = useSelector(
-    (state) => state.user
+    (state) => state.user || {}
   );
   const { search } = useSelector((state) => ({ ...state }));
   const { text } = search;

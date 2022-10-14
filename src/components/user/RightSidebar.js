@@ -9,7 +9,7 @@ import axios from 'axios';
 const RightSidebar = () => {
   const [ads, setAds] = useState([]);
 
-  const { _id, token, events } = useSelector((state) => state.user);
+  const { _id, token, events } = useSelector((state) => state.user) || {};
 
   const history = useHistory();
 

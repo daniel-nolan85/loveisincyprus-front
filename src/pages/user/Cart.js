@@ -5,6 +5,8 @@ import ProductInCheckout from '../../components/cards/ProductInCheckout';
 import { userCart } from '../../functions/user';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import LeftSidebar from '../../components/user/LeftSidebar';
+import RightSidebar from '../../components/user/RightSidebar';
 
 const Cart = ({ history }) => {
   const [loading, setLoading] = useState(false);
@@ -47,63 +49,77 @@ const Cart = ({ history }) => {
       });
   };
 
+  const totalItems =
+    cart.length && cart.map((c) => parseInt(c.count)).reduce((a, b) => a + b);
+
   return (
-    <>
-      {!cart.length ? (
-        <h1 className='center'>
-          Your cart is currently empty.{' '}
-          <Link to='/shop/search'>Go shopping?</Link>
-        </h1>
-      ) : (
-        <div className='small-container cart-page'>
-          {showCartItems()}
-          <div className='total-price'>
-            <table>
-              <tbody>
-                <tr>
-                  <td>Sub-total</td>
-                  <td>€{getTotal()}</td>
-                </tr>
-                <tr>
-                  <td>Tax</td>
-                  <td>€30.00</td>
-                </tr>
-                <tr>
-                  <td>Total</td>
-                  <td>€180.00</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          {token ? (
-            <button
-              onClick={saveOrderToDb}
-              type='submit'
-              className='submit-btn cart'
-              disabled={!cart.length}
-            >
-              {loading ? (
-                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+    <div className='container'>
+      <LeftSidebar />
+      <div className='main-content'>
+        {!cart.length ? (
+          <h1 className='center'>
+            Your cart is currently empty.{' '}
+            <Link to='/shop/search'>Go shopping?</Link>
+          </h1>
+        ) : (
+          <>
+            <h1 className='center'>
+              Your cart contains{' '}
+              {/* {cart.length > 1 ? `${cart.length} items` : `${cart.length} item`} */}
+              {totalItems > 1 ? `${totalItems} items` : `${totalItems} item`}
+            </h1>
+            <div className='small-container cart-page'>
+              {showCartItems()}
+              <div className='total-price'>
+                <table>
+                  <tbody>
+                    <tr>
+                      <td>Sub-total</td>
+                      <td>€{getTotal()}</td>
+                    </tr>
+                    <tr>
+                      <td>Tax</td>
+                      <td>€30.00</td>
+                    </tr>
+                    <tr>
+                      <td>Total</td>
+                      <td>€180.00</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              {token ? (
+                <button
+                  onClick={saveOrderToDb}
+                  type='submit'
+                  className='submit-btn cart'
+                  disabled={!cart.length}
+                >
+                  {loading ? (
+                    <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                  ) : (
+                    <FontAwesomeIcon icon={faPaperPlane} className='fa' />
+                  )}
+                  Proceed to Checkout
+                </button>
               ) : (
-                <FontAwesomeIcon icon={faPaperPlane} className='fa' />
+                <button type='submit' className='submit-btn cart'>
+                  <Link
+                    to={{
+                      pathname: '/authentication',
+                      state: { from: 'cart' },
+                    }}
+                  >
+                    Login to Checkout
+                  </Link>
+                </button>
               )}
-              Proceed to Checkout
-            </button>
-          ) : (
-            <button type='submit' className='submit-btn cart'>
-              <Link
-                to={{
-                  pathname: '/authentication',
-                  state: { from: 'cart' },
-                }}
-              >
-                Login to Checkout
-              </Link>
-            </button>
-          )}
-        </div>
-      )}
-    </>
+            </div>
+          </>
+        )}
+      </div>
+      <RightSidebar />
+    </div>
   );
 };
 

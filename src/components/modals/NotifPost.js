@@ -19,6 +19,7 @@ import {
   faUserCheck,
   faCalendarDays,
   faLocationDot,
+  faMap,
 } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import PostDelete from '../../components/modals/PostDelete';
@@ -29,6 +30,7 @@ import Maybe from '../../components/modals/Maybe';
 import Declined from '../../components/modals/Declined';
 import Comments from '../cards/Comments';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 Modal.setAppElement('#root');
 
@@ -256,10 +258,24 @@ const NotifPost = ({
             <FontAwesomeIcon icon={faLocationDot} className='fa' />{' '}
             {post.notif.location}
           </h2>
-          <h2>
+          {post.notif.link && (
+            <h2>
+              <Link
+                to={{
+                  pathname: post.notif.link,
+                }}
+                target='_blank'
+                className='link'
+              >
+                <FontAwesomeIcon icon={faMap} className='fa' /> View map
+              </Link>
+            </h2>
+          )}
+          <h3>
             <FontAwesomeIcon icon={faCalendarDays} className='fa' />{' '}
             {moment(post.notif.when).format('MMMM Do YYYY, h:mm:ss a')}
-          </h2>
+          </h3>
+          <br />
           <h3>{post.notif.notes}</h3>
 
           <div className='inv-response'>

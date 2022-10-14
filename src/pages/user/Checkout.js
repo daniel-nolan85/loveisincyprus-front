@@ -15,6 +15,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import AddressForm from '../../components/forms/AddressForm';
 import AddressList from '../../components/modals/AddressList';
+import LeftSidebar from '../../components/user/LeftSidebar';
+import RightSidebar from '../../components/user/RightSidebar';
 
 const Checkout = ({ history }) => {
   const [products, setProducts] = useState([]);
@@ -110,7 +112,7 @@ const Checkout = ({ history }) => {
   const showProductSummary = () => (
     <div className='small-container checkout-page'>
       <h1 className='center'>Order Summary</h1>
-      <div className='total-price'>
+      <div className='total-price checkout'>
         <table>
           <tbody>
             {products.map((p, i) => (
@@ -254,37 +256,43 @@ const Checkout = ({ history }) => {
   };
 
   return (
-    <>
-      <div>
-        <br />
-        <h1 className='center'>Please confirm recipient's name and address</h1>
-        <div className='contact-container'>
-          <div>
-            {showDeliverTo()}
-            <AddressForm
-              userAddress={userAddress}
-              setUserAddress={setUserAddress}
-              saveAddressToDb={saveAddressToDb}
-              changeAddress={changeAddress}
-              address={address}
-              loadingAddress={loadingAddress}
-              deliverTo={deliverTo}
-              addressSaved={addressSaved}
-            />
+    <div className='container'>
+      <LeftSidebar />
+      <div className='main-content'>
+        <div>
+          <br />
+          <h1 className='center'>
+            Please confirm recipient's name and address
+          </h1>
+          <div className='contact-container'>
+            <div>
+              {showDeliverTo()}
+              <AddressForm
+                userAddress={userAddress}
+                setUserAddress={setUserAddress}
+                saveAddressToDb={saveAddressToDb}
+                changeAddress={changeAddress}
+                address={address}
+                loadingAddress={loadingAddress}
+                deliverTo={deliverTo}
+                addressSaved={addressSaved}
+              />
+            </div>
+            <div>
+              {showApplyCoupon()}
+              {showProductSummary()}
+            </div>
           </div>
-          <div>
-            {showApplyCoupon()}
-            {showProductSummary()}
-          </div>
+          <AddressList
+            addressListModalIsOpen={addressListModalIsOpen}
+            setAddressListModalIsOpen={setAddressListModalIsOpen}
+            address={address}
+            setUserAddress={setUserAddress}
+          />
         </div>
-        <AddressList
-          addressListModalIsOpen={addressListModalIsOpen}
-          setAddressListModalIsOpen={setAddressListModalIsOpen}
-          address={address}
-          setUserAddress={setUserAddress}
-        />
       </div>
-    </>
+      <RightSidebar />
+    </div>
   );
 };
 

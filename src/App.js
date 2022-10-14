@@ -283,7 +283,7 @@ const App = () => {
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
-    } else {
+    } else if (user) {
       socket.on('message received', (newMessageReceived) => {
         // console.log('newMessageReceived => ', newMessageReceived);
         fetchChats();

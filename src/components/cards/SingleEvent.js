@@ -4,6 +4,9 @@ import {
   faUserCheck,
   faUserClock,
   faUserXmark,
+  faCalendarDays,
+  faLocationDot,
+  faMap,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
@@ -62,7 +65,7 @@ const SingleEvent = ({ event, fetchEvent }) => {
   } = event;
 
   return (
-    <div className='small-container single-product'>
+    <div className='small-container single-product single-event'>
       <h1 className='center'>
         {accepted && accepted.length > 0 && accepted.some((e) => e._id === _id)
           ? 'You are going to this event'
@@ -81,7 +84,7 @@ const SingleEvent = ({ event, fetchEvent }) => {
         Change response?
       </button>
       <div className='row'>
-        <div className='col-2'>
+        <div className='col-2 single-event-image'>
           {uploadedPhotos && uploadedPhotos.length ? (
             <Carousel showArrows autoPlay infiniteLoop>
               {uploadedPhotos.map((i) => (
@@ -102,17 +105,27 @@ const SingleEvent = ({ event, fetchEvent }) => {
         <div className='col-2'>
           <Card>
             <h1>{name}</h1>
-            <h4>{moment(when).format('MMMM Do YYYY')}</h4>
+            <h2>
+              <FontAwesomeIcon icon={faLocationDot} className='fa' /> {location}
+            </h2>
             {link && (
-              <Link
-                to={{
-                  pathname: link,
-                }}
-                target='_blank'
-              >
-                View location
-              </Link>
+              <h2>
+                <Link
+                  to={{
+                    pathname: link,
+                  }}
+                  target='_blank'
+                  // className='link'
+                >
+                  <FontAwesomeIcon icon={faMap} className='fa' /> View map
+                </Link>
+              </h2>
             )}
+            <p>
+              <FontAwesomeIcon icon={faCalendarDays} className='fa' />{' '}
+              {moment(when).format('MMMM Do YYYY, h:mm:ss a')}
+            </p>
+            <br />
             <p>{notes}</p>
           </Card>
         </div>

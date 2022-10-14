@@ -186,6 +186,7 @@ const Notifications = () => {
         setImage({});
         setCommentModalIsOpen(false);
         fetchNotifications();
+        populateNotifications();
         if (res.data.postedBy._id !== user._id) {
           socket.emit('new comment', res.data);
         }
@@ -249,6 +250,7 @@ const Notifications = () => {
           // socket.emit('like post', res.data);
         }
         fetchNotifications();
+        populateNotifications();
       })
       .catch((err) => {
         console.log(err);
@@ -268,6 +270,7 @@ const Notifications = () => {
       )
       .then((res) => {
         fetchNotifications();
+        populateNotifications();
       })
       .catch((err) => {
         console.log(err);

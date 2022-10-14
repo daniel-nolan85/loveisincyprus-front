@@ -10,6 +10,7 @@ import defaultItem from '../../assets/defaultItem.png';
 import PaymentForm from '../forms/PaymentForm';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { Carousel } from 'react-responsive-carousel';
 
 const CardinityCheckout = ({ deliverTo, userAddress }) => {
   const [succeeded, setSucceeded] = useState(false);
@@ -22,12 +23,14 @@ const CardinityCheckout = ({ deliverTo, userAddress }) => {
 
   const { token } = useSelector((state) => state.user);
   const { coupon } = useSelector((state) => ({ ...state }));
+  const { cart } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
 
   let history = useHistory();
 
   const isFirstRun = useRef(true);
+  console.log(cart);
 
   useEffect(() => {
     calcFinalAmount();
@@ -121,8 +124,8 @@ const CardinityCheckout = ({ deliverTo, userAddress }) => {
   };
 
   return (
-    <>
-      {!succeeded && (
+    <div className='payment-amount'>
+      {/* {!succeeded && (
         <div>
           {coupon && totalAfterDiscount !== undefined ? (
             <p>{`Total after discount: €${totalAfterDiscount}`}</p>
@@ -130,30 +133,64 @@ const CardinityCheckout = ({ deliverTo, userAddress }) => {
             <p>No coupon applied</p>
           )}
         </div>
+      )} */}
+      {cart.length > 1 ? (
+        <Carousel
+          showArrows
+          autoPlay
+          infiniteLoop
+          style={{
+            height: '200px',
+            width: '200px',
+            objectFit: 'cover',
+            marginBottom: '-50px',
+          }}
+        >
+          {cart.map((item, index) =>
+            !item.images.length ? (
+              <img src={defaultItem} key={index} />
+            ) : (
+              <img src={item.images[0].url} key={index} />
+            )
+          )}
+        </Carousel>
+      ) : (
+        <Card
+          cover={
+            <img
+              src={
+                cart.length && cart[0].images && cart[0].images.length > 0
+                  ? cart[0].images[0].url
+                  : defaultItem
+              }
+              style={{
+                height: '200px',
+                width: '200px',
+                objectFit: 'cover',
+                margin: '0 auto',
+              }}
+            />
+          }
+        />
       )}
-
       <Card
-        cover={
-          <img
-            src={defaultItem}
-            style={{
-              height: '200px',
-              width: '200px',
-              objectFit: 'cover',
-              marginBottom: '-50px',
-            }}
-          />
-        }
         actions={[
           <>
-            <FontAwesomeIcon icon={faEuroSign} className='fa' />
+            <FontAwesomeIcon icon={faEuroSign} className='fa euro' />
             <br />
-            Total: €{cartTotal}
+            <p className='price'>Total: €{cartTotal}</p>
           </>,
           <>
-            <FontAwesomeIcon icon={faCheck} className='fa' />
+            <FontAwesomeIcon icon={faCheck} className='fa check' />
             <br />
-            Total payable: €{(payable / 100).toFixed(2)}
+            {/* Total payable: €{(payable / 100).toFixed(2)} */}
+            {coupon && totalAfterDiscount !== undefined ? (
+              <p className='price'>{`Total after discount: €${totalAfterDiscount}`}</p>
+            ) : (
+              <p className='price'>{`No coupon applied: €${(
+                payable / 100
+              ).toFixed(2)}`}</p>
+            )}
           </>,
         ]}
       />
@@ -163,7 +200,7 @@ const CardinityCheckout = ({ deliverTo, userAddress }) => {
         succeeded={succeeded}
         cartTotal={cartTotal}
       />
-    </>
+    </div>
   );
 };
 

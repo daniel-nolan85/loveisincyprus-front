@@ -37,7 +37,7 @@ const PaymentForm = ({ handleSubmit, processing, succeeded, cartTotal }) => {
       }}
     >
       {(formik) => (
-        <div className='form-box address'>
+        <div className='form-box'>
           <div className='button-box'>
             <p className='form-header'>Payment Information</p>
           </div>

@@ -3,6 +3,8 @@ import SingleProduct from '../../components/cards/SingleProduct';
 import ProductInfo from '../../components/cards/ProductInfo';
 import { getProduct, productStar, getRelated } from '../../functions/product';
 import { useSelector } from 'react-redux';
+import LeftSidebar from '../../components/user/LeftSidebar';
+import RightSidebar from '../../components/user/RightSidebar';
 
 const Product = ({ match }) => {
   const [product, setProduct] = useState({});
@@ -42,21 +44,29 @@ const Product = ({ match }) => {
   };
 
   return (
-    <>
-      <SingleProduct product={product} onStarClick={onStarClick} star={star} />
-      <div>
-        <h1 className='center'>Related Products</h1>
-        <div className='container'>
-          {related.length
-            ? related.map((r) => (
-                <div className='product-card' key={r._id}>
-                  <ProductInfo product={r} />
-                </div>
-              ))
-            : 'No related products found'}
+    <div className='container'>
+      <LeftSidebar />
+      <div className='main-content'>
+        <SingleProduct
+          product={product}
+          onStarClick={onStarClick}
+          star={star}
+        />
+        <div>
+          <h1 className='center'>Related Products</h1>
+          <div className='container'>
+            {related.length
+              ? related.map((r) => (
+                  <div className='product-card' key={r._id}>
+                    <ProductInfo product={r} />
+                  </div>
+                ))
+              : 'No related products found'}
+          </div>
         </div>
       </div>
-    </>
+      <RightSidebar />
+    </div>
   );
 };
 

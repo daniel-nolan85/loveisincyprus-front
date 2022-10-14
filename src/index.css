@@ -1627,7 +1627,7 @@ nav {
 .event-invitees {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 10px;
+  margin: 10px 0;
 }
 
 .event-invitees .fa {
@@ -1653,6 +1653,22 @@ nav {
 .event-card .fa {
   position: absolute;
   right: 5px;
+}
+
+.small-container.single-product.single-event {
+  margin: 0;
+}
+
+.single-event-image .ant-card-body {
+  padding: 0;
+}
+
+.single-event .col-2 h1 {
+  font-size: 35px;
+}
+
+.single-event .col-2 .fa {
+  font-size: 20px;
 }
 
 /* --------------- advertisement-pages --------------- */
@@ -2148,13 +2164,13 @@ nav {
 }
 
 .form-box.address {
-  margin: 0 100px 0 0;
+  margin: 0 100px 0 10px;
   height: 580px;
 }
 
 .form-box.deliver-to {
   height: 180px;
-  margin: 0 100px 0 0;
+  margin: 0 100px 0 10px;
 }
 
 .form-box.coupon {
@@ -3505,8 +3521,8 @@ input[name='Photos'] {
 .small-container {
   max-width: 1080px;
   margin: auto;
-  padding-right: 25px;
-  padding-left: 25px;
+  /* padding-right: 25px;
+  padding-left: 25px; */
 }
 
 .row {
@@ -3523,7 +3539,7 @@ input[name='Photos'] {
 .col-2 {
   flex-basis: 45%;
   min-width: 300px;
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 .col-4 {
@@ -3605,9 +3621,9 @@ input[name='Photos'] {
   cursor: pointer;
 }
 
-.cart-page {
-  margin: 80px auto;
-}
+/* .cart-page {
+  margin: 20px auto;
+} */
 
 .checkout-page {
   width: 500px;
@@ -3668,6 +3684,10 @@ td a {
   max-width: 400px;
 }
 
+.total-price.checkout table {
+  margin: 0 auto;
+}
+
 .cart-page td:last-child,
 .checkout-page td:last-child {
   text-align: right;
@@ -3704,6 +3724,69 @@ table.product-info tbody {
 .submit-btn.cart {
   width: fit-content;
   color: #fff;
+}
+
+.payment-amount .ant-card-cover {
+  background-color: #efefef;
+}
+
+.payment-amount .ant-card-body {
+  padding: 0;
+}
+
+.payment-amount .ant-card-actions {
+  padding-top: 10px;
+}
+
+.payment-amount .fa.euro {
+  font-size: 30px;
+  color: var(--nav-color);
+}
+
+.payment-amount .fa.check {
+  font-size: 30px;
+  color: #07bc0c;
+}
+
+.payment-amount .price {
+  font-size: 20px;
+}
+
+.payment-amount .carousel-root {
+  width: 200px;
+  margin: 0 auto;
+}
+
+.payment-amount .carousel-slider {
+  height: 200px;
+}
+
+.payment-amount img {
+  height: 200px;
+  width: 200px;
+}
+
+.payment-amount .thumbs-wrapper {
+  display: none;
+}
+
+.payment-info {
+  display: flex;
+  justify-content: space-around;
+}
+
+.order-status {
+  display: flex;
+  justify-content: space-around;
+}
+
+.order-status .order-information table {
+  border-spacing: 20px;
+  border-collapse: separate;
+}
+
+.order-status {
+  margin-bottom: 20px;
 }
 
 /* --------------- information pages --------------- */

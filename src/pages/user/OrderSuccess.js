@@ -87,7 +87,9 @@ const OrderSuccess = (props) => {
         </div>
         <p>
           Thanks for your purchase.{' '}
-          <Link to='purchase/history'>View purchase history</Link>
+          <Link to='purchase/history' className='link'>
+            View purchase history
+          </Link>
         </p>
       </div>
       <RightSidebar />
