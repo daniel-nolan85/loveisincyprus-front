@@ -57,7 +57,11 @@ const Product = ({ match }) => {
           <div className='container'>
             {related.length
               ? related.map((r) => (
-                  <div className='product-card' key={r._id}>
+                  <div
+                    className='product-card'
+                    key={r._id}
+                    style={{ margin: '0 5px' }}
+                  >
                     <ProductInfo product={r} />
                   </div>
                 ))

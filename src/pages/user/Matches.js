@@ -65,7 +65,8 @@ const Matches = ({ history }) => {
               }}
               onClick={() => history.push(`/user/${u._id}`)}
             >
-              {following.includes(u._id) ? (
+              {following.some((e) => e._id === u._id) ||
+              following.includes(u._id) ? (
                 <>
                   <FontAwesomeIcon
                     icon={faHeart}

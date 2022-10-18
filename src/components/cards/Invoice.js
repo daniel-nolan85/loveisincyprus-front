@@ -67,7 +67,19 @@ const Invoice = ({ order }) => (
           {order.orderStatus}
         </Text>
         {'\n'}
-
+        {order.discount && (
+          <>
+            <Text>
+              Discount: {'         '}€{parseFloat(order.discount).toFixed(2)}
+            </Text>
+            {'\n'}
+          </>
+        )}
+        {'\n'}
+        <Text>
+          Delivery Fee: {'   '}€{parseFloat(order.deliveryFee).toFixed(2)}
+        </Text>
+        {'\n'}
         <Text>
           Total Paid: {'       '}€{order.paymentIntent.amount}
         </Text>

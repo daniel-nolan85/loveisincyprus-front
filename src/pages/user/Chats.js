@@ -146,6 +146,7 @@ const Chats = ({ history }) => {
         }
       )
       .then((res) => {
+        console.log('access chat => ', res);
         if (!chats.find((c) => c._id === res.data._id)) {
           setChats([res.data, ...chats]);
         }
@@ -170,6 +171,7 @@ const Chats = ({ history }) => {
         }
       )
       .then((res) => {
+        console.log(res);
         setChats(res.data);
       })
       .catch((err) => {
@@ -193,8 +195,8 @@ const Chats = ({ history }) => {
         })
         .then((res) => {
           setMessages(res.data);
-          // console.log('messages => ', res.data);
-          // console.log('selectedChat => ', selectedChat);
+          console.log('messages => ', res.data);
+          console.log('selectedChat => ', selectedChat);
           socket.emit('join chat', selectedChat._id);
         })
         .catch((err) => {
@@ -280,7 +282,7 @@ const Chats = ({ history }) => {
             <FontAwesomeIcon icon={faMagnifyingGlass} onClick={searchMatches} />
             <input
               type='search'
-              placeholder='Search Your Matches to Start Chatting'
+              placeholder='Search your matches to start chatting'
               onChange={searchMatches}
               value={query}
             />

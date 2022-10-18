@@ -28,7 +28,8 @@ const OrderSuccess = (props) => {
   };
 
   console.log(props);
-  const { _id, orderStatus } = props.location.state.order;
+  const { _id, orderStatus, deliveryFee, discount } =
+    props.location.state.order;
   const { amount } = props.location.state.order.paymentIntent;
   const { card_brand, pan, exp_month, exp_year, holder } =
     props.location.state.order.paymentIntent.payment_instrument;
@@ -65,32 +66,62 @@ const OrderSuccess = (props) => {
         </div>
         <div className='ps-receipt'>
           <div className='ps-col'>
-            <p>Cost:</p>
-            <h2 className='ps-cost'>€{amount}</h2>
+            <div className='ps-row'>
+              <p>Cost of items:</p>
+              <h3 className='ps-cost'>
+                €
+                {discount
+                  ? (parseFloat(amount) + discount).toFixed(2) -
+                    deliveryFee.toFixed(2)
+                  : parseFloat(amount) - deliveryFee.toFixed(2)}
+              </h3>
+            </div>
+            {discount && (
+              <div className='ps-row'>
+                <p>Discount:</p>
+                <h3 className='ps-cost'>€{discount.toFixed(2)}</h3>
+              </div>
+            )}
+            <div className='ps-row'>
+              <p>Delivery fee:</p>
+              <h3 className='ps-cost'>€{deliveryFee.toFixed(2)}</h3>
+            </div>
+            <div className='ps-row'>
+              <p>Total paid:</p>
+              <h2 className='ps-cost'>€{amount}</h2>
+            </div>
           </div>
           <div className='ps-col'>
-            {products &&
-              products.map((p) => (
-                <div key={p.product._id}>
-                  <p>Items:</p>
-                  <h3 className='ps-bought-items'>{p.product.title}</h3>
-                  <p className='ps-bought-items ps-description'>
-                    {p.product.description}
-                  </p>
-                  <p className='ps-bought-items ps-price'>€{p.product.price}</p>
-                </div>
-              ))}
+            <div className='ps-row'>
+              <p>Items:</p>
+              <div className='ps-items'>
+                {products &&
+                  products.map((p) => (
+                    <div key={p.product._id}>
+                      <h3 className='ps-bought-items'>
+                        {p.product.title} x {p.count}
+                      </h3>
+                      <p className='ps-bought-items ps-description'>
+                        {p.product.description}
+                      </p>
+                      <p className='ps-bought-items ps-price'>
+                        €{(p.product.price * p.count).toFixed(2)}
+                      </p>
+                    </div>
+                  ))}
+              </div>
+            </div>
           </div>
           <p className='ps-comprobe'>
-            This information will be sent to your email
+            Thanks for your purchase. This information will be sent to your
+            email.
+          </p>
+          <p className='ps-comprobe'>
+            <Link to='purchase/history' className='link'>
+              View purchase history.
+            </Link>
           </p>
         </div>
-        <p>
-          Thanks for your purchase.{' '}
-          <Link to='purchase/history' className='link'>
-            View purchase history
-          </Link>
-        </p>
       </div>
       <RightSidebar />
     </div>

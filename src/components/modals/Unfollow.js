@@ -15,7 +15,7 @@ const Unfollow = ({
   fetchMatches,
   fetchFollowing,
 }) => {
-  let { user } = useSelector((state) => ({ ...state }));
+  const { user } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
 
@@ -42,6 +42,7 @@ const Unfollow = ({
         }
       )
       .then((res) => {
+        console.log(res.data);
         toast.error(
           `You no longer like ${u.name ? u.name : u.email.split('@')[0]}.`,
           {

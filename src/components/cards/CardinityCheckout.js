@@ -5,14 +5,26 @@ import { createOrder, emptyUserCart } from '../../functions/user';
 import { Link, useHistory } from 'react-router-dom';
 import { Card } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEuroSign, faCheck } from '@fortawesome/free-solid-svg-icons';
+import {
+  faEuroSign,
+  faCheck,
+  faTruck,
+  faTruckFast,
+  faCashRegister,
+} from '@fortawesome/free-solid-svg-icons';
 import defaultItem from '../../assets/defaultItem.png';
 import PaymentForm from '../forms/PaymentForm';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Carousel } from 'react-responsive-carousel';
+import { addPoints } from '../../functions/user';
 
-const CardinityCheckout = ({ deliverTo, userAddress }) => {
+const CardinityCheckout = ({
+  deliverTo,
+  userAddress,
+  couponApplied,
+  deliveryFee,
+}) => {
   const [succeeded, setSucceeded] = useState(false);
   const [processing, setProcessing] = useState('');
   const [cartTotal, setCartTotal] = useState(0);
@@ -20,6 +32,7 @@ const CardinityCheckout = ({ deliverTo, userAddress }) => {
   const [payable, setPayable] = useState(0);
   const [userAgent, setUserAgent] = useState('');
   const [order, setOrder] = useState({});
+  const [discount, setDiscount] = useState(0);
 
   const { token } = useSelector((state) => state.user);
   const { coupon } = useSelector((state) => ({ ...state }));
@@ -30,7 +43,8 @@ const CardinityCheckout = ({ deliverTo, userAddress }) => {
   let history = useHistory();
 
   const isFirstRun = useRef(true);
-  console.log(cart);
+  console.log(coupon);
+  console.log('payable => ', payable);
 
   useEffect(() => {
     calcFinalAmount();
@@ -68,26 +82,42 @@ const CardinityCheckout = ({ deliverTo, userAddress }) => {
         setCartTotal(res.data.cartTotal);
         setTotalAfterDiscount(res.data.totalAfterDiscount);
         setPayable(res.data.payable);
+        setDiscount(res.data.cartTotal - res.data.totalAfterDiscount);
       })
       .catch((err) => console.log(err));
   };
 
   const handleSubmit = async (values) => {
     setProcessing(true);
-    createPayment(values, payable, userAgent, token).then((res) => {
-      console.log('create payment', res.data);
-      if (res.data.errors) {
-        toast.error(res.data.errors[0].message, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setProcessing(false);
-      }
-      if (res.data.status === 'approved') {
-        toast.success(`Payment successful.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        createOrder(res.data, token, deliverTo, userAddress).then(
-          (response) => {
+    createPayment(values, payable, userAgent, token, deliveryFee).then(
+      (res) => {
+        console.log('create payment', res.data);
+        if (res.data.errors) {
+          toast.error(res.data.errors[0].message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+        }
+        if (res.data.status === 'approved') {
+          if (coupon) deleteCoupon();
+          addPoints(Math.floor(payable) / 100, 'store purchase', token);
+          toast.success(
+            `Payment successful!
+          Thanks for your purchase. You have been awarded ${
+            Math.floor(payable) / 100
+          } points!`,
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+          createOrder(
+            res.data,
+            token,
+            deliverTo,
+            userAddress,
+            discount,
+            deliveryFee
+          ).then((response) => {
             console.log('createOrder response => ', response);
             if (response.data.paymentIntent.status === 'approved') {
               if (typeof window !== 'undefined')
@@ -103,24 +133,40 @@ const CardinityCheckout = ({ deliverTo, userAddress }) => {
               emptyUserCart(token);
               setOrder(response.data);
             }
-          }
-        );
-        setProcessing(false);
-        setSucceeded(true);
+          });
+          setProcessing(false);
+          setSucceeded(true);
+        }
+        if (res.data.status === 'pending') {
+          toast.warning(`Payment pending.`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+        }
+        if (res.data.status === 'declined') {
+          toast.error(`Payment declined.`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+        }
       }
-      if (res.data.status === 'pending') {
-        toast.warning(`Payment pending.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setProcessing(false);
-      }
-      if (res.data.status === 'declined') {
-        toast.error(`Payment declined.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setProcessing(false);
-      }
-    });
+    );
+  };
+
+  const deleteCoupon = async () => {
+    await axios
+      .delete(
+        `${process.env.REACT_APP_API}/delete-coupon/${couponApplied._id}`,
+        {
+          headers: {
+            authtoken: token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log('coupon => ', res.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -178,17 +224,25 @@ const CardinityCheckout = ({ deliverTo, userAddress }) => {
           <>
             <FontAwesomeIcon icon={faEuroSign} className='fa euro' />
             <br />
-            <p className='price'>Total: €{cartTotal}</p>
+            <p className='price'>Items: €{cartTotal.toFixed(2)}</p>
           </>,
           <>
-            <FontAwesomeIcon icon={faCheck} className='fa check' />
+            <FontAwesomeIcon icon={faTruckFast} className='fa euro' />
+            <br />
+            <p className='price'>Total: €{deliveryFee.toFixed(2)}</p>
+          </>,
+          <>
+            <FontAwesomeIcon icon={faCashRegister} className='fa euro' />
             <br />
             {/* Total payable: €{(payable / 100).toFixed(2)} */}
             {coupon && totalAfterDiscount !== undefined ? (
-              <p className='price'>{`Total after discount: €${totalAfterDiscount}`}</p>
+              <p className='price'>{`Total after discount: €${(
+                totalAfterDiscount + deliveryFee
+              ).toFixed(2)}`}</p>
             ) : (
-              <p className='price'>{`No coupon applied: €${(
-                payable / 100
+              <p className='price'>{`Total amount: €${(
+                payable / 100 +
+                deliveryFee
               ).toFixed(2)}`}</p>
             )}
           </>,

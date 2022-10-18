@@ -1516,6 +1516,21 @@ nav {
   float: left;
 }
 
+.ps-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.ps-items {
+  /* display: flex; */
+  /* justify-content: flex-end; */
+}
+
+.ps-row h2,
+.ps-row h3 {
+  margin-right: 20px;
+}
+
 .ps-bought-items {
   margin-top: -3px;
 }
@@ -1527,9 +1542,11 @@ nav {
 .ps-description {
   font-size: 13px;
 }
+
 .ps-price {
   font-size: 12px;
 }
+
 .ps-comprobe {
   text-align: center;
 }

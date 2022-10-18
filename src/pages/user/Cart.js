@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import ProductInCheckout from '../../components/cards/ProductInCheckout';
@@ -10,9 +10,16 @@ import RightSidebar from '../../components/user/RightSidebar';
 
 const Cart = ({ history }) => {
   const [loading, setLoading] = useState(false);
+  const [deliveryFee, setDeliveryFee] = useState(0);
 
   const { token } = useSelector((state) => state.user) || {};
   const { cart } = useSelector((state) => ({ ...state }));
+
+  console.log(cart);
+
+  useEffect(() => {
+    getDeliveryFee();
+  }, [cart || deliveryFee]);
 
   const showCartItems = () => (
     <table>
@@ -41,7 +48,11 @@ const Cart = ({ history }) => {
       .then((res) => {
         setLoading(false);
         console.log('CART POST RES', res);
-        if (res.data.ok) history.push('/checkout');
+        if (res.data.ok)
+          history.push({
+            pathname: '/checkout',
+            state: deliveryFee,
+          });
       })
       .catch((err) => {
         setLoading(false);
@@ -49,8 +60,23 @@ const Cart = ({ history }) => {
       });
   };
 
-  const totalItems =
-    cart.length && cart.map((c) => parseInt(c.count)).reduce((a, b) => a + b);
+  // const totalItems =
+  //   cart.length && cart.map((c) => c.count).reduce((a, b) => a + b);
+
+  const totalItems = cart.reduce((accumulator, c) => {
+    return accumulator + parseInt(c.count);
+  }, 0);
+
+  const getDeliveryFee = () => {
+    const weight = cart.reduce((accumulator, c) => {
+      return accumulator + c.count * c.weight;
+    }, 0);
+    weight + 1 <= 2
+      ? setDeliveryFee(3.4)
+      : weight + 1 <= 5
+      ? setDeliveryFee(3.8)
+      : weight + 1 <= 10 && setDeliveryFee(4.2);
+  };
 
   return (
     <div className='container'>
@@ -75,15 +101,15 @@ const Cart = ({ history }) => {
                   <tbody>
                     <tr>
                       <td>Sub-total</td>
-                      <td>€{getTotal()}</td>
+                      <td>€{getTotal().toFixed(2)}</td>
                     </tr>
                     <tr>
-                      <td>Tax</td>
-                      <td>€30.00</td>
+                      <td>Delivery fee</td>
+                      <td>€{deliveryFee.toFixed(2)}</td>
                     </tr>
                     <tr>
                       <td>Total</td>
-                      <td>€180.00</td>
+                      <td>€{(getTotal() + deliveryFee).toFixed(2)}</td>
                     </tr>
                   </tbody>
                 </table>

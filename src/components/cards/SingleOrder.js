@@ -7,7 +7,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 const { TabPane } = Tabs;
 
 const SingleOrder = ({ order }) => {
-  const { orderStatus, deliverTo } = order;
+  const { orderStatus, deliverTo, discount, deliveryFee } = order;
   const { id, amount, status, created } = order.paymentIntent;
   const { firstLine, secondLine, city, state, zip, country } =
     order.deliveryAddress;
@@ -20,6 +20,20 @@ const SingleOrder = ({ order }) => {
             <div className='order-line'>
               <span className='order-title'>Order ID: </span>
               <span className='order-detail'>{id}</span>
+            </div>
+            {discount && (
+              <div className='order-line'>
+                <span className='order-title'>Discount: </span>
+                <span className='order-detail'>
+                  €{parseFloat(discount).toFixed(2)}
+                </span>
+              </div>
+            )}
+            <div className='order-line'>
+              <span className='order-title'>Delivery fee: </span>
+              <span className='order-detail'>
+                €{parseFloat(deliveryFee).toFixed(2)}
+              </span>
             </div>
             <div className='order-line'>
               <span className='order-title'>Total paid: </span>

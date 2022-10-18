@@ -38,12 +38,17 @@ const Checkout = ({ history }) => {
   const [loadingAddress, setLoadingAddress] = useState(false);
   const [loadingCoupon, setLoadingCoupon] = useState(false);
   const [deliverTo, setDeliverTo] = useState('');
+  const [couponApplied, setCouponApplied] = useState({});
 
   const { token, address } = useSelector((state) => state.user);
+
+  const deliveryFee = history.location.state;
 
   const dispatch = useDispatch();
 
   const isFirstRun = useRef(true);
+
+  console.log('totalAfterDiscount => ', totalAfterDiscount);
 
   useEffect(() => {
     fetchUserCart();
@@ -118,16 +123,26 @@ const Checkout = ({ history }) => {
             {products.map((p, i) => (
               <tr key={i}>
                 <td>
-                  {p.product.title} x {p.count} = {p.product.price * p.count}
+                  {p.product.title} x {p.count} = €
+                  {(p.product.price * p.count).toFixed(2)}
                 </td>
               </tr>
             ))}
             <tr>
-              <td>Cart total: €{total}</td>
+              <td>Sub-total: €{total.toFixed(2)}</td>
+            </tr>
+            <tr>
+              <td>Delivery fee: €{deliveryFee.toFixed(2)}</td>
+            </tr>
+            <tr>
+              <td>Cart total: €{(total + deliveryFee).toFixed(2)}</td>
             </tr>
             {totalAfterDiscount > 0 && (
               <tr>
-                <td>Discount applied! Total payable: €{totalAfterDiscount}</td>
+                <td>
+                  Discount applied! Total payable: €
+                  {(totalAfterDiscount + deliveryFee).toFixed(2)}
+                </td>
               </tr>
             )}
           </tbody>
@@ -145,7 +160,7 @@ const Checkout = ({ history }) => {
                 // history.push({ pathName: '/payment', state: userAddress })
                 history.push({
                   pathname: '/payment',
-                  state: { deliverTo, userAddress },
+                  state: { deliverTo, userAddress, couponApplied, deliveryFee },
                 })
               // history.push('/payment')
             }
@@ -223,8 +238,10 @@ const Checkout = ({ history }) => {
         return;
       }
       if (res.data) {
+        console.log(res.data);
         setLoadingCoupon(false);
-        setTotalAfterDiscount(res.data);
+        setTotalAfterDiscount(parseFloat(res.data.totalAfterDiscount));
+        setCouponApplied(res.data.validCoupon);
         toast.success('Discount applied!', {
           position: toast.POSITION.TOP_CENTER,
         });

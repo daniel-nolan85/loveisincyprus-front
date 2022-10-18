@@ -393,6 +393,8 @@ const Points = () => {
                         'You completed 100% of your profile'}
                       {pg.reason === 'match' && 'You matched with another user'}
                       {pg.reason === 'event post' && 'You posted on an event'}
+                      {pg.reason === 'store purchase' &&
+                        'You made a store purchase'}
                     </p>
                   </td>
                 </tr>

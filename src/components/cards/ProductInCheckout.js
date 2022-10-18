@@ -91,7 +91,7 @@ const ProductInCheckout = ({ p }) => {
       <td>
         <input type='number' value={p.count} onChange={handleQuantityChange} />
       </td>
-      <td>€{p.price * p.count}</td>
+      <td>€{(p.price * p.count).toFixed(2)}</td>
     </tr>
   );
 };

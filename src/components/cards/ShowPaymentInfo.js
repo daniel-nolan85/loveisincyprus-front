@@ -10,8 +10,18 @@ const ShowPaymentInfo = ({ order }) => {
         <div>
           <p>
             <span>Order ID: {order.paymentIntent.id}</span> <br />
+            {order.discount && (
+              <>
+                <span>Discount: €{parseFloat(order.discount).toFixed(2)}</span>{' '}
+                <br />
+              </>
+            )}
             <span>
-              Total Paid: €
+              Delivery fee: €{parseFloat(order.deliveryFee).toFixed(2)}
+            </span>{' '}
+            <br />
+            <span>
+              Total paid: €
               {order.paymentIntent.amount.toLocaleString('en-US', {
                 style: 'currency',
                 currency: 'EUR',
@@ -32,7 +42,7 @@ const ShowPaymentInfo = ({ order }) => {
               {/* {new Date(order.paymentIntent.created * 1000).toLocaleString()} */}
             </span>{' '}
             <br />
-            <span>Order Status: {order.orderStatus}</span>
+            <span>Order status: {order.orderStatus}</span>
           </p>
         </div>
         <div>

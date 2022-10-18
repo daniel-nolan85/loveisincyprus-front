@@ -51,11 +51,13 @@ export const createOrder = async (
   cardinityResponse,
   authtoken,
   deliverTo,
-  deliveryAddress
+  deliveryAddress,
+  discount,
+  deliveryFee
 ) =>
   await axios.post(
     `${process.env.REACT_APP_API}/order`,
-    { cardinityResponse, deliverTo, deliveryAddress },
+    { cardinityResponse, deliverTo, deliveryAddress, discount, deliveryFee },
     {
       headers: {
         authtoken,

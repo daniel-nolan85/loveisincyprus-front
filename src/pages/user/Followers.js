@@ -23,13 +23,14 @@ const Followers = ({ history }) => {
   const [unfollowModalIsOpen, setUnfollowModalIsOpen] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
+  console.log(user);
+  console.log(users);
 
   const { socketConnected, setSocketConnected } = ChatState();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(user);
     if (user && user.token) fetchFollowers();
   }, [user && user.token]);
 
@@ -53,7 +54,7 @@ const Followers = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log('followers ==> ', res);
+        // console.log('followers ==> ', res);
         setUsers(res.data);
       })
       .catch((err) => {
@@ -96,10 +97,10 @@ const Followers = ({ history }) => {
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
+            ...user,
             following: res.data.following,
             followers: res.data.followers,
             matches: res.data.matches,
-            ...user,
           },
         });
       })
@@ -134,7 +135,9 @@ const Followers = ({ history }) => {
               }}
               onClick={() => history.push(`/user/${u._id}`)}
             >
-              {user.following.includes(u._id) ? (
+              {/* {user.following.includes(u._id) ? ( */}
+              {user.following.some((e) => e._id === u._id) ||
+              user.following.includes(u._id) ? (
                 <>
                   <FontAwesomeIcon
                     icon={faHeart}

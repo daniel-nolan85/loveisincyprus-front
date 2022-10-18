@@ -33,6 +33,7 @@ const initialState = {
   subs: [],
   quantity: '',
   images: [],
+  weight: '',
 };
 
 const Product = () => {
@@ -137,6 +138,7 @@ const Product = () => {
     subs,
     quantity,
     images,
+    weight,
   } = values;
 
   const productForm = () => (
@@ -170,6 +172,14 @@ const Product = () => {
           className='input-field'
           placeholder='Price'
           value={price}
+          onChange={handleChange}
+        />
+        <input
+          type='number'
+          name='weight'
+          className='input-field'
+          placeholder='Weight'
+          value={weight}
           onChange={handleChange}
         />
         <input
