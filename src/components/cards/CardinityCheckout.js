@@ -45,6 +45,7 @@ const CardinityCheckout = ({
   const isFirstRun = useRef(true);
   console.log(coupon);
   console.log('payable => ', payable);
+  console.log('payable => ', Math.floor(payable / 100));
 
   useEffect(() => {
     calcFinalAmount();
@@ -100,12 +101,12 @@ const CardinityCheckout = ({
         }
         if (res.data.status === 'approved') {
           if (coupon) deleteCoupon();
-          addPoints(Math.floor(payable) / 100, 'store purchase', token);
+          addPoints(Math.floor(payable / 100), 'store purchase', token);
           toast.success(
             `Payment successful!
-          Thanks for your purchase. You have been awarded ${
-            Math.floor(payable) / 100
-          } points!`,
+          Thanks for your purchase. You have been awarded ${Math.floor(
+            payable / 100
+          )} points!`,
             {
               position: toast.POSITION.TOP_CENTER,
             }

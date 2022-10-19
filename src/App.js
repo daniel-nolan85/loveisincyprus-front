@@ -14,6 +14,8 @@ import axios from 'axios';
 import Popup from './components/modals/Popup';
 import Expiring from './components/modals/Expiring';
 import Expired from './components/modals/Expired';
+import CancelSubscription from './components/modals/CancelSubscription';
+import OptIn from './components/modals/OptIn';
 
 import Header from './components/nav/Header';
 import SideDrawer from './components/drawer/SideDrawer';
@@ -75,7 +77,6 @@ import BecomePaid from './pages/user/BecomePaid';
 import MembershipCard from './pages/user/MembershipCard';
 import SubscriptionSuccess from './pages/user/SubscriptionSuccess';
 import OrderSuccess from './pages/user/OrderSuccess';
-import UserSettings from './pages/user/UserSettings';
 import IPBlock from './pages/admin/IPBlock';
 
 //using lazy
@@ -116,6 +117,9 @@ const App = () => {
   const [popupModalIsOpen, setPopupModalIsOpen] = useState(false);
   const [expiringModalIsOpen, setExpiringModalIsOpen] = useState(false);
   const [expiredModalIsOpen, setExpiredModalIsOpen] = useState(false);
+  const [cancelSubscriptionModalIsOpen, setCancelSubscriptionModalIsOpen] =
+    useState(false);
+  const [optinModalIsOpen, setOptinModalIsOpen] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -418,7 +422,10 @@ const App = () => {
     //   }
     // >
     <>
-      <Header />
+      <Header
+        setCancelSubscriptionModalIsOpen={setCancelSubscriptionModalIsOpen}
+        setOptinModalIsOpen={setOptinModalIsOpen}
+      />
       <SideDrawer />
       <ToastContainer />
       <Popup
@@ -432,6 +439,14 @@ const App = () => {
       <Expired
         expiredModalIsOpen={expiredModalIsOpen}
         setExpiredModalIsOpen={setExpiredModalIsOpen}
+      />
+      <CancelSubscription
+        cancelSubscriptionModalIsOpen={cancelSubscriptionModalIsOpen}
+        setCancelSubscriptionModalIsOpen={setCancelSubscriptionModalIsOpen}
+      />
+      <OptIn
+        optinModalIsOpen={optinModalIsOpen}
+        setOptinModalIsOpen={setOptinModalIsOpen}
       />
       <Switch>
         <Route exact path='/' component={Home} />
@@ -477,7 +492,6 @@ const App = () => {
           component={SubscriptionSuccess}
         />
         <UserRoute exact path='/order-successful' component={OrderSuccess} />
-        <UserRoute exact path='/user-settings' component={UserSettings} />
         <SubscriberRoute exact path='/swipe-to-match' component={Swipe} />
         <SubscriberRoute exact path='/chats' component={Chats} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />

@@ -24,8 +24,9 @@ import firebase from 'firebase/compat/app';
 import { Link, useHistory } from 'react-router-dom';
 import { Badge } from 'antd';
 import { ChatState } from '../../context/ChatProvider';
+import SideNav from './SideNav';
 
-const Header = () => {
+const Header = ({ setCancelSubscriptionModalIsOpen, setOptinModalIsOpen }) => {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [settingsMenu, setSettingsMenu] = useState(false);
@@ -146,7 +147,7 @@ const Header = () => {
         </Link>
         {user && (
           <>
-            {user.role === 'admin' && (
+            {/* {user.role === 'admin' && (
               <div className='settings-links dropdown'>
                 <Link to='/admin/dashboard'>
                   <FontAwesomeIcon icon={faToolbox} className='menu-icon' />
@@ -208,7 +209,8 @@ const Header = () => {
                   <FontAwesomeIcon icon={faCoins} className='menu-icon' />
                   <span className='tooltip-text'>Points</span>
                 </li>
-              </Link>
+              </Link> */}
+            <ul>
               {user.membership.paid && (
                 <Link to='/chats'>
                   <li className='tooltip' onClick={resetCount}>
@@ -243,12 +245,14 @@ const Header = () => {
             </div>
           </>
         )}
-        <Link to='/shop'>
-          <div className='tooltip'>
-            <FontAwesomeIcon icon={faShop} className='menu-icon ' />
-            <span className='tooltip-text'>Shop</span>
-          </div>
-        </Link>
+        {!user && (
+          <Link to='/shop'>
+            <div className='tooltip'>
+              <FontAwesomeIcon icon={faShop} className='menu-icon ' />
+              <span className='tooltip-text'>Shop</span>
+            </div>
+          </Link>
+        )}
         <Link to='/cart'>
           <div className='tooltip'>
             <Badge count={cart.length} offset={[-20, 0]}>
@@ -315,6 +319,10 @@ const Header = () => {
               settingsMenu={settingsMenu}
               setSettingsMenu={setSettingsMenu}
               logout={logout}
+              setCancelSubscriptionModalIsOpen={
+                setCancelSubscriptionModalIsOpen
+              }
+              setOptinModalIsOpen={setOptinModalIsOpen}
             />
           </>
         )}
@@ -326,6 +334,7 @@ const Header = () => {
             </Link>
           </>
         )}
+        {user && <SideNav />}
       </div>
     </nav>
   );

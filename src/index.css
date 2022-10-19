@@ -29,6 +29,50 @@ body {
   color: #626262;
 }
 
+#side-nav {
+  width: 250px;
+  height: 100vh;
+  position: fixed;
+  right: -250px;
+  top: 0;
+  background: var(--nav-color);
+  z-index: 2;
+  transition: 0.5s;
+}
+
+#side-nav nav {
+  margin-top: 50px;
+}
+
+#side-nav li {
+  list-style: none;
+  margin: 50px 20px;
+}
+
+#side-nav li a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 18px;
+}
+
+#menu-btn {
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  position: fixed;
+  background: var(--nav-color);
+  right: 2%;
+  top: 3.3%;
+  border-radius: 3px;
+  z-index: 3;
+  cursor: pointer;
+}
+
+#menu-btn img {
+  width: 25px;
+  margin-top: 15px;
+}
+
 .link {
   color: var(--nav-color);
 }
@@ -1127,8 +1171,8 @@ nav {
 
 #opt-btn {
   position: absolute;
-  top: 35px;
-  right: 20px;
+  top: 45%;
+  right: 45%;
   background: #ccc;
   width: 45px;
   border-radius: 15px;

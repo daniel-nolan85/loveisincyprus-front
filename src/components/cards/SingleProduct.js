@@ -182,7 +182,7 @@ const SingleProduct = ({ product, onStarClick, star }) => {
                     <FontAwesomeIcon
                       icon={faHeart}
                       className='fa view'
-                      style={{ color: '#ccc' }}
+                      style={{ color: 'rgba(0, 0, 0, 0.45)' }}
                     />
                     <span className='tooltip-text'>Add to Wishlist</span>
                   </div>

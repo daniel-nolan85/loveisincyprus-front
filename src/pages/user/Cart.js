@@ -68,14 +68,21 @@ const Cart = ({ history }) => {
   }, 0);
 
   const getDeliveryFee = () => {
-    const weight = cart.reduce((accumulator, c) => {
-      return accumulator + c.count * c.weight;
-    }, 0);
-    weight + 1 <= 2
-      ? setDeliveryFee(3.4)
-      : weight + 1 <= 5
-      ? setDeliveryFee(3.8)
-      : weight + 1 <= 10 && setDeliveryFee(4.2);
+    const weight =
+      1 +
+      cart.reduce((accumulator, c) => {
+        return accumulator + c.count * c.weight;
+      }, 0);
+    console.log(weight);
+    if (weight <= 2) {
+      setDeliveryFee(3.4);
+    } else if (weight <= 5) {
+      setDeliveryFee(3.8);
+    } else if (weight <= 10) {
+      setDeliveryFee(4.2);
+    } else {
+      setDeliveryFee(4.2 + Math.ceil(weight / 10 - 1) * 3.5);
+    }
   };
 
   return (

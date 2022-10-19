@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faAddressCard,
   faArrowRightFromBracket,
+  faEject,
+  faEnvelope,
   faGear,
   faLock,
   faNewspaper,
+  faPlay,
   faToolbox,
+  faUnlockKeyhole,
 } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -13,10 +18,16 @@ import defaultProfile from '../../assets/defaultProfile.png';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-const SettingsMenu = ({ settingsMenu, setSettingsMenu, logout }) => {
+const SettingsMenu = ({
+  settingsMenu,
+  setSettingsMenu,
+  logout,
+  setCancelSubscriptionModalIsOpen,
+  setOptinModalIsOpen,
+}) => {
   const [darkMode, setDarkMode] = useState(false);
 
-  let { _id, name, email, profileImage, role } = useSelector(
+  let { _id, name, email, profileImage, role, membership, optin } = useSelector(
     (state) => state.user
   );
 
@@ -69,28 +80,56 @@ const SettingsMenu = ({ settingsMenu, setSettingsMenu, logout }) => {
           </div>
         </Link>
         <hr />
-        {role === 'admin' && (
-          <div
-            className='settings-links'
-            onClick={() => setSettingsMenu(false)}
-          >
-            <Link to='/admin/dashboard'>
-              <FontAwesomeIcon icon={faToolbox} className='fa' />
-              Admin Panel
-            </Link>
-          </div>
-        )}
         <div className='settings-links' onClick={() => setSettingsMenu(false)}>
-          <Link to='/user/dashboard'>
-            <FontAwesomeIcon icon={faNewspaper} className='fa' />
-            Latest News
+          <Link to='/change/password'>
+            <FontAwesomeIcon icon={faUnlockKeyhole} className='fa' />
+            Change Password
           </Link>
         </div>
         <div className='settings-links' onClick={() => setSettingsMenu(false)}>
-          <Link to='/user-settings'>
-            <FontAwesomeIcon icon={faGear} className='fa' />
-            Settings
+          <Link to='/membership-card'>
+            <FontAwesomeIcon icon={faAddressCard} className='fa' />
+            Membership Card
           </Link>
+        </div>
+        {!membership.paid && (
+          <div
+            className='settings-links'
+            onClick={() => {
+              setSettingsMenu(false);
+            }}
+          >
+            <Link to='/become-paid-member'>
+              <FontAwesomeIcon icon={faPlay} className='fa' />
+              Become Paid Member
+            </Link>
+          </div>
+        )}
+        {membership.trialPeriod && (
+          <div
+            className='settings-links'
+            onClick={() => {
+              setSettingsMenu(false);
+              setCancelSubscriptionModalIsOpen(true);
+            }}
+          >
+            <span>
+              <FontAwesomeIcon icon={faEject} className='fa' />
+              Cancel Subscription
+            </span>
+          </div>
+        )}
+        <div
+          className='settings-links'
+          onClick={() => {
+            setSettingsMenu(false);
+            setOptinModalIsOpen(true);
+          }}
+        >
+          <span>
+            <FontAwesomeIcon icon={faEnvelope} className='fa' />
+            Mass Mail
+          </span>
         </div>
         <div className='settings-links' onClick={logout}>
           <FontAwesomeIcon icon={faArrowRightFromBracket} className='fa' />
