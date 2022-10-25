@@ -211,16 +211,14 @@ const Header = ({ setCancelSubscriptionModalIsOpen, setOptinModalIsOpen }) => {
                 </li>
               </Link> */}
             <ul>
-              {user.membership.paid && (
-                <Link to='/chats'>
-                  <li className='tooltip' onClick={resetCount}>
-                    <Badge count={user.messages.length} offset={[-20, 0]}>
-                      <FontAwesomeIcon icon={faMessage} className='menu-icon' />
-                    </Badge>
-                    <span className='tooltip-text'>Chats</span>
-                  </li>
-                </Link>
-              )}
+              <Link to='/chats'>
+                <li className='tooltip' onClick={resetCount}>
+                  <Badge count={user.messages.length} offset={[-20, 0]}>
+                    <FontAwesomeIcon icon={faMessage} className='menu-icon' />
+                  </Badge>
+                  <span className='tooltip-text'>Chats</span>
+                </li>
+              </Link>
             </ul>
             <div className='settings-links dropdown'>
               <Link to='/notifications'>

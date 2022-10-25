@@ -156,6 +156,7 @@ const App = () => {
                 coverImage: res.data.coverImage,
                 name: res.data.name,
                 email: res.data.email,
+                mobile: res.data.mobile,
                 username: res.data.username,
                 about: res.data.about,
                 gender: res.data.gender,
@@ -492,8 +493,8 @@ const App = () => {
           component={SubscriptionSuccess}
         />
         <UserRoute exact path='/order-successful' component={OrderSuccess} />
+        <UserRoute exact path='/chats' component={Chats} />
         <SubscriberRoute exact path='/swipe-to-match' component={Swipe} />
-        <SubscriberRoute exact path='/chats' component={Chats} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/posts' component={Posts} />
         <AdminRoute exact path='/admin/users' component={Users} />

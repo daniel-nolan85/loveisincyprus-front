@@ -75,6 +75,7 @@ body {
 
 .link {
   color: var(--nav-color);
+  cursor: pointer;
 }
 
 .link:hover {
@@ -3098,13 +3099,36 @@ select.decorated option:active {
   left: 450px;
 }
 
-.forgot-link {
+/* .forgot-link {
   text-align: center;
 }
 
 .forgot-link a {
   text-decoration: none;
   color: #626262;
+} */
+
+.react-tel-input .form-control,
+.react-tel-input .flag-dropdown {
+  background-color: var(--body-color) !important;
+  border: none !important;
+  font-family: 'poppins', sans-serif;
+}
+
+.otp-container {
+  max-height: 0;
+  transition: max-height 0.3s;
+  overflow: auto;
+  visibility: hidden;
+}
+
+.otp-container-show {
+  max-height: 50px;
+  visibility: visible;
+}
+
+.hide {
+  display: none;
 }
 
 /* --------------- points page --------------- */

@@ -37,11 +37,9 @@ const SideNav = () => {
               <li onClick={() => setOpenNav(false)}>
                 <Link to='/points'>POINTS</Link>
               </li>
-              {user.membership.paid && (
-                <li onClick={() => setOpenNav(false)}>
-                  <Link to='/chats'>CHATS</Link>
-                </li>
-              )}
+              <li onClick={() => setOpenNav(false)}>
+                <Link to='/chats'>CHATS</Link>
+              </li>
               <li onClick={() => setOpenNav(false)}>
                 <Link to='/notifications'>NOTIFICATIONS</Link>
               </li>

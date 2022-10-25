@@ -12,6 +12,8 @@ import AdPreview from '../../components/modals/AdPreview';
 import AdContact from '../../components/forms/AdContact';
 import AdPayment from '../../components/forms/AdPayment';
 import { Checkbox } from 'antd';
+import LeftSidebar from '../../components/user/LeftSidebar';
+import RightSidebar from '../../components/user/RightSidebar';
 
 const AdSubmission = () => {
   const [content, setContent] = useState('');
@@ -107,6 +109,7 @@ const AdSubmission = () => {
         justifyContent: 'center',
       }}
     >
+      <LeftSidebar />
       <div className='main-content'>
         <h2>How long would you like your ad to be displayed?</h2>
         <select
@@ -216,6 +219,7 @@ const AdSubmission = () => {
           Submit your ad
         </button>
       </div>
+      <RightSidebar />
     </div>
   );
 };

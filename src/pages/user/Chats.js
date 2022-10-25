@@ -116,7 +116,7 @@ const Chats = ({ history }) => {
   const fetchMatches = async () => {
     await axios
       .post(
-        `${process.env.REACT_APP_API}/my-matches`,
+        `${process.env.REACT_APP_API}/my-chat-matches`,
         { _id },
         {
           headers: {
@@ -125,7 +125,7 @@ const Chats = ({ history }) => {
         }
       )
       .then((res) => {
-        // console.log('users ==> ', res.data);
+        console.log('users ==> ', res.data);
         setUsers(res.data);
       })
       .catch((err) => {
@@ -422,23 +422,25 @@ const Chats = ({ history }) => {
             )}
           </div>
 
-          <form onSubmit={sendMessage}>
-            <div className='message-box'>
-              <div className='message-box-aria'>
-                <input
-                  type='text'
-                  placeholder='Type a message...'
-                  onChange={typingHandler}
-                  value={newMessage}
-                />
-                <FontAwesomeIcon
-                  icon={faPaperPlane}
-                  onClick={sendMessage}
-                  className='fa send-message'
-                />
+          {selectedChat && (
+            <form onSubmit={sendMessage}>
+              <div className='message-box'>
+                <div className='message-box-aria'>
+                  <input
+                    type='text'
+                    placeholder='Type a message...'
+                    onChange={typingHandler}
+                    value={newMessage}
+                  />
+                  <FontAwesomeIcon
+                    icon={faPaperPlane}
+                    onClick={sendMessage}
+                    className='fa send-message'
+                  />
+                </div>
               </div>
-            </div>
-          </form>
+            </form>
+          )}
         </div>
       </div>
     </div>

@@ -22,6 +22,8 @@ const ProfileUpdate = ({
   setAbout,
   name,
   setName,
+  email,
+  setEmail,
   loading,
   modalIsOpen,
   setModalIsOpen,
@@ -278,6 +280,14 @@ const ProfileUpdate = ({
           placeholder='Choose a username'
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+        />
+
+        <input
+          type='email'
+          className='input-field'
+          placeholder='What is your email'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
 
         <select

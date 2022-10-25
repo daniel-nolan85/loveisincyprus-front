@@ -303,7 +303,8 @@ const Points = () => {
       <LeftSidebar />
       <div className='main-content'>
         <h1 className='center'>
-          You currently have a total of {points} points
+          You currently have a total of{' '}
+          {points === 1 ? `${points} point` : `${points} points`}
         </h1>
         <div className='points-icons'>
           <div className='tooltip'>

@@ -196,8 +196,8 @@ const LoginAndRegister = ({ history }) => {
           Register
         </button>
       </div>
-      <Register />
-      <Login />
+      <Register showLogin={showLogin} />
+      <Login showRegister={showRegister} />
     </div>
   );
 };

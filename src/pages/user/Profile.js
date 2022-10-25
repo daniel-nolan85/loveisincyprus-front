@@ -45,9 +45,9 @@ import * as faceapi from 'face-api.js';
 const { Ribbon } = Badge;
 
 const Profile = ({ history }) => {
-  const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [about, setAbout] = useState('');
   const [profileImage, setProfileImage] = useState({});
   const [coverImage, setCoverImage] = useState({});
@@ -254,6 +254,7 @@ const Profile = ({ history }) => {
           username,
           about,
           name,
+          email,
           user,
           profileImage,
           coverImage,
@@ -1245,7 +1246,8 @@ const Profile = ({ history }) => {
         setAbout={setAbout}
         name={name}
         setName={setName}
-        // email={email}
+        email={email}
+        setEmail={setEmail}
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
         handleSubmit={handleSubmit}
