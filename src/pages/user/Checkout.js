@@ -190,7 +190,7 @@ const Checkout = ({ history }) => {
   );
 
   const showApplyCoupon = () => (
-    <div className='form-box coupon'>
+    <div className='form-box apply-coupon'>
       <div className='button-box'>
         <p className='form-header'>Got Coupon?</p>
       </div>

@@ -2241,8 +2241,13 @@ nav {
   margin: 0 100px 0 10px;
 }
 
-.form-box.coupon {
+.form-box.apply-coupon {
   height: 300px;
+  margin: 0 auto;
+}
+
+.form-box.coupon {
+  height: 580px;
   margin: 0 auto;
 }
 
