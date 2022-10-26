@@ -128,10 +128,14 @@ const Verify = ({
     >
       <div className='match'>
         <h1>
-          To get verified, please update a photo of yourself holding a sign that
-          displays your name
+          Verified users appear more trustworthy to other members and are more
+          likely to receive interactions.
         </h1>
-        <br />
+        <h2>You will also receive 80 points for successful verification.</h2>
+        <h2>
+          To get verified, please update a photo of yourself holding a sign that
+          displays your name.
+        </h2>
         <div>
           <div>
             {loadingImg ? (

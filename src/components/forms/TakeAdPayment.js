@@ -11,7 +11,7 @@ const TakeAdPayment = ({
   const { cardHolder, cardNumber, expiry, cvc } = currentAd.accountInfo;
 
   return (
-    <div className='form-box'>
+    <div className='form-box take-ad-payment'>
       <div className='button-box'>
         <p className='form-header'>Payment Information</p>
       </div>

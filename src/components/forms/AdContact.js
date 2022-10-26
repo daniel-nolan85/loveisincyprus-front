@@ -3,9 +3,18 @@ import { Formik, Form } from 'formik';
 import { Input } from './TextFields';
 import * as yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFloppyDisk, faUndo } from '@fortawesome/free-solid-svg-icons';
+import {
+  faFloppyDisk,
+  faUndo,
+  faCheck,
+} from '@fortawesome/free-solid-svg-icons';
+import { toast } from 'react-toastify';
 
-const AdContact = ({ setContactInfo }) => {
+const AdContact = ({
+  contactInfoSaved,
+  setContactInfoSaved,
+  setContactInfo,
+}) => {
   const validate = yup.object({
     name: yup.string().required('Please enter your name'),
     email: yup
@@ -24,7 +33,11 @@ const AdContact = ({ setContactInfo }) => {
       }}
       validationSchema={validate}
       onSubmit={(values) => {
+        setContactInfoSaved(true);
         setContactInfo(values);
+        toast.success(`Contact info saved.`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
       }}
     >
       {(formik) => (
@@ -57,8 +70,17 @@ const AdContact = ({ setContactInfo }) => {
                 className='submit-btn'
                 disabled={!(formik.isValid && formik.dirty)}
               >
-                <FontAwesomeIcon icon={faFloppyDisk} className='fa' />
-                Save
+                {!contactInfoSaved ? (
+                  <>
+                    <FontAwesomeIcon icon={faFloppyDisk} className='fa' />
+                    Save
+                  </>
+                ) : (
+                  <>
+                    <FontAwesomeIcon icon={faCheck} className='fa' />
+                    Saved
+                  </>
+                )}
               </button>
               <button type='reset' className='submit-btn reset'>
                 <FontAwesomeIcon icon={faUndo} className='fa' />

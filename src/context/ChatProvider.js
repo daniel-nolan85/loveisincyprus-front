@@ -14,6 +14,8 @@ const ChatProvider = ({ children }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [pointsQuestionsModalIsOpen, setPointsQuestionsModalIsOpen] =
     useState(false);
+  const [newAds, setNewAds] = useState(0);
+  const [newVerifs, setNewVerifs] = useState(0);
 
   return (
     <ChatContext.Provider
@@ -38,6 +40,10 @@ const ChatProvider = ({ children }) => {
         setModalIsOpen,
         pointsQuestionsModalIsOpen,
         setPointsQuestionsModalIsOpen,
+        newAds,
+        setNewAds,
+        newVerifs,
+        setNewVerifs,
       }}
     >
       {children}

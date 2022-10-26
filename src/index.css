@@ -1836,13 +1836,19 @@ nav {
 }
 
 .form-box.ad-contact {
-  height: 250px;
-  margin-top: 0;
+  max-height: 250px;
+  margin-top: -10px;
   width: 100%;
 }
 
 .form-box.ad-payment {
   height: 300px;
+  margin-top: 0;
+  width: 100%;
+}
+
+.form-box.take-ad-payment {
+  height: 450px;
   margin-top: 0;
   width: 100%;
 }
@@ -3129,6 +3135,41 @@ select.decorated option:active {
 
 .hide {
   display: none;
+}
+
+/* --------------- ad pages --------------- */
+.ad-section {
+  margin-bottom: 35px;
+}
+
+.ad-header {
+  display: flex;
+  position: relative;
+}
+
+.ad-header .number {
+  font-size: 35px;
+  font-weight: bold;
+  color: var(--nav-color);
+  margin-right: 20px;
+  line-height: 1.1;
+}
+
+.ad-header .tooltip {
+  position: absolute;
+  right: 0;
+}
+
+.ad-header .fa {
+  font-size: 35px;
+  color: var(--nav-color);
+  cursor: pointer;
+}
+
+.duration-info table {
+  margin: 0 auto;
+  border-collapse: separate;
+  border-spacing: 50px 0;
 }
 
 /* --------------- points page --------------- */

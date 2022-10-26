@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -17,8 +17,35 @@ import {
   faShieldBlank,
   faDesktop,
 } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
+import { ChatState } from '../../context/ChatProvider';
 
 const LeftSidebar = () => {
+  const { newAds, setNewAds, newVerifs, setNewVerifs } = ChatState();
+
+  useEffect(() => {
+    fetchNewAds();
+    fetchNewVerifs();
+  }, []);
+
+  const fetchNewAds = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-new-ads`)
+      .then((res) => {
+        console.log('new ads ==> ', res.data);
+        setNewAds(res.data);
+      });
+  };
+
+  const fetchNewVerifs = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-new-verifs`)
+      .then((res) => {
+        console.log('new verifs ==> ', res.data);
+        setNewVerifs(res.data);
+      });
+  };
+
   return (
     <div className='left-sidebar'>
       <div className='imp-links'>
@@ -73,10 +100,12 @@ const LeftSidebar = () => {
         <Link to='/ad-submissions'>
           <FontAwesomeIcon icon={faRectangleAd} className='fa' />
           Ad Submissions
+          <span>{newAds && newAds.length > 0 && newAds.length}</span>
         </Link>
         <Link to='/verif-submissions'>
           <FontAwesomeIcon icon={faShieldBlank} className='fa' />
           Verified User Submissions
+          <span>{newVerifs && newVerifs.length > 0 && newVerifs.length}</span>
         </Link>
       </div>
     </div>

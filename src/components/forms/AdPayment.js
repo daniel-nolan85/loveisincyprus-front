@@ -3,18 +3,40 @@ import { Formik, Form } from 'formik';
 import { Input } from './TextFields';
 import * as yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUndo, faFloppyDisk } from '@fortawesome/free-solid-svg-icons';
+import {
+  faUndo,
+  faFloppyDisk,
+  faCheck,
+} from '@fortawesome/free-solid-svg-icons';
+import { toast } from 'react-toastify';
 
-const AdPayment = ({ setAccountInfo }) => {
+const AdPayment = ({
+  accountInfoSaved,
+  setAccountInfoSaved,
+  setAccountInfo,
+  loading,
+}) => {
   const validate = yup.object({
     cardHolder: yup.string().required('Please enter your full name'),
-    cardNumber: yup.string().required('Please enter your card number'),
+    cardNumber: yup
+      .string()
+      .required('Please enter your card number')
+      .matches(/^[0-9]+$/, 'Card number must contain only digits 0-9')
+      .min(16, 'Card number must be 16 digits')
+      .max(16, 'Card number must be 16 digits'),
     expiry: yup
       .string()
-      .required('Please enter your card expiry date in the form MM/YYYY'),
+      .required('Please enter your card expiry date in the form MM/YYYY')
+      .matches(
+        /^(0[1-9]|1[0-2])\/?([0-9]{4})$/,
+        'Please enter your card expiry date in the form MM/YYYY'
+      ),
     cvc: yup
       .string()
-      .required('Please enter the 3 numbers on the back of your card'),
+      .required('Please enter the 3 numbers on the back of your card')
+      .matches(/^[0-9]+$/, 'CVC must contain only digits 0-9')
+      .min(3, 'CVC must be 3 digits')
+      .max(3, 'CVC must be 3 digits'),
   });
 
   return (
@@ -27,7 +49,11 @@ const AdPayment = ({ setAccountInfo }) => {
       }}
       validationSchema={validate}
       onSubmit={(values) => {
+        setAccountInfoSaved(true);
         setAccountInfo(values);
+        toast.success(`Account info saved.`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
       }}
     >
       {(formik) => (
@@ -65,10 +91,19 @@ const AdPayment = ({ setAccountInfo }) => {
               <button
                 type='submit'
                 className='submit-btn'
-                disabled={!(formik.isValid && formik.dirty)}
+                disabled={!(formik.isValid && formik.dirty) || loading}
               >
-                <FontAwesomeIcon icon={faFloppyDisk} className='fa' />
-                Save
+                {!accountInfoSaved ? (
+                  <>
+                    <FontAwesomeIcon icon={faFloppyDisk} className='fa' />
+                    Save
+                  </>
+                ) : (
+                  <>
+                    <FontAwesomeIcon icon={faCheck} className='fa' />
+                    Saved
+                  </>
+                )}
               </button>
               <button type='reset' className='submit-btn reset'>
                 <FontAwesomeIcon icon={faUndo} className='fa' />

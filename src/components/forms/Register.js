@@ -159,6 +159,7 @@ const Register = ({ showLogin }) => {
                   relWanted: res.data.relWanted,
                   following: res.data.following,
                   followers: res.data.followers,
+                  nopes: res.data.nopes,
                   matches: res.data.matches,
                   visitors: res.data.visitors,
                   token: idTokenResult.token,

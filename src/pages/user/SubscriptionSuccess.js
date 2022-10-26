@@ -75,12 +75,9 @@ const SubscriptionSuccess = (props) => {
               {moment(membership.expiry).format('MMMM Do YYYY')}.
             </p>
             <p className='ps-bought-items ps-price'>
-              You may cancel your subscription from the{' '}
-              <Link to='/user-settings' className='link'>
-                settings
-              </Link>{' '}
-              page and receive a full refund any time between now and{' '}
-              {fortnight}.
+              You may cancel your subscription by clicking your avatar at the
+              top of the page and selecting 'Cancel Subscription' to receive a
+              full refund any time between now and {fortnight}.
             </p>
           </div>
           <p className='ps-comprobe'>

@@ -14,13 +14,25 @@ import { Link } from 'react-router-dom';
 const PaymentForm = ({ handleSubmit, processing, succeeded, cartTotal }) => {
   const validate = yup.object({
     cardHolder: yup.string().required('Please enter your full name'),
-    cardNumber: yup.string().required('Please enter your card number'),
+    cardNumber: yup
+      .string()
+      .required('Please enter your card number')
+      .matches(/^[0-9]+$/, 'Card number must contain only digits 0-9')
+      .min(16, 'Card number must be 16 digits')
+      .max(16, 'Card number must be 16 digits'),
     expiry: yup
       .string()
-      .required('Please enter your card expiry date in the form MM/YYYY'),
+      .required('Please enter your card expiry date in the form MM/YYYY')
+      .matches(
+        /^(0[1-9]|1[0-2])\/?([0-9]{4})$/,
+        'Please enter your card expiry date in the form MM/YYYY'
+      ),
     cvc: yup
       .string()
-      .required('Please enter the 3 numbers on the back of your card'),
+      .required('Please enter the 3 numbers on the back of your card')
+      .matches(/^[0-9]+$/, 'CVC must contain only digits 0-9')
+      .min(3, 'CVC must be 3 digits')
+      .max(3, 'CVC must be 3 digits'),
   });
 
   return (

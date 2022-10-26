@@ -8,42 +8,79 @@ import axios from 'axios';
 
 const RightSidebar = () => {
   const [ads, setAds] = useState([]);
+  const [targetedAds, setTargetedAds] = useState([]);
 
-  const { _id, token, events } = useSelector((state) => state.user) || {};
+  const { _id, token, events, gender, age } =
+    useSelector((state) => state.user) || {};
 
   const history = useHistory();
 
   useEffect(() => {
-    if (token) {
-      fetchApprovedAds();
-    }
-  }, [token]);
+    fetchApprovedAds();
+  }, []);
+
+  useEffect(() => {
+    filterTargeted();
+  }, [ads]);
 
   const fetchApprovedAds = async () => {
     await axios
-      .post(
-        `${process.env.REACT_APP_API}/fetch-approved-ads`,
-        { _id },
-        {
-          headers: {
-            authtoken: token,
-          },
-        }
-      )
+      .get(`${process.env.REACT_APP_API}/fetch-approved-ads`)
       .then((res) => {
+        console.log(res.data);
         setAds(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
       });
   };
 
+  const filterTargeted = () => {
+    const targeted = [];
+
+    if (!token) {
+      ads.map((ad) => {
+        if (ad.demographic.includes('everyone')) {
+          targeted.push(ad);
+        }
+      });
+      setTargetedAds([...new Set(targeted)]);
+      return;
+    } else {
+      ads.map((ad) => {
+        if (ad.demographic.includes('everyone')) {
+          targeted.push(ad);
+        }
+        if (ad.demographic.includes('male') && gender === 'male') {
+          targeted.push(ad);
+        }
+        if (ad.demographic.includes('female') && gender === 'female') {
+          targeted.push(ad);
+        }
+        if (ad.demographic.includes('18-30') && age > 17 && age < 31) {
+          targeted.push(ad);
+        }
+        if (ad.demographic.includes('30-45') && age > 29 && age < 46) {
+          targeted.push(ad);
+        }
+        if (ad.demographic.includes('45-60') && age > 44 && age < 61) {
+          targeted.push(ad);
+        }
+        if (ad.demographic.includes('over 60') && age > 59) {
+          targeted.push(ad);
+        }
+      });
+      setTargetedAds([...new Set(targeted)]);
+    }
+  };
+
+  // let exists = Object.values(obj).includes('test1');
+
   return (
     <div className='right-sidebar'>
-      <div className='sidebar-title'>
-        <h4>Events</h4>
-        <Link to='/events'>All Events</Link>
-      </div>
+      {token && (
+        <div className='sidebar-title'>
+          <h4>Events</h4>
+          <Link to='/events'>All Events</Link>
+        </div>
+      )}
       {events &&
         events.map(
           (e) =>
@@ -77,8 +114,8 @@ const RightSidebar = () => {
         <h4>Advertisements</h4>
         <Link to='/ad-submission'>Submit an Ad</Link>
       </div>
-      {ads.length > 0 ? (
-        ads.map((ad) => (
+      {targetedAds.length > 0 ? (
+        targetedAds.map((ad) => (
           <div key={ad._id}>
             {ad.image ? (
               <div className='sidebar-ad'>

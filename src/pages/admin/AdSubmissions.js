@@ -19,11 +19,13 @@ import AdApprove from '../../components/modals/AdApprove';
 import AdContactInfo from '../../components/modals/AdContactInfo';
 import AdPayment from '../../components/modals/AdPayment';
 import { createAdPayment } from '../../functions/cardinity';
+import AdRemove from '../../components/modals/AdRemove';
 
 const AdSubmissions = () => {
   const [ads, setAds] = useState([]);
   const [contactInfoModalIsOpen, setContactInfoModalIsOpen] = useState(false);
   const [paymentModalIsOpen, setPaymentModalIsOpen] = useState(false);
+  const [adRemoveModalIsOpen, setAdRemoveModalIsOpen] = useState(false);
   const [adDisapproveModalIsOpen, setAdDisapproveModalIsOpen] = useState(false);
   const [adApproveModalIsOpen, setAdApproveModalIsOpen] = useState(false);
   const [currentAd, setCurrentAd] = useState({});
@@ -72,6 +74,11 @@ const AdSubmissions = () => {
   const handlePayment = (ad) => {
     setSucceeded(false);
     setPaymentModalIsOpen(true);
+    setCurrentAd(ad);
+  };
+
+  const removeAd = (ad) => {
+    setAdRemoveModalIsOpen(true);
     setCurrentAd(ad);
   };
 
@@ -175,6 +182,13 @@ const AdSubmissions = () => {
                   </div>
                   <div className='post-icons'>
                     <FontAwesomeIcon
+                      icon={faTrashCan}
+                      className='fa trash'
+                      onClick={() => removeAd(ad)}
+                    />
+                  </div>
+                  <div className='post-icons'>
+                    <FontAwesomeIcon
                       icon={faThumbsDown}
                       className='fa trash'
                       onClick={() => handleDisapprove(ad)}
@@ -225,6 +239,14 @@ const AdSubmissions = () => {
           preparePayment={preparePayment}
           processing={processing}
           succeeded={succeeded}
+        />
+        <AdRemove
+          adRemoveModalIsOpen={adRemoveModalIsOpen}
+          setAdRemoveModalIsOpen={setAdRemoveModalIsOpen}
+          currentAd={currentAd}
+          fetchAds={fetchAds}
+          loading={loading}
+          setLoading={setLoading}
         />
         <AdDisapprove
           adDisapproveModalIsOpen={adDisapproveModalIsOpen}

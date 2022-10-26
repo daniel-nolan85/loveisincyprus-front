@@ -38,6 +38,7 @@ const Swipe = ({ history }) => {
         }
       )
       .then((res) => {
+        console.log(res.data);
         setUsers(res.data);
         console.log('users rendered');
       })
@@ -63,6 +64,7 @@ const Swipe = ({ history }) => {
         }
       )
       .then((res) => {
+        console.log(res.data);
         toast.error(
           `You don't like ${u.name ? u.name : u.email.split('@')[0]}.`,
           {
@@ -91,6 +93,7 @@ const Swipe = ({ history }) => {
         }
       )
       .then((res) => {
+        console.log(res.data);
         if (res.data.matches.includes(u._id)) {
           setMatchModalIsOpen(true);
           setMatch(u);

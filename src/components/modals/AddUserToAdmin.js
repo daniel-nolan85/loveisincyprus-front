@@ -26,6 +26,7 @@ const AddUserToAdmin = ({
         }
       )
       .then((res) => {
+        console.log(res.data);
         toast.success(`${u.name || u.email.split('@')[0]} added to admin`, {
           position: toast.POSITION.TOP_CENTER,
         });

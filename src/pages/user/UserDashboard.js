@@ -120,6 +120,7 @@ const UserDashboard = () => {
         }
       )
       .then((res) => {
+        console.log(res.data);
         setUsers(res.data);
       })
       .catch((err) => {

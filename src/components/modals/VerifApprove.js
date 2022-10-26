@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
+import { addPoints } from '../../functions/user';
 
 let socket;
 
@@ -16,9 +17,11 @@ const VerifApprove = ({
   currentVerif,
   fetchVerifs,
 }) => {
+  const {} = ChatState();
+
   let { token } = useSelector((state) => state.user);
 
-  const { setSocketConnected } = ChatState();
+  const { setSocketConnected, setNewVerifs } = ChatState();
 
   useEffect(() => {
     socket = io(
@@ -27,6 +30,15 @@ const VerifApprove = ({
       { reconnection: true }
     );
   }, []);
+
+  const fetchNewVerifs = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-new-verifs`)
+      .then((res) => {
+        console.log('new verifs ==> ', res.data);
+        setNewVerifs(res.data);
+      });
+  };
 
   const approveVerif = async (verif) => {
     await axios
@@ -41,12 +53,17 @@ const VerifApprove = ({
       )
       .then((res) => {
         console.log(res.data);
-        socket.emit('new message', res.data);
-        toast.success(`You have approved this verification.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
+        socket.emit('new message', res.data.message);
+        toast.success(
+          `You have approved this verification. A confirmation message has been sent to the user.`,
+          {
+            position: toast.POSITION.TOP_CENTER,
+          }
+        );
+        fetchNewVerifs();
         fetchVerifs();
         setVerifApproveModalIsOpen(false);
+        addPoints(80, 'verified', token, res.data.userStatus);
       })
       .catch((err) => console.log(err));
   };

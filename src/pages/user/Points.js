@@ -396,6 +396,8 @@ const Points = () => {
                       {pg.reason === 'event post' && 'You posted on an event'}
                       {pg.reason === 'store purchase' &&
                         'You made a store purchase'}
+                      {pg.reason === 'verified' &&
+                        'You became a verified member'}
                     </p>
                   </td>
                 </tr>
