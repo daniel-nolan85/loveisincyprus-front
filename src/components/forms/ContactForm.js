@@ -49,6 +49,7 @@ const ContactForm = () => {
         })
         // contactFormEmail(values)
         .then((res) => {
+          console.log(res);
           setLoading(false);
           toast.success(`Your message has been sent.`, {
             position: toast.POSITION.TOP_CENTER,
@@ -89,10 +90,10 @@ const ContactForm = () => {
   return (
     <Formik
       initialValues={{
-        name: '',
-        email: '',
-        subject: '',
-        message: '',
+        name: 'Daniel Nolan',
+        email: 'danielnolan85@yahoo.com',
+        subject: 'Test subject',
+        message: 'This is a test email',
       }}
       validationSchema={validate}
       onSubmit={(values) => {

@@ -410,8 +410,9 @@ const Notifications = () => {
                 <th>Date</th>
                 <th>Action</th>
               </tr>
-              {populatedNotifs.map((n) =>
-                typeof n.notif === 'object' ? (
+              {populatedNotifs.map(
+                (n) => (
+                  // typeof n.notif === 'object' ? (
                   <tr key={n._id}>
                     <td>
                       <p className={n.new === true ? 'new' : ''}>
@@ -455,25 +456,42 @@ const Notifications = () => {
                           </span>
                         </p>
                       )}
-                    </td>
-                  </tr>
-                ) : (
-                  <tr key={n._id}>
-                    <td>
-                      <p className={n.new === true ? 'new' : ''}>
-                        {moment(n.occurred).format('MMMM Do YYYY')}
-                      </p>
-                    </td>
-                    <td>
-                      <p className={n.new === true ? 'new' : ''}>
-                        Someone interacted with your{' '}
-                        <span className='link' onClick={() => viewNotif(n)}>
-                          post
-                        </span>
-                      </p>
+                      {n.action === 'user liked you' && (
+                        <p className={n.new === true ? 'new' : ''}>
+                          You have a new{' '}
+                          <span className='link' onClick={() => viewNotif(n)}>
+                            follower
+                          </span>
+                        </p>
+                      )}
+                      {n.action === 'user visited you' && (
+                        <p className={n.new === true ? 'new' : ''}>
+                          You received a new{' '}
+                          <span className='link' onClick={() => viewNotif(n)}>
+                            visitor
+                          </span>
+                        </p>
+                      )}
                     </td>
                   </tr>
                 )
+                // ) : (
+                //   <tr key={n._id}>
+                //     <td>
+                //       <p className={n.new === true ? 'new' : ''}>
+                //         {moment(n.occurred).format('MMMM Do YYYY')}
+                //       </p>
+                //     </td>
+                //     <td>
+                //       <p className={n.new === true ? 'new' : ''}>
+                //         Someone interacted with your{' '}
+                //         <span className='link' onClick={() => viewNotif(n)}>
+                //           post
+                //         </span>
+                //       </p>
+                //     </td>
+                //   </tr>
+                // )
               )}
             </tbody>
           </table>

@@ -48,7 +48,7 @@ const CancelSubscription = ({
           },
         });
         toast.success(
-          `Your subscription has been cancelled and your money has been refunded.`,
+          `Your subscription has been cancelled and your payment has been refunded.`,
           {
             position: toast.POSITION.TOP_CENTER,
           }

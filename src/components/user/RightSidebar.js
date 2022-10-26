@@ -34,7 +34,6 @@ const RightSidebar = () => {
 
   const filterTargeted = () => {
     const targeted = [];
-
     if (!token) {
       ads.map((ad) => {
         if (ad.demographic.includes('everyone')) {

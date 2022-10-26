@@ -10,6 +10,10 @@ import { faHeart, faXmark, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import Match from '../../components/modals/Match';
 import { addPoints } from '../../functions/user';
+import io from 'socket.io-client';
+import { ChatState } from '../../context/ChatProvider';
+
+let socket;
 
 const Swipe = ({ history }) => {
   const [users, setUsers] = useState([]);
@@ -18,6 +22,8 @@ const Swipe = ({ history }) => {
 
   const { user } = useSelector((state) => ({ ...state }));
 
+  const { socketConnected, setSocketConnected } = ChatState();
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -25,6 +31,14 @@ const Swipe = ({ history }) => {
       usersToSwipe();
     }
   }, [user && user.token]);
+
+  useEffect(() => {
+    socket = io(
+      process.env.REACT_APP_SOCKET_IO,
+      { path: '/socket.io' },
+      { reconnection: true }
+    );
+  }, []);
 
   const usersToSwipe = async () => {
     await axios
@@ -110,6 +124,7 @@ const Swipe = ({ history }) => {
         toast.success(`You like ${u.name ? u.name : u.email.split('@')[0]}.`, {
           position: toast.POSITION.TOP_CENTER,
         });
+        socket.emit('new follower', res.data);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {

@@ -113,7 +113,7 @@ const NotifPost = ({
     },
   };
 
-  // console.log(post);
+  console.log(post);
 
   return (
     <Modal
@@ -347,6 +347,54 @@ const NotifPost = ({
               <span className='tooltip-text'>See who can't come</span>
             </span>
           </div>
+        </div>
+      ) : post.notif && post.notif.follower ? (
+        <div className='match'>
+          <h2>
+            <Link to={`/user/${post.notif.follower}`} className='link'>
+              {post.notif.name || post.notif.email.split('@')[0]}
+            </Link>{' '}
+            likes you
+          </h2>
+          <div className='match-images'>
+            <Link to={`/user/${post.notif.follower}`} className='link'>
+              <img
+                src={
+                  post.notif.profileImage
+                    ? post.notif.profileImage.url
+                    : defaultProfile
+                }
+                alt={`${
+                  post.notif.name || post.notif.email.split('@')[0]
+                }'s profile picture`}
+              />
+            </Link>
+          </div>
+          <br />
+        </div>
+      ) : post.notif && post.notif.visitor ? (
+        <div className='match'>
+          <h2>
+            <Link to={`/user/${post.notif.visitor}`} className='link'>
+              {post.notif.name || post.notif.email.split('@')[0]}
+            </Link>{' '}
+            visited your profile
+          </h2>
+          <div className='match-images'>
+            <Link to={`/user/${post.notif.visitor}`} className='link'>
+              <img
+                src={
+                  post.notif.profileImage
+                    ? post.notif.profileImage.url
+                    : defaultProfile
+                }
+                alt={`${
+                  post.notif.name || post.notif.email.split('@')[0]
+                }'s profile picture`}
+              />
+            </Link>
+          </div>
+          <br />
         </div>
       ) : (
         <div className='post-container'>
