@@ -36,7 +36,7 @@ import Analyse from '../../components/modals/Analyse';
 
 let socket;
 
-const UserProfile = () => {
+const UserProfile = ({ history }) => {
   const [thisUser, setThisUser] = useState({});
   const [imageModalIsOpen, setImageModalIsOpen] = useState(false);
   const [posts, setPosts] = useState([]);
@@ -67,7 +67,7 @@ const UserProfile = () => {
   const [userToAnalyse, setUserToAnalyse] = useState({});
   const [loadingImg, setLoadingImg] = useState(false);
 
-  let { user } = useSelector((state) => ({ ...state }));
+  const { user } = useSelector((state) => ({ ...state }));
 
   const { socketConnected, setSocketConnected } = ChatState();
 
@@ -381,6 +381,9 @@ const UserProfile = () => {
           type: 'LOGGED_IN_USER',
           payload: {
             ...user,
+            following: res.data.following,
+            followers: res.data.followers,
+            matches: res.data.matches,
           },
         });
       })
@@ -452,7 +455,8 @@ const UserProfile = () => {
           </div>
         </div>
         <div className='pd-right'>
-          {user.following.includes(_id) ? (
+          {user.following.some((e) => e._id === _id) ||
+          user.following.includes(_id) ? (
             <button
               type='button'
               onClick={() => handleUnfollow(thisUser)}
@@ -472,7 +476,11 @@ const UserProfile = () => {
             </button>
           )}
           {user.matches.includes(_id) && (
-            <button type='button' className='tooltip'>
+            <button
+              type='button'
+              className='tooltip'
+              onClick={() => history.push('/chats')}
+            >
               <FontAwesomeIcon icon={faMessage} className='fa' />
               <span className='tooltip-text'>Message this user</span>
             </button>

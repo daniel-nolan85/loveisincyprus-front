@@ -70,26 +70,26 @@ const Users = () => {
       });
   };
 
-  const searchUsers = async (e) => {
-    e.preventDefault();
+  // const searchUsers = async (e) => {
+  //   e.preventDefault();
 
-    await axios
-      .post(
-        `${process.env.REACT_APP_API}/admin/search-users/${query}`,
-        { _id },
-        {
-          headers: {
-            authtoken: token,
-          },
-        }
-      )
-      .then((res) => {
-        setUsers(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  //   await axios
+  //     .post(
+  //       `${process.env.REACT_APP_API}/admin/search-users/${query}`,
+  //       { _id },
+  //       {
+  //         headers: {
+  //           authtoken: token,
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       setUsers(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const removeFromFeaturedMembers = (u) => {
     setRemoveFromFeaturedMembersModalIsOpen(true);
@@ -116,32 +116,44 @@ const Users = () => {
     setUserToDelete(u);
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setQuery(e.target.value.toLowerCase());
+  };
+
+  const searched = (query) => (q) =>
+    (q.name && q.name.toLowerCase().includes(query)) ||
+    (q.email && q.email.toLowerCase().includes(query)) ||
+    (q.username && q.username.toLowerCase().includes(query)) ||
+    q.role.toLowerCase().includes(query);
+
   return (
     <div className='container'>
       <LeftSidebar />
       <div className='admin-main-content'>
-        <form onSubmit={searchUsers}>
-          <div className='search-box'>
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              onClick={searchUsers}
-              className='fa'
-            />
-            <input
-              type='search'
-              placeholder='Search Users'
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setSearchResults([]);
-              }}
-              value={query}
-            />
-            <input type='submit' hidden />
-          </div>
-        </form>
+        {/* <form onSubmit={searchUsers}> */}
+        <div className='search-box'>
+          <FontAwesomeIcon
+            icon={faMagnifyingGlass}
+            onClick={handleSearch}
+            className='fa'
+          />
+          <input
+            type='search'
+            placeholder='Search Users'
+            onChange={handleSearch}
+            // onChange={(e) => {
+            //   setQuery(e.target.value);
+            //   setSearchResults([]);
+            // }}
+            value={query}
+          />
+          <input type='submit' hidden />
+        </div>
+        {/* </form> */}
         <div className='admin-cards'>
           {users &&
-            users.map((u) => (
+            users.filter(searched(query)).map((u) => (
               <div className='admin-card' key={u._id}>
                 <Link
                   to={_id === u._id ? `/user/profile/${_id}` : `/user/${u._id}`}

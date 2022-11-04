@@ -16,6 +16,10 @@ const ChatProvider = ({ children }) => {
     useState(false);
   const [newAds, setNewAds] = useState(0);
   const [newVerifs, setNewVerifs] = useState(0);
+  const [chatUsers, setChatUsers] = useState([]);
+  const [theirChats, setTheirChats] = useState([]);
+  const [typersId, setTypersId] = useState('');
+  const [theirId, setTheirId] = useState('');
 
   return (
     <ChatContext.Provider
@@ -44,6 +48,14 @@ const ChatProvider = ({ children }) => {
         setNewAds,
         newVerifs,
         setNewVerifs,
+        chatUsers,
+        setChatUsers,
+        theirChats,
+        setTheirChats,
+        typersId,
+        setTypersId,
+        theirId,
+        setTheirId,
       }}
     >
       {children}

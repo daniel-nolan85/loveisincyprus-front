@@ -53,26 +53,26 @@ const Posts = () => {
       });
   };
 
-  const searchPosts = async (e) => {
-    e.preventDefault();
+  // const searchPosts = async (e) => {
+  //   e.preventDefault();
 
-    await axios
-      .post(
-        `${process.env.REACT_APP_API}/admin/search-posts/${query}`,
-        { _id },
-        {
-          headers: {
-            authtoken: token,
-          },
-        }
-      )
-      .then((res) => {
-        setPosts(res.data);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  //   await axios
+  //     .post(
+  //       `${process.env.REACT_APP_API}/admin/search-posts/${query}`,
+  //       { _id },
+  //       {
+  //         headers: {
+  //           authtoken: token,
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       setPosts(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const handleDelete = async (post) => {
     setPostDeleteModalIsOpen(true);
@@ -91,32 +91,44 @@ const Posts = () => {
     console.log(post.comments);
   };
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setQuery(e.target.value.toLowerCase());
+  };
+
+  const searched = (query) => (q) =>
+    q.content.toLowerCase().includes(query) ||
+    (q.postedBy.name && q.postedBy.name.toLowerCase().includes(query)) ||
+    (q.postedBy.email && q.postedBy.email.toLowerCase().includes(query)) ||
+    (q.postedBy.username && q.postedBy.username.toLowerCase().includes(query));
+
   return (
     <div className='container'>
       <LeftSidebar />
       <div className='admin-main-content'>
-        <form onSubmit={searchPosts}>
-          <div className='search-box'>
-            <FontAwesomeIcon
-              icon={faMagnifyingGlass}
-              onClick={searchPosts}
-              className='fa'
-            />
-            <input
-              type='search'
-              placeholder='Search Posts'
-              onChange={(e) => {
-                setQuery(e.target.value);
-                setSearchResults([]);
-              }}
-              value={query}
-            />
-            <input type='submit' hidden />
-          </div>
-        </form>
+        {/* <form onSubmit={searchPosts}> */}
+        <div className='search-box'>
+          <FontAwesomeIcon
+            icon={faMagnifyingGlass}
+            onClick={handleSearch}
+            className='fa'
+          />
+          <input
+            type='search'
+            placeholder='Search Posts'
+            onChange={handleSearch}
+            // onChange={(e) => {
+            //   setQuery(e.target.value);
+            //   setSearchResults([]);
+            // }}
+            value={query}
+          />
+          <input type='submit' hidden />
+        </div>
+        {/* </form> */}
         <div className='admin-cards'>
           {posts &&
-            posts.map((post) => (
+            posts.filter(searched(query)).map((post) => (
               <div className='admin-card' key={post._id}>
                 <div>
                   <h3>

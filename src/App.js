@@ -140,6 +140,14 @@ const App = () => {
     setIsTyping,
     socketConnected,
     setSocketConnected,
+    chatUsers,
+    setChatUsers,
+    theirChats,
+    setTheirChats,
+    typersId,
+    setTypersId,
+    theirId,
+    setTheirId,
   } = ChatState();
 
   useEffect(() => {
@@ -256,9 +264,27 @@ const App = () => {
       );
       socket.emit('setup', user);
       socket.on('connected', () => setSocketConnected(true));
-      socket.on('typing', () => setIsTyping(true));
-      socket.on('stop typing', () => setIsTyping(false));
-
+      // socket.on('message received', (newMessageReceived, theirId) => {
+      //   // console.log('newMessageReceived => ', newMessageReceived);
+      //   // fetchChats();
+      //   fetchTheirChats(theirId);
+      //   if (
+      //     !selectedChatCompare ||
+      //     selectedChatCompare._id != newMessageReceived.chat._id
+      //   ) {
+      //     // if (!notification.includes(newMessageReceived)) {
+      //     //   setNotification([newMessageReceived, ...notification]);
+      //     // }
+      //     incrementNewMessages(newMessageReceived);
+      //   } else {
+      //     setMessages([...messages, newMessageReceived]);
+      //   }
+      // });
+      // socket.on('typing', (_id) => {
+      //   setTypersId(_id);
+      //   setIsTyping(true);
+      // });
+      // socket.on('stop typing', () => setIsTyping(false));
       socket.on('post liked', (post) => {
         incrementNewNotifications(post, 'like');
       });
@@ -290,9 +316,10 @@ const App = () => {
       isFirstRun.current = false;
       return;
     } else if (user) {
-      socket.on('message received', (newMessageReceived) => {
+      socket.on('message received', (newMessageReceived, theirId) => {
         // console.log('newMessageReceived => ', newMessageReceived);
-        fetchChats();
+        // fetchChats();
+        fetchTheirChats(theirId);
         if (
           !selectedChatCompare ||
           selectedChatCompare._id != newMessageReceived.chat._id
@@ -305,8 +332,13 @@ const App = () => {
           setMessages([...messages, newMessageReceived]);
         }
       });
+      socket.on('typing', (_id) => {
+        setTypersId(_id);
+        setIsTyping(true);
+      });
+      socket.on('stop typing', () => setIsTyping(false));
     }
-  });
+  }, [user && user.token]);
 
   const incrementNewNotifications = async (notif, reason) => {
     await axios
@@ -338,7 +370,7 @@ const App = () => {
     await axios
       .put(
         `${process.env.REACT_APP_API}/new-message-count`,
-        { user, message },
+        { _id: user._id, message },
         {
           headers: {
             authtoken: user.token,
@@ -360,11 +392,11 @@ const App = () => {
       });
   };
 
-  const fetchChats = async () => {
+  const fetchTheirChats = async (theirId) => {
     await axios
       .post(
-        `${process.env.REACT_APP_API}/fetch-chats`,
-        { user },
+        `${process.env.REACT_APP_API}/fetch-their-chats`,
+        { theirId },
         {
           headers: {
             authtoken: user.token,
@@ -372,12 +404,32 @@ const App = () => {
         }
       )
       .then((res) => {
+        console.log(res.data);
         setChats(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
+
+  // const fetchChats = async () => {
+  //   await axios
+  //     .post(
+  //       `${process.env.REACT_APP_API}/fetch-chats`,
+  //       { user },
+  //       {
+  //         headers: {
+  //           authtoken: user.token,
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       setChats(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const removeExpiredFeatures = async () => {
     await axios.put(`${process.env.REACT_APP_API}/remove-expired-features`);
@@ -494,7 +546,12 @@ const App = () => {
           component={SubscriptionSuccess}
         />
         <UserRoute exact path='/order-successful' component={OrderSuccess} />
-        <UserRoute exact path='/chats' component={Chats} />
+        <UserRoute
+          exact
+          path='/chats'
+          component={Chats}
+          onLeave={() => setSelectedChat(undefined)}
+        />
         <SubscriberRoute exact path='/swipe-to-match' component={Swipe} />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/posts' component={Posts} />

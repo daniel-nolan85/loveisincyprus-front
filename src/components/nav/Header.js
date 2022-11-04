@@ -68,32 +68,32 @@ const Header = ({ setCancelSubscriptionModalIsOpen, setOptinModalIsOpen }) => {
       });
   };
 
-  const resetCount = async () => {
-    console.log('reset count');
-    await axios
-      .put(
-        `${process.env.REACT_APP_API}/reset-message-count`,
-        { user },
-        {
-          headers: {
-            authtoken: user.token,
-          },
-        }
-      )
-      .then((res) => {
-        // console.log(res.data);
-        dispatch({
-          type: 'LOGGED_IN_USER',
-          payload: {
-            ...user,
-            messages: res.data.messages,
-          },
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  // const resetCount = async () => {
+  //   console.log('reset count');
+  //   await axios
+  //     .put(
+  //       `${process.env.REACT_APP_API}/reset-message-count`,
+  //       { user },
+  //       {
+  //         headers: {
+  //           authtoken: user.token,
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       // console.log(res.data);
+  //       dispatch({
+  //         type: 'LOGGED_IN_USER',
+  //         payload: {
+  //           ...user,
+  //           messages: res.data.messages,
+  //         },
+  //       });
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   const resetNotifCount = async () => {
     console.log('reset count');
@@ -212,7 +212,7 @@ const Header = ({ setCancelSubscriptionModalIsOpen, setOptinModalIsOpen }) => {
               </Link> */}
             <ul>
               <Link to='/chats'>
-                <li className='tooltip' onClick={resetCount}>
+                <li className='tooltip'>
                   <Badge count={user.messages.length} offset={[-20, 0]}>
                     <FontAwesomeIcon icon={faMessage} className='menu-icon' />
                   </Badge>
