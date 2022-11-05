@@ -317,7 +317,7 @@ const App = () => {
       return;
     } else if (user) {
       socket.on('message received', (newMessageReceived, theirId) => {
-        // console.log('newMessageReceived => ', newMessageReceived);
+        console.log('newMessageReceived => ', newMessageReceived);
         // fetchChats();
         fetchTheirChats(theirId);
         if (

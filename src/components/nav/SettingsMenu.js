@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAddressCard,
   faArrowRightFromBracket,
+  faBullseye,
   faEject,
   faEnvelope,
   faGear,
@@ -31,6 +32,9 @@ const SettingsMenu = ({
     (state) => state.user
   );
 
+  const box = useRef(null);
+  useOutsideAlerter(box);
+
   let dispatch = useDispatch();
 
   useEffect(() => {
@@ -56,6 +60,28 @@ const SettingsMenu = ({
     }
   };
 
+  function useOutsideAlerter(ref) {
+    useEffect(() => {
+      // Function for click event
+      function handleOutsideClick(event) {
+        console.log('settingsMenu => ', settingsMenu);
+        console.log('ref.current => ', ref.current);
+        console.log('event.target => ', event.target);
+        if (
+          settingsMenu &&
+          ref.current &&
+          !ref.current.contains(event.target)
+        ) {
+          setSettingsMenu(false);
+        }
+      }
+
+      // Adding click event listener
+      document.addEventListener('click', handleOutsideClick);
+      return () => document.removeEventListener('click', handleOutsideClick);
+    }, [ref, settingsMenu]);
+  }
+
   return (
     <div
       className={
@@ -69,7 +95,7 @@ const SettingsMenu = ({
       >
         <span />
       </div>
-      <div className='settings-menu-inner'>
+      <div className='settings-menu-inner' ref={box}>
         <Link to={`/user/profile/${_id}`}>
           <div className='user-profile' onClick={() => setSettingsMenu(false)}>
             <img

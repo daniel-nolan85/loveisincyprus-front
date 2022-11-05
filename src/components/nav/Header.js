@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Logo from '../../assets/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -45,6 +45,8 @@ const Header = ({ setCancelSubscriptionModalIsOpen, setOptinModalIsOpen }) => {
   let history = useHistory();
 
   let dispatch = useDispatch();
+
+  const isFirstRun = useRef(true);
 
   const searchUser = async (e) => {
     e.preventDefault();

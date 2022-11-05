@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faHeartBroken } from '@fortawesome/free-solid-svg-icons';
@@ -23,6 +23,9 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
   let { user } = useSelector((state) => ({ ...state }));
 
   const { socketConnected, setSocketConnected } = ChatState();
+
+  const box = useRef(null);
+  useOutsideAlerter(box);
 
   const dispatch = useDispatch();
 
@@ -87,10 +90,25 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
     setUserToUnfollow(u);
   };
 
+  function useOutsideAlerter(ref) {
+    useEffect(() => {
+      // Function for click event
+      function handleOutsideClick(event) {
+        if (ref.current && !ref.current.contains(event.target)) {
+          setSearchResults([]);
+        }
+      }
+
+      // Adding click event listener
+      document.addEventListener('click', handleOutsideClick);
+      return () => document.removeEventListener('click', handleOutsideClick);
+    }, [ref]);
+  }
+
   return (
     <>
       {searchResults.length > 0 && (
-        <div className='search-results-container'>
+        <div className='search-results-container' ref={box}>
           {searchResults.map((u) => (
             <div className='search-results' key={u._id}>
               <Link
@@ -127,7 +145,8 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
 
               {user._id === u._id ? (
                 ''
-              ) : user.following.includes(u._id) ? (
+              ) : user.following.some((e) => e._id === u._id) ||
+                user.following.includes(u._id) ? (
                 <FontAwesomeIcon
                   icon={faHeart}
                   className='fa liked'
