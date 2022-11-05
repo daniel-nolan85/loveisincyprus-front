@@ -146,7 +146,6 @@ const Chats = ({ history }) => {
   };
 
   const accessChat = async (u) => {
-    markRead(u);
     setNewMessage('');
     await axios
       .post(
@@ -166,6 +165,7 @@ const Chats = ({ history }) => {
         setSelectedChat(res.data);
         // scrollToBottom();
         // console.log('selectedChat => ', res.data);
+        markRead(u);
       })
       .catch((err) => {
         console.log(err);

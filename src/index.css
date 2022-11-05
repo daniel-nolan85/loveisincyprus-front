@@ -3215,6 +3215,22 @@ select.decorated option:active {
   width: 140px;
 }
 
+.filter-datepicker {
+  width: 100%;
+  position: relative;
+}
+
+.filter-datepicker .react-datepicker-wrapper {
+  width: 25%;
+  position: absolute;
+  right: 0;
+  top: -40px;
+}
+
+.filter-datepicker .react-datepicker__input-container {
+  display: none;
+}
+
 .chart-header {
   display: flex;
   justify-content: space-between;
@@ -3252,6 +3268,12 @@ select.decorated option:active {
   display: flex;
   flex-direction: column;
   position: relative;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+
+.chat-list::-webkit-scrollbar {
+  display: none;
 }
 
 .chat-list form {

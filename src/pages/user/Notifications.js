@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import { useSelector, useDispatch } from 'react-redux';
@@ -11,6 +11,8 @@ import NotifPost from '../../components/modals/NotifPost';
 import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
 import { toast } from 'react-toastify';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 let socket;
 
@@ -38,10 +40,15 @@ const Notifications = () => {
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [loadingImg, setLoadingImg] = useState(false);
+  const [notifsDisplay, setNotifsDisplay] = useState([]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [datePickerIsOpen, setDatePickerIsOpen] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
+
+  const isFirstRun = useRef(true);
 
   const { socketConnected, setSocketConnected } = ChatState();
 
@@ -57,6 +64,10 @@ const Notifications = () => {
   useEffect(() => {
     setNumOfNewNotifs(notifications.filter((x) => x.new === true).length);
   }, [notifications]);
+
+  useEffect(() => {
+    today();
+  }, [populatedNotifs]);
 
   useEffect(() => {
     socket = io(
@@ -117,21 +128,61 @@ const Notifications = () => {
     setPopulatedNotifs(notifications);
   };
 
-  const allTime = () => {
-    //
+  const newNotifs = () => {
+    const newbies = populatedNotifs.filter((n) => {
+      return n.new === true;
+    });
+    setNotifsDisplay(newbies);
   };
 
   const today = () => {
-    //
+    const now = new Date();
+    const yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+    const today = populatedNotifs.filter((n) => {
+      var time = new Date(n.occurred).getTime();
+      return yesterday < time && time < now;
+    });
+    setNotifsDisplay(today);
   };
 
   const thisWeek = () => {
-    //
+    const now = new Date();
+    const lastWeek = new Date(new Date().setDate(new Date().getDate() - 7));
+    const thisWeek = populatedNotifs.filter((n) => {
+      var time = new Date(n.occurred).getTime();
+      return lastWeek < time && time < now;
+    });
+    setNotifsDisplay(thisWeek);
   };
 
   const thisMonth = () => {
-    //
+    const currentMonth = new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
+    const thisMonth = populatedNotifs.filter((n) => {
+      const [year, month] = n.occurred.split('-');
+      return currentMonth === +month && currentYear == year;
+    });
+    setNotifsDisplay(thisMonth);
   };
+
+  const select = () => {
+    setDatePickerIsOpen(true);
+  };
+
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      const selectedMonth = new Date(startDate).getMonth() + 1;
+      const selectedYear = new Date(startDate).getFullYear();
+      const chosenMonth = populatedNotifs.filter((n) => {
+        const [year, month] = n.occurred.split('-');
+        return selectedMonth === +month && selectedYear == year;
+      });
+      setNotifsDisplay(chosenMonth);
+    }
+  }, [startDate]);
 
   const viewNotif = async (n) => {
     // console.log(n);
@@ -382,14 +433,21 @@ const Notifications = () => {
       <div className='main-content'>
         <h1 className='center'>
           You have{' '}
-          {numOfNewNotifs === 1
-            ? `${numOfNewNotifs} new notification`
-            : `${numOfNewNotifs} new notifications`}
+          {numOfNewNotifs === 0 ? (
+            `${numOfNewNotifs} new notifications`
+          ) : numOfNewNotifs === 1 ? (
+            <span className='link' onClick={newNotifs}>
+              {numOfNewNotifs} new notification
+            </span>
+          ) : (
+            numOfNewNotifs > 1 && (
+              <span className='link' onClick={newNotifs}>
+                {numOfNewNotifs} new notifications
+              </span>
+            )
+          )}
         </h1>
         <div className='points-filter-btns'>
-          <button className='submit-btn' onClick={allTime}>
-            All
-          </button>
           <button className='submit-btn' onClick={today}>
             Today
           </button>
@@ -399,102 +457,124 @@ const Notifications = () => {
           <button className='submit-btn' onClick={thisMonth}>
             This Month
           </button>
+          <button className='submit-btn' onClick={select}>
+            Select
+          </button>
+        </div>
+        <div className='filter-datepicker'>
+          <DatePicker
+            selected={startDate}
+            onChange={(date) => {
+              setStartDate(date);
+              setDatePickerIsOpen(false);
+            }}
+            dateFormat='MM/yyyy'
+            showMonthYearPicker
+            open={datePickerIsOpen}
+            onClickOutside={() => setDatePickerIsOpen(false)}
+          />
         </div>
         <div
           className='small-container cart-page'
           style={{ marginTop: '40px' }}
         >
-          <table>
-            <tbody>
-              <tr>
-                <th>Date</th>
-                <th>Action</th>
-              </tr>
-              {populatedNotifs.map(
-                (n) => (
-                  // typeof n.notif === 'object' ? (
-                  <tr key={n._id}>
-                    <td>
-                      <p className={n.new === true ? 'new' : ''}>
-                        {moment(n.occurred).format('MMMM Do YYYY')}
-                      </p>
-                    </td>
-                    <td>
-                      {n.action === 'liked post' && (
+          {notifsDisplay.length === 0 ? (
+            <h1 className='center'>
+              No notifications were received at the selected time
+            </h1>
+          ) : (
+            <table>
+              <tbody>
+                <tr>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+                {notifsDisplay.map(
+                  (n) => (
+                    // typeof n.notif === 'object' ? (
+                    <tr key={n._id}>
+                      <td>
                         <p className={n.new === true ? 'new' : ''}>
-                          {/* {n.notif.likes.length > 1
+                          {moment(n.occurred).format('MMMM Do YYYY')}
+                        </p>
+                      </td>
+                      <td>
+                        {n.action === 'liked post' && (
+                          <p className={n.new === true ? 'new' : ''}>
+                            {/* {n.notif.likes.length > 1
                             ? n.notif.likes[
                                 n.notif.likes.length - 1
                               ].email.split('@')[0]
                             : n.notif.likes[0].email.split('@')[0]}{' '} */}
-                          Someone liked your{' '}
-                          <span className='link' onClick={() => viewNotif(n)}>
-                            post
-                          </span>
-                        </p>
-                      )}
-                      {n.action === 'commented post' && (
-                        <p className={n.new === true ? 'new' : ''}>
-                          {/* {n.notif.comments.length > 1
+                            Someone liked your{' '}
+                            <span className='link' onClick={() => viewNotif(n)}>
+                              post
+                            </span>
+                          </p>
+                        )}
+                        {n.action === 'commented post' && (
+                          <p className={n.new === true ? 'new' : ''}>
+                            {/* {n.notif.comments.length > 1
                             ? n.notif.comments[
                                 n.notif.comments.length - 1
                               ].postedBy.email.split('@')[0]
                             : n.notif.comments[0].postedBy.email.split(
                                 '@'
                               )[0]}{' '} */}
-                          Someone commented on your{' '}
-                          <span className='link' onClick={() => viewNotif(n)}>
-                            post
-                          </span>
-                        </p>
-                      )}
-                      {n.action === 'new event' && (
-                        <p className={n.new === true ? 'new' : ''}>
-                          You have been invited to an{' '}
-                          <span className='link' onClick={() => viewNotif(n)}>
-                            event
-                          </span>
-                        </p>
-                      )}
-                      {n.action === 'user liked you' && (
-                        <p className={n.new === true ? 'new' : ''}>
-                          You have a new{' '}
-                          <span className='link' onClick={() => viewNotif(n)}>
-                            follower
-                          </span>
-                        </p>
-                      )}
-                      {n.action === 'user visited you' && (
-                        <p className={n.new === true ? 'new' : ''}>
-                          You received a new{' '}
-                          <span className='link' onClick={() => viewNotif(n)}>
-                            visitor
-                          </span>
-                        </p>
-                      )}
-                    </td>
-                  </tr>
-                )
-                // ) : (
-                //   <tr key={n._id}>
-                //     <td>
-                //       <p className={n.new === true ? 'new' : ''}>
-                //         {moment(n.occurred).format('MMMM Do YYYY')}
-                //       </p>
-                //     </td>
-                //     <td>
-                //       <p className={n.new === true ? 'new' : ''}>
-                //         Someone interacted with your{' '}
-                //         <span className='link' onClick={() => viewNotif(n)}>
-                //           post
-                //         </span>
-                //       </p>
-                //     </td>
-                //   </tr>
-                // )
-              )}
-            </tbody>
-          </table>
+                            Someone commented on your{' '}
+                            <span className='link' onClick={() => viewNotif(n)}>
+                              post
+                            </span>
+                          </p>
+                        )}
+                        {n.action === 'new event' && (
+                          <p className={n.new === true ? 'new' : ''}>
+                            You have been invited to an{' '}
+                            <span className='link' onClick={() => viewNotif(n)}>
+                              event
+                            </span>
+                          </p>
+                        )}
+                        {n.action === 'user liked you' && (
+                          <p className={n.new === true ? 'new' : ''}>
+                            You have a new{' '}
+                            <span className='link' onClick={() => viewNotif(n)}>
+                              follower
+                            </span>
+                          </p>
+                        )}
+                        {n.action === 'user visited you' && (
+                          <p className={n.new === true ? 'new' : ''}>
+                            You received a new{' '}
+                            <span className='link' onClick={() => viewNotif(n)}>
+                              visitor
+                            </span>
+                          </p>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                  // ) : (
+                  //   <tr key={n._id}>
+                  //     <td>
+                  //       <p className={n.new === true ? 'new' : ''}>
+                  //         {moment(n.occurred).format('MMMM Do YYYY')}
+                  //       </p>
+                  //     </td>
+                  //     <td>
+                  //       <p className={n.new === true ? 'new' : ''}>
+                  //         Someone interacted with your{' '}
+                  //         <span className='link' onClick={() => viewNotif(n)}>
+                  //           post
+                  //         </span>
+                  //       </p>
+                  //     </td>
+                  //   </tr>
+                  // )
+                )}
+              </tbody>
+            </table>
+          )}
         </div>
         <AddComment
           commentModalIsOpen={commentModalIsOpen}
