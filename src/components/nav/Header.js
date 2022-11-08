@@ -236,7 +236,7 @@ const Header = ({ setCancelSubscriptionModalIsOpen, setOptinModalIsOpen }) => {
                 {user.newNotifs.length > 0
                   ? user.newNotifs.map((n, i) => (
                       <div key={i}>
-                        {n}
+                        {n.action}
                         <br />
                       </div>
                     ))
