@@ -281,6 +281,10 @@ const ProfileUpdate = ({
           value={username}
           onChange={(e) => setUsername(e.target.value)}
         />
+        <label className='csv'>
+          Your username will be how you are referred to throughout the site.
+          (Can be changed anytime)
+        </label>
 
         <input
           type='email'

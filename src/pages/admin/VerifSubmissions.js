@@ -87,8 +87,7 @@ const VerifSubmissions = () => {
                             : defaultProfile
                         }
                         alt={`${
-                          verif.postedBy.name ||
-                          verif.postedBy.email.split('@')[0]
+                          verif.postedBy.username || verif.postedBy.name
                         }'s profile picture`}
                       />
                     </Link>
@@ -100,10 +99,7 @@ const VerifSubmissions = () => {
                             : `/user/${verif.postedBy._id}`
                         }
                       >
-                        <p>
-                          {verif.postedBy.name ||
-                            verif.postedBy.email.split('@')[0]}
-                        </p>
+                        <p>{verif.postedBy.username || verif.postedBy.name}</p>
                       </Link>
                       <span>{moment(verif.createdAt).fromNow()}</span>
                     </div>
@@ -125,7 +121,7 @@ const VerifSubmissions = () => {
                   <img
                     src={verif.image.url}
                     alt={`${
-                      verif.postedBy.name || verif.postedBy.email.split('@')[0]
+                      verif.postedBy.username || verif.postedBy.name
                     }'s advertisement`}
                     className='post-img'
                   />

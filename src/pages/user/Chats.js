@@ -349,15 +349,13 @@ const Chats = ({ history }) => {
                         src={
                           u.profileImage ? u.profileImage.url : defaultProfile
                         }
-                        alt={`${
-                          u.name || u.email.split('@')[0]
-                        }'s profile picture`}
+                        alt={`${u.username || u.name}'s profile picture`}
                       />
                     </div>
                     <div className='msg-info'>
                       <div className='ms-info'>
                         <span className='sender-name'>
-                          {u.name || u.email.split('@')[0]}
+                          {u.username || u.name}
                         </span>
                         <span className='ms-count'>
                           {user.messages.some((e) => e.sender === u._id) > 0 &&
@@ -427,8 +425,7 @@ const Chats = ({ history }) => {
                               : defaultProfile
                           }
                           alt={`${
-                            otherUser[0].name ||
-                            otherUser[0].email.split('@')[0]
+                            otherUser[0].username || otherUser[0].name
                           }'s profile picture`}
                         />
                       </div>
@@ -452,8 +449,7 @@ const Chats = ({ history }) => {
                               />
                             </div>
                           ) : (
-                            otherUser[0].name ||
-                            otherUser[0].email.split('@')[0]
+                            otherUser[0].username || otherUser[0].name
                           )}
                         </h3>
                       </Link>
@@ -478,7 +474,7 @@ const Chats = ({ history }) => {
                                 : defaultProfile
                             }
                             alt={`${
-                              m.sender.name || m.sender.email.split('@')[0]
+                              m.sender.username || m.sender.name
                             }'s profile picture`}
                           />
                         </div>

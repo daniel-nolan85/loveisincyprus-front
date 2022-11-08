@@ -79,12 +79,9 @@ const Swipe = ({ history }) => {
       )
       .then((res) => {
         console.log(res.data);
-        toast.error(
-          `You don't like ${u.name ? u.name : u.email.split('@')[0]}.`,
-          {
-            position: toast.POSITION.TOP_CENTER,
-          }
-        );
+        toast.error(`You don't like ${u.username || u.name}.`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
         usersToSwipe();
       })
       .catch((err) => {
@@ -114,14 +111,14 @@ const Swipe = ({ history }) => {
           addPoints(15, 'match', user.token);
           toast.success(
             `You matched with ${
-              u.name || u.email.split('@')[0]
+              u.username || u.name
             }. You have been awarded 15 points!`,
             {
               position: toast.POSITION.TOP_CENTER,
             }
           );
         }
-        toast.success(`You like ${u.name ? u.name : u.email.split('@')[0]}.`, {
+        toast.success(`You like ${u.username || u.name}.`, {
           position: toast.POSITION.TOP_CENTER,
         });
         socket.emit('new follower', res.data);
@@ -180,7 +177,7 @@ const Swipe = ({ history }) => {
                     }}
                   >
                     <div className='tinder-card-info'>
-                      <h3>{u.name || u.email.split('@')[0]}</h3>
+                      <h3>{u.username || u.name}</h3>
                       <h3>{u.age}</h3>
                     </div>
                   </div>

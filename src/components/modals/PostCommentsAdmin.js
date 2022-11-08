@@ -43,19 +43,6 @@ const PostCommentsAdmin = ({
     >
       {post.comments &&
         post.comments.map((c) => (
-          //   <>
-          //     <pre>{JSON.stringify(text, null, 4)}</pre>
-          //     <pre>
-          //       {JSON.stringify(
-          //         postedBy.name || postedBy.email.split('@')[0],
-          //         null,
-          //         4
-          //       )}
-          //     </pre>
-          //     <pre>{JSON.stringify(_id, null, 4)}</pre>
-          //   </>
-          //   <div className='comments-container' key={_id}>
-          //     <div className='user-profile'>
           <div className='admin-comments-container' key={c._id}>
             <div className='post-row'>
               <div className='user-profile'>
@@ -73,7 +60,7 @@ const PostCommentsAdmin = ({
                         : defaultProfile
                     }
                     alt={`${
-                      c.postedBy.name || c.postedBy.email.split('@'[0])
+                      c.postedBy.username || c.postedBy.name
                     }'s profile picture`}
                     className='admin-post-img'
                   />
@@ -86,7 +73,7 @@ const PostCommentsAdmin = ({
                   }
                 >
                   <p className='admin-postedBy'>
-                    {c.postedBy.name || c.postedBy.email.split('@')[0]}
+                    {c.postedBy.username || c.postedBy.name}
                   </p>
                 </Link>
               </div>
@@ -104,7 +91,7 @@ const PostCommentsAdmin = ({
                 <img
                   src={c.image.url}
                   alt={`${
-                    c.postedBy.name || c.postedBy.email.split('@'[0])
+                    c.postedBy.username || c.postedBy.username
                   }'s commented picture`}
                   className='admin-comments-img'
                 />

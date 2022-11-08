@@ -23,9 +23,7 @@ const Unfollow = ({
     if (user.matches.includes(u._id)) {
       removePoints(15, 'unmatch', user.token);
       toast.error(
-        `You unmatched with ${
-          u.name ? u.name : u.email.split('@')[0]
-        }. 15 points were removed`,
+        `You unmatched with ${u.username || u.name}. 15 points were removed`,
         {
           position: toast.POSITION.TOP_CENTER,
         }
@@ -43,12 +41,9 @@ const Unfollow = ({
       )
       .then((res) => {
         console.log(res.data);
-        toast.error(
-          `You no longer like ${u.name ? u.name : u.email.split('@')[0]}.`,
-          {
-            position: toast.POSITION.TOP_CENTER,
-          }
-        );
+        toast.error(`You no longer like ${u.username || u.name}.`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
@@ -79,7 +74,7 @@ const Unfollow = ({
     },
   };
 
-  const { name, email, profileImage } = userToUnfollow;
+  const { name, profileImage, username } = userToUnfollow;
 
   return (
     <Modal
@@ -91,12 +86,12 @@ const Unfollow = ({
       <div className='match'>
         <h1>
           Are you sure you want to unlike
-          {/* {name || email.split('@')[0]}? */}
+          {username || name}?
         </h1>
         <div className='match-images'>
           <img
             src={profileImage ? profileImage.url : defaultProfile}
-            // alt={`${name || email.split('@')[0]}'s profile picture`}
+            alt={`${username || name}'s profile picture`}
           />
         </div>
         <br />

@@ -39,13 +39,13 @@ const Accepted = ({ acceptedModalIsOpen, setAcceptedModalIsOpen, post }) => {
               >
                 <img
                   src={a.profileImage ? a.profileImage.url : defaultProfile}
-                  alt={`${a.name || a.email.split('@'[0])}'s profile picture`}
+                  alt={`${a.username || a.name}'s profile picture`}
                 />
               </Link>
               <Link
                 to={_id === a._id ? `/user/profile/${_id}` : `/user/${a._id}`}
               >
-                <p>{a.name ? a.name : a.email.split('@')[0]}</p>
+                <p>{a.username || a.name}</p>
               </Link>
             </div>
             <br />
@@ -60,13 +60,13 @@ const Accepted = ({ acceptedModalIsOpen, setAcceptedModalIsOpen, post }) => {
               >
                 <img
                   src={a.profileImage ? a.profileImage.url : defaultProfile}
-                  alt={`${a.name || a.email.split('@'[0])}'s profile picture`}
+                  alt={`${a.username || a.name}'s profile picture`}
                 />
               </Link>
               <Link
                 to={_id === a._id ? `/user/profile/${_id}` : `/user/${a._id}`}
               >
-                <p>{a.name ? a.name : a.email.split('@')[0]}</p>
+                <p>{a.username || a.name}</p>
               </Link>
             </div>
             <br />

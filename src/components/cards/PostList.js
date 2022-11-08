@@ -78,7 +78,7 @@ const PostList = ({
                         : defaultProfile
                     }
                     alt={`${
-                      post.postedBy.name || post.postedBy.email.split('@')[0]
+                      post.postedBy.username || post.postedBy.name
                     }'s profile picture`}
                   />
                 </Link>
@@ -90,9 +90,7 @@ const PostList = ({
                         : `/user/${post.postedBy._id}`
                     }
                   >
-                    <p>
-                      {post.postedBy.name || post.postedBy.email.split('@')[0]}
-                    </p>
+                    <p>{post.postedBy.username || post.postedBy.name}</p>
                   </Link>
                   <span>{moment(post.createdAt).fromNow()}</span>
                 </div>
@@ -116,9 +114,7 @@ const PostList = ({
             {post.image && (
               <img
                 src={post.image.url}
-                alt={`${
-                  post.postedBy.name || post.postedBy.email.split('@')[0]
-                }'s post`}
+                alt={`${post.postedBy.username || post.postedBy.name}'s post`}
                 className='post-img'
               />
             )}

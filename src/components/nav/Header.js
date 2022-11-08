@@ -309,9 +309,7 @@ const Header = ({ setCancelSubscriptionModalIsOpen, setOptinModalIsOpen }) => {
             <div className='nav-user-icon'>
               <img
                 src={user.profileImage ? user.profileImage.url : defaultProfile}
-                alt={`${
-                  user.name || user.email.split('@')[0]
-                }'s profile picture`}
+                alt={`${user.username || user.name}'s profile picture`}
                 onClick={() => setSettingsMenu(!settingsMenu)}
               />
             </div>

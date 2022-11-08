@@ -58,14 +58,14 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
           addPoints(15, 'match', user.token);
           toast.success(
             `You matched with ${
-              u.name || u.email.split('@')[0]
+              u.username || u.name
             }. You have been awarded 15 points!`,
             {
               position: toast.POSITION.TOP_CENTER,
             }
           );
         }
-        toast.success(`You like ${u.name ? u.name : u.email.split('@')[0]}.`, {
+        toast.success(`You like ${u.username || u.name}.`, {
           position: toast.POSITION.TOP_CENTER,
         });
         socket.emit('new follower', res.data);
@@ -125,7 +125,7 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
                 <div className='nav-user-icon'>
                   <img
                     src={u.profileImage ? u.profileImage.url : defaultProfile}
-                    alt={`${u.name || u.email.split('@')[0]}'s profile picture`}
+                    alt={`${u.username || u.name}'s profile picture`}
                   />
                 </div>
               </Link>
@@ -140,7 +140,7 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
                   setSearchResults([]);
                 }}
               >
-                <span>{u.name || u.email.split('@')[0]}</span>
+                <span>{u.username || u.name}</span>
               </Link>
 
               {user._id === u._id ? (

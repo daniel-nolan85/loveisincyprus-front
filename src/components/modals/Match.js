@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 Modal.setAppElement('#root');
 
 const Match = ({ matchModalIsOpen, setMatchModalIsOpen, match }) => {
-  const { profileImage, name, email } = useSelector((state) => state.user);
+  const { profileImage, name, username } = useSelector((state) => state.user);
 
   const modalStyles = {
     content: {
@@ -30,16 +30,15 @@ const Match = ({ matchModalIsOpen, setMatchModalIsOpen, match }) => {
       <div className='match'>
         <h1>Congratulations!</h1>
         <h2>It's a match!</h2>
-        {/* <pre>{JSON.stringify(match, null, 4)}</pre> */}
-        {/* <h2>You matched with {match.name || match.email.split('@')[0]}</h2> */}
+        <h2>You matched with {match.username || match.name}</h2>
         <div className='match-images'>
           <img
             src={match.profileImage ? match.profileImage.url : defaultProfile}
-            // alt={`${match.name || match.email.split('@')[0]}'s profile picture`}
+            alt={`${match.username || match.name}'s profile picture`}
           />
           <img
             src={profileImage ? profileImage.url : defaultProfile}
-            alt={`${name || email.split('@')[0]}'s profile picture`}
+            alt={`${username || name}'s profile picture`}
           />
         </div>
         <br />

@@ -131,9 +131,7 @@ const Posts = () => {
             posts.filter(searched(query)).map((post) => (
               <div className='admin-card' key={post._id}>
                 <div>
-                  <h3>
-                    {post.postedBy.name || post.postedBy.email.split('@')[0]}
-                  </h3>
+                  <h3>{post.postedBy.username || post.postedBy.name}</h3>
                   <p>
                     {post.content.length > 100
                       ? `${post.content.substring(0, 100)}...`
@@ -144,7 +142,7 @@ const Posts = () => {
                   <img
                     src={post.image.url}
                     alt={`${
-                      post.postedBy.name || post.postedBy.email.split('@')[0]
+                      post.postedBy.username || post.postedBy.name
                     }'s post`}
                     className='admin-post-img'
                   />

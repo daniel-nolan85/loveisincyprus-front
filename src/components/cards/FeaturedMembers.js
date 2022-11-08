@@ -61,13 +61,13 @@ const FeaturedMembers = () => {
                 >
                   <img
                     src={f.profileImage ? f.profileImage.url : defaultProfile}
-                    alt={`${f.name || f.email.split('@')[0]}'s profile picture`}
+                    alt={`${f.username || f.name}'s profile picture`}
                   />
                 </Link>
               ) : (
                 <img
                   src={f.profileImage ? f.profileImage.url : defaultProfile}
-                  alt={`${f.name || f.email.split('@')[0]}'s profile picture`}
+                  alt={`${f.username || f.name}'s profile picture`}
                 />
               )}
             </SwiperSlide>

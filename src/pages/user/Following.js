@@ -71,7 +71,7 @@ const Following = ({ history }) => {
                   handleUnfollow(u);
                 }}
               />
-              <p>{u.name ? `${u.name}` : `${u.email.split('@')[0]}`}</p>
+              <p>{u.username || u.name}</p>
             </div>
           ))}
         </div>

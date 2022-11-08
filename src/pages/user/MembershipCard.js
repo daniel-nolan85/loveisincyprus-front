@@ -18,7 +18,6 @@ const MembershipCard = () => {
   const {
     _id,
     name,
-    email,
     profileImage,
     about,
     token,
@@ -27,6 +26,7 @@ const MembershipCard = () => {
     featuredMember,
     eventsEligible,
     verified,
+    username,
   } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -55,13 +55,13 @@ const MembershipCard = () => {
                   <img
                     className='ms-image ms-center'
                     src={profileImage ? profileImage.url : defaultProfile}
-                    alt={`${name || email.split('@')[0]}'s profile picture`}
+                    alt={`${username || name}'s profile picture`}
                   />
                 </Link>
               </div>
               <div className='ms-more-info'>
                 <Link to={`/user/profile/${_id}`}>
-                  <h1>{name || email.split('@')[0]}</h1>
+                  <h1>{username || name}</h1>
                 </Link>
                 <br />
                 <div className='ms-coords small'>
@@ -116,7 +116,7 @@ const MembershipCard = () => {
             </div>
             <div className='ms-general'>
               <Link to={`/user/profile/${_id}`}>
-                <h1>{name || email.split('@')[0]}</h1>
+                <h1>{username || name}</h1>
               </Link>
               <p>{about}</p>
               <span className='ms-more'>Hover the card for more info</span>

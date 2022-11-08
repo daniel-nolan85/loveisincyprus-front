@@ -195,9 +195,7 @@ const AdminDashboard = () => {
                                 ? u.profileImage.url
                                 : defaultProfile
                             }
-                            alt={`${
-                              u.name || u.email.split('@'[0])
-                            }'s profile picture`}
+                            alt={`${u.username || u.name}'s profile picture`}
                           />
                         </Link>
                       </td>
@@ -209,7 +207,7 @@ const AdminDashboard = () => {
                               : `/user/${u._id}`
                           }
                         >
-                          <p>{u.name ? u.name : u.email.split('@')[0]}</p>
+                          <p>{u.username || u.name}</p>
                         </Link>
                       </td>
                     </tr>

@@ -27,7 +27,7 @@ const SinglePost = ({
   const [image, setImage] = useState({});
   const [loadingImg, setLoadingImg] = useState(false);
 
-  const { token, _id, name, email, profileImage } = useSelector(
+  const { token, _id, name, profileImage, username } = useSelector(
     (state) => state.user
   );
 
@@ -115,11 +115,11 @@ const SinglePost = ({
           <Link to={`/user/profile/${_id}`}>
             <img
               src={profileImage ? profileImage.url : defaultProfile}
-              alt={`${name || email.split('@')[0]}'s profile pic`}
+              alt={`${username || name}'s profile pic`}
             />
           </Link>
           <Link to={`/user/profile/${_id}`}>
-            <p>{name || (email && email.split('@')[0])}</p>
+            <p>{username || name}</p>
           </Link>
         </div>
         <div className='post-input-container'>
@@ -127,9 +127,7 @@ const SinglePost = ({
             <textarea
               defaultValue={post.content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder={`What's on your mind, ${
-                name ? name.split(' ')[0] : email && email.split('@')[0]
-              }?`}
+              placeholder={`What's on your mind, ${username || name}?`}
             />
           </form>
           <div className='write-post-footer'>

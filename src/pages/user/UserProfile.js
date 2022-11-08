@@ -366,14 +366,14 @@ const UserProfile = ({ history }) => {
           addPoints(15, 'match', user.token);
           toast.success(
             `You matched with ${
-              u.name || u.email.split('@')[0]
+              u.username || u.name
             }. You have been awarded 15 points!`,
             {
               position: toast.POSITION.TOP_CENTER,
             }
           );
         }
-        toast.success(`You like ${name ? name : email.split('@')[0]}.`, {
+        toast.success(`You like ${username || name}.`, {
           position: toast.POSITION.TOP_CENTER,
         });
         socket.emit('new follower', res.data);
@@ -410,7 +410,6 @@ const UserProfile = ({ history }) => {
 
   const {
     name,
-    email,
     profileImage,
     about,
     coverImage,
@@ -421,13 +420,14 @@ const UserProfile = ({ history }) => {
     clearPhoto,
     membership,
     lastLogin,
+    username,
   } = thisUser;
 
   return (
     <div className='profile-container'>
       <img
         src={coverImage ? coverImage.url : defaultCover}
-        // alt={`${name || email.split('@'[0])}'s profile photo`}
+        alt={`${username || name}'s profile photo`}
         className='cover-img'
       />
       <div className='profile-details'>
@@ -436,7 +436,7 @@ const UserProfile = ({ history }) => {
             {profileImage && profileImage.url ? (
               <img
                 src={profileImage.url}
-                alt={`${name || email.split('@'[0])}'s profile photo`}
+                alt={`${username || name}'s profile photo`}
                 className='pd-image'
                 style={{ cursor: 'zoom-in' }}
                 onClick={() => setImageModalIsOpen(true)}
@@ -450,7 +450,7 @@ const UserProfile = ({ history }) => {
             )}
 
             <div>
-              <h3>{name || (email && email.split('@')[0])}</h3>
+              <h3>{username || name}</h3>
               <p>Member since {moment(createdAt).format('MMMM Do YYYY')}</p>
               <p>Last logged in {moment(lastLogin).fromNow()}</p>
             </div>
@@ -568,10 +568,10 @@ const UserProfile = ({ history }) => {
                     <div className='user-profile'>
                       <img
                         src={profileImage ? profileImage.url : defaultProfile}
-                        alt={`${name || email.split('@'[0])}'s profile picture`}
+                        alt={`${username || name}'s profile picture`}
                       />
                       <div>
-                        <p>{name ? name : email.split('@')[0]}</p>
+                        <p>{username || name}</p>
                         <span>{moment(post.createdAt).fromNow()}</span>
                       </div>
                     </div>
@@ -580,7 +580,7 @@ const UserProfile = ({ history }) => {
                   {post.image && (
                     <img
                       src={post.image.url}
-                      alt={`${name || email.split('@')[0]}'s post`}
+                      alt={`${username || name}'s post`}
                       className='post-img'
                     />
                   )}

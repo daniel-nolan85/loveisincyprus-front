@@ -39,13 +39,13 @@ const Declined = ({ declinedModalIsOpen, setDeclinedModalIsOpen, post }) => {
               >
                 <img
                   src={d.profileImage ? d.profileImage.url : defaultProfile}
-                  alt={`${d.name || d.email.split('@'[0])}'s profile picture`}
+                  alt={`${d.username || d.name}'s profile picture`}
                 />
               </Link>
               <Link
                 to={_id === d._id ? `/user/profile/${_id}` : `/user/${d._id}`}
               >
-                <p>{d.name ? d.name : d.email.split('@')[0]}</p>
+                <p>{d.username || d.name}</p>
               </Link>
             </div>
             <br />
@@ -60,13 +60,13 @@ const Declined = ({ declinedModalIsOpen, setDeclinedModalIsOpen, post }) => {
               >
                 <img
                   src={a.profileImage ? a.profileImage.url : defaultProfile}
-                  alt={`${a.name || a.email.split('@'[0])}'s profile picture`}
+                  alt={`${a.username || a.name}'s profile picture`}
                 />
               </Link>
               <Link
                 to={_id === a._id ? `/user/profile/${_id}` : `/user/${a._id}`}
               >
-                <p>{a.name ? a.name : a.email.split('@')[0]}</p>
+                <p>{a.username || a.name}</p>
               </Link>
             </div>
             <br />

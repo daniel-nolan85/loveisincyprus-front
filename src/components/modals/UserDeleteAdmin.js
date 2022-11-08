@@ -40,7 +40,7 @@ const UserDeleteAdmin = ({
       });
   };
 
-  const { name, email, profileImage } = userToDelete;
+  const { name, profileImage, username } = userToDelete;
 
   const modalStyles = {
     content: {
@@ -64,13 +64,13 @@ const UserDeleteAdmin = ({
       <div className='match'>
         <h1>Are you sure you want to delete this user?</h1>
         <br />
-        {/* <p>{name || email.split('@')[0]}</p> */}
+        <p>{username || name}</p>
         <br />
 
         <div className='match-images'>
           <img
             src={profileImage ? profileImage.url : defaultImage}
-            // alt={`${name || email.split('@')[0]}'s post`}
+            alt={`${username || name}'s post`}
           />
         </div>
         <p>All trace of this user will be permanently deleted</p>

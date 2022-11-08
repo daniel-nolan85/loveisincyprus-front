@@ -82,14 +82,14 @@ const Visitors = ({ history }) => {
           addPoints(15, 'match', user.token);
           toast.success(
             `You matched with ${
-              u.name || u.email.split('@')[0]
+              u.username || u.name
             }. You have been awarded 15 points!`,
             {
               position: toast.POSITION.TOP_CENTER,
             }
           );
         }
-        toast.success(`You like ${u.name ? u.name : u.email.split('@')[0]}.`, {
+        toast.success(`You like ${u.username || u.name}.`, {
           position: toast.POSITION.TOP_CENTER,
         });
         socket.emit('new follower', res.data);
@@ -144,7 +144,7 @@ const Visitors = ({ history }) => {
                       handleUnfollow(u);
                     }}
                   />
-                  <p>{u.name ? `${u.name}` : `${u.email.split('@')[0]}`}</p>
+                  <p>{u.username || u.name}</p>
                 </>
               ) : (
                 <>
@@ -156,7 +156,7 @@ const Visitors = ({ history }) => {
                       handleFollow(u);
                     }}
                   />
-                  <p>{u.name ? `${u.name}` : `${u.email.split('@')[0]}`}</p>
+                  <p>{u.username || u.name}</p>
                 </>
               )}
             </div>

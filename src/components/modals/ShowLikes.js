@@ -43,9 +43,7 @@ const ShowLikes = ({ likesModalIsOpen, setLikesModalIsOpen, post }) => {
                   src={
                     like.profileImage ? like.profileImage.url : defaultProfile
                   }
-                  alt={`${
-                    like.name || like.email.split('@'[0])
-                  }'s profile picture`}
+                  alt={`${like.username || like.name}'s profile picture`}
                 />
               </Link>
               <Link
@@ -55,7 +53,7 @@ const ShowLikes = ({ likesModalIsOpen, setLikesModalIsOpen, post }) => {
                     : `/user/${like._id}`
                 }
               >
-                <p>{like.name ? like.name : like.email.split('@')[0]}</p>
+                <p>{like.username || like.name}</p>
               </Link>
             </div>
             <br />

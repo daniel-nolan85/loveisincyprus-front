@@ -27,7 +27,7 @@ const AddUserToAdmin = ({
       )
       .then((res) => {
         console.log(res.data);
-        toast.success(`${u.name || u.email.split('@')[0]} added to admin`, {
+        toast.success(`${u.username || u.name} added to admin`, {
           position: toast.POSITION.TOP_CENTER,
         });
         setAddToAdminModalIsOpen(false);
@@ -50,7 +50,7 @@ const AddUserToAdmin = ({
     },
   };
 
-  const { name, email, profileImage } = userToAddToAdmin;
+  const { name, username, profileImage } = userToAddToAdmin;
 
   return (
     <Modal
@@ -64,10 +64,7 @@ const AddUserToAdmin = ({
         <br />
         {profileImage && (
           <div className='match-images'>
-            <img
-              src={profileImage.url}
-              alt={`${name || email.split('@')[0]}'s post`}
-            />
+            <img src={profileImage.url} alt={`${username || name}'s post`} />
           </div>
         )}
         <br />

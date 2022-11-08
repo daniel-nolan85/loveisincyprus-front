@@ -26,12 +26,9 @@ const RemoveUserFromFeaturedMembers = ({
         }
       )
       .then((res) => {
-        toast.success(
-          `${u.name || u.email.split('@')[0]} removed from featured members`,
-          {
-            position: toast.POSITION.TOP_CENTER,
-          }
-        );
+        toast.success(`${u.username || u.name} removed from featured members`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
         setRemoveFromFeaturedMembersModalIsOpen(false);
         fetchUsers();
       })
@@ -52,7 +49,7 @@ const RemoveUserFromFeaturedMembers = ({
     },
   };
 
-  const { name, email, profileImage } = userToRemoveFromFeaturedMembers;
+  const { name, profileImage, username } = userToRemoveFromFeaturedMembers;
 
   return (
     <Modal
@@ -69,10 +66,7 @@ const RemoveUserFromFeaturedMembers = ({
         <br />
         {profileImage && (
           <div className='match-images'>
-            <img
-              src={profileImage.url}
-              alt={`${name || email.split('@')[0]}'s post`}
-            />
+            <img src={profileImage.url} alt={`${username || name}'s post`} />
           </div>
         )}
         <br />

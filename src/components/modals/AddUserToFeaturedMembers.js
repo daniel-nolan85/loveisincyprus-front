@@ -26,12 +26,9 @@ const AddUserToFeaturedMembers = ({
         }
       )
       .then((res) => {
-        toast.success(
-          `${u.name || u.email.split('@')[0]} added to featured members`,
-          {
-            position: toast.POSITION.TOP_CENTER,
-          }
-        );
+        toast.success(`${u.username || u.name} added to featured members`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
         setAddToFeaturedMembersModalIsOpen(false);
         fetchUsers();
       })
@@ -52,7 +49,7 @@ const AddUserToFeaturedMembers = ({
     },
   };
 
-  const { name, email, profileImage } = userToAddToFeaturedMembers;
+  const { name, username, profileImage } = userToAddToFeaturedMembers;
 
   return (
     <Modal
@@ -66,10 +63,7 @@ const AddUserToFeaturedMembers = ({
         <br />
         {profileImage && (
           <div className='match-images'>
-            <img
-              src={profileImage.url}
-              alt={`${name || email.split('@')[0]}'s post`}
-            />
+            <img src={profileImage.url} alt={`${username || name}'s post`} />
           </div>
         )}
         <br />

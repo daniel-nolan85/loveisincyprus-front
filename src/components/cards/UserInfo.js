@@ -17,7 +17,7 @@ const { Meta } = Card;
 const UserInfo = ({ u }) => {
   // console.log(u);
 
-  const { _id, name, email, profileImage, age, about } = u;
+  const { _id, name, profileImage, age, about, username } = u;
 
   return (
     <>
@@ -27,14 +27,14 @@ const UserInfo = ({ u }) => {
             <img
               className='product-image'
               src={profileImage ? profileImage.url : defaultProfile}
-              alt={`${name || email.split('@')[0]}'s profile picture`}
+              alt={`${username || name}'s profile picture`}
             />
           }
         >
           <Meta
             title={
               <>
-                <span>{name || email.split('@')[0]}</span>
+                <span>{username || name}</span>
                 <br />
                 <span>{age}</span>
               </>

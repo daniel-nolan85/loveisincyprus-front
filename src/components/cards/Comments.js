@@ -55,9 +55,9 @@ const Comments = ({
                       ? c.postedBy.profileImage.url
                       : defaultProfile
                   }
-                  // alt={`${
-                  //   c.postedBy.name || c.postedBy.email.split('@')[0]
-                  // }'s profile picture`}
+                  alt={`${
+                    c.postedBy.username || c.postedBy.name
+                  }'s profile picture`}
                 />
               </Link>
               <div>
@@ -68,11 +68,7 @@ const Comments = ({
                       : `/user/${c.postedBy._id}`
                   }
                 >
-                  {/* <p>
-                    {c.postedBy.name
-                      ? c.postedBy.name
-                      : c.postedBy.email.split('@')[0]}
-                  </p> */}
+                  <p>{c.postedBy.username || c.postedBy.name}</p>
                 </Link>
                 <span>{moment(c.created).fromNow()}</span>
               </div>
@@ -111,9 +107,7 @@ const Comments = ({
           {c.image && (
             <img
               src={c.image.url}
-              // alt={`${
-              //   c.postedBy.name || c.postedBy.email.split('@')[0]
-              // }'s comment`}
+              alt={`${c.postedBy.username || c.postedBy.name}'s comment`}
               className='post-img'
             />
           )}

@@ -120,11 +120,11 @@ const UsersToInvite = ({
               <Link to={`/user/${u._id}`}>
                 <img
                   src={u.profileImage ? u.profileImage.url : defaultProfile}
-                  alt={`${u.name || u.email.split('@'[0])}'s profile picture`}
+                  alt={`${u.username || u.name}'s profile picture`}
                 />
               </Link>
               <Link to={`/user/${u._id}`}>
-                <p>{u.name ? u.name : u.email.split('@')[0]}</p>
+                <p>{u.username || u.name}</p>
               </Link>
             </div>
             <div className='icons'>

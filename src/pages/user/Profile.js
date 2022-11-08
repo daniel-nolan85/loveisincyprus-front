@@ -811,7 +811,7 @@ const Profile = ({ history }) => {
         <div className='cover-img-container'>
           <img
             src={user.coverImage.url}
-            alt={`${user.name || user.email.split('@'[0])}'s cover photo`}
+            alt={`${user.username || user.name}'s cover photo`}
             className='cover-img'
           />
           <FontAwesomeIcon
@@ -823,7 +823,7 @@ const Profile = ({ history }) => {
       ) : (
         <img
           src={defaultCover}
-          alt={`${user.name || user.email.split('@'[0])}'s cover photo`}
+          alt={`${user.username || user.name}'s cover photo`}
           className='cover-img'
         />
       )}
@@ -841,9 +841,7 @@ const Profile = ({ history }) => {
                   ref={profileImgRef}
                   crossOrigin='anonymous'
                   src={user.profileImage.url}
-                  alt={`${
-                    user.name || user.email.split('@'[0])
-                  }'s profile photo`}
+                  alt={`${user.username || user.name}'s profile photo`}
                   className='pd-image'
                   style={{ cursor: 'zoom-in' }}
                   onClick={() => setImageModalIsOpen(true)}
@@ -864,7 +862,7 @@ const Profile = ({ history }) => {
             )}
 
             <div>
-              <h3>{user.name || user.email.split('@')[0]}</h3>
+              <h3>{user.username || user.name}</h3>
               <p>
                 Member since {moment(user.createdAt).format('MMMM Do YYYY')}
               </p>
@@ -976,9 +974,7 @@ const Profile = ({ history }) => {
                           (m.profileImage && m.profileImage.url) ||
                           defaultProfile
                         }
-                        alt={`${
-                          m.name || m.email.split('@')[0]
-                        }'s profile picture`}
+                        alt={`${m.username || m.name}'s profile picture`}
                       />
                     </Link>
                   </div>
@@ -1002,9 +998,7 @@ const Profile = ({ history }) => {
                           (v.profileImage && v.profileImage.url) ||
                           defaultProfile
                         }
-                        alt={`${
-                          v.name || v.email.split('@')[0]
-                        }'s profile picture`}
+                        alt={`${v.username || v.name}'s profile picture`}
                       />
                     </Link>
                   </div>
@@ -1018,11 +1012,9 @@ const Profile = ({ history }) => {
             <div className='user-profile'>
               <img
                 src={user.profileImage ? user.profileImage.url : defaultProfile}
-                alt={`${
-                  user.name || user.email.split('@')[0]
-                }'s profile picture`}
+                alt={`${user.username || user.name}'s profile picture`}
               />
-              <p>{user.name || (user.email && user.email.split('@')[0])}</p>
+              <p>{user.username || user.name}</p>
             </div>
             <div className='post-input-container'>
               <form>
@@ -1030,9 +1022,7 @@ const Profile = ({ history }) => {
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
                   placeholder={`What's on your mind, ${
-                    user.name
-                      ? user.name.split(' ')[0]
-                      : user.email && user.email.split('@')[0]
+                    user.username || user.name.split(' ')[0]
                   }?`}
                 />
               </form>
@@ -1107,8 +1097,7 @@ const Profile = ({ history }) => {
                               : defaultProfile
                           }
                           alt={`${
-                            post.postedBy.name ||
-                            post.postedBy.email.split('@'[0])
+                            post.postedBy.username || post.postedBy.name
                           }'s profile picture`}
                         />
                       </Link>
@@ -1122,8 +1111,8 @@ const Profile = ({ history }) => {
                         >
                           <p>
                             {post.postedBy.name
-                              ? post.postedBy.name
-                              : post.postedBy.email.split('@')[0]}
+                              ? post.postedBy.username
+                              : post.postedBy.name}
                           </p>
                         </Link>
                         <span>{moment(post.createdAt).fromNow()}</span>
@@ -1149,7 +1138,7 @@ const Profile = ({ history }) => {
                     <img
                       src={post.image.url}
                       alt={`${
-                        post.postedBy.name || post.postedBy.email.split('@')[0]
+                        post.postedBy.username || post.postedBy.name
                       }'s post`}
                       className='post-img'
                     />

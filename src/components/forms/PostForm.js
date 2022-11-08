@@ -20,7 +20,9 @@ const PostForm = ({
   update,
   loadingImg,
 }) => {
-  let { _id, profileImage, name, email } = useSelector((state) => state.user);
+  let { _id, profileImage, name, username } = useSelector(
+    (state) => state.user
+  );
 
   return (
     <div className='write-post-container'>
@@ -28,11 +30,11 @@ const PostForm = ({
         <Link to={`/user/profile/${_id}`}>
           <img
             src={profileImage ? profileImage.url : defaultProfile}
-            alt={`${name || email.split('@')[0]}'s profile picture`}
+            alt={`${username || name}'s profile picture`}
           />
         </Link>
         <Link to={`/user/profile/${_id}`}>
-          <p>{name || (email && email.split('@')[0])}</p>
+          <p>{username || name}</p>
         </Link>
       </div>
       <div className='post-input-container'>
@@ -41,7 +43,7 @@ const PostForm = ({
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder={`What's on your mind, ${
-              name ? name.split(' ')[0] : email && email.split('@')[0]
+              username || name.split(' ')[0]
             }?`}
           />
         </form>

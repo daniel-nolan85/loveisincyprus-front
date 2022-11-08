@@ -293,10 +293,10 @@ const Events = () => {
               <div className='admin-card' key={i._id}>
                 <img
                   src={i.profileImage ? i.profileImage.url : defaultProfile}
-                  alt={`${i.name || i.email.split('@')}'s profile picture`}
+                  alt={`${i.username || i.name}'s profile picture`}
                   className='admin-user-img'
                 />
-                <p>{i.name || i.email.split('@')}</p>
+                <p>{i.username || i.name}</p>
                 {i.featuredMember === true && (
                   <span>
                     <FontAwesomeIcon icon={faStar} className='fa star gold' />

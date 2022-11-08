@@ -22,7 +22,7 @@ const ImagesDenied = ({
     },
   };
 
-  const { name, email, clearPhoto, membership } = thisUser;
+  const { name, clearPhoto, membership, username } = thisUser;
 
   return (
     <Modal
@@ -53,9 +53,8 @@ const ImagesDenied = ({
         ) : !clearPhoto ? (
           <>
             <h1>
-              {/* {name || email.split('@')[0]} is not using a clear image of their */}
-              This user is not using a clear image of their face as their
-              profile picture.
+              {username || name} is not using a clear image of their face as
+              their profile picture.
             </h1>
             <div>
               <h3>As a result their uploaded images cannot be viewed.</h3>
@@ -64,8 +63,8 @@ const ImagesDenied = ({
         ) : !membership.paid ? (
           <>
             <h1>
-              {/* {name || email.split('@')[0]} is not currently a paid subsciber to */}
-              This user is not currently a paid subsciber to Love Is In Cyprus.
+              {username || name} is not currently a paid subsciber to Love Is In
+              Cyprus.
             </h1>
             <div>
               <h3>As a result their uploaded images cannot be viewed.</h3>

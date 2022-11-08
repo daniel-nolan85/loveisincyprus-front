@@ -24,7 +24,7 @@ import 'react-phone-input-2/lib/style.css';
 import axios from 'axios';
 
 const Login = ({ showRegister }) => {
-  const [email, setEmail] = useState('');
+  // const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
   const [loading, setLoading] = useState(false);
   const [showOTP, setShowOTP] = useState(false);

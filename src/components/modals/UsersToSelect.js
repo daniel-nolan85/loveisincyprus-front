@@ -107,13 +107,11 @@ const UsersToSelect = ({
                   <Link to={`/user/${o._id}`}>
                     <img
                       src={o.profileImage ? o.profileImage.url : defaultProfile}
-                      alt={`${
-                        o.name || o.email.split('@'[0])
-                      }'s profile picture`}
+                      alt={`${o.username || o.name}'s profile picture`}
                     />
                   </Link>
                   <Link to={`/user/${o._id}`}>
-                    <p>{o.name ? o.name : o.email.split('@')[0]}</p>
+                    <p>{o.username || o.name}</p>
                   </Link>
                 </div>
                 <div className='icons'>

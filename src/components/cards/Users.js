@@ -29,7 +29,7 @@ const Users = ({ users, handleFollow }) => {
                 handleFollow(user);
               }}
             />
-            <p>{user.name ? `${user.name}` : `${user.email.split('@')[0]}`}</p>
+            <p>{user.username || user.name}</p>
           </div>
         ))}
     </div>

@@ -152,10 +152,10 @@ const MassMail = () => {
               <div className='admin-card' key={s._id}>
                 <img
                   src={s.profileImage ? s.profileImage.url : defaultProfile}
-                  alt={`${s.name || s.email.split('@')}'s profile picture`}
+                  alt={`${s.username || s.name}'s profile picture`}
                   className='admin-user-img'
                 />
-                <p>{s.name || s.email.split('@')}</p>
+                <p>{s.username || s.name}</p>
                 {s.featuredMember === true && (
                   <span>
                     <FontAwesomeIcon icon={faStar} className='fa star gold' />

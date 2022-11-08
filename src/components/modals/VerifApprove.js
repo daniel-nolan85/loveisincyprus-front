@@ -106,7 +106,7 @@ const VerifApprove = ({
           <div className='match-images'>
             <img
               src={image.url}
-              //   alt={`${postedBy.name || postedBy.email.split('@')[0]}'s post`}
+              alt={`${postedBy.username || postedBy.name}'s post`}
             />
           </div>
         )}

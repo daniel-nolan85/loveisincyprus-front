@@ -160,14 +160,14 @@ const Users = () => {
                 >
                   <img
                     src={u.profileImage ? u.profileImage.url : defaultProfile}
-                    alt={`${u.name || u.email.split('@')[0]}'s profile picture`}
+                    alt={`${u.username || u.name}'s profile picture`}
                     className='admin-user-img'
                   />
                 </Link>
                 <Link
                   to={_id === u._id ? `/user/profile/${_id}` : `/user/${u._id}`}
                 >
-                  <p>{u.name || u.email.split('@')[0]}</p>
+                  <p>{u.username || u.name}</p>
                 </Link>
                 {u.featuredMember === true ? (
                   <span>

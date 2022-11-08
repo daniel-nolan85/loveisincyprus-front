@@ -39,13 +39,13 @@ const Maybe = ({ maybeModalIsOpen, setMaybeModalIsOpen, post }) => {
               >
                 <img
                   src={m.profileImage ? m.profileImage.url : defaultProfile}
-                  alt={`${m.name || m.email.split('@'[0])}'s profile picture`}
+                  alt={`${m.username || m.name}'s profile picture`}
                 />
               </Link>
               <Link
                 to={_id === m._id ? `/user/profile/${_id}` : `/user/${m._id}`}
               >
-                <p>{m.name ? m.name : m.email.split('@')[0]}</p>
+                <p>{m.username || m.name}</p>
               </Link>
             </div>
             <br />
@@ -60,13 +60,13 @@ const Maybe = ({ maybeModalIsOpen, setMaybeModalIsOpen, post }) => {
               >
                 <img
                   src={a.profileImage ? a.profileImage.url : defaultProfile}
-                  alt={`${a.name || a.email.split('@'[0])}'s profile picture`}
+                  alt={`${a.username || a.name}'s profile picture`}
                 />
               </Link>
               <Link
                 to={_id === a._id ? `/user/profile/${_id}` : `/user/${a._id}`}
               >
-                <p>{a.name ? a.name : a.email.split('@')[0]}</p>
+                <p>{a.username || a.name}</p>
               </Link>
             </div>
             <br />

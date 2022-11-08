@@ -26,7 +26,7 @@ const RemoveUserFromAdmin = ({
         }
       )
       .then((res) => {
-        toast.success(`${u.name || u.email.split('@')[0]} removed from admin`, {
+        toast.success(`${u.username || u.name} removed from admin`, {
           position: toast.POSITION.TOP_CENTER,
         });
         setRemoveFromAdminModalIsOpen(false);
@@ -49,7 +49,7 @@ const RemoveUserFromAdmin = ({
     },
   };
 
-  const { name, email, profileImage } = userToRemoveFromAdmin;
+  const { name, username, profileImage } = userToRemoveFromAdmin;
 
   return (
     <Modal
@@ -63,10 +63,7 @@ const RemoveUserFromAdmin = ({
         <br />
         {profileImage && (
           <div className='match-images'>
-            <img
-              src={profileImage.url}
-              alt={`${name || email.split('@')[0]}'s post`}
-            />
+            <img src={profileImage.url} alt={`${username || name}'s post`} />
           </div>
         )}
         <br />

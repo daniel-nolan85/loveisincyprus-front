@@ -103,7 +103,7 @@ const Photos = () => {
     }
   };
 
-  const { name, email, clearPhoto, membership } = thisUser;
+  const { name, username, clearPhoto, membership } = thisUser;
 
   // console.log('photos => ', photos);
 
@@ -115,7 +115,7 @@ const Photos = () => {
           {photos[0].length > 0 || photos[1].length > 0 || photos[2].length > 0
             ? //   {photos.length > 0
               'Photo Gallery'
-            : `${name || email} has not uploaded any photos yet`}
+            : `${username || name} has not uploaded any photos yet`}
         </h1> */}
         <input type='radio' name='Photos' id='check1' defaultChecked />
         <input type='radio' name='Photos' id='check2' />

@@ -72,7 +72,7 @@ const NotifPost = ({
   const [maybeModalIsOpen, setMaybeModalIsOpen] = useState(false);
   const [declinedModalIsOpen, setDeclinedModalIsOpen] = useState(false);
 
-  const { token, _id, name, email, profileImage } = useSelector(
+  const { token, _id, name, profileImage, username } = useSelector(
     (state) => state.user
   );
 
@@ -128,10 +128,10 @@ const NotifPost = ({
             <div className='user-profile'>
               <img
                 src={profileImage ? profileImage.url : defaultProfile}
-                alt={`${name || email.split('@')[0]}'s profile picture`}
+                alt={`${username || name}'s profile picture`}
               />
               <div>
-                <p>{name || email.split('@')[0]}</p>
+                <p>{username || name}</p>
                 <span>{moment(post.notif.createdAt).fromNow()}</span>
               </div>
             </div>
@@ -157,7 +157,7 @@ const NotifPost = ({
           {post.notif.image && (
             <img
               src={post.notif.image.url}
-              alt={`${name || email.split('@')[0]}'s post`}
+              alt={`${username || name}'s post`}
               className='post-img'
             />
           )}
@@ -352,7 +352,7 @@ const NotifPost = ({
         <div className='match'>
           <h2>
             <Link to={`/user/${post.notif.follower}`} className='link'>
-              {post.notif.name || post.notif.email.split('@')[0]}
+              {post.notif.username || post.notif.name}
             </Link>{' '}
             likes you
           </h2>
@@ -365,7 +365,7 @@ const NotifPost = ({
                     : defaultProfile
                 }
                 alt={`${
-                  post.notif.name || post.notif.email.split('@')[0]
+                  post.notif.username || post.notif.name
                 }'s profile picture`}
               />
             </Link>
@@ -376,7 +376,7 @@ const NotifPost = ({
         <div className='match'>
           <h2>
             <Link to={`/user/${post.notif.visitor}`} className='link'>
-              {post.notif.name || post.notif.email.split('@')[0]}
+              {post.notif.username || post.notif.name}
             </Link>{' '}
             visited your profile
           </h2>
@@ -389,7 +389,7 @@ const NotifPost = ({
                     : defaultProfile
                 }
                 alt={`${
-                  post.notif.name || post.notif.email.split('@')[0]
+                  post.notif.username || post.notif.name
                 }'s profile picture`}
               />
             </Link>

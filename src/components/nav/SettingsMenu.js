@@ -28,9 +28,8 @@ const SettingsMenu = ({
 }) => {
   const [darkMode, setDarkMode] = useState(false);
 
-  let { _id, name, email, profileImage, role, membership, optin } = useSelector(
-    (state) => state.user
-  );
+  let { _id, name, username, profileImage, role, membership, optin } =
+    useSelector((state) => state.user);
 
   const box = useRef(null);
   useOutsideAlerter(box);
@@ -100,9 +99,9 @@ const SettingsMenu = ({
           <div className='user-profile' onClick={() => setSettingsMenu(false)}>
             <img
               src={profileImage ? profileImage.url : defaultProfile}
-              alt={`${name || email.split('@')[0]}'s profile picture`}
+              alt={`${username || name}'s profile picture`}
             />
-            <div>{name ? name : email && email.split('@')[0]}</div>
+            <div>{username || name}</div>
           </div>
         </Link>
         <hr />
