@@ -24,10 +24,10 @@ export const createUser = async (authtoken, name, email, mobile) => {
   );
 };
 
-export const loginUser = async (authtoken, email, mobile) => {
+export const loginUser = async (authtoken, mobile) => {
   return await axios.post(
     `${process.env.REACT_APP_API}/login-user`,
-    { email, mobile },
+    { mobile },
     {
       headers: {
         authtoken,

@@ -8,6 +8,7 @@ import {
   faSpinner,
   faEye,
   faEyeSlash,
+  faCircleQuestion,
 } from '@fortawesome/free-solid-svg-icons';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
@@ -16,14 +17,21 @@ import { useDispatch } from 'react-redux';
 import { createUser } from '../../functions/auth';
 import { addPoints } from '../../functions/user';
 import axios from 'axios';
+import WhyNeedThisEmail from '../modals/WhyNeedThisEmail';
+import WhyNeedThisPhone from '../modals/WhyNeedThisPhone';
 
 const Register = ({ showLogin }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [validEmail, setValidEmail] = useState(false);
   const [mobile, setMobile] = useState('');
   const [loading, setLoading] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
   const [OTP, setOTP] = useState('');
+  const [whyNeedThisEmailModalIsOpen, setWhyNeedThisEmailModalIsOpen] =
+    useState(false);
+  const [whyNeedThisPhoneModalIsOpen, setWhyNeedThisPhoneModalIsOpen] =
+    useState(false);
   // const [newUser, setNewUser] = useState({});
   // const [password, setPassword] = useState('');
   // const [showPassword, setShowPassword] = useState(false);
@@ -66,6 +74,10 @@ const Register = ({ showLogin }) => {
   let dispatch = useDispatch();
   const history = useHistory();
 
+  useEffect(() => {
+    setValidEmail(validateEmail(email));
+  }, [email]);
+
   const roleBasedRedirect = (res) => {
     if (res.data.role === 'admin') {
       history.push('/admin/dashboard');
@@ -74,7 +86,8 @@ const Register = ({ showLogin }) => {
     }
   };
 
-  const userExists = async (req, res) => {
+  const userExists = async (e) => {
+    e.preventDefault();
     await axios
       .get(`${process.env.REACT_APP_API}/user-exists/${mobile}`)
       .then((res) => {
@@ -123,6 +136,9 @@ const Register = ({ showLogin }) => {
       })
       .catch((err) => {
         console.log(err);
+        toast.error(`${err.message}. Please refresh the page and try again`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
         setLoading(false);
       });
   };
@@ -220,6 +236,7 @@ const Register = ({ showLogin }) => {
                   sexFrequency: res.data.sexFrequency,
                   membership: res.data.membership,
                   clearPhoto: res.data.clearPhoto,
+                  lastLogin: res.data.lastLogin,
                 },
               });
               roleBasedRedirect(res);
@@ -237,6 +254,9 @@ const Register = ({ showLogin }) => {
             })
             .catch((err) => {
               console.log(err);
+              toast.error(err.message, {
+                position: toast.POSITION.TOP_CENTER,
+              });
             });
         })
         .catch((err) => {
@@ -249,6 +269,19 @@ const Register = ({ showLogin }) => {
     }
   };
 
+  const whyEmail = () => {
+    setWhyNeedThisEmailModalIsOpen(true);
+  };
+
+  const whyPhone = () => {
+    setWhyNeedThisPhoneModalIsOpen(true);
+  };
+
+  const validateEmail = (email) => {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
   return (
     <form id='register' className='input-group'>
       <input
@@ -258,23 +291,43 @@ const Register = ({ showLogin }) => {
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
-      <input
-        type='email'
-        className='input-field'
-        placeholder='Enter your email'
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <PhoneInput
-        country={'cy'}
-        className='input-field'
-        placeholder='Enter your mobile phone number'
-        value={mobile}
-        onChange={(phone) => {
-          console.log(phone);
-          setMobile(`+${phone}`);
-        }}
-      />
+      <div className='info-questions email'>
+        <input
+          type='email'
+          className='input-field'
+          placeholder='Enter your email'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <div className='tooltip'>
+          <FontAwesomeIcon
+            icon={faCircleQuestion}
+            className='fa'
+            onClick={whyEmail}
+          />
+          <span className='tooltip-text'>Why do we need this?</span>
+        </div>
+      </div>
+      <div className='info-questions phone'>
+        <PhoneInput
+          country={'cy'}
+          className='input-field'
+          placeholder='Enter your mobile phone number'
+          value={mobile}
+          onChange={(phone) => {
+            console.log(phone);
+            setMobile(`+${phone}`);
+          }}
+        />
+        <div className='tooltip'>
+          <FontAwesomeIcon
+            icon={faCircleQuestion}
+            className='fa'
+            onClick={whyPhone}
+          />
+          <span className='tooltip-text'>Why do we need this?</span>
+        </div>
+      </div>
       <input
         type='number'
         className={
@@ -286,12 +339,11 @@ const Register = ({ showLogin }) => {
         value={OTP}
         onChange={verifyOTP}
       />
-
       <button
         onClick={userExists}
-        type='button'
+        type='submit'
         className='submit-btn'
-        disabled={!name || !email || !mobile || showOTP}
+        disabled={!name || !email || !validEmail || !mobile || showOTP}
       >
         {loading ? (
           <FontAwesomeIcon icon={faSpinner} className='fa' spin />
@@ -304,6 +356,14 @@ const Register = ({ showLogin }) => {
       <p className='center link' onClick={showLogin}>
         Already have an account?
       </p>
+      <WhyNeedThisEmail
+        whyNeedThisEmailModalIsOpen={whyNeedThisEmailModalIsOpen}
+        setWhyNeedThisEmailModalIsOpen={setWhyNeedThisEmailModalIsOpen}
+      />
+      <WhyNeedThisPhone
+        whyNeedThisPhoneModalIsOpen={whyNeedThisPhoneModalIsOpen}
+        setWhyNeedThisPhoneModalIsOpen={setWhyNeedThisPhoneModalIsOpen}
+      />
     </form>
   );
 };

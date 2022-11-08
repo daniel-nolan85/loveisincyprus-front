@@ -335,6 +335,9 @@ const Login = ({ showRegister }) => {
       })
       .catch((err) => {
         console.log(err);
+        toast.error(`${err.message}. Please refresh the page and try again`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
         setLoading(false);
       });
   };
@@ -432,21 +435,32 @@ const Login = ({ showRegister }) => {
                   sexFrequency: res.data.sexFrequency,
                   membership: res.data.membership,
                   clearPhoto: res.data.clearPhoto,
+                  lastLogin: res.data.lastLogin,
                 },
               });
               roleBasedRedirect(res);
-              addPoints(1, 'login', idTokenResult.token).then(
-                toast.success(
-                  `Welcome to Love is in Cyprus. You have been awarded 1 point!`,
-                  {
+              addPoints(1, 'login', idTokenResult.token).then((res) => {
+                console.log(res);
+                if (res.data.ok) {
+                  toast.success(`Welcome to Love is in Cyprus.`, {
                     position: toast.POSITION.TOP_CENTER,
-                  }
-                )
-              );
+                  });
+                } else {
+                  toast.success(
+                    `Welcome to Love is in Cyprus. You have been awarded 1 point!`,
+                    {
+                      position: toast.POSITION.TOP_CENTER,
+                    }
+                  );
+                }
+              });
               setMobile('');
             })
             .catch((err) => {
               console.log(err);
+              toast.error(err.message, {
+                position: toast.POSITION.TOP_CENTER,
+              });
             });
         })
         .catch((err) => {

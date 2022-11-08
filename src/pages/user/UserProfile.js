@@ -131,7 +131,7 @@ const UserProfile = ({ history }) => {
         }
       )
       .then((res) => {
-        // console.log('fetch user response => ', res.data);
+        console.log('fetch user response => ', res.data);
         setThisUser(res.data);
       })
       .catch((err) => {
@@ -420,6 +420,7 @@ const UserProfile = ({ history }) => {
     verified,
     clearPhoto,
     membership,
+    lastLogin,
   } = thisUser;
 
   return (
@@ -451,6 +452,7 @@ const UserProfile = ({ history }) => {
             <div>
               <h3>{name || (email && email.split('@')[0])}</h3>
               <p>Member since {moment(createdAt).format('MMMM Do YYYY')}</p>
+              <p>Last logged in {moment(lastLogin).fromNow()}</p>
             </div>
           </div>
         </div>

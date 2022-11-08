@@ -2995,7 +2995,7 @@ span.link {
   resize: none;
 }
 
-.password-row .input-field {
+/* .password-row .input-field {
   border: none;
 }
 
@@ -3008,7 +3008,7 @@ span.link {
 .password-row .fa {
   margin-top: 15px;
   cursor: pointer;
-}
+} */
 
 .submit-btn {
   width: 85%;
@@ -3108,6 +3108,41 @@ select.decorated option:active {
 
 #register {
   left: 450px;
+}
+
+.info-questions .input-field {
+  border: none;
+}
+
+.info-questions {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #999;
+  position: relative;
+}
+
+.info-questions .fa {
+  background-color: #fff;
+  color: var(--nav-color);
+  font-size: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.info-questions.email .fa {
+  position: absolute;
+  right: -30px;
+  top: 8px;
+}
+
+.info-questions.phone .fa {
+  position: absolute;
+  top: 15px;
+}
+
+.why-do-we-need-this ul {
+  display: table;
+  margin: 0 auto;
 }
 
 /* .forgot-link {

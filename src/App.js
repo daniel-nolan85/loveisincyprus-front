@@ -236,6 +236,7 @@ const App = () => {
                 sexFrequency: res.data.sexFrequency,
                 membership: res.data.membership,
                 clearPhoto: res.data.clearPhoto,
+                lastLogin: res.data.lastLogin,
               },
             });
             console.log('logged in user ==> ', res);
