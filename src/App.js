@@ -16,6 +16,7 @@ import Expiring from './components/modals/Expiring';
 import Expired from './components/modals/Expired';
 import CancelSubscription from './components/modals/CancelSubscription';
 import OptIn from './components/modals/OptIn';
+import DeleteAccount from './components/modals/DeleteAccount';
 
 import Header from './components/nav/Header';
 import SideDrawer from './components/drawer/SideDrawer';
@@ -120,6 +121,8 @@ const App = () => {
   const [cancelSubscriptionModalIsOpen, setCancelSubscriptionModalIsOpen] =
     useState(false);
   const [optinModalIsOpen, setOptinModalIsOpen] = useState(false);
+  const [deleteAccountModalIsOpen, setDeleteAccountModalIsOpen] =
+    useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -237,6 +240,7 @@ const App = () => {
                 membership: res.data.membership,
                 clearPhoto: res.data.clearPhoto,
                 lastLogin: res.data.lastLogin,
+                userStatus: res.data.userStatus,
               },
             });
             console.log('logged in user ==> ', res);
@@ -480,6 +484,7 @@ const App = () => {
       <Header
         setCancelSubscriptionModalIsOpen={setCancelSubscriptionModalIsOpen}
         setOptinModalIsOpen={setOptinModalIsOpen}
+        setDeleteAccountModalIsOpen={setDeleteAccountModalIsOpen}
       />
       <SideDrawer />
       <ToastContainer />
@@ -502,6 +507,10 @@ const App = () => {
       <OptIn
         optinModalIsOpen={optinModalIsOpen}
         setOptinModalIsOpen={setOptinModalIsOpen}
+      />
+      <DeleteAccount
+        deleteAccountModalIsOpen={deleteAccountModalIsOpen}
+        setDeleteAccountModalIsOpen={setDeleteAccountModalIsOpen}
       />
       <Switch>
         <Route exact path='/' component={Home} />

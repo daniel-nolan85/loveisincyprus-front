@@ -26,7 +26,11 @@ import { Badge } from 'antd';
 import { ChatState } from '../../context/ChatProvider';
 import SideNav from './SideNav';
 
-const Header = ({ setCancelSubscriptionModalIsOpen, setOptinModalIsOpen }) => {
+const Header = ({
+  setCancelSubscriptionModalIsOpen,
+  setOptinModalIsOpen,
+  setDeleteAccountModalIsOpen,
+}) => {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [settingsMenu, setSettingsMenu] = useState(false);
@@ -321,6 +325,7 @@ const Header = ({ setCancelSubscriptionModalIsOpen, setOptinModalIsOpen }) => {
                 setCancelSubscriptionModalIsOpen
               }
               setOptinModalIsOpen={setOptinModalIsOpen}
+              setDeleteAccountModalIsOpen={setDeleteAccountModalIsOpen}
             />
           </>
         )}

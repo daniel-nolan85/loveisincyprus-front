@@ -22,6 +22,7 @@ import {
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import axios from 'axios';
+import UserSuspended from '../modals/UserSuspended';
 
 const Login = ({ showRegister }) => {
   // const [email, setEmail] = useState('');
@@ -29,6 +30,9 @@ const Login = ({ showRegister }) => {
   const [loading, setLoading] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
   const [OTP, setOTP] = useState('');
+  const [userSuspendedModalIsOpen, setUserSuspendedModalIsOpen] =
+    useState(false);
+  const [suspendedUser, setSuspendedUser] = useState({});
 
   // const [email, setEmail] = useState('loveisincyprus@gmail.com');
   // const [password, setPassword] = useState('123456');
@@ -294,13 +298,26 @@ const Login = ({ showRegister }) => {
       .get(`${process.env.REACT_APP_API}/user-exists/${mobile}`)
       .then((res) => {
         if (res.data.length > 0) {
-          requestOTP();
+          checkAllowedAccess();
+          // requestOTP();
         } else {
           toast.error('No user exists with this phone number.', {
             position: toast.POSITION.TOP_CENTER,
           });
           return;
         }
+      });
+  };
+
+  const checkAllowedAccess = async (req, res) => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/user-permitted/${mobile}`)
+      .then((res) => {
+        if (res.data[0].userStatus.suspended) {
+          setUserSuspendedModalIsOpen(true);
+          setSuspendedUser(res.data[0]);
+          return;
+        } else requestOTP();
       });
   };
 
@@ -436,6 +453,7 @@ const Login = ({ showRegister }) => {
                   membership: res.data.membership,
                   clearPhoto: res.data.clearPhoto,
                   lastLogin: res.data.lastLogin,
+                  userStatus: res.data.userStatus,
                 },
               });
               roleBasedRedirect(res);
@@ -559,6 +577,11 @@ const Login = ({ showRegister }) => {
       <p className='center link' onClick={showRegister}>
         Don't have an account?
       </p>
+      <UserSuspended
+        userSuspendedModalIsOpen={userSuspendedModalIsOpen}
+        setUserSuspendedModalIsOpen={setUserSuspendedModalIsOpen}
+        suspendedUser={suspendedUser}
+      />
     </form>
   );
 };

@@ -11,6 +11,7 @@ import {
   faLock,
   faKey,
   faStar,
+  faClock,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import UserDeleteAdmin from '../../components/modals/UserDeleteAdmin';
@@ -18,6 +19,7 @@ import AddUserToAdmin from '../../components/modals/AddUserToAdmin';
 import RemoveUserFromAdmin from '../../components/modals/RemoveUserFromAdmin';
 import AddUserToFeaturedMembers from '../../components/modals/AddUserToFeaturedMembers';
 import RemoveUserFromFeaturedMembers from '../../components/modals/RemoveUserFromFeaturedMembers';
+import UserSuspend from '../../components/modals/UserSuspend';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -41,6 +43,8 @@ const Users = () => {
     removeFromFeaturedMembersModalIsOpen,
     setRemoveFromFeaturedMembersModalIsOpen,
   ] = useState(false);
+  const [userSuspendModalIsOpen, setUserSuspendModalIsOpen] = useState(false);
+  const [userToSuspend, setUserToSuspend] = useState({});
 
   const { token, _id } = useSelector((state) => state.user);
 
@@ -116,6 +120,11 @@ const Users = () => {
     setUserToDelete(u);
   };
 
+  const handleSuspend = async (u) => {
+    setUserSuspendModalIsOpen(true);
+    setUserToSuspend(u);
+  };
+
   const handleSearch = (e) => {
     e.preventDefault();
     setQuery(e.target.value.toLowerCase());
@@ -154,7 +163,12 @@ const Users = () => {
         <div className='admin-cards'>
           {users &&
             users.filter(searched(query)).map((u) => (
-              <div className='admin-card' key={u._id}>
+              <div
+                className={
+                  u.userStatus.suspended ? 'admin-card suspended' : 'admin-card'
+                }
+                key={u._id}
+              >
                 <Link
                   to={_id === u._id ? `/user/profile/${_id}` : `/user/${u._id}`}
                 >
@@ -213,6 +227,13 @@ const Users = () => {
                     onClick={() => handleDelete(u)}
                   />
                 </span>
+                <span>
+                  <FontAwesomeIcon
+                    icon={faClock}
+                    className='fa suspend'
+                    onClick={() => handleSuspend(u)}
+                  />
+                </span>
               </div>
             ))}
         </div>
@@ -249,6 +270,12 @@ const Users = () => {
           setRemoveFromFeaturedMembersModalIsOpen
         }
         userToRemoveFromFeaturedMembers={userToRemoveFromFeaturedMembers}
+        fetchUsers={fetchUsers}
+      />
+      <UserSuspend
+        userSuspendModalIsOpen={userSuspendModalIsOpen}
+        setUserSuspendModalIsOpen={setUserSuspendModalIsOpen}
+        userToSuspend={userToSuspend}
         fetchUsers={fetchUsers}
       />
     </div>

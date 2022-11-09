@@ -23,6 +23,13 @@
   --bg-color: #000;
 }
 
+.warning {
+  text-transform: uppercase;
+  color: #ff0e0e;
+  font-size: 25px;
+  font-weight: bold;
+}
+
 body {
   background: var(--body-color);
   transition: background 0.3s;
@@ -1986,6 +1993,7 @@ nav {
   right: 10px;
   font-size: 25px;
   color: #c70000;
+  z-index: 10;
 }
 
 .fa.trash {
@@ -1993,23 +2001,41 @@ nav {
 }
 
 .admin-card .fa.comments,
-.admin-card .fa.admin,
 .admin-card .fa.update {
   position: absolute;
   top: 10px;
   right: 50px;
   font-size: 25px;
+  z-index: 10;
 }
 
-.admin-card .fa.update {
+.admin-card .fa.admin {
+  position: absolute;
+  top: 10px;
+  right: 90px;
+  font-size: 25px;
+  z-index: 10;
+}
+
+.admin-card .fa.update,
+.admin-card .fa.suspend {
   color: #5388b4;
+}
+
+.admin-card .fa.suspend {
+  position: absolute;
+  top: 10px;
+  right: 50px;
+  font-size: 25px;
+  z-index: 10;
 }
 
 .admin-card .fa.star {
   position: absolute;
   top: 10px;
-  right: 90px;
+  right: 130px;
   font-size: 25px;
+  z-index: 10;
 }
 
 .admin-card .fa.star.gold {
@@ -2290,6 +2316,51 @@ select.gray {
 
 .ip-field {
   font-weight: bold;
+}
+
+.suspend-user {
+  position: relative;
+}
+
+.suspend-user .react-datepicker__input-container {
+  display: none;
+}
+
+.suspend-user .react-datepicker-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 66%;
+  transform: translate(-50%, -50%);
+}
+
+.suspend-user .react-datepicker__day--in-range {
+  background-color: var(--nav-color);
+}
+
+.admin-card.suspended:after {
+  content: 'SUSPENDED';
+  position: absolute;
+  top: 35px;
+  left: -3px;
+  z-index: 1;
+  font-family: Arial, sans-serif;
+  -webkit-transform: rotate(-15deg); /* Safari */
+  -moz-transform: rotate(-15deg); /* Firefox */
+  -ms-transform: rotate(-15deg); /* IE */
+  -o-transform: rotate(-15deg); /* Opera */
+  transform: rotate(-15deg);
+  font-size: 40px;
+  color: #5388b4;
+  /* background: #fff; */
+  border: solid 4px #5388b4;
+  padding: 5px;
+  border-radius: 5px;
+  zoom: 1;
+  filter: alpha(opacity=20);
+  opacity: 0.6;
+  -webkit-text-shadow: 0 0 2px #5388b4;
+  text-shadow: 0 0 2px #5388b4;
+  box-shadow: 0 0 2px #5388b4;
 }
 
 /* --------------- profile-page --------------- */

@@ -92,10 +92,29 @@ const Register = ({ showLogin }) => {
       .get(`${process.env.REACT_APP_API}/user-exists/${mobile}`)
       .then((res) => {
         if (res.data.length === 0) {
-          requestOTP();
+          // requestOTP();
+          checkAllowedAccess();
         } else {
           toast.error(
             'A user with this phone number already exists. Try logging in.',
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+          return;
+        }
+      });
+  };
+
+  const checkAllowedAccess = async (req, res) => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/user-blocked/${mobile}`)
+      .then((res) => {
+        if (res.data.length === 0) {
+          requestOTP();
+        } else {
+          toast.error(
+            'Access from this mobile number is denied. Please use another.',
             {
               position: toast.POSITION.TOP_CENTER,
             }
@@ -237,6 +256,7 @@ const Register = ({ showLogin }) => {
                   membership: res.data.membership,
                   clearPhoto: res.data.clearPhoto,
                   lastLogin: res.data.lastLogin,
+                  userStatus: res.data.userStatus,
                 },
               });
               roleBasedRedirect(res);

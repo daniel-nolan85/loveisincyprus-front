@@ -11,6 +11,7 @@ import {
   faNewspaper,
   faPlay,
   faToolbox,
+  faTrash,
   faUnlockKeyhole,
 } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
@@ -25,6 +26,7 @@ const SettingsMenu = ({
   logout,
   setCancelSubscriptionModalIsOpen,
   setOptinModalIsOpen,
+  setDeleteAccountModalIsOpen,
 }) => {
   const [darkMode, setDarkMode] = useState(false);
 
@@ -154,6 +156,18 @@ const SettingsMenu = ({
           <span>
             <FontAwesomeIcon icon={faEnvelope} className='fa' />
             Mass Mail
+          </span>
+        </div>
+        <div
+          className='settings-links'
+          onClick={() => {
+            setSettingsMenu(false);
+            setDeleteAccountModalIsOpen(true);
+          }}
+        >
+          <span>
+            <FontAwesomeIcon icon={faTrash} className='fa' />
+            Delete Account
           </span>
         </div>
         <div className='settings-links' onClick={logout}>
