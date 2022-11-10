@@ -12,6 +12,7 @@ import {
   faKey,
   faStar,
   faClock,
+  faCalendarDays,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import UserDeleteAdmin from '../../components/modals/UserDeleteAdmin';
@@ -21,6 +22,8 @@ import AddUserToFeaturedMembers from '../../components/modals/AddUserToFeaturedM
 import RemoveUserFromFeaturedMembers from '../../components/modals/RemoveUserFromFeaturedMembers';
 import UserSuspend from '../../components/modals/UserSuspend';
 import RevokeSuspension from '../../components/modals/RevokeSuspension';
+import AddUserToEventsEligible from '../../components/modals/AddUserToEventsEligible';
+import RemoveUserFromEventsEligible from '../../components/modals/RemoveUserFromEventsEligible';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -46,6 +49,17 @@ const Users = () => {
   ] = useState(false);
   const [userSuspendModalIsOpen, setUserSuspendModalIsOpen] = useState(false);
   const [userToSuspend, setUserToSuspend] = useState({});
+  const [
+    removeFromEventsEligibleModalIsOpen,
+    setRemoveFromEventsEligibleModalIsOpen,
+  ] = useState(false);
+  const [userToRemoveFromEventsEligible, setUserToRemoveFromEventsEligible] =
+    useState({});
+  const [addToEventsEligibleModalIsOpen, setAddToEventsEligibleModalIsOpen] =
+    useState(false);
+  const [userToAddToEventsEligible, setUserToAddToEventsEligible] = useState(
+    {}
+  );
   const [userRevokeModalIsOpen, setUserRevokeModalIsOpen] = useState(false);
   const [userToRevoke, setUserToRevoke] = useState({});
 
@@ -97,6 +111,16 @@ const Users = () => {
   //       console.log(err);
   //     });
   // };
+
+  const removeFromEventsEligible = (u) => {
+    setRemoveFromEventsEligibleModalIsOpen(true);
+    setUserToRemoveFromEventsEligible(u);
+  };
+
+  const addToEventsEligible = (u) => {
+    setAddToEventsEligibleModalIsOpen(true);
+    setUserToAddToEventsEligible(u);
+  };
 
   const removeFromFeaturedMembers = (u) => {
     setRemoveFromFeaturedMembersModalIsOpen(true);
@@ -191,6 +215,25 @@ const Users = () => {
                 >
                   <p>{u.username || u.name}</p>
                 </Link>
+                {u.eventsEligible === true ? (
+                  <span>
+                    <FontAwesomeIcon
+                      icon={faCalendarDays}
+                      className='fa event green'
+                      onClick={() => removeFromEventsEligible(u)}
+                    />
+                  </span>
+                ) : (
+                  u.eventsEligible === false && (
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faCalendarDays}
+                        className='fa event grey'
+                        onClick={() => addToEventsEligible(u)}
+                      />
+                    </span>
+                  )
+                )}
                 {u.featuredMember === true ? (
                   <span>
                     <FontAwesomeIcon
@@ -239,7 +282,7 @@ const Users = () => {
                   {!u.userStatus.suspended ? (
                     <FontAwesomeIcon
                       icon={faClock}
-                      className='fa suspend'
+                      className='fa suspend grey'
                       onClick={() => handleSuspend(u)}
                     />
                   ) : (
@@ -298,6 +341,22 @@ const Users = () => {
         userRevokeModalIsOpen={userRevokeModalIsOpen}
         setUserRevokeModalIsOpen={setUserRevokeModalIsOpen}
         userToRevoke={userToRevoke}
+        fetchUsers={fetchUsers}
+      />
+      <AddUserToEventsEligible
+        addToEventsEligibleModalIsOpen={addToEventsEligibleModalIsOpen}
+        setAddToEventsEligibleModalIsOpen={setAddToEventsEligibleModalIsOpen}
+        userToAddToEventsEligible={userToAddToEventsEligible}
+        fetchUsers={fetchUsers}
+      />
+      <RemoveUserFromEventsEligible
+        removeFromEventsEligibleModalIsOpen={
+          removeFromEventsEligibleModalIsOpen
+        }
+        setRemoveFromEventsEligibleModalIsOpen={
+          setRemoveFromEventsEligibleModalIsOpen
+        }
+        userToRemoveFromEventsEligible={userToRemoveFromEventsEligible}
         fetchUsers={fetchUsers}
       />
     </div>

@@ -662,12 +662,14 @@ const Points = () => {
                       </td>
                       <td>
                         <p>
-                          {ps.reason === 'featured' ||
-                            (ps.reason === 'expired' &&
-                              'You became a Featured Member')}
+                          {ps.reason === 'featured' &&
+                            'You became a Featured Member'}
+                          {ps.reason === 'expired' &&
+                            'You became a Featured Member'}
                           {ps.reason === 'events' &&
                             'You became eligible for event invites'}
                           {ps.reason === 'five' && 'You purchased a 5% coupon'}
+                          {ps.reason === 'ten' && 'You purchased a 10% coupon'}
                         </p>
                       </td>
                     </tr>
@@ -699,6 +701,7 @@ const Points = () => {
           setPointsTenModalIsOpen={setPointsTenModalIsOpen}
           pointsEventsModalIsOpen={pointsEventsModalIsOpen}
           setPointsEventsModalIsOpen={setPointsEventsModalIsOpen}
+          fetchUserPointsSpentData={fetchUserPointsSpentData}
         />
       </div>
       <RightSidebar />

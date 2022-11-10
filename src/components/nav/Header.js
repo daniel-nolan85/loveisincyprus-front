@@ -138,6 +138,13 @@ const Header = ({
     setQuery('');
     setSearchResults([]);
     firebase.auth().signOut();
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('cart');
+    }
+    dispatch({
+      type: 'ADD_TO_CART',
+      payload: [],
+    });
     dispatch({
       type: 'LOGOUT',
       payload: null,

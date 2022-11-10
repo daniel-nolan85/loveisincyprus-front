@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 let socket;
 
@@ -15,7 +17,12 @@ const PointsTen = ({
   setPointsTenModalIsOpen,
   points,
   fetchUserPointsTotal,
+  fetchUserPointsSpentData,
+  setSpendPointsModalIsOpen,
 }) => {
+  const [randomCode, setRandomCode] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const { _id, token } = useSelector((state) => state.user);
 
   const { setSocketConnected } = ChatState();
@@ -28,7 +35,24 @@ const PointsTen = ({
     );
   }, []);
 
+  useEffect(() => {
+    function makeid(length) {
+      var result = '';
+      var characters =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      return result;
+    }
+    setRandomCode(makeid(8));
+  }, []);
+
   const tenPercent = async (number, reason, couponName) => {
+    setLoading(true);
     await axios
       .put(
         `${process.env.REACT_APP_API}/spent-points`,
@@ -42,18 +66,22 @@ const PointsTen = ({
       .then((res) => {
         console.log(res.data);
         socket.emit('new message', res.data);
+        toast.success(
+          'Congratulations! Check your inbox, you will soon receive a new message containing your coupon code.',
+          {
+            position: toast.POSITION.TOP_CENTER,
+          }
+        );
+        fetchUserPointsTotal();
+        fetchUserPointsSpentData();
+        setPointsTenModalIsOpen(false);
+        setSpendPointsModalIsOpen(false);
+        setLoading(false);
       })
       .catch((err) => {
+        setLoading(false);
         console.log(err);
       });
-    toast.success(
-      'Congratulations! Check your inbox, you will soon receive a new message containing your coupon code.',
-      {
-        position: toast.POSITION.TOP_CENTER,
-      }
-    );
-    fetchUserPointsTotal();
-    setPointsTenModalIsOpen(false);
   };
 
   const modalStyles = {
@@ -104,9 +132,13 @@ const PointsTen = ({
         <br />
         <button
           className='submit-btn'
-          onClick={() => tenPercent(250, 'ten', 'NEWCOUPON10')}
+          onClick={() => tenPercent(250, 'ten', randomCode)}
         >
-          Yes, I'd like to receive a 10% discount
+          {loading ? (
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+          ) : (
+            "Yes, I'd like to receive a 10% discount"
+          )}
         </button>
         <button
           className='submit-btn cancel'

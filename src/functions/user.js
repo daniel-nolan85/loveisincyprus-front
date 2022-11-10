@@ -136,12 +136,12 @@ export const spentPoints = async (
   number,
   reason,
   authtoken,
-  user,
+  _id,
   couponName
 ) => {
   await axios.put(
     `${process.env.REACT_APP_API}/spent-points`,
-    { number, reason, user, couponName },
+    { number, reason, _id, couponName },
     {
       headers: {
         authtoken,

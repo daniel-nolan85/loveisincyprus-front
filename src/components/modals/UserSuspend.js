@@ -136,7 +136,7 @@ const UserSuspend = ({
         <button
           className='submit-btn'
           onClick={() => suspendUser(userToSuspend)}
-          disabled={!startDate && !endDate}
+          disabled={!endDate}
         >
           {suspending ? (
             <FontAwesomeIcon icon={faSpinner} className='fa' spin />

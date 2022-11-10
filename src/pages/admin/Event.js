@@ -81,14 +81,14 @@ const Events = () => {
 
   useEffect(() => {
     if (token) {
-      fetchUsers();
+      fetchEventUsers();
     }
   }, [token]);
 
-  const fetchUsers = async () => {
+  const fetchEventUsers = async () => {
     await axios
       .post(
-        `${process.env.REACT_APP_API}/users`,
+        `${process.env.REACT_APP_API}/event-users`,
         { _id },
         {
           headers: {

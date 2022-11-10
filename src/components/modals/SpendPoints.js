@@ -22,6 +22,7 @@ const SpendPoints = ({
   setPointsTenModalIsOpen,
   pointsEventsModalIsOpen,
   setPointsEventsModalIsOpen,
+  fetchUserPointsSpentData,
 }) => {
   const { featuredMember, eventsEligible } = useSelector((state) => state.user);
 
@@ -108,24 +109,32 @@ const SpendPoints = ({
           setPointsFeaturedModalIsOpen={setPointsFeaturedModalIsOpen}
           points={points}
           fetchUserPointsTotal={fetchUserPointsTotal}
+          fetchUserPointsSpentData={fetchUserPointsSpentData}
+          setSpendPointsModalIsOpen={setSpendPointsModalIsOpen}
         />
         <PointsFive
           pointsFiveModalIsOpen={pointsFiveModalIsOpen}
           setPointsFiveModalIsOpen={setPointsFiveModalIsOpen}
           points={points}
           fetchUserPointsTotal={fetchUserPointsTotal}
+          fetchUserPointsSpentData={fetchUserPointsSpentData}
+          setSpendPointsModalIsOpen={setSpendPointsModalIsOpen}
         />
         <PointsTen
           pointsTenModalIsOpen={pointsTenModalIsOpen}
           setPointsTenModalIsOpen={setPointsTenModalIsOpen}
           points={points}
           fetchUserPointsTotal={fetchUserPointsTotal}
+          fetchUserPointsSpentData={fetchUserPointsSpentData}
+          setSpendPointsModalIsOpen={setSpendPointsModalIsOpen}
         />
         <PointsEvents
           pointsEventsModalIsOpen={pointsEventsModalIsOpen}
           setPointsEventsModalIsOpen={setPointsEventsModalIsOpen}
           points={points}
           fetchUserPointsTotal={fetchUserPointsTotal}
+          fetchUserPointsSpentData={fetchUserPointsSpentData}
+          setSpendPointsModalIsOpen={setSpendPointsModalIsOpen}
         />
       </div>
     </Modal>

@@ -942,11 +942,10 @@ const ProfileUpdate = ({
         />
 
         <span>
-          €
           <input
             type='number'
             className='input-field'
-            placeholder='What is your annual income'
+            placeholder='What is your annual income (€)'
             value={income}
             onChange={(e) => setIncome(e.target.value)}
             step='500'

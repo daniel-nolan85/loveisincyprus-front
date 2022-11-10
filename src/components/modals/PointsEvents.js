@@ -11,13 +11,15 @@ const PointsEvents = ({
   setPointsEventsModalIsOpen,
   points,
   fetchUserPointsTotal,
+  fetchUserPointsSpentData,
+  setSpendPointsModalIsOpen,
 }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
   let dispatch = useDispatch();
 
   const eventInvites = () => {
-    spentPoints(300, 'events', user.token, user);
+    spentPoints(300, 'events', user.token, user._id);
     toast.success(
       'Congratulations! You will now be placed on our guest list and will receive an invitation to an upcoming event near you.',
       {
@@ -25,6 +27,9 @@ const PointsEvents = ({
       }
     );
     fetchUserPointsTotal();
+    fetchUserPointsSpentData();
+    setSpendPointsModalIsOpen(false);
+    setPointsEventsModalIsOpen(false);
     dispatch({
       type: 'LOGGED_IN_USER',
       payload: {
@@ -32,7 +37,6 @@ const PointsEvents = ({
         eventsEligible: true,
       },
     });
-    setPointsEventsModalIsOpen(false);
   };
 
   const modalStyles = {

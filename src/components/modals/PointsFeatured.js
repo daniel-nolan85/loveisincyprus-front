@@ -11,13 +11,15 @@ const PointsFeatured = ({
   setPointsFeaturedModalIsOpen,
   points,
   fetchUserPointsTotal,
+  fetchUserPointsSpentData,
+  setSpendPointsModalIsOpen,
 }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
   let dispatch = useDispatch();
 
   const featuredMember = async () => {
-    spentPoints(100, 'featured', user.token, user);
+    spentPoints(100, 'featured', user.token, user._id);
     toast.success(
       'Congratulations! You will now be listed as a featured member for the next two weeks.',
       {
@@ -25,6 +27,9 @@ const PointsFeatured = ({
       }
     );
     fetchUserPointsTotal();
+    fetchUserPointsSpentData();
+    setPointsFeaturedModalIsOpen(false);
+    setSpendPointsModalIsOpen(false);
     dispatch({
       type: 'LOGGED_IN_USER',
       payload: {
@@ -32,7 +37,6 @@ const PointsFeatured = ({
         featuredMember: true,
       },
     });
-    setPointsFeaturedModalIsOpen(false);
   };
 
   const modalStyles = {

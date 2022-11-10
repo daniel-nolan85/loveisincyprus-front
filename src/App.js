@@ -310,6 +310,8 @@ const App = () => {
       handleExpiredAds();
       handleExpiredMemberships();
       handleExpiredEvents();
+      handleExpiredCoupons();
+      handleExpiredSuspensions();
     }
   }, [user && user.token]);
 
@@ -470,7 +472,15 @@ const App = () => {
   };
 
   const handleExpiredEvents = async () => {
-    await axios.put(`${process.env.REACT_APP_API}/expired-event`, { user });
+    await axios.put(`${process.env.REACT_APP_API}/expired-event`);
+  };
+
+  const handleExpiredCoupons = async () => {
+    await axios.delete(`${process.env.REACT_APP_API}/delete-expired-coupon`);
+  };
+
+  const handleExpiredSuspensions = async () => {
+    await axios.put(`${process.env.REACT_APP_API}/expired-suspension`);
   };
 
   return (

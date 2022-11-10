@@ -80,9 +80,8 @@ const Product = () => {
         toast.success(`${res.data.title} has been created`, {
           position: toast.POSITION.TOP_CENTER,
         });
-        setValues(initialState);
-        loadCategories();
         loadAllProducts();
+        setValues(initialState);
       })
       .catch((err) => {
         console.log(err);

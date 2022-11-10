@@ -39,6 +39,10 @@ const Coupon = () => {
     loadCoupons();
   }, []);
 
+  useEffect(() => {
+    console.log(expiry);
+  }, [expiry]);
+
   const loadCoupons = () => getCoupons().then((c) => setCoupons(c.data));
 
   const handleSubmit = (e) => {
