@@ -20,6 +20,7 @@ import RemoveUserFromAdmin from '../../components/modals/RemoveUserFromAdmin';
 import AddUserToFeaturedMembers from '../../components/modals/AddUserToFeaturedMembers';
 import RemoveUserFromFeaturedMembers from '../../components/modals/RemoveUserFromFeaturedMembers';
 import UserSuspend from '../../components/modals/UserSuspend';
+import RevokeSuspension from '../../components/modals/RevokeSuspension';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -45,6 +46,8 @@ const Users = () => {
   ] = useState(false);
   const [userSuspendModalIsOpen, setUserSuspendModalIsOpen] = useState(false);
   const [userToSuspend, setUserToSuspend] = useState({});
+  const [userRevokeModalIsOpen, setUserRevokeModalIsOpen] = useState(false);
+  const [userToRevoke, setUserToRevoke] = useState({});
 
   const { token, _id } = useSelector((state) => state.user);
 
@@ -66,7 +69,7 @@ const Users = () => {
         }
       )
       .then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         setUsers(res.data);
       })
       .catch((err) => {
@@ -123,6 +126,11 @@ const Users = () => {
   const handleSuspend = async (u) => {
     setUserSuspendModalIsOpen(true);
     setUserToSuspend(u);
+  };
+
+  const handleRevoke = async (u) => {
+    setUserRevokeModalIsOpen(true);
+    setUserToRevoke(u);
   };
 
   const handleSearch = (e) => {
@@ -228,11 +236,19 @@ const Users = () => {
                   />
                 </span>
                 <span>
-                  <FontAwesomeIcon
-                    icon={faClock}
-                    className='fa suspend'
-                    onClick={() => handleSuspend(u)}
-                  />
+                  {!u.userStatus.suspended ? (
+                    <FontAwesomeIcon
+                      icon={faClock}
+                      className='fa suspend'
+                      onClick={() => handleSuspend(u)}
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faClock}
+                      className='fa suspend'
+                      onClick={() => handleRevoke(u)}
+                    />
+                  )}
                 </span>
               </div>
             ))}
@@ -276,6 +292,12 @@ const Users = () => {
         userSuspendModalIsOpen={userSuspendModalIsOpen}
         setUserSuspendModalIsOpen={setUserSuspendModalIsOpen}
         userToSuspend={userToSuspend}
+        fetchUsers={fetchUsers}
+      />
+      <RevokeSuspension
+        userRevokeModalIsOpen={userRevokeModalIsOpen}
+        setUserRevokeModalIsOpen={setUserRevokeModalIsOpen}
+        userToRevoke={userToRevoke}
         fetchUsers={fetchUsers}
       />
     </div>

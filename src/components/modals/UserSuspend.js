@@ -109,7 +109,7 @@ const UserSuspend = ({
           />
         </div>
         <button className='submit-btn' onClick={chooseDuration}>
-          Select
+          Select Duration
         </button>
         <DatePicker
           selected={startDate}
