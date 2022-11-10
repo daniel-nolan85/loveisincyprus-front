@@ -81,6 +81,7 @@ const Product = () => {
           position: toast.POSITION.TOP_CENTER,
         });
         setValues(initialState);
+        loadCategories();
         loadAllProducts();
       })
       .catch((err) => {
@@ -206,7 +207,7 @@ const Product = () => {
         {showSub && (
           <Select
             mode='multiple'
-            // style={{ width: '100%' }}
+            style={{ width: '100%' }}
             placeholder='Select a sub-category'
             value={subs}
             onChange={(value) => setValues({ ...values, subs: value })}

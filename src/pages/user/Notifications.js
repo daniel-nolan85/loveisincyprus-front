@@ -199,7 +199,7 @@ const Notifications = () => {
       .then((res) => {
         fetchNotifications();
       });
-    // console.log(n);
+    console.log(n);
     setNotifModalIsOpen(true);
     setPost(n);
     // setNotifToDelete(n);

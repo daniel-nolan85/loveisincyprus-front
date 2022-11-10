@@ -170,7 +170,7 @@ const ProductEdit = ({
         </select>
         <Select
           mode='multiple'
-          // style={{ width: '100%' }}
+          style={{ width: '100%' }}
           placeholder='Select a sub-category'
           value={arrayOfSubs}
           onChange={(value) => setArrayOfSubs(value)}
@@ -204,6 +204,18 @@ const ProductEdit = ({
       transform: 'translate(-50%, -50%)',
       width: '400px',
       height: '600px',
+    },
+    overlay: {
+      position: 'fixed',
+      display: 'flex',
+      justifyContent: 'center',
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'rgba(0,0,0, .8)',
+      zIndex: '1000',
+      overflowY: 'auto',
     },
   };
 

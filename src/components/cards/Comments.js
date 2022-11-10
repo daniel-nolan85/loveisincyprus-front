@@ -167,12 +167,14 @@ const Comments = ({
         postOfCommentToEdit={postOfCommentToEdit}
         fetchEvent={fetchEvent}
       />
-      <CommentReport
-        commentReportModalIsOpen={commentReportModalIsOpen}
-        setCommentReportModalIsOpen={setCommentReportModalIsOpen}
-        commentToReport={commentToReport}
-        postOfCommentToReport={postOfCommentToReport}
-      />
+      {commentToReport && (
+        <CommentReport
+          commentReportModalIsOpen={commentReportModalIsOpen}
+          setCommentReportModalIsOpen={setCommentReportModalIsOpen}
+          commentToReport={commentToReport}
+          postOfCommentToReport={postOfCommentToReport}
+        />
+      )}
     </>
   );
 };
