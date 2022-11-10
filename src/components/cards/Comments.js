@@ -1,6 +1,10 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan, faPenToSquare } from '@fortawesome/free-solid-svg-icons';
+import {
+  faTrashCan,
+  faPenToSquare,
+  faFlag,
+} from '@fortawesome/free-solid-svg-icons';
 import defaultProfile from '../../assets/defaultProfile.png';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
@@ -9,10 +13,12 @@ import CommentDelete from '../../components/modals/CommentDelete';
 import CommentEdit from '../../components/modals/CommentEdit';
 import EventCommentDelete from '../../components/modals/EventCommentDelete';
 import EventCommentEdit from '../../components/modals/EventCommentEdit';
+import CommentReport from '../../components/modals/CommentReport';
 
 const Comments = ({
   post,
   removeComment,
+  reportComment,
   commentDeleteModalIsOpen,
   setCommentDeleteModalIsOpen,
   commentToDelete,
@@ -32,6 +38,10 @@ const Comments = ({
   eventCommentEditModalIsOpen,
   setEventCommentEditModalIsOpen,
   fetchEvent,
+  commentReportModalIsOpen,
+  setCommentReportModalIsOpen,
+  commentToReport,
+  postOfCommentToReport,
 }) => {
   const { token, _id } = useSelector((state) => state.user);
 
@@ -100,7 +110,19 @@ const Comments = ({
                     className='fa trash'
                     onClick={() => removeComment(post._id, c)}
                   />
+                  <FontAwesomeIcon
+                    icon={faFlag}
+                    className='fa report'
+                    onClick={() => reportComment(post._id, c)}
+                  />
                 </div>
+              )) ||
+              (token && _id !== c.postedBy._id && (
+                <FontAwesomeIcon
+                  icon={faFlag}
+                  className='fa report'
+                  onClick={() => reportComment(post._id, c)}
+                />
               ))}
           </div>
           {c.text}
@@ -144,6 +166,12 @@ const Comments = ({
         commentToEdit={commentToEdit}
         postOfCommentToEdit={postOfCommentToEdit}
         fetchEvent={fetchEvent}
+      />
+      <CommentReport
+        commentReportModalIsOpen={commentReportModalIsOpen}
+        setCommentReportModalIsOpen={setCommentReportModalIsOpen}
+        commentToReport={commentToReport}
+        postOfCommentToReport={postOfCommentToReport}
       />
     </>
   );

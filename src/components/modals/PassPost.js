@@ -3,30 +3,28 @@ import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { removePoints } from '../../functions/user';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 Modal.setAppElement('#root');
 
-const PostDelete = ({
-  postDeleteModalIsOpen,
-  setPostDeleteModalIsOpen,
-  postToDelete,
-  newsFeed,
-  fetchUserPosts,
+const PassPost = ({
+  passPostModalIsOpen,
+  setPassPostModalIsOpen,
+  postToPass,
   fetchPosts,
-  fetchComments,
   fetchReportedContent,
 }) => {
-  const [deleting, setDeleting] = useState(false);
+  const [passing, setPassing] = useState(false);
 
   let { _id, token } = useSelector((state) => state.user);
 
-  const deletePost = async (post) => {
-    setDeleting(true);
+  const approvePost = async (post) => {
+    setPassing(true);
     await axios
       .put(
-        `${process.env.REACT_APP_API}/admin/delete-post/${post._id}`,
+        `${process.env.REACT_APP_API}/approve-post/${post._id}`,
         { _id, post },
         {
           headers: {
@@ -35,19 +33,16 @@ const PostDelete = ({
         }
       )
       .then((res) => {
-        toast.error('Post deleted', {
+        toast.success('You have approved this post for display', {
           position: toast.POSITION.TOP_CENTER,
         });
-        setPostDeleteModalIsOpen(false);
-        newsFeed && newsFeed();
-        fetchUserPosts && fetchUserPosts();
-        fetchPosts && fetchPosts();
-        fetchComments && fetchComments();
-        fetchReportedContent && fetchReportedContent();
-        setDeleting(false);
+        fetchPosts();
+        fetchReportedContent();
+        setPassPostModalIsOpen(false);
+        setPassing(false);
       })
       .catch((err) => {
-        setDeleting(false);
+        setPassing(false);
         console.log(err);
       });
   };
@@ -64,17 +59,17 @@ const PostDelete = ({
     },
   };
 
-  const { content, image, postedBy } = postToDelete;
+  const { content, image, postedBy } = postToPass;
 
   return (
     <Modal
-      isOpen={postDeleteModalIsOpen}
-      onRequestClose={() => setPostDeleteModalIsOpen(false)}
+      isOpen={passPostModalIsOpen}
+      onRequestClose={() => setPassPostModalIsOpen(false)}
       style={modalStyles}
       contentLabel='Example Modal'
     >
       <div className='match'>
-        <h1>Are you sure you want to delete this post?</h1>
+        <h1>Are you sure you want to approve this post?</h1>
         <br />
         <p>{content}</p>
         <br />
@@ -87,17 +82,17 @@ const PostDelete = ({
           </div>
         )}
         <br />
-        <button className='submit-btn' onClick={() => deletePost(postToDelete)}>
-          {deleting ? (
+        <button className='submit-btn' onClick={() => approvePost(postToPass)}>
+          {passing ? (
             <FontAwesomeIcon icon={faSpinner} className='fa' spin />
           ) : (
-            'Yes, delete'
+            'Yes, approve'
           )}
         </button>
         <button
           className='submit-btn trash'
-          onClick={() => setPostDeleteModalIsOpen(false)}
-          disabled={deleting}
+          onClick={() => setPassPostModalIsOpen(false)}
+          disabled={passing}
         >
           No, cancel
         </button>
@@ -106,4 +101,4 @@ const PostDelete = ({
   );
 };
 
-export default PostDelete;
+export default PassPost;

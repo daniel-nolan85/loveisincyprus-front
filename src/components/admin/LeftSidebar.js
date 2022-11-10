@@ -16,16 +16,25 @@ import {
   faRectangleAd,
   faShieldBlank,
   faDesktop,
+  faFlag,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { ChatState } from '../../context/ChatProvider';
 
 const LeftSidebar = () => {
-  const { newAds, setNewAds, newVerifs, setNewVerifs } = ChatState();
+  const {
+    newAds,
+    setNewAds,
+    newVerifs,
+    setNewVerifs,
+    reportedContent,
+    setReportedContent,
+  } = ChatState();
 
   useEffect(() => {
     fetchNewAds();
     fetchNewVerifs();
+    fetchReportedContent();
   }, []);
 
   const fetchNewAds = async () => {
@@ -46,12 +55,40 @@ const LeftSidebar = () => {
       });
   };
 
+  const fetchReportedContent = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-reported-content`)
+      .then((res) => {
+        console.log('reported content ==> ', res.data);
+        setReportedContent(res.data);
+      });
+  };
+
   return (
     <div className='left-sidebar'>
       <div className='imp-links'>
         <Link to='/admin/dashboard'>
           <FontAwesomeIcon icon={faToolbox} className='fa' />
           Dashboard
+        </Link>
+        <Link to='/ad-submissions'>
+          <FontAwesomeIcon icon={faRectangleAd} className='fa' />
+          Ad Submissions
+          <span>{newAds && newAds.length > 0 && newAds.length}</span>
+        </Link>
+        <Link to='/verif-submissions'>
+          <FontAwesomeIcon icon={faShieldBlank} className='fa' />
+          Verified User Submissions
+          <span>{newVerifs && newVerifs.length > 0 && newVerifs.length}</span>
+        </Link>
+        <Link to='/reported-content'>
+          <FontAwesomeIcon icon={faFlag} className='fa' />
+          Reported Content
+          <span>
+            {reportedContent &&
+              reportedContent.content.length > 0 &&
+              reportedContent.content.length}
+          </span>
         </Link>
         <Link to='/admin/posts'>
           <FontAwesomeIcon icon={faSignsPost} className='fa' />
@@ -96,16 +133,6 @@ const LeftSidebar = () => {
         <Link to='/admin/coupon'>
           <FontAwesomeIcon icon={faTicket} className='fa' />
           Coupon
-        </Link>
-        <Link to='/ad-submissions'>
-          <FontAwesomeIcon icon={faRectangleAd} className='fa' />
-          Ad Submissions
-          <span>{newAds && newAds.length > 0 && newAds.length}</span>
-        </Link>
-        <Link to='/verif-submissions'>
-          <FontAwesomeIcon icon={faShieldBlank} className='fa' />
-          Verified User Submissions
-          <span>{newVerifs && newVerifs.length > 0 && newVerifs.length}</span>
         </Link>
       </div>
     </div>

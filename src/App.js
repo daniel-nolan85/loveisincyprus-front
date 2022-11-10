@@ -79,6 +79,7 @@ import MembershipCard from './pages/user/MembershipCard';
 import SubscriptionSuccess from './pages/user/SubscriptionSuccess';
 import OrderSuccess from './pages/user/OrderSuccess';
 import IPBlock from './pages/admin/IPBlock';
+import ReportedContent from './pages/admin/ReportedContent';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -580,6 +581,11 @@ const App = () => {
           exact
           path='/verif-submissions'
           component={VerifSubmissions}
+        />
+        <AdminRoute
+          exact
+          path='/reported-content'
+          component={ReportedContent}
         />
       </Switch>
       {/* </Suspense> */}

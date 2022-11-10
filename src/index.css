@@ -796,6 +796,15 @@ nav {
   margin-left: 15px;
 }
 
+.post-icons .pass {
+  color: var(--nav-color);
+  margin-right: 15px;
+}
+
+.post-icons .report {
+  color: var(--nav-color);
+}
+
 .post-input-container {
   padding-left: 55px;
   padding-top: 20px;
@@ -2309,6 +2318,16 @@ select.gray {
   margin-left: 15px;
 }
 
+.submissioner-info .fa.edit {
+  margin-right: 7.5px;
+  color: #5388b4;
+}
+
+.submissioner-info .fa.trash {
+  margin-left: 7.5px;
+  color: #c70000;
+}
+
 .ip-info {
   display: flex;
   justify-content: space-between;
@@ -2361,6 +2380,13 @@ select.gray {
   -webkit-text-shadow: 0 0 2px #5388b4;
   text-shadow: 0 0 2px #5388b4;
   box-shadow: 0 0 2px #5388b4;
+}
+
+.post-container.flag {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
 }
 
 /* --------------- profile-page --------------- */

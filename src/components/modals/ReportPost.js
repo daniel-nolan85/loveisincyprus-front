@@ -8,25 +8,20 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 Modal.setAppElement('#root');
 
-const PostDelete = ({
-  postDeleteModalIsOpen,
-  setPostDeleteModalIsOpen,
-  postToDelete,
-  newsFeed,
-  fetchUserPosts,
-  fetchPosts,
-  fetchComments,
-  fetchReportedContent,
+const ReportPost = ({
+  reportPostModalIsOpen,
+  setReportPostModalIsOpen,
+  post,
 }) => {
-  const [deleting, setDeleting] = useState(false);
+  const [reporting, setReporting] = useState(false);
 
   let { _id, token } = useSelector((state) => state.user);
 
-  const deletePost = async (post) => {
-    setDeleting(true);
+  const reportPost = async (post) => {
+    setReporting(true);
     await axios
       .put(
-        `${process.env.REACT_APP_API}/admin/delete-post/${post._id}`,
+        `${process.env.REACT_APP_API}/report-post/${post._id}`,
         { _id, post },
         {
           headers: {
@@ -35,19 +30,15 @@ const PostDelete = ({
         }
       )
       .then((res) => {
-        toast.error('Post deleted', {
+        console.log(res.data);
+        toast.warning('This post has been reported', {
           position: toast.POSITION.TOP_CENTER,
         });
-        setPostDeleteModalIsOpen(false);
-        newsFeed && newsFeed();
-        fetchUserPosts && fetchUserPosts();
-        fetchPosts && fetchPosts();
-        fetchComments && fetchComments();
-        fetchReportedContent && fetchReportedContent();
-        setDeleting(false);
+        setReporting(false);
+        setReportPostModalIsOpen(false);
       })
       .catch((err) => {
-        setDeleting(false);
+        setReporting(false);
         console.log(err);
       });
   };
@@ -64,17 +55,17 @@ const PostDelete = ({
     },
   };
 
-  const { content, image, postedBy } = postToDelete;
+  const { content, image, postedBy } = post;
 
   return (
     <Modal
-      isOpen={postDeleteModalIsOpen}
-      onRequestClose={() => setPostDeleteModalIsOpen(false)}
+      isOpen={reportPostModalIsOpen}
+      onRequestClose={() => setReportPostModalIsOpen(false)}
       style={modalStyles}
       contentLabel='Example Modal'
     >
       <div className='match'>
-        <h1>Are you sure you want to delete this post?</h1>
+        <h1>Are you sure you want to report this post?</h1>
         <br />
         <p>{content}</p>
         <br />
@@ -87,17 +78,17 @@ const PostDelete = ({
           </div>
         )}
         <br />
-        <button className='submit-btn' onClick={() => deletePost(postToDelete)}>
-          {deleting ? (
+        <button className='submit-btn' onClick={() => reportPost(post)}>
+          {reporting ? (
             <FontAwesomeIcon icon={faSpinner} className='fa' spin />
           ) : (
-            'Yes, delete'
+            'Yes, report'
           )}
         </button>
         <button
           className='submit-btn trash'
-          onClick={() => setPostDeleteModalIsOpen(false)}
-          disabled={deleting}
+          onClick={() => setReportPostModalIsOpen(false)}
+          disabled={reporting}
         >
           No, cancel
         </button>
@@ -106,4 +97,4 @@ const PostDelete = ({
   );
 };
 
-export default PostDelete;
+export default ReportPost;

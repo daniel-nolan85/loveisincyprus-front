@@ -293,6 +293,24 @@ const Login = ({ showRegister }) => {
   //     });
   // };
 
+  const checkBlocked = async (req, res) => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/user-blocked/${mobile}`)
+      .then((res) => {
+        if (res.data.length === 0) {
+          userExists();
+        } else {
+          toast.error(
+            'Access from this mobile number is denied. Please use another.',
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+          return;
+        }
+      });
+  };
+
   const userExists = async (req, res) => {
     await axios
       .get(`${process.env.REACT_APP_API}/user-exists/${mobile}`)
@@ -561,7 +579,7 @@ const Login = ({ showRegister }) => {
       />
 
       <button
-        onClick={userExists}
+        onClick={checkBlocked}
         type='button'
         className='submit-btn'
         disabled={!mobile || showOTP}

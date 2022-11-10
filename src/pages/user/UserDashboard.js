@@ -46,6 +46,10 @@ const UserDashboard = () => {
   const [postOfCommentToEdit, setPostOfCommentToEdit] = useState([]);
   const [followersPosts, setFollowersPosts] = useState(0);
   const [loadingImg, setLoadingImg] = useState(false);
+  const [commentReportModalIsOpen, setCommentReportModalIsOpen] =
+    useState(false);
+  const [commentToReport, setCommentToReport] = useState({});
+  const [postOfCommentToReport, setPostOfCommentToReport] = useState([]);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -367,6 +371,12 @@ const UserDashboard = () => {
     setPostOfCommentToEdit(postId);
   };
 
+  const reportComment = async (postId, comment) => {
+    setCommentReportModalIsOpen(true);
+    setCommentToReport(comment);
+    setPostOfCommentToReport(postId);
+  };
+
   {
     console.log('posts => ', posts);
   }
@@ -426,6 +436,11 @@ const UserDashboard = () => {
             setCommentEditModalIsOpen={setCommentEditModalIsOpen}
             commentToEdit={commentToEdit}
             postOfCommentToEdit={postOfCommentToEdit}
+            reportComment={reportComment}
+            commentReportModalIsOpen={commentReportModalIsOpen}
+            setCommentReportModalIsOpen={setCommentReportModalIsOpen}
+            commentToReport={commentToReport}
+            postOfCommentToReport={postOfCommentToReport}
           />
         </InfiniteScroll>
         <AddComment

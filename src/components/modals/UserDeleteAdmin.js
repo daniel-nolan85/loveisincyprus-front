@@ -14,6 +14,9 @@ const UserDeleteAdmin = ({
   setUserDeleteModalIsOpen,
   userToDelete,
   fetchUsers,
+  fetchPosts,
+  fetchComments,
+  fetchReportedContent,
 }) => {
   const [deleting, setDeleting] = useState(false);
 
@@ -37,7 +40,10 @@ const UserDeleteAdmin = ({
           position: toast.POSITION.TOP_CENTER,
         });
         setUserDeleteModalIsOpen(false);
-        fetchUsers();
+        fetchUsers && fetchUsers();
+        fetchPosts && fetchPosts();
+        fetchComments && fetchComments();
+        fetchReportedContent && fetchReportedContent();
         setDeleting(false);
       })
       .catch((err) => {

@@ -63,11 +63,7 @@ const SettingsMenu = ({
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
-      // Function for click event
       function handleOutsideClick(event) {
-        console.log('settingsMenu => ', settingsMenu);
-        console.log('ref.current => ', ref.current);
-        console.log('event.target => ', event.target);
         if (
           settingsMenu &&
           ref.current &&

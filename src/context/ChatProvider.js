@@ -20,6 +20,7 @@ const ChatProvider = ({ children }) => {
   const [theirChats, setTheirChats] = useState([]);
   const [typersId, setTypersId] = useState('');
   const [theirId, setTheirId] = useState('');
+  const [reportedContent, setReportedContent] = useState(0);
 
   return (
     <ChatContext.Provider
@@ -56,6 +57,8 @@ const ChatProvider = ({ children }) => {
         setTypersId,
         theirId,
         setTheirId,
+        reportedContent,
+        setReportedContent,
       }}
     >
       {children}

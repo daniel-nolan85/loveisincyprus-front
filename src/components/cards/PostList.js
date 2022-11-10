@@ -8,6 +8,7 @@ import {
   faTrashCan,
   faCaretDown,
   faCaretUp,
+  faFlag,
 } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -16,6 +17,7 @@ import Comments from '../cards/Comments';
 import ShowLikes from '../../components/modals/ShowLikes';
 import SinglePost from '../../components/modals/SinglePost';
 import PostDelete from '../../components/modals/PostDelete';
+import ReportPost from '../modals/ReportPost';
 
 const PostList = ({
   posts,
@@ -24,6 +26,7 @@ const PostList = ({
   handleUnlike,
   handleComment,
   removeComment,
+  reportComment,
   showComments,
   setShowComments,
   newsFeed,
@@ -39,10 +42,15 @@ const PostList = ({
   setCommentEditModalIsOpen,
   commentToEdit,
   postOfCommentToEdit,
+  commentReportModalIsOpen,
+  setCommentReportModalIsOpen,
+  commentToReport,
+  postOfCommentToReport,
 }) => {
   const [currentPost, setCurrentPost] = useState({});
   const [likesModalIsOpen, setLikesModalIsOpen] = useState(false);
   const [postModalIsOpen, setPostModalIsOpen] = useState(false);
+  const [reportPostModalIsOpen, setReportPostModalIsOpen] = useState(false);
 
   const { token, _id } = useSelector((state) => state.user);
 
@@ -50,6 +58,11 @@ const PostList = ({
     setCurrentPost(post);
     setLikesModalIsOpen(true);
     // console.log(post.likes);
+  };
+
+  const reportPost = (post) => {
+    setCurrentPost(post);
+    setReportPostModalIsOpen(true);
   };
 
   const editPost = (post) => {
@@ -95,20 +108,29 @@ const PostList = ({
                   <span>{moment(post.createdAt).fromNow()}</span>
                 </div>
               </div>
-              {token && _id === post.postedBy._id && (
-                <div className='post-icons'>
+              <div className='post-icons'>
+                {token && _id !== post.postedBy._id && (
                   <FontAwesomeIcon
-                    icon={faTrashCan}
-                    className='fa trash'
-                    onClick={() => handleDelete(post)}
+                    icon={faFlag}
+                    className='fa report'
+                    onClick={() => reportPost(post)}
                   />
-                  <FontAwesomeIcon
-                    icon={faPenToSquare}
-                    className='fa edit'
-                    onClick={() => editPost(post)}
-                  />
-                </div>
-              )}
+                )}
+                {token && _id === post.postedBy._id && (
+                  <>
+                    <FontAwesomeIcon
+                      icon={faTrashCan}
+                      className='fa trash'
+                      onClick={() => handleDelete(post)}
+                    />
+                    <FontAwesomeIcon
+                      icon={faPenToSquare}
+                      className='fa edit'
+                      onClick={() => editPost(post)}
+                    />
+                  </>
+                )}
+              </div>
             </div>
             <p className='post-text'>{post.content}</p>
             {post.image && (
@@ -184,6 +206,11 @@ const PostList = ({
                     setCommentEditModalIsOpen={setCommentEditModalIsOpen}
                     commentToEdit={commentToEdit}
                     postOfCommentToEdit={postOfCommentToEdit}
+                    reportComment={reportComment}
+                    commentReportModalIsOpen={commentReportModalIsOpen}
+                    setCommentReportModalIsOpen={setCommentReportModalIsOpen}
+                    commentToReport={commentToReport}
+                    postOfCommentToReport={postOfCommentToReport}
                   />
                 </div>
               </div>
@@ -206,6 +233,11 @@ const PostList = ({
         setPostDeleteModalIsOpen={setPostDeleteModalIsOpen}
         postToDelete={postToDelete}
         newsFeed={newsFeed}
+      />
+      <ReportPost
+        reportPostModalIsOpen={reportPostModalIsOpen}
+        setReportPostModalIsOpen={setReportPostModalIsOpen}
+        post={currentPost}
       />
     </>
   );

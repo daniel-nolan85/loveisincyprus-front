@@ -43,7 +43,7 @@ const UserSuspend = ({
           position: toast.POSITION.TOP_CENTER,
         });
         setUserSuspendModalIsOpen(false);
-        fetchUsers();
+        fetchUsers && fetchUsers();
         setSuspending(false);
         setReason('');
         setStartDate(new Date());
