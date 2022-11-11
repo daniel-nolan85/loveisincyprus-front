@@ -42,8 +42,12 @@ const Comments = ({
   setCommentReportModalIsOpen,
   commentToReport,
   postOfCommentToReport,
+  fetchNotifications,
+  populateNotifications,
 }) => {
   const { token, _id } = useSelector((state) => state.user);
+
+  console.log(post);
 
   return (
     <>
@@ -90,7 +94,7 @@ const Comments = ({
                   className='fa trash'
                   onClick={() => {
                     removeComment(post._id, c);
-                    notifModalIsOpen && setNotifModalIsOpen(false);
+                    // notifModalIsOpen && setNotifModalIsOpen(false);
                   }}
                 />
                 <FontAwesomeIcon
@@ -98,12 +102,26 @@ const Comments = ({
                   className='fa edit'
                   onClick={() => {
                     editComment(post._id, c);
-                    notifModalIsOpen && setNotifModalIsOpen(false);
+                    // notifModalIsOpen && setNotifModalIsOpen(false);
                   }}
                 />
               </div>
             )) ||
               (token && _id === post.postedBy._id && (
+                <div className='post-icons'>
+                  <FontAwesomeIcon
+                    icon={faTrashCan}
+                    className='fa trash'
+                    onClick={() => removeComment(post._id, c)}
+                  />
+                  <FontAwesomeIcon
+                    icon={faFlag}
+                    className='fa report'
+                    onClick={() => reportComment(post._id, c)}
+                  />
+                </div>
+              )) ||
+              (token && _id === post.postedBy && (
                 <div className='post-icons'>
                   <FontAwesomeIcon
                     icon={faTrashCan}
@@ -143,6 +161,9 @@ const Comments = ({
         fetchUserPosts={fetchUserPosts}
         newsFeed={newsFeed}
         fetchThisUsersPosts={fetchThisUsersPosts}
+        fetchNotifications={fetchNotifications}
+        populateNotifications={populateNotifications}
+        setNotifModalIsOpen={setNotifModalIsOpen}
       />
       <CommentEdit
         commentEditModalIsOpen={commentEditModalIsOpen}
@@ -152,6 +173,9 @@ const Comments = ({
         newsFeed={newsFeed}
         fetchThisUsersPosts={fetchThisUsersPosts}
         postOfCommentToEdit={postOfCommentToEdit}
+        fetchNotifications={fetchNotifications}
+        populateNotifications={populateNotifications}
+        setNotifModalIsOpen={setNotifModalIsOpen}
       />
       <EventCommentDelete
         eventCommentDeleteModalIsOpen={eventCommentDeleteModalIsOpen}

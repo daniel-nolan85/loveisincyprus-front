@@ -43,6 +43,10 @@ const Notifications = () => {
   const [notifsDisplay, setNotifsDisplay] = useState([]);
   const [startDate, setStartDate] = useState(new Date());
   const [datePickerIsOpen, setDatePickerIsOpen] = useState(false);
+  const [commentReportModalIsOpen, setCommentReportModalIsOpen] =
+    useState(false);
+  const [commentToReport, setCommentToReport] = useState({});
+  const [postOfCommentToReport, setPostOfCommentToReport] = useState([]);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -257,6 +261,12 @@ const Notifications = () => {
     setCommentDeleteModalIsOpen(true);
     setPostOfCommentToDelete(postId);
     setCommentToDelete(comment);
+  };
+
+  const reportComment = async (postId, comment) => {
+    setCommentReportModalIsOpen(true);
+    setCommentToReport(comment);
+    setPostOfCommentToReport(postId);
   };
 
   const handleImage = async (e) => {
@@ -609,12 +619,18 @@ const Notifications = () => {
           commentToEdit={commentToEdit}
           postOfCommentToEdit={postOfCommentToEdit}
           fetchNotifications={fetchNotifications}
+          populateNotifications={populateNotifications}
           // notifToDelete={notifToDelete}
           // setNotifToDelete={setNotifToDelete}
           acceptInvite={acceptInvite}
           maybe={maybe}
           declineInvite={declineInvite}
           loading={loading}
+          reportComment={reportComment}
+          commentReportModalIsOpen={commentReportModalIsOpen}
+          setCommentReportModalIsOpen={setCommentReportModalIsOpen}
+          commentToReport={commentToReport}
+          postOfCommentToReport={postOfCommentToReport}
         />
       </div>
       <RightSidebar />

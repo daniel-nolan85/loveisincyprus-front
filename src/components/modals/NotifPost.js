@@ -43,6 +43,7 @@ const NotifPost = ({
   handleUnlike,
   handleComment,
   removeComment,
+  reportComment,
   // newsFeed,
   postToDelete,
   postDeleteModalIsOpen,
@@ -57,12 +58,17 @@ const NotifPost = ({
   commentToEdit,
   postOfCommentToEdit,
   fetchNotifications,
+  populateNotifications,
   // notifToDelete,
   // setNotifToDelete,
   acceptInvite,
   maybe,
   declineInvite,
   loading,
+  commentReportModalIsOpen,
+  setCommentReportModalIsOpen,
+  commentToReport,
+  postOfCommentToReport,
 }) => {
   const [currentPost, setCurrentPost] = useState({});
   const [likesModalIsOpen, setLikesModalIsOpen] = useState(false);
@@ -158,7 +164,7 @@ const NotifPost = ({
               />
               <FontAwesomeIcon
                 icon={faPenToSquare}
-                className='fa edit'
+                className='fa edit ml'
                 onClick={() => {
                   editPost(post.notif);
                 }}
@@ -256,6 +262,13 @@ const NotifPost = ({
                   postOfCommentToEdit={postOfCommentToEdit}
                   notifModalIsOpen={notifModalIsOpen}
                   setNotifModalIsOpen={setNotifModalIsOpen}
+                  reportComment={reportComment}
+                  commentReportModalIsOpen={commentReportModalIsOpen}
+                  setCommentReportModalIsOpen={setCommentReportModalIsOpen}
+                  commentToReport={commentToReport}
+                  postOfCommentToReport={postOfCommentToReport}
+                  fetchNotifications={fetchNotifications}
+                  populateNotifications={populateNotifications}
                 />
               </div>
             </div>

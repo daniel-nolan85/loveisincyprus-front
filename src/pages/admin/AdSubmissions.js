@@ -195,7 +195,7 @@ const AdSubmissions = () => {
                     />
                     <FontAwesomeIcon
                       icon={faThumbsUp}
-                      className='fa edit'
+                      className='fa edit ml'
                       onClick={() => handleApprove(ad)}
                     />
                   </div>

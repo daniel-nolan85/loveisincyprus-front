@@ -22,6 +22,9 @@ const CommentEdit = ({
   newsFeed,
   fetchThisUsersPosts,
   postOfCommentToEdit,
+  fetchNotifications,
+  populateNotifications,
+  setNotifModalIsOpen,
 }) => {
   const [text, setText] = useState(commentToEdit.text);
   const [uploading, setUploading] = useState(false);
@@ -59,7 +62,10 @@ const CommentEdit = ({
         newsFeed && newsFeed();
         fetchUserPosts && fetchUserPosts();
         fetchThisUsersPosts && fetchThisUsersPosts();
+        fetchNotifications && fetchNotifications();
+        populateNotifications && populateNotifications();
         setCommentEditModalIsOpen(false);
+        setNotifModalIsOpen(false);
         setImage({});
       })
       .catch((err) => console.log(err));

@@ -17,6 +17,9 @@ const CommentDelete = ({
   fetchThisUsersPosts,
   fetchComments,
   fetchReportedContent,
+  fetchNotifications,
+  populateNotifications,
+  setNotifModalIsOpen,
 }) => {
   let { token, _id } = useSelector((state) => state.user);
 
@@ -41,7 +44,10 @@ const CommentDelete = ({
         fetchComments && fetchComments();
         fetchReportedContent && fetchReportedContent();
         setCommentsModalIsOpen && setCommentsModalIsOpen(false);
+        fetchNotifications && fetchNotifications();
+        populateNotifications && populateNotifications();
         setCommentDeleteModalIsOpen(false);
+        setNotifModalIsOpen(false);
       })
       .catch((err) => {
         console.log(err);
