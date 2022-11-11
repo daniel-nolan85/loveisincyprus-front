@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 
 const ShowPaymentInfo = ({ order }) => {
-  console.log('order => ', order);
+  // console.log('order => ', order);
   return (
     <>
       <h2 className='center'>User Info</h2>

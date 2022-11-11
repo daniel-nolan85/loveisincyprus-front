@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClose, faCheck } from '@fortawesome/free-solid-svg-icons';
 import ShowPaymentInfo from '../cards/ShowPaymentInfo';
 
-const OrdersList = ({ orders, handleStatusChange }) => {
+const OrdersList = ({ orders, handleStatusChange, searched, query }) => {
   //   const showOrderInTable = (order) => (
   //     <table>
   //       <thead>
@@ -38,7 +38,7 @@ const OrdersList = ({ orders, handleStatusChange }) => {
 
   return (
     <>
-      {orders.map((order) => (
+      {orders.filter(searched(query)).map((order) => (
         <div key={order._id}>
           <div>
             <ShowPaymentInfo order={order} />
