@@ -325,9 +325,27 @@ const App = () => {
       return;
     } else if (user) {
       socket.on('message received', (newMessageReceived, theirId) => {
+        console.log('theirId => ', theirId);
+
         console.log('newMessageReceived => ', newMessageReceived);
         // fetchChats();
         fetchTheirChats(theirId);
+        if (
+          !selectedChatCompare ||
+          selectedChatCompare._id != newMessageReceived.chat._id
+        ) {
+          // if (!notification.includes(newMessageReceived)) {
+          //   setNotification([newMessageReceived, ...notification]);
+          // }
+          incrementNewMessages(newMessageReceived);
+        } else {
+          setMessages([...messages, newMessageReceived]);
+        }
+      });
+      socket.on('mass mail received', (newMessageReceived) => {
+        console.log('new mass mail received => ', newMessageReceived);
+        console.log('theirId => ', user._id);
+        fetchTheirChats(user._id);
         if (
           !selectedChatCompare ||
           selectedChatCompare._id != newMessageReceived.chat._id
@@ -349,6 +367,7 @@ const App = () => {
   }, [user && user.token]);
 
   const incrementNewNotifications = async (notif, reason) => {
+    console.log('message received');
     await axios
       .put(
         `${process.env.REACT_APP_API}/new-notification-count`,

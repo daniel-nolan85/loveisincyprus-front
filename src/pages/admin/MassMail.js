@@ -78,7 +78,8 @@ const MassMail = () => {
         console.log(res);
         setLoading(false);
         setValues(initialState);
-        socket.emit('new message', res.data);
+        // socket.emit('new message', res.data);
+        socket.emit('new mass mail', res.data);
         toast.success('Your message has been sent', {
           position: toast.POSITION.TOP_CENTER,
         });

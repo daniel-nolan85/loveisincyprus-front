@@ -39,14 +39,11 @@ const Orders = () => {
   };
 
   const searched = (query) => (q) =>
-    // (q.orderedBy.name &&
-    //   q.postedBy.name.toLowerCase().includes(query)) ||
-    //   (q.orderedBy.username &&
-    //     q.postedBy.username.toLowerCase().includes(query)) ||
-    //   (q.orderedBy.email && q.postedBy.email.toLowerCase().includes(query)) ||
-    (q._id && q._id.toLowerCase().includes(query)) ||
+    (q.paymentIntent.id && q.paymentIntent.id.includes(query)) ||
     (q.orderStatus && q.orderStatus.toLowerCase().includes(query)) ||
-    (q.createdAt && q.createdAt.toLowerCase().includes(query));
+    (q.createdAt && q.createdAt.toLowerCase().includes(query)) ||
+    (q.paymentIntent.status &&
+      q.paymentIntent.status.toLowerCase().includes(query));
 
   return (
     <div className='container'>
@@ -67,62 +64,12 @@ const Orders = () => {
           <input type='submit' hidden />
         </div>
         <div>
-          {/* <OrdersList
+          <OrdersList
             orders={orders}
             handleStatusChange={handleStatusChange}
             searched={searched}
             query={query}
-          /> */}
-          {orders.filter(searched(query)).map((order) => (
-            <div key={order._id}>
-              <div>
-                <ShowPaymentInfo order={order} />
-                <div className='order-status'>
-                  <div className='delivery-status'>
-                    <h2 className='center'>Delivery Status</h2>
-                    <select
-                      onChange={(e) =>
-                        handleStatusChange(order._id, e.target.value)
-                      }
-                      defaultValue={order.orderStatus}
-                      name='status'
-                    >
-                      <option value='Not Processed'>Not Processed</option>
-                      <option value='Processing'>Processing</option>
-                      <option value='Dispatched'>Dispatched</option>
-                      <option value='Cancelled'>Cancelled</option>
-                      <option value='Completed'>Completed</option>
-                    </select>
-                  </div>
-                  <div className='order-information'>
-                    <h2 className='center' style={{ marginBottom: '0' }}>
-                      Order Info
-                    </h2>
-                    <table className='product-info'>
-                      <thead>
-                        <tr>
-                          <th>Product</th>
-                          <th>Price</th>
-                          <th>Quantity</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {order.products.map((p, i) => (
-                          <tr key={i}>
-                            <td>{p.product.title}</td>
-                            <td>{p.product.price}</td>
-                            <td>{p.count}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-              {/* {showOrderInTable(order)} */}
-              {/* {showDeliveryAddress(order.deliveryAddress)} */}
-            </div>
-          ))}
+          />
         </div>
       </div>
     </div>
