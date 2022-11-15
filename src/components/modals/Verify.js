@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -8,7 +8,9 @@ import {
   faCamera,
   faSpinner,
   faPaperPlane,
+  faUndo,
 } from '@fortawesome/free-solid-svg-icons';
+import Webcam from 'react-webcam';
 
 Modal.setAppElement('#root');
 
@@ -22,37 +24,20 @@ const Verify = ({
   loadingImg,
   setLoadingImg,
 }) => {
+  const [webcamEnabled, setWebcamEnabled] = useState(false);
+
   let { user } = useSelector((state) => ({ ...state }));
 
   let dispatch = useDispatch();
 
-  const handleImage = async (e) => {
-    const file = e.target.files[0];
-    let formData = new FormData();
-    formData.append('image', file);
-    setLoadingImg(true);
+  const webcamRef = useRef(null);
 
-    await axios
-      .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
-        headers: {
-          authtoken: user.token,
-        },
-      })
-      .then((res) => {
-        setVerifImg({
-          url: res.data.url,
-          public_id: res.data.public_id,
-        });
-        setLoadingImg(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoadingImg(false);
-      });
-  };
+  const capturePhoto = useCallback(async () => {
+    const imageSrc = webcamRef.current.getScreenshot();
+    setVerifImg(imageSrc);
+  }, [webcamRef]);
 
   const getVerified = async (e) => {
-    console.log('verifImg => ', verifImg);
     e.preventDefault();
     setUploading(true);
 
@@ -80,7 +65,8 @@ const Verify = ({
           toast.success(`Your submission has been sent.`, {
             position: toast.POSITION.TOP_CENTER,
           });
-          setVerifImg({});
+          setVerifImg(null);
+          setWebcamEnabled(false);
           setVerifyModalIsOpen(false);
           dispatch({
             type: 'LOGGED_IN_USER',
@@ -135,34 +121,53 @@ const Verify = ({
         </h1>
         <h2>You will also receive 80 points for successful verification.</h2>
         <h2>
-          To get verified, please update a photo of yourself holding a sign that
-          displays your name.
+          To get verified, please upload a live photo of yourself holding a sign
+          that displays your name.
         </h2>
         <div>
           <div>
-            {loadingImg ? (
-              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-            ) : (
-              <label className='verif-upload'>
-                {verifImg && verifImg.url ? (
-                  <img src={verifImg.url} />
-                ) : (
-                  <FontAwesomeIcon icon={faCamera} className='fa' />
-                )}
-                <input
-                  onChange={handleImage}
-                  type='file'
-                  accept='images/*'
-                  hidden
-                />
+            {!webcamEnabled && !verifImg && (
+              <label
+                className='verif-upload'
+                onClick={() => setWebcamEnabled(true)}
+              >
+                <FontAwesomeIcon icon={faCamera} className='fa' />
               </label>
             )}
           </div>
+          {webcamEnabled && (
+            <>
+              <div className='verif-icons'>
+                <FontAwesomeIcon
+                  icon={faCamera}
+                  className='fa camera'
+                  onClick={capturePhoto}
+                />
+                <FontAwesomeIcon
+                  icon={faUndo}
+                  className='fa reset'
+                  onClick={() => setVerifImg(null)}
+                />
+              </div>
+              {!verifImg ? (
+                <Webcam
+                  ref={webcamRef}
+                  screenshotFormat='image/jpeg'
+                  screenshotQuality={1}
+                  width={360}
+                />
+              ) : (
+                <>
+                  <img src={verifImg} alt='screenshot' className='verif-img' />
+                </>
+              )}
+            </>
+          )}
           <button
             onClick={getVerified}
             type='submit'
             className='submit-btn'
-            disabled={!verifImg.url || uploading}
+            disabled={!verifImg}
           >
             {uploading ? (
               <FontAwesomeIcon icon={faSpinner} className='fa' spin />
@@ -173,7 +178,11 @@ const Verify = ({
           </button>
           <button
             className='submit-btn trash'
-            onClick={() => setVerifyModalIsOpen(false)}
+            onClick={() => {
+              setVerifyModalIsOpen(false);
+              setWebcamEnabled(false);
+            }}
+            disabled={uploading}
           >
             Cancel
           </button>

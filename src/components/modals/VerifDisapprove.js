@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 
 let socket;
 
@@ -18,6 +20,8 @@ const VerifDisapprove = ({
   setReason,
   fetchVerifs,
 }) => {
+  const [loading, setLoading] = useState(false);
+
   let { token } = useSelector((state) => state.user);
 
   const { setSocketConnected, setNewVerifs } = ChatState();
@@ -40,6 +44,7 @@ const VerifDisapprove = ({
   };
 
   const disapproveVerif = async (verif) => {
+    setLoading(true);
     await axios
       .put(
         `${process.env.REACT_APP_API}/disapprove-verif`,
@@ -51,6 +56,7 @@ const VerifDisapprove = ({
         }
       )
       .then((res) => {
+        setLoading(false);
         console.log(res.data);
         socket.emit('new message', res.data);
         toast.error(
@@ -63,7 +69,10 @@ const VerifDisapprove = ({
         fetchVerifs();
         setVerifDisapproveModalIsOpen(false);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
   };
 
   const modalStyles = {
@@ -105,7 +114,7 @@ const VerifDisapprove = ({
         {image && (
           <div className='match-images'>
             <img
-              src={image.url}
+              src={image}
               alt={`${postedBy.username || postedBy.name}'s post`}
             />
           </div>
@@ -122,11 +131,17 @@ const VerifDisapprove = ({
           className='submit-btn'
           onClick={() => disapproveVerif(currentVerif)}
         >
+          {loading ? (
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+          ) : (
+            <FontAwesomeIcon icon={faThumbsDown} className='fa' />
+          )}
           Yes, reject
         </button>
         <button
           className='submit-btn trash'
           onClick={() => setVerifDisapproveModalIsOpen(false)}
+          disabled={loading}
         >
           No, cancel
         </button>

@@ -63,6 +63,7 @@ const CropProfilePic = ({
         crop.height
       );
       const base64Image = canvas.toDataURL('image/jpeg', 1);
+      console.log('base64Image => ', base64Image);
       setCroppedProfile(base64Image);
     } catch (err) {
       console.log(err);

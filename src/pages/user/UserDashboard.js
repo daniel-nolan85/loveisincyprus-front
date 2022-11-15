@@ -257,6 +257,8 @@ const UserDashboard = () => {
     let formData = new FormData();
     formData.append('image', file);
     setLoadingImg(true);
+    console.log('file => ', file);
+    console.log('formData => ', formData);
 
     await axios
       .post(`${process.env.REACT_APP_API}/upload-image`, formData, {

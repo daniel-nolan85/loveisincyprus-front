@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -6,6 +6,8 @@ import { useSelector } from 'react-redux';
 import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
 import { addPoints } from '../../functions/user';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 
 let socket;
 
@@ -17,6 +19,8 @@ const VerifApprove = ({
   currentVerif,
   fetchVerifs,
 }) => {
+  const [loading, setLoading] = useState(false);
+
   const {} = ChatState();
 
   let { token } = useSelector((state) => state.user);
@@ -41,6 +45,7 @@ const VerifApprove = ({
   };
 
   const approveVerif = async (verif) => {
+    setLoading(true);
     await axios
       .put(
         `${process.env.REACT_APP_API}/approve-verif`,
@@ -52,6 +57,7 @@ const VerifApprove = ({
         }
       )
       .then((res) => {
+        setLoading(false);
         console.log(res.data);
         socket.emit('new message', res.data.message);
         toast.success(
@@ -65,7 +71,10 @@ const VerifApprove = ({
         setVerifApproveModalIsOpen(false);
         addPoints(80, 'verified', token, res.data.userStatus);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
   };
 
   const modalStyles = {
@@ -107,7 +116,7 @@ const VerifApprove = ({
         {image && (
           <div className='match-images'>
             <img
-              src={image.url}
+              src={image}
               alt={`${postedBy.username || postedBy.name}'s post`}
             />
           </div>
@@ -117,11 +126,17 @@ const VerifApprove = ({
           className='submit-btn'
           onClick={() => approveVerif(currentVerif)}
         >
+          {loading ? (
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+          ) : (
+            <FontAwesomeIcon icon={faThumbsUp} className='fa' />
+          )}
           Yes, I approve
         </button>
         <button
           className='submit-btn trash'
           onClick={() => setVerifApproveModalIsOpen(false)}
+          disabled={loading}
         >
           No, cancel
         </button>

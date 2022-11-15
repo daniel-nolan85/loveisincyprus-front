@@ -2556,6 +2556,37 @@ label.verif-upload .fa {
   color: var(--nav-color);
 }
 
+.fa.verify {
+  color: var(--nav-color);
+  font-size: 30px;
+}
+
+.verif-icons {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 15px;
+}
+
+.verif-icons .fa {
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.verif-icons .fa.camera {
+  color: var(--nav-color);
+}
+
+.verif-icons .fa.reset {
+  color: #5388b4;
+}
+
+.verif-img {
+  width: 360px !important;
+  height: 270px !important;
+  border-radius: 0% !important;
+  margin-bottom: 7px !important;
+}
+
 .profile-info {
   display: flex;
   align-items: flex-start;

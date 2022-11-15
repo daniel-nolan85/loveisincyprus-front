@@ -135,7 +135,7 @@ const Profile = ({ history }) => {
   const [sexFrequency, setSexFrequency] = useState('');
   const [progress, setProgress] = useState({});
   const [progressModalIsOpen, setProgressModalIsOpen] = useState(false);
-  const [verifImg, setVerifImg] = useState({});
+  const [verifImg, setVerifImg] = useState(null);
   const [faces, setFaces] = useState([]);
   const [loadingImg, setLoadingImg] = useState(false);
   const [loadingCoverImg, setLoadingCoverImg] = useState(false);

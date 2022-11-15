@@ -112,14 +112,14 @@ const VerifSubmissions = () => {
                     />
                     <FontAwesomeIcon
                       icon={faThumbsUp}
-                      className='fa edit'
+                      className='fa edit ml'
                       onClick={() => handleApprove(verif)}
                     />
                   </div>
                 </div>
                 {verif.image && (
                   <img
-                    src={verif.image.url}
+                    src={verif.image}
                     alt={`${
                       verif.postedBy.username || verif.postedBy.name
                     }'s advertisement`}
