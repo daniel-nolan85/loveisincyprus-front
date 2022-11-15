@@ -252,14 +252,14 @@ const App = () => {
     return () => unsubscribe();
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (user && user.profileComplete === false) {
-  //     const timer = setTimeout(() => {
-  //       setPopupModalIsOpen(true);
-  //     }, 5000);
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [user && user.token]);
+  useEffect(() => {
+    if (user && user.profileComplete === false) {
+      const timer = setTimeout(() => {
+        setPopupModalIsOpen(true);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [user && user.token]);
 
   useEffect(() => {
     if (user) {
