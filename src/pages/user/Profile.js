@@ -140,6 +140,8 @@ const Profile = ({ history }) => {
   const [loadingImg, setLoadingImg] = useState(false);
   const [loadingCoverImg, setLoadingCoverImg] = useState(false);
   const [loadingProfileImg, setLoadingProfileImg] = useState(false);
+  const [profileImageUpdateModalIsOpen, setProfileImageUpdateModalIsOpen] =
+    useState(false);
 
   const { modalIsOpen, setModalIsOpen } = ChatState();
 
@@ -424,7 +426,36 @@ const Profile = ({ history }) => {
       });
   };
 
+  const handleLiveImage = async (url) => {
+    console.log(url);
+    setProfileImageUpdateModalIsOpen(false);
+    setLoadingProfileImg(true);
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/live-profile-pic`,
+        { user, url },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        setProfileImage({
+          url: res.data.url,
+          public_id: res.data.public_id,
+        });
+        setLoadingProfileImg(false);
+      })
+      .catch((err) => {
+        setLoadingProfileImg(false);
+        console.log(err);
+      });
+  };
+
   const handleProfileImage = async (e) => {
+    setProfileImageUpdateModalIsOpen(false);
     const file = e.target.files[0];
     let formData = new FormData();
     formData.append('image', file);
@@ -1333,6 +1364,9 @@ const Profile = ({ history }) => {
         setSexFrequency={setSexFrequency}
         loadingCoverImg={loadingCoverImg}
         loadingProfileImg={loadingProfileImg}
+        profileImageUpdateModalIsOpen={profileImageUpdateModalIsOpen}
+        setProfileImageUpdateModalIsOpen={setProfileImageUpdateModalIsOpen}
+        handleLiveImage={handleLiveImage}
       />
       {user.coverImage && user.coverImage.url && (
         <CropCover

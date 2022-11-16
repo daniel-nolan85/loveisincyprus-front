@@ -8,6 +8,7 @@ import {
 import Modal from 'react-modal';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import ProfileImageUpdate from '../modals/ProfileImageUpdate';
 
 Modal.setAppElement('#root');
 
@@ -120,6 +121,9 @@ const ProfileUpdate = ({
   setSexFrequency,
   loadingProfileImg,
   loadingCoverImg,
+  profileImageUpdateModalIsOpen,
+  setProfileImageUpdateModalIsOpen,
+  handleLiveImage,
 }) => {
   const [showAboutMe, setShowAboutMe] = useState(true);
   const [showBackground, setShowBackground] = useState(false);
@@ -240,7 +244,7 @@ const ProfileUpdate = ({
               <FontAwesomeIcon icon={faSpinner} className='fa' spin />
             </label>
           ) : (
-            <label>
+            <label onClick={() => setProfileImageUpdateModalIsOpen(true)}>
               <small>Profile Image: </small>
               {profileImage && profileImage.url ? (
                 <img src={profileImage.url} />
@@ -250,12 +254,12 @@ const ProfileUpdate = ({
                   className='fa'
                 ></FontAwesomeIcon>
               )}
-              <input
+              {/* <input
                 onChange={handleProfileImage}
                 type='file'
                 accept='images/*'
                 hidden
-              />
+              /> */}
             </label>
           )}
         </div>
@@ -1105,6 +1109,12 @@ const ProfileUpdate = ({
             Update
           </button>
         </form>
+        <ProfileImageUpdate
+          profileImageUpdateModalIsOpen={profileImageUpdateModalIsOpen}
+          setProfileImageUpdateModalIsOpen={setProfileImageUpdateModalIsOpen}
+          handleProfileImage={handleProfileImage}
+          handleLiveImage={handleLiveImage}
+        />
       </div>
     </Modal>
   );
