@@ -19,10 +19,13 @@ import UserDeleteAdmin from '../../components/modals/UserDeleteAdmin';
 import PassPost from '../../components/modals/PassPost';
 import PassComment from '../../components/modals/PassComment';
 import CommentDelete from '../../components/modals/CommentDelete';
+import PassMessage from '../../components/modals/PassMessage';
+import MessageDelete from '../../components/modals/MessageDelete';
 
 const ReportedContent = () => {
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [userSuspendModalIsOpen, setUserSuspendModalIsOpen] = useState(false);
   const [userToSuspend, setUserToSuspend] = useState({});
   const [postToDelete, setPostToDelete] = useState([]);
@@ -38,6 +41,11 @@ const ReportedContent = () => {
     useState(false);
   const [commentToDelete, setCommentToDelete] = useState([]);
   const [postOfCommentToDelete, setPostOfCommentToDelete] = useState([]);
+  const [messageToDelete, setMessageToDelete] = useState([]);
+  const [messageDeleteModalIsOpen, setMessageDeleteModalIsOpen] =
+    useState(false);
+  const [passMessageModalIsOpen, setPassMessageModalIsOpen] = useState(false);
+  const [messageToPass, setMessageToPass] = useState([]);
 
   const { setReportedContent } = ChatState();
 
@@ -46,6 +54,7 @@ const ReportedContent = () => {
   useEffect(() => {
     fetchPosts();
     fetchComments();
+    fetchMessages();
   }, []);
 
   const fetchPosts = async () => {
@@ -68,6 +77,18 @@ const ReportedContent = () => {
           o.comments = o.comments.filter((s) => s.reported == true);
         });
         setComments(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const fetchMessages = async () => {
+    await axios
+      .post(`${process.env.REACT_APP_API}/fetch-reported-messages`)
+      .then((res) => {
+        console.log(res.data);
+        setMessages(res.data);
       })
       .catch((err) => {
         console.log(err);
@@ -113,6 +134,16 @@ const ReportedContent = () => {
     setCommentDeleteModalIsOpen(true);
     setCommentToDelete(c);
     setPostOfCommentToDelete(comment._id);
+  };
+
+  const passMessage = (message) => {
+    setPassMessageModalIsOpen(true);
+    setMessageToPass(message);
+  };
+
+  const handleDeleteMessage = async (message) => {
+    setMessageDeleteModalIsOpen(true);
+    setMessageToDelete(message);
   };
 
   return (
@@ -244,7 +275,67 @@ const ReportedContent = () => {
                 </div>
               ))
             )}
+          {messages.length > 0 && <h1 className='center'>Messages</h1>}
+          {messages.length > 0 &&
+            messages.map((m) => (
+              <div className='post-container' key={m._id}>
+                <div className='post-row'>
+                  <div className='user-profile'>
+                    <Link to={`/user/${m.sender._id}`}>
+                      <img
+                        src={
+                          m.sender.profileImage
+                            ? m.sender.profileImage.url
+                            : defaultProfile
+                        }
+                        alt={`${
+                          m.sender.username || m.sender.name
+                        }'s profile picture`}
+                      />
+                    </Link>
+                    <div>
+                      <Link to={`/user/${m.sender._id}`}>
+                        <p>{m.sender.username || m.sender.name}</p>
+                      </Link>
+                      <span>{moment(m.createdAt).fromNow()}</span>
+                    </div>
+                  </div>
+                  <div className='submissioner-info'>
+                    <FontAwesomeIcon
+                      icon={faClock}
+                      className='fa edit'
+                      onClick={() => handleSuspend(m.sender)}
+                    />
+                    <FontAwesomeIcon
+                      icon={faTrashCan}
+                      className='fa trash'
+                      onClick={() => handleDeleteUser(m.sender)}
+                    />
+                  </div>
+                  <div className='post-icons'>
+                    <FontAwesomeIcon
+                      icon={faThumbsUp}
+                      className='fa pass'
+                      onClick={() => passMessage(m)}
+                    />
 
+                    <FontAwesomeIcon
+                      icon={faTrashCan}
+                      className='fa trash'
+                      onClick={() => handleDeleteMessage(m)}
+                    />
+                  </div>
+                </div>
+                <p className='post-text'>{m.content}</p>
+                {/* {p.image && (
+                  <img
+                    src={p.image.url}
+                    alt={`${p.postedBy.username || p.postedBy.name}'s post`}
+                    className='post-img'
+                  />
+                )} */}
+              </div>
+            ))}
           {/* {!content && (
             <h1 className='center'>
               There are not currently any reported posts.
@@ -294,6 +385,20 @@ const ReportedContent = () => {
         commentToDelete={commentToDelete}
         postOfCommentToDelete={postOfCommentToDelete}
         fetchComments={fetchComments}
+        fetchReportedContent={fetchReportedContent}
+      />
+      <PassMessage
+        passMessageModalIsOpen={passMessageModalIsOpen}
+        setPassMessageModalIsOpen={setPassMessageModalIsOpen}
+        messageToPass={messageToPass}
+        fetchMessages={fetchMessages}
+        fetchReportedContent={fetchReportedContent}
+      />
+      <MessageDelete
+        messageDeleteModalIsOpen={messageDeleteModalIsOpen}
+        setMessageDeleteModalIsOpen={setMessageDeleteModalIsOpen}
+        messageToDelete={messageToDelete}
+        fetchMessages={fetchMessages}
         fetchReportedContent={fetchReportedContent}
       />
     </div>

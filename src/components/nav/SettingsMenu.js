@@ -104,12 +104,6 @@ const SettingsMenu = ({
         </Link>
         <hr />
         <div className='settings-links' onClick={() => setSettingsMenu(false)}>
-          <Link to='/change/password'>
-            <FontAwesomeIcon icon={faUnlockKeyhole} className='fa' />
-            Change Password
-          </Link>
-        </div>
-        <div className='settings-links' onClick={() => setSettingsMenu(false)}>
           <Link to='/membership-card'>
             <FontAwesomeIcon icon={faAddressCard} className='fa' />
             Membership Card

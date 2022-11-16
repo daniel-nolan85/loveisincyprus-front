@@ -22,13 +22,10 @@ import Header from './components/nav/Header';
 import SideDrawer from './components/drawer/SideDrawer';
 import Home from './pages/Home';
 import LoginAndRegister from './pages/LoginAndRegister';
-import RegisterComplete from './components/forms/RegisterComplete';
-import ForgotPassword from './components/forms/ForgotPassword';
 import { currentUser } from './functions/auth';
 import UserRoute from './components/routes/UserRoute';
 import AdminRoute from './components/routes/AdminRoute';
 import SubscriberRoute from './components/routes/SubscriberRoute';
-import ChangePassword from './components/forms/ChangePassword';
 import UserDashboard from './pages/user/UserDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import Profile from './pages/user/Profile';
@@ -545,8 +542,6 @@ const App = () => {
       <Switch>
         <Route exact path='/' component={Home} />
         <Route exact path='/authentication' component={LoginAndRegister} />
-        <Route exact path='/register/complete' component={RegisterComplete} />
-        <Route exact path='/forgot/password' component={ForgotPassword} />
         <Route exact path='/about-us' component={About} />
         <Route exact path='/help' component={Help} />
         <Route exact path='/contact-us' component={Contact} />
@@ -560,7 +555,6 @@ const App = () => {
         <Route exact path='/shop/search' component={ShopSearch} />
         <Route exact path='/cart' component={Cart} />
         <Route exact path='/ad-submission' component={AdSubmission} />
-        <UserRoute exact path='/change/password' component={ChangePassword} />
         <UserRoute exact path='/user/dashboard' component={UserDashboard} />
         <UserRoute exact path='/user/profile/:userId' component={Profile} />
         <UserRoute exact path='/liked-users' component={Following} />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faFlag,
   faMagnifyingGlass,
   faPaperPlane,
 } from '@fortawesome/free-solid-svg-icons';
@@ -22,6 +23,7 @@ import animationData from '../../assets/animations/typingIndicator.json';
 import moment from 'moment';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
+import ReportMessage from '../../components/modals/ReportMessage';
 
 let socket, selectedChatCompare;
 
@@ -37,6 +39,9 @@ const Chats = ({ history }) => {
   // const [isTyping, setIsTyping] = useState(false);
   const [lastMessage, setLastMessage] = useState(false);
   const [theirChatUsers, setTheirChatUsers] = useState([]);
+  const [currentMessage, setCurrentMessage] = useState({});
+  const [reportMessageModalIsOpen, setReportMessageModalIsOpen] =
+    useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -308,6 +313,11 @@ const Chats = ({ history }) => {
     }, timerLength);
   };
 
+  const reportMessage = (m) => {
+    setCurrentMessage(m);
+    setReportMessageModalIsOpen(true);
+  };
+
   const scrollToBottom = () => {
     const element = document.getElementById('lastMessage');
     element.scrollIntoView();
@@ -502,6 +512,15 @@ const Chats = ({ history }) => {
                           <p>{m.content}</p>
                         )}
                       </div>
+                      {m.sender._id !== user._id && (
+                        <span className='flag-message'>
+                          <FontAwesomeIcon
+                            icon={faFlag}
+                            className='fa'
+                            onClick={() => reportMessage(m)}
+                          />
+                        </span>
+                      )}
                     </div>
                   ))}
                 {/* </ScrollableFeed> */}
@@ -546,6 +565,11 @@ const Chats = ({ history }) => {
             </div>
           </div>
         </div>
+        <ReportMessage
+          currentMessage={currentMessage}
+          reportMessageModalIsOpen={reportMessageModalIsOpen}
+          setReportMessageModalIsOpen={setReportMessageModalIsOpen}
+        />
       </div>
       <RightSidebar />
     </div>

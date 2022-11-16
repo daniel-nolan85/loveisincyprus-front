@@ -96,7 +96,7 @@ const EventPostList = ({
                   >
                     <p>{post.postedBy.username || post.postedBy.name}</p>
                   </Link>
-                  <span>{moment(post.createdAt).fromNow()}</span>
+                  <span>{moment(post.created).fromNow()}</span>
                 </div>
               </div>
               {token && _id === post.postedBy._id && (

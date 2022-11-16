@@ -3615,6 +3615,10 @@ select.decorated option:active {
   /* text-align: center; */
 }
 
+.message-sender-message:hover ~ .flag-message .fa {
+  display: block;
+}
+
 /* .message-sender-icon {
   margin-right: 15px;
   color: #34debb;
@@ -3629,6 +3633,23 @@ select.decorated option:active {
   border-radius: 50%;
   height: 50px;
   width: 50px;
+}
+
+.flag-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flag-message .fa {
+  color: var(--nav-color);
+  margin-left: 20px;
+  display: none;
+  cursor: pointer;
+}
+
+.flag-message:hover .fa {
+  display: block;
 }
 
 .message-box {
