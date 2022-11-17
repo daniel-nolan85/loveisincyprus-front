@@ -10,7 +10,7 @@ const RightSidebar = () => {
   const [ads, setAds] = useState([]);
   const [targetedAds, setTargetedAds] = useState([]);
 
-  const { _id, token, events, gender, age } =
+  const { _id, token, events, gender, age, location } =
     useSelector((state) => state.user) || {};
 
   const history = useHistory();
@@ -47,22 +47,49 @@ const RightSidebar = () => {
         if (ad.demographic.includes('everyone')) {
           targeted.push(ad);
         }
-        if (ad.demographic.includes('male') && gender === 'male') {
+        if (ad.demographic.includes('Male') && gender === 'male') {
           targeted.push(ad);
         }
-        if (ad.demographic.includes('female') && gender === 'female') {
+        if (ad.demographic.includes('Female') && gender === 'female') {
           targeted.push(ad);
         }
-        if (ad.demographic.includes('18-30') && age > 17 && age < 31) {
+        if (
+          ad.demographic.includes('18-30 year olds') &&
+          age > 17 &&
+          age < 31
+        ) {
           targeted.push(ad);
         }
-        if (ad.demographic.includes('30-45') && age > 29 && age < 46) {
+        if (
+          ad.demographic.includes('30-45 year olds') &&
+          age > 29 &&
+          age < 46
+        ) {
           targeted.push(ad);
         }
-        if (ad.demographic.includes('45-60') && age > 44 && age < 61) {
+        if (
+          ad.demographic.includes('45-60 year olds') &&
+          age > 44 &&
+          age < 61
+        ) {
           targeted.push(ad);
         }
-        if (ad.demographic.includes('over 60') && age > 59) {
+        if (ad.demographic.includes('Over 60s') && age > 59) {
+          targeted.push(ad);
+        }
+        if (ad.demographic.includes('Ayia Napa') && location === 'ayia napa') {
+          targeted.push(ad);
+        }
+        if (ad.demographic.includes('Larnaca') && location === 'larnaca') {
+          targeted.push(ad);
+        }
+        if (ad.demographic.includes('Limassol') && location === 'limassol') {
+          targeted.push(ad);
+        }
+        if (ad.demographic.includes('Nicosia') && location === 'nicosia') {
+          targeted.push(ad);
+        }
+        if (ad.demographic.includes('Paphos') && location === 'paphos') {
           targeted.push(ad);
         }
       });

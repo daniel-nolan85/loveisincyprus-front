@@ -2911,7 +2911,12 @@ span.link {
 }
 
 .new {
-  font-weight: bold;
+  font-weight: 900;
+  color: var(--nav-color);
+}
+
+.notification {
+  cursor: pointer;
 }
 
 .event-notification-user-img {
@@ -3333,6 +3338,37 @@ select.decorated option:active {
   margin: 0 auto;
   border-collapse: separate;
   border-spacing: 50px 0;
+}
+
+.ad-demographic {
+  display: flex;
+}
+
+.ad-demographic label {
+  position: relative;
+  cursor: pointer;
+}
+
+.ad-demographic label .fa {
+  position: absolute;
+  left: 120px;
+  top: 3px;
+}
+
+.ad-select-options {
+  width: 25%;
+}
+
+.ad-selected-options {
+  border: 1px solid black;
+  background-color: var(--bg-color);
+  padding: 15px;
+  width: 75%;
+  margin-left: 20px;
+}
+
+.ad-selected-options span {
+  margin-right: 20px;
 }
 
 /* --------------- points page --------------- */

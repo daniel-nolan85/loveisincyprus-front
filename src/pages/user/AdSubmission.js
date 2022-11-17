@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCamera,
@@ -6,6 +6,8 @@ import {
   faPaperPlane,
   faBinoculars,
   faCircleInfo,
+  faCaretDown,
+  faCaretUp,
 } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import axios from 'axios';
@@ -33,6 +35,17 @@ const AdSubmission = () => {
   const [accountInfo, setAccountInfo] = useState({});
   const [accountInfoSaved, setAccountInfoSaved] = useState(false);
   const [demographic, setDemographic] = useState([]);
+  const [selectedGender, setSelectedGender] = useState([]);
+  const [showGender, setShowGender] = useState(false);
+  const [showAge, setShowAge] = useState(false);
+  const [selectedAge, setSelectedAge] = useState([]);
+  const [showLocation, setShowLocation] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState([]);
+
+  useEffect(() => {
+    let selectedOpts = selectedGender.concat(selectedAge, selectedLocation);
+    setDemographic(selectedOpts);
+  }, [selectedGender, selectedAge, selectedLocation]);
 
   const handleDurationInfo = () => {
     setDurationInfoModalIsOpen(true);
@@ -75,6 +88,9 @@ const AdSubmission = () => {
           setContactInfo({});
           setAccountInfo({});
           setDemographic([]);
+          setSelectedGender([]);
+          setSelectedAge([]);
+          setSelectedLocation([]);
         }
       })
       .catch((err) => {
@@ -104,19 +120,24 @@ const AdSubmission = () => {
       });
   };
 
-  const handleCheck = (e) => {
-    let checkedItems = demographic;
-    let index;
+  // const handleCheck = (e) => {
+  //   let checkedItems = demographic;
+  //   let index;
 
-    if (e.target.checked) {
-      checkedItems.push(e.target.name);
-    } else {
-      index = checkedItems.indexOf(e.target.value);
-      checkedItems.splice(index, 1);
-    }
-    console.log('checkedItems => ', checkedItems);
-    setDemographic(checkedItems);
-  };
+  //   if (e.target.checked) {
+  //     checkedItems.push(e.target.name);
+  //   } else {
+  //     index = checkedItems.indexOf(e.target.value);
+  //     checkedItems.splice(index, 1);
+  //   }
+  //   console.log('checkedItems => ', checkedItems);
+  //   setDemographic(checkedItems);
+  // };
+
+  // const handleSelect = (e) => {
+  //   const values = [...e.target.selectedOptions].map((opt) => opt.value);
+  //   console.log(values);
+  // };
 
   return (
     <div className='container'>
@@ -206,28 +227,143 @@ const AdSubmission = () => {
               <span className='tooltip-text'>Info about targeting options</span>
             </div>
           </div>
-          <p>Select as many as you'd like.</p>
-          <Checkbox name='everyone' onChange={handleCheck}>
+          <p>
+            Hold down `Ctrl` on Windows or 'Command' on Mac to select multiple
+            options.
+          </p>
+          <p>
+            If you skip this section your ad will be displayed to all users.
+          </p>
+          {/* <Checkbox name='everyone' onChange={handleCheck}>
             Everyone
           </Checkbox>
-          <Checkbox name='male' onChange={handleCheck}>
+          <br /> */}
+          <div className='ad-demographic'>
+            <div className='ad-select-options'>
+              <label
+                htmlFor='gender'
+                onClick={() => {
+                  setShowGender(!showGender);
+                  setShowAge(false);
+                  setShowLocation(false);
+                }}
+              >
+                Select gender
+                <FontAwesomeIcon
+                  icon={!showGender ? faCaretDown : faCaretUp}
+                  className='fa'
+                />
+              </label>
+              {showGender && (
+                <select
+                  id='gender'
+                  onChange={(e) => {
+                    setSelectedGender(
+                      [...e.target.selectedOptions].map((opt) => opt.value)
+                    );
+                  }}
+                  multiple
+                  size={2}
+                >
+                  <option value='Male'>Male</option>
+                  <option value='Female'>Female</option>
+                </select>
+              )}
+              <br />
+              <label
+                htmlFor='age'
+                onClick={() => {
+                  setShowAge(!showAge);
+                  setShowGender(false);
+                  setShowLocation(false);
+                }}
+              >
+                Select age
+                <FontAwesomeIcon
+                  icon={!showAge ? faCaretDown : faCaretUp}
+                  className='fa'
+                />
+              </label>
+              {showAge && (
+                <select
+                  id='age'
+                  onChange={(e) =>
+                    setSelectedAge(
+                      [...e.target.selectedOptions].map((opt) => opt.value)
+                    )
+                  }
+                  multiple
+                  size={4}
+                >
+                  <option value='18-30 year olds'>18-30 year olds</option>
+                  <option value='30-45 year olds'>30-45 year olds</option>
+                  <option value='45-60 year olds'>45-60 year olds</option>
+                  <option value='Over 60s'>Over 60s</option>
+                </select>
+              )}
+              <br />
+              <label
+                htmlFor='location'
+                onClick={() => {
+                  setShowLocation(!showLocation);
+                  setShowGender(false);
+                  setShowAge(false);
+                }}
+              >
+                Select location
+                <FontAwesomeIcon
+                  icon={!showLocation ? faCaretDown : faCaretUp}
+                  className='fa'
+                />
+              </label>
+              {showLocation && (
+                <select
+                  id='location'
+                  onChange={(e) =>
+                    setSelectedLocation(
+                      [...e.target.selectedOptions].map((opt) => opt.value)
+                    )
+                  }
+                  multiple
+                  size={5}
+                >
+                  <option value='Ayia Napa'>Ayia Napa</option>
+                  <option value='Larnaca'>Larnaca</option>
+                  <option value='Limassol'>Limassol</option>
+                  <option value='Nicosia'>Nicosia</option>
+                  <option value='Paphos'>Paphos</option>
+                </select>
+              )}
+            </div>
+            <div className='ad-selected-options'>
+              {selectedGender &&
+                selectedGender.map((g, i) => <span key={i}>{g}</span>)}
+              <br />
+              {selectedAge &&
+                selectedAge.map((a, i) => <span key={i}>{a}</span>)}
+              <br />
+              {selectedLocation &&
+                selectedLocation.map((l, i) => <span key={i}>{l}</span>)}
+            </div>
+          </div>
+          {/* <Checkbox name='male' onChange={handleCheck}>
             Males
           </Checkbox>
-          <Checkbox name='female' onChange={handleCheck}>
+          <Checkbox name='female' onChange={handleCheck}> 
             Females
-          </Checkbox>
-          <Checkbox name='18-30' onChange={handleCheck}>
-            18-30 year olds
-          </Checkbox>
-          <Checkbox name='30-45' onChange={handleCheck}>
-            30-45 year olds
-          </Checkbox>
-          <Checkbox name='45-60' onChange={handleCheck}>
-            45-60 year olds
-          </Checkbox>
-          <Checkbox name='over 60' onChange={handleCheck}>
-            Over 60 year olds
-          </Checkbox>
+          </Checkbox> */}
+          {/* <Checkbox name='18-30' onChange={handleCheck}>
+              18-30 year olds
+            </Checkbox>
+            <Checkbox name='30-45' onChange={handleCheck}>
+              30-45 year olds
+            </Checkbox>
+            <Checkbox name='45-60' onChange={handleCheck}>
+              45-60 year olds
+            </Checkbox>
+            <Checkbox name='over 60' onChange={handleCheck}>
+              Over 60 year olds
+            </Checkbox> */}
         </div>
         <div className='ad-section'>
           <div className='ad-header'>

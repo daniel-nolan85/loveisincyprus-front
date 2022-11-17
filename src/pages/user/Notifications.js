@@ -504,13 +504,19 @@ const Notifications = () => {
                     // typeof n.notif === 'object' ? (
                     <tr key={n._id}>
                       <td>
-                        <p className={n.new === true ? 'new' : ''}>
+                        <p className={n.new === true ? 'new ' : ''}>
                           {moment(n.occurred).format('MMMM Do YYYY')}
                         </p>
                       </td>
                       <td>
                         {n.action === 'liked post' && (
-                          <p className={n.new === true ? 'new' : ''}>
+                          <p
+                            className={
+                              n.new === true
+                                ? 'new notification'
+                                : 'notification'
+                            }
+                          >
                             {/* {n.notif.likes.length > 1
                             ? n.notif.likes[
                                 n.notif.likes.length - 1
@@ -523,7 +529,14 @@ const Notifications = () => {
                           </p>
                         )}
                         {n.action === 'commented post' && (
-                          <p className={n.new === true ? 'new' : ''}>
+                          <p
+                            className={
+                              n.new === true
+                                ? 'new notification'
+                                : 'notification'
+                            }
+                            onClick={() => viewNotif(n)}
+                          >
                             {/* {n.notif.comments.length > 1
                             ? n.notif.comments[
                                 n.notif.comments.length - 1
@@ -531,34 +544,43 @@ const Notifications = () => {
                             : n.notif.comments[0].postedBy.email.split(
                                 '@'
                               )[0]}{' '} */}
-                            Someone commented on your{' '}
-                            <span className='link' onClick={() => viewNotif(n)}>
-                              post
-                            </span>
+                            Someone commented on your post
                           </p>
                         )}
                         {n.action === 'new event' && (
-                          <p className={n.new === true ? 'new' : ''}>
-                            You have been invited to an{' '}
-                            <span className='link' onClick={() => viewNotif(n)}>
-                              event
-                            </span>
+                          <p
+                            className={
+                              n.new === true
+                                ? 'new notification'
+                                : 'notification'
+                            }
+                            onClick={() => viewNotif(n)}
+                          >
+                            You have been invited to an event
                           </p>
                         )}
                         {n.action === 'user liked you' && (
-                          <p className={n.new === true ? 'new' : ''}>
-                            You have a new{' '}
-                            <span className='link' onClick={() => viewNotif(n)}>
-                              follower
-                            </span>
+                          <p
+                            className={
+                              n.new === true
+                                ? 'new notification'
+                                : 'notification'
+                            }
+                            onClick={() => viewNotif(n)}
+                          >
+                            You have a new follower
                           </p>
                         )}
                         {n.action === 'user visited you' && (
-                          <p className={n.new === true ? 'new' : ''}>
-                            You received a new{' '}
-                            <span className='link' onClick={() => viewNotif(n)}>
-                              visitor
-                            </span>
+                          <p
+                            className={
+                              n.new === true
+                                ? 'new notification'
+                                : 'notification'
+                            }
+                            onClick={() => viewNotif(n)}
+                          >
+                            You received a new visitor
                           </p>
                         )}
                       </td>
