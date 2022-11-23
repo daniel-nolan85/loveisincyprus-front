@@ -42,7 +42,7 @@ const initialState = {
   invitees: [],
 };
 
-const Events = () => {
+const Events = ({ history }) => {
   const [users, setUsers] = useState([]);
   // const [mainImage, setMainImage] = useState({});
   const [values, setValues] = useState(initialState);
@@ -57,9 +57,15 @@ const Events = () => {
     useState(false);
   const [query, setQuery] = useState('');
 
-  const { token, _id } = useSelector((state) => state.user);
+  const { token, _id, canEvents } = useSelector((state) => state.user);
 
   const { setSocketConnected } = ChatState();
+
+  useEffect(() => {
+    if (!canEvents) {
+      history.push('/admin/dashboard');
+    }
+  }, []);
 
   useEffect(() => {
     socket = io(

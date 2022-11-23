@@ -36,7 +36,7 @@ const initialState = {
   weight: '',
 };
 
-const Product = () => {
+const Product = ({ history }) => {
   const [values, setValues] = useState(initialState);
   const [loading, setLoading] = useState(false);
   const [subOptions, setSubOptions] = useState([]);
@@ -49,7 +49,13 @@ const Product = () => {
   const [productToEdit, setProductToEdit] = useState({});
   const [query, setQuery] = useState('');
 
-  const { token } = useSelector((state) => state.user);
+  const { token, canProducts } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!canProducts) {
+      history.push('/admin/dashboard');
+    }
+  }, []);
 
   useEffect(() => {
     loadCategories();

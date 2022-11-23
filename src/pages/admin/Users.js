@@ -13,6 +13,9 @@ import {
   faStar,
   faClock,
   faCalendarDays,
+  faFolderOpen,
+  faUserTie,
+  faUserGraduate,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import UserDeleteAdmin from '../../components/modals/UserDeleteAdmin';
@@ -24,8 +27,11 @@ import UserSuspend from '../../components/modals/UserSuspend';
 import RevokeSuspension from '../../components/modals/RevokeSuspension';
 import AddUserToEventsEligible from '../../components/modals/AddUserToEventsEligible';
 import RemoveUserFromEventsEligible from '../../components/modals/RemoveUserFromEventsEligible';
+import ShowMain from '../../components/modals/ShowMain';
+import ShowSecondary from '../../components/modals/ShowSecondary';
+import AdminPreferences from '../../components/modals/AdminPreferences';
 
-const Users = () => {
+const Users = ({ history }) => {
   const [users, setUsers] = useState([]);
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -62,8 +68,22 @@ const Users = () => {
   );
   const [userRevokeModalIsOpen, setUserRevokeModalIsOpen] = useState(false);
   const [userToRevoke, setUserToRevoke] = useState({});
+  const [mainAdminModalIsOpen, setMainAdminModalIsOpen] = useState(false);
+  const [userIsMainAdmin, setUserIsMainAdmin] = useState({});
+  const [secondaryAdminModalIsOpen, setSecondaryAdminModalIsOpen] =
+    useState(false);
+  const [userIsSecondaryAdmin, setUserIsSecondaryAdmin] = useState({});
+  const [adminPreferencesModalIsOpen, setAdminPreferencesModalIsOpen] =
+    useState(false);
+  const [secondaryAdmin, setSecondaryAdmin] = useState({});
 
-  const { token, _id } = useSelector((state) => state.user);
+  const { token, _id, role, canUsers } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!canUsers) {
+      history.push('/admin/dashboard');
+    }
+  }, []);
 
   useEffect(() => {
     if (token) {
@@ -155,6 +175,21 @@ const Users = () => {
   const handleRevoke = async (u) => {
     setUserRevokeModalIsOpen(true);
     setUserToRevoke(u);
+  };
+
+  const showMain = async (u) => {
+    setMainAdminModalIsOpen(true);
+    setUserIsMainAdmin(u);
+  };
+
+  const showSecondary = async (u) => {
+    setSecondaryAdminModalIsOpen(true);
+    setUserIsSecondaryAdmin(u);
+  };
+
+  const handlePreferences = async (u) => {
+    setAdminPreferencesModalIsOpen(true);
+    setSecondaryAdmin(u);
   };
 
   const handleSearch = (e) => {
@@ -262,7 +297,7 @@ const Users = () => {
                     />
                   </span>
                 )}
-                {u.role === 'admin' && (
+                {u.role === 'main-admin' ? (
                   <span>
                     <FontAwesomeIcon
                       icon={faKey}
@@ -270,6 +305,16 @@ const Users = () => {
                       onClick={() => removeFromAdmin(u)}
                     />
                   </span>
+                ) : (
+                  u.role === 'secondary-admin' && (
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faKey}
+                        className='fa admin'
+                        onClick={() => removeFromAdmin(u)}
+                      />
+                    </span>
+                  )
                 )}
                 <span>
                   <FontAwesomeIcon
@@ -293,6 +338,33 @@ const Users = () => {
                     />
                   )}
                 </span>
+                {u.role === 'main-admin' && (
+                  <span>
+                    <FontAwesomeIcon
+                      icon={faUserTie}
+                      className='fa admin-member'
+                      onClick={() => showMain(u)}
+                    />
+                  </span>
+                )}
+                {u.role === 'secondary-admin' && (
+                  <span>
+                    <FontAwesomeIcon
+                      icon={faUserGraduate}
+                      className='fa admin-member'
+                      onClick={() => showSecondary(u)}
+                    />
+                  </span>
+                )}
+                {role === 'main-admin' && u.role === 'secondary-admin' && (
+                  <span>
+                    <FontAwesomeIcon
+                      icon={faFolderOpen}
+                      className='fa folder'
+                      onClick={() => handlePreferences(u)}
+                    />
+                  </span>
+                )}
               </div>
             ))}
         </div>
@@ -357,6 +429,22 @@ const Users = () => {
           setRemoveFromEventsEligibleModalIsOpen
         }
         userToRemoveFromEventsEligible={userToRemoveFromEventsEligible}
+        fetchUsers={fetchUsers}
+      />
+      <ShowMain
+        mainAdminModalIsOpen={mainAdminModalIsOpen}
+        setMainAdminModalIsOpen={setMainAdminModalIsOpen}
+        userIsMainAdmin={userIsMainAdmin}
+      />
+      <ShowSecondary
+        secondaryAdminModalIsOpen={secondaryAdminModalIsOpen}
+        setSecondaryAdminModalIsOpen={setSecondaryAdminModalIsOpen}
+        userIsSecondaryAdmin={userIsSecondaryAdmin}
+      />
+      <AdminPreferences
+        adminPreferencesModalIsOpen={adminPreferencesModalIsOpen}
+        setAdminPreferencesModalIsOpen={setAdminPreferencesModalIsOpen}
+        secondaryAdmin={secondaryAdmin}
         fetchUsers={fetchUsers}
       />
     </div>

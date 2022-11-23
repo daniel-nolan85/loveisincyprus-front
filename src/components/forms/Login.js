@@ -60,7 +60,10 @@ const Login = ({ showRegister }) => {
     if (intended) {
       history.push(intended.from);
     } else {
-      if (res.data.role === 'admin') {
+      if (
+        res.data.role === 'main-admin' ||
+        res.data.role === 'secondary-admin'
+      ) {
         history.push('/admin/dashboard');
       } else {
         history.push('/user/dashboard');
@@ -472,6 +475,17 @@ const Login = ({ showRegister }) => {
                   clearPhoto: res.data.clearPhoto,
                   lastLogin: res.data.lastLogin,
                   userStatus: res.data.userStatus,
+                  canVerify: res.data.canVerify,
+                  canReported: res.data.canReported,
+                  canPosts: res.data.canPosts,
+                  canUsers: res.data.canUsers,
+                  canMassMail: res.data.canMassMail,
+                  canEvents: res.data.canEvents,
+                  canOrders: res.data.canOrders,
+                  canProducts: res.data.canProducts,
+                  canCategories: res.data.canCategories,
+                  canSubs: res.data.canSubs,
+                  canCoupon: res.data.canCoupon,
                 },
               });
               roleBasedRedirect(res);

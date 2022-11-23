@@ -22,7 +22,7 @@ import CommentDelete from '../../components/modals/CommentDelete';
 import PassMessage from '../../components/modals/PassMessage';
 import MessageDelete from '../../components/modals/MessageDelete';
 
-const ReportedContent = () => {
+const ReportedContent = ({ history }) => {
   const [posts, setPosts] = useState([]);
   const [comments, setComments] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -49,7 +49,13 @@ const ReportedContent = () => {
 
   const { setReportedContent } = ChatState();
 
-  let { _id, token } = useSelector((state) => state.user);
+  let { _id, token, canReported } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!canReported) {
+      history.push('/admin/dashboard');
+    }
+  }, []);
 
   useEffect(() => {
     fetchPosts();

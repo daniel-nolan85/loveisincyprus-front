@@ -239,6 +239,17 @@ const App = () => {
                 clearPhoto: res.data.clearPhoto,
                 lastLogin: res.data.lastLogin,
                 userStatus: res.data.userStatus,
+                canVerify: res.data.canVerify,
+                canReported: res.data.canReported,
+                canPosts: res.data.canPosts,
+                canUsers: res.data.canUsers,
+                canMassMail: res.data.canMassMail,
+                canEvents: res.data.canEvents,
+                canOrders: res.data.canOrders,
+                canProducts: res.data.canProducts,
+                canCategories: res.data.canCategories,
+                canSubs: res.data.canSubs,
+                canCoupon: res.data.canCoupon,
               },
             });
             console.log('logged in user ==> ', res);
@@ -599,15 +610,19 @@ const App = () => {
         <AdminRoute exact path='/admin/orders' component={Orders} />
         <AdminRoute exact path='/admin/event' component={Event} />
         <AdminRoute exact path='/admin/mass-mail' component={MassMail} />
-        <AdminRoute exact path='/ad-submissions' component={AdSubmissions} />
         <AdminRoute
           exact
-          path='/verif-submissions'
+          path='/admin/ad-submissions'
+          component={AdSubmissions}
+        />
+        <AdminRoute
+          exact
+          path='/admin/verif-submissions'
           component={VerifSubmissions}
         />
         <AdminRoute
           exact
-          path='/reported-content'
+          path='/admin/reported-content'
           component={ReportedContent}
         />
       </Switch>

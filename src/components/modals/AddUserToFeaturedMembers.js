@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 Modal.setAppElement('#root');
 
@@ -12,9 +14,12 @@ const AddUserToFeaturedMembers = ({
   userToAddToFeaturedMembers,
   fetchUsers,
 }) => {
+  const [loading, setLoading] = useState(false);
+
   let { token } = useSelector((state) => state.user);
 
   const addToFeaturedMembers = async (u) => {
+    setLoading(true);
     await axios
       .put(
         `${process.env.REACT_APP_API}/admin/add-user-to-featured-members`,
@@ -26,6 +31,7 @@ const AddUserToFeaturedMembers = ({
         }
       )
       .then((res) => {
+        setLoading(false);
         toast.success(`${u.username || u.name} added to featured members`, {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -34,6 +40,7 @@ const AddUserToFeaturedMembers = ({
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       });
   };
 
@@ -83,11 +90,16 @@ const AddUserToFeaturedMembers = ({
           className='submit-btn'
           onClick={() => addToFeaturedMembers(userToAddToFeaturedMembers)}
         >
-          Yes, add this user
+          {loading ? (
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+          ) : (
+            'Yes, add this user'
+          )}
         </button>
         <button
           className='submit-btn trash'
           onClick={() => setAddToFeaturedMembersModalIsOpen(false)}
+          disabled={loading}
         >
           No, cancel
         </button>

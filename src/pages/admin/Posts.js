@@ -12,7 +12,7 @@ import {
 import PostCommentsAdmin from '../../components/modals/PostCommentsAdmin';
 import PostDeleteAdmin from '../../components/modals/PostDeleteAdmin';
 
-const Posts = () => {
+const Posts = ({ history }) => {
   const [posts, setPosts] = useState([]);
   const [currentPost, setCurrentPost] = useState({});
   const [commentsModalIsOpen, setCommentsModalIsOpen] = useState(false);
@@ -25,7 +25,13 @@ const Posts = () => {
     useState(false);
   const [postOfCommentToDelete, setPostOfCommentToDelete] = useState([]);
 
-  const { _id, token } = useSelector((state) => state.user);
+  const { _id, token, canPosts } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!canPosts) {
+      history.push('/admin/dashboard');
+    }
+  }, []);
 
   useEffect(() => {
     if (token) {

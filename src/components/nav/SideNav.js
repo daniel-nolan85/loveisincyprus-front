@@ -18,10 +18,16 @@ const SideNav = () => {
         >
           <nav>
             <ul>
-              {user.role === 'admin' && (
+              {user.role === 'main-admin' ? (
                 <li onClick={() => setOpenNav(false)}>
                   <Link to='/admin/dashboard'>ADMIN DASHBOARD</Link>
                 </li>
+              ) : (
+                user.role === 'secondary-admin' && (
+                  <li onClick={() => setOpenNav(false)}>
+                    <Link to='/admin/dashboard'>ADMIN DASHBOARD</Link>
+                  </li>
+                )
               )}
               <li onClick={() => setOpenNav(false)}>
                 <Link to='/user/dashboard'>DASHBOARD</Link>

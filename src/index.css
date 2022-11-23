@@ -2079,6 +2079,20 @@ nav {
   font-size: 25px;
 }
 
+.admin-card .fa.folder {
+  position: absolute;
+  top: 115px;
+  right: 10px;
+  font-size: 25px;
+}
+
+.admin-card .fa.admin-member {
+  position: absolute;
+  top: 105px;
+  left: 22px;
+  font-size: 35px;
+}
+
 .admin-card p.points {
   position: absolute;
   top: 10px;
@@ -2378,6 +2392,12 @@ select.gray {
   left: 0px;
   right: 0px;
   top: 0px;
+}
+
+.preferences {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* --------------- profile-page --------------- */

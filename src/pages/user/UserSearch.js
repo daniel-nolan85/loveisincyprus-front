@@ -1974,8 +1974,7 @@ const UserSearch = () => {
               </Radio.Group>
             </SubMenu>
           </Menu>
-
-          {user.role === 'admin' && (
+          {user.role === 'main-admin' ? (
             <div className='form-box search'>
               <div className='button-box'>
                 <p className='form-header'>Save Search</p>
@@ -2003,6 +2002,36 @@ const UserSearch = () => {
                 </button>
               </form>
             </div>
+          ) : (
+            user.role === 'secondary-admin' && (
+              <div className='form-box search'>
+                <div className='button-box'>
+                  <p className='form-header'>Save Search</p>
+                </div>
+                <form>
+                  <input
+                    type='text'
+                    className='input-field'
+                    placeholder='Give this search a name'
+                    value={searchName}
+                    onChange={(e) => setSearchName(e.target.value)}
+                  />
+                  <button
+                    onClick={saveSearch}
+                    type='submit'
+                    className='submit-btn'
+                    disabled={loadingSave || !searchName || !params}
+                  >
+                    {loadingSave ? (
+                      <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                    ) : (
+                      <FontAwesomeIcon icon={faFloppyDisk} className='fa' />
+                    )}
+                    Save
+                  </button>
+                </form>
+              </div>
+            )
           )}
           <button
             onClick={searchMembers}

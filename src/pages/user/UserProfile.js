@@ -167,6 +167,7 @@ const UserProfile = ({ history }) => {
   };
 
   const fetchVisitor = async () => {
+    if (user.role === 'main-admin' || user.role === 'secondary-admin') return;
     try {
       await axios
         .post(

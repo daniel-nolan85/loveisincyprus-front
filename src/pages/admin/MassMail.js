@@ -25,16 +25,22 @@ const initialState = {
   selected: [],
 };
 
-const MassMail = () => {
+const MassMail = ({ history }) => {
   const [optIns, setOptIns] = useState([]);
   const [values, setValues] = useState(initialState);
   const [loading, setLoading] = useState(false);
   const [selectedUsersModalIsOpen, setSelectedUsersModalIsOpen] =
     useState(false);
 
-  const { token, _id } = useSelector((state) => state.user);
+  const { token, _id, canMassMail } = useSelector((state) => state.user);
 
   const { setSocketConnected } = ChatState();
+
+  useEffect(() => {
+    if (!canMassMail) {
+      history.push('/admin/dashboard');
+    }
+  }, []);
 
   useEffect(() => {
     socket = io(

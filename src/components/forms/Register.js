@@ -78,14 +78,6 @@ const Register = ({ showLogin }) => {
     setValidEmail(validateEmail(email));
   }, [email]);
 
-  const roleBasedRedirect = (res) => {
-    if (res.data.role === 'admin') {
-      history.push('/admin/dashboard');
-    } else {
-      history.push('/user/dashboard');
-    }
-  };
-
   const userExists = async (e) => {
     e.preventDefault();
     await axios
@@ -257,9 +249,20 @@ const Register = ({ showLogin }) => {
                   clearPhoto: res.data.clearPhoto,
                   lastLogin: res.data.lastLogin,
                   userStatus: res.data.userStatus,
+                  canVerify: res.data.canVerify,
+                  canReported: res.data.canReported,
+                  canPosts: res.data.canPosts,
+                  canUsers: res.data.canUsers,
+                  canMassMail: res.data.canMassMail,
+                  canEvents: res.data.canEvents,
+                  canOrders: res.data.canOrders,
+                  canProducts: res.data.canProducts,
+                  canCategories: res.data.canCategories,
+                  canSubs: res.data.canSubs,
+                  canCoupon: res.data.canCoupon,
                 },
               });
-              roleBasedRedirect(res);
+              history.push('/user/dashboard');
               addPoints(1, 'login', idTokenResult.token).then(
                 toast.success(
                   `Welcome to Love is in Cyprus. You have been awarded 1 point!`,

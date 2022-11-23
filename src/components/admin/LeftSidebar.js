@@ -20,6 +20,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { ChatState } from '../../context/ChatProvider';
+import { useSelector } from 'react-redux';
 
 const LeftSidebar = () => {
   const {
@@ -30,6 +31,21 @@ const LeftSidebar = () => {
     reportedContent,
     setReportedContent,
   } = ChatState();
+
+  let {
+    role,
+    canVerify,
+    canReported,
+    canPosts,
+    canUsers,
+    canMassMail,
+    canEvents,
+    canOrders,
+    canProducts,
+    canCategories,
+    canSubs,
+    canCoupon,
+  } = useSelector((state) => state.user);
 
   useEffect(() => {
     fetchNewAds();
@@ -71,69 +87,97 @@ const LeftSidebar = () => {
           <FontAwesomeIcon icon={faToolbox} className='fa' />
           Dashboard
         </Link>
-        <Link to='/ad-submissions'>
-          <FontAwesomeIcon icon={faRectangleAd} className='fa' />
-          Ad Submissions
-          <span>{newAds && newAds.length > 0 && newAds.length}</span>
-        </Link>
-        <Link to='/verif-submissions'>
-          <FontAwesomeIcon icon={faShieldBlank} className='fa' />
-          Verified User Submissions
-          <span>{newVerifs && newVerifs.length > 0 && newVerifs.length}</span>
-        </Link>
-        <Link to='/reported-content'>
-          <FontAwesomeIcon icon={faFlag} className='fa' />
-          Reported Content
-          <span>
-            {reportedContent &&
-              reportedContent.content.length > 0 &&
-              reportedContent.content.length}
-          </span>
-        </Link>
-        <Link to='/admin/posts'>
-          <FontAwesomeIcon icon={faSignsPost} className='fa' />
-          Posts
-        </Link>
-        <Link to='/admin/users'>
-          <FontAwesomeIcon icon={faUsers} className='fa' />
-          Users
-        </Link>
-        <Link to='/admin/mass-mail'>
-          <FontAwesomeIcon icon={faEnvelope} className='fa' />
-          Mass Mail
-        </Link>
-        <Link to='/admin/event'>
-          <FontAwesomeIcon icon={faCalendarDays} className='fa' />
-          Events
-        </Link>
-        <Link to='/admin/geo-block'>
-          <FontAwesomeIcon icon={faEarthAmericas} className='fa' />
-          Geo-Block
-        </Link>
-        <Link to='/admin/ip-block'>
-          <FontAwesomeIcon icon={faDesktop} className='fa' />
-          IP-Block
-        </Link>
-        <Link to='/admin/orders'>
-          <FontAwesomeIcon icon={faFolderOpen} className='fa' />
-          Orders
-        </Link>
-        <Link to='/admin/product'>
-          <FontAwesomeIcon icon={faShirt} className='fa' />
-          Products
-        </Link>
-        <Link to='/admin/category'>
-          <FontAwesomeIcon icon={faTag} className='fa' />
-          Categories
-        </Link>
-        <Link to='/admin/sub'>
-          <FontAwesomeIcon icon={faTags} className='fa' />
-          Sub-Categories
-        </Link>
-        <Link to='/admin/coupon'>
-          <FontAwesomeIcon icon={faTicket} className='fa' />
-          Coupon
-        </Link>
+        {role === 'main-admin' && (
+          <Link to='/admin/ad-submissions'>
+            <FontAwesomeIcon icon={faRectangleAd} className='fa' />
+            Ad Submissions
+            <span>{newAds && newAds.length > 0 && newAds.length}</span>
+          </Link>
+        )}
+        {canVerify && (
+          <Link to='/admin/verif-submissions'>
+            <FontAwesomeIcon icon={faShieldBlank} className='fa' />
+            Verified User Submissions
+            <span>{newVerifs && newVerifs.length > 0 && newVerifs.length}</span>
+          </Link>
+        )}
+        {canReported && (
+          <Link to='/admin/reported-content'>
+            <FontAwesomeIcon icon={faFlag} className='fa' />
+            Reported Content
+            <span>
+              {reportedContent &&
+                reportedContent.content.length > 0 &&
+                reportedContent.content.length}
+            </span>
+          </Link>
+        )}
+        {canPosts && (
+          <Link to='/admin/posts'>
+            <FontAwesomeIcon icon={faSignsPost} className='fa' />
+            Posts
+          </Link>
+        )}
+        {canUsers && (
+          <Link to='/admin/users'>
+            <FontAwesomeIcon icon={faUsers} className='fa' />
+            Users
+          </Link>
+        )}
+        {canMassMail && (
+          <Link to='/admin/mass-mail'>
+            <FontAwesomeIcon icon={faEnvelope} className='fa' />
+            Mass Mail
+          </Link>
+        )}
+        {canEvents && (
+          <Link to='/admin/event'>
+            <FontAwesomeIcon icon={faCalendarDays} className='fa' />
+            Events
+          </Link>
+        )}
+        {role === 'main-admin' && (
+          <>
+            <Link to='/admin/geo-block'>
+              <FontAwesomeIcon icon={faEarthAmericas} className='fa' />
+              Geo-Block
+            </Link>
+            <Link to='/admin/ip-block'>
+              <FontAwesomeIcon icon={faDesktop} className='fa' />
+              IP-Block
+            </Link>
+          </>
+        )}
+        {canOrders && (
+          <Link to='/admin/orders'>
+            <FontAwesomeIcon icon={faFolderOpen} className='fa' />
+            Orders
+          </Link>
+        )}
+        {canProducts && (
+          <Link to='/admin/product'>
+            <FontAwesomeIcon icon={faShirt} className='fa' />
+            Products
+          </Link>
+        )}
+        {canCategories && (
+          <Link to='/admin/category'>
+            <FontAwesomeIcon icon={faTag} className='fa' />
+            Categories
+          </Link>
+        )}
+        {canSubs && (
+          <Link to='/admin/sub'>
+            <FontAwesomeIcon icon={faTags} className='fa' />
+            Sub-Categories
+          </Link>
+        )}
+        {canCoupon && (
+          <Link to='/admin/coupon'>
+            <FontAwesomeIcon icon={faTicket} className='fa' />
+            Coupon
+          </Link>
+        )}
       </div>
     </div>
   );

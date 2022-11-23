@@ -17,7 +17,7 @@ import defaultProfile from '../../assets/defaultProfile.png';
 import VerifDisapprove from '../../components/modals/VerifDisapprove';
 import VerifApprove from '../../components/modals/VerifApprove';
 
-const VerifSubmissions = () => {
+const VerifSubmissions = ({ history }) => {
   const [verifs, setVerifs] = useState([]);
   const [verifDisapproveModalIsOpen, setVerifDisapproveModalIsOpen] =
     useState(false);
@@ -25,7 +25,13 @@ const VerifSubmissions = () => {
   const [currentVerif, setCurrentVerif] = useState({});
   const [reason, setReason] = useState('');
 
-  const { token, _id } = useSelector((state) => state.user);
+  const { token, _id, canVerify } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!canVerify) {
+      history.push('/admin/dashboard');
+    }
+  }, []);
 
   useEffect(() => {
     if (token) {

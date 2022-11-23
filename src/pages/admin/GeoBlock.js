@@ -10,12 +10,18 @@ import {
   faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
 
-const GeoBlock = () => {
+const GeoBlock = ({ history }) => {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [locations, setLocations] = useState([]);
 
-  const { token, _id } = useSelector((state) => state.user);
+  const { token, _id, role } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (role !== 'main-admin') {
+      history.push('/admin/dashboard');
+    }
+  }, []);
 
   useEffect(() => {
     fetchLocations();

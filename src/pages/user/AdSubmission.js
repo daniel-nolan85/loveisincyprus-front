@@ -14,7 +14,6 @@ import axios from 'axios';
 import AdPreview from '../../components/modals/AdPreview';
 import AdContact from '../../components/forms/AdContact';
 import AdPayment from '../../components/forms/AdPayment';
-import { Checkbox } from 'antd';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import DurationInfo from '../../components/modals/DurationInfo';

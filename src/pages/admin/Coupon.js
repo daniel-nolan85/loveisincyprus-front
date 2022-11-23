@@ -21,7 +21,7 @@ import LeftSidebar from '../../components/admin/LeftSidebar';
 import CouponDelete from '../../components/modals/CouponDelete';
 import CouponEdit from '../../components/modals/CouponEdit';
 
-const Coupon = () => {
+const Coupon = ({ history }) => {
   const [name, setName] = useState('');
   const [discount, setDiscount] = useState('');
   const [expiry, setExpiry] = useState('');
@@ -33,7 +33,13 @@ const Coupon = () => {
   const [couponEditModalIsOpen, setCouponEditModalIsOpen] = useState(false);
   const [couponToEdit, setCouponToEdit] = useState({});
 
-  const { token } = useSelector((state) => state.user);
+  const { token, canCoupon } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!canCoupon) {
+      history.push('/admin/dashboard');
+    }
+  }, []);
 
   useEffect(() => {
     loadCoupons();

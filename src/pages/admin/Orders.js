@@ -8,11 +8,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import ShowPaymentInfo from '../../components/cards/ShowPaymentInfo';
 
-const Orders = () => {
+const Orders = ({ history }) => {
   const [orders, setOrders] = useState([]);
   const [query, setQuery] = useState('');
 
-  const { token } = useSelector((state) => state.user);
+  const { token, canOrders } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!canOrders) {
+      history.push('/admin/dashboard');
+    }
+  }, []);
 
   useEffect(() => {
     loadOrders();
@@ -57,7 +63,7 @@ const Orders = () => {
           />
           <input
             type='search'
-            placeholder='Search Posts'
+            placeholder='Search Orders'
             onChange={handleSearch}
             value={query}
           />

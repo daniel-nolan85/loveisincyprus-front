@@ -15,7 +15,7 @@ import {
 import SubDelete from '../../components/modals/SubDelete';
 import SubEdit from '../../components/modals/SubEdit';
 
-const Sub = () => {
+const Sub = ({ history }) => {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState('');
@@ -27,7 +27,13 @@ const Sub = () => {
   const [subToEdit, setSubToEdit] = useState({});
   const [query, setQuery] = useState('');
 
-  const { token } = useSelector((state) => state.user);
+  const { token, canSubs } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!canSubs) {
+      history.push('/admin/dashboard');
+    }
+  }, []);
 
   useEffect(() => {
     loadCategories();

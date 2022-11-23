@@ -16,7 +16,7 @@ import IPinfoWrapper from 'node-ipinfo';
 import IPInfo from '../../components/modals/IPInfo';
 import IPToRemove from '../../components/modals/IPToRemove';
 
-const IPBlock = () => {
+const IPBlock = ({ history }) => {
   const [ips, setIps] = useState([]);
   const [loading, setLoading] = useState(false);
   const [query, setQuery] = useState('');
@@ -27,9 +27,15 @@ const IPBlock = () => {
   const [ipToLookup, setIpToLookup] = useState({});
   const [ipToBan, setIpToBan] = useState({});
 
-  const { token } = useSelector((state) => state.user);
+  const { token, role } = useSelector((state) => state.user);
 
   const isFirstRun = useRef(true);
+
+  useEffect(() => {
+    if (role !== 'main-admin') {
+      history.push('/admin/dashboard');
+    }
+  }, []);
 
   useEffect(() => {
     fetchIps();

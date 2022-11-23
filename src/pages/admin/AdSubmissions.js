@@ -21,7 +21,7 @@ import AdPayment from '../../components/modals/AdPayment';
 import { createAdPayment } from '../../functions/cardinity';
 import AdRemove from '../../components/modals/AdRemove';
 
-const AdSubmissions = () => {
+const AdSubmissions = ({ history }) => {
   const [ads, setAds] = useState([]);
   const [contactInfoModalIsOpen, setContactInfoModalIsOpen] = useState(false);
   const [paymentModalIsOpen, setPaymentModalIsOpen] = useState(false);
@@ -36,9 +36,15 @@ const AdSubmissions = () => {
   const [payable, setPayable] = useState('');
   const [userAgent, setUserAgent] = useState('');
 
-  const { token } = useSelector((state) => state.user);
+  const { token, role } = useSelector((state) => state.user);
 
   const isFirstRun = useRef(true);
+
+  useEffect(() => {
+    if (role !== 'main-admin') {
+      history.push('/admin/dashboard');
+    }
+  }, []);
 
   useEffect(() => {
     fetchAds();

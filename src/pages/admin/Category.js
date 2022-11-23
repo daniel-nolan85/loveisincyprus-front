@@ -19,7 +19,7 @@ import {
 import CategoryDelete from '../../components/modals/CategoryDelete';
 import CategoryEdit from '../../components/modals/CategoryEdit';
 
-const Category = () => {
+const Category = ({ history }) => {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -30,7 +30,13 @@ const Category = () => {
   const [categoryToEdit, setCategoryToEdit] = useState({});
   const [query, setQuery] = useState('');
 
-  const { token } = useSelector((state) => state.user);
+  const { token, canCategories } = useSelector((state) => state.user);
+
+  useEffect(() => {
+    if (!canCategories) {
+      history.push('/admin/dashboard');
+    }
+  }, []);
 
   useEffect(() => {
     loadCategories();
