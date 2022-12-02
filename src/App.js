@@ -2,13 +2,14 @@ import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { auth } from './firebase';
+import { auth, analytics } from './firebase';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { ChatState } from './context/ChatProvider';
 import io from 'socket.io-client';
 import axios from 'axios';
+import { logEvent } from 'firebase/analytics';
 
 // modals
 import Popup from './components/modals/Popup';
@@ -77,6 +78,7 @@ import SubscriptionSuccess from './pages/user/SubscriptionSuccess';
 import OrderSuccess from './pages/user/OrderSuccess';
 import IPBlock from './pages/admin/IPBlock';
 import ReportedContent from './pages/admin/ReportedContent';
+import ProductReview from './pages/admin/ProductReview';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -150,6 +152,12 @@ const App = () => {
     theirId,
     setTheirId,
   } = ChatState();
+
+  useEffect(() => {
+    logEvent(analytics, 'page_view', {
+      page_location: window.location.pathname + window.location.search,
+    });
+  });
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -624,6 +632,11 @@ const App = () => {
           exact
           path='/admin/reported-content'
           component={ReportedContent}
+        />
+        <AdminRoute
+          exact
+          path='/admin/product-review'
+          component={ProductReview}
         />
       </Switch>
       {/* </Suspense> */}

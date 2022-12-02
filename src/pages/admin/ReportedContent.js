@@ -342,11 +342,11 @@ const ReportedContent = ({ history }) => {
                 )} */}
               </div>
             ))}
-          {/* {!content && (
+          {posts.length < 1 && comments.length < 1 && messages.length < 1 && (
             <h1 className='center'>
-              There are not currently any reported posts.
+              There is not currently any reported content.
             </h1>
-          )} */}
+          )}
         </div>
       </div>
       <UserSuspend

@@ -34,6 +34,7 @@ const initialState = {
   quantity: '',
   images: [],
   weight: '',
+  approved: false,
 };
 
 const Product = ({ history }) => {
@@ -49,7 +50,7 @@ const Product = ({ history }) => {
   const [productToEdit, setProductToEdit] = useState({});
   const [query, setQuery] = useState('');
 
-  const { token, canProducts } = useSelector((state) => state.user);
+  const { token, canProducts, role } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (!canProducts) {
@@ -61,6 +62,14 @@ const Product = ({ history }) => {
     loadCategories();
     loadAllProducts();
   }, []);
+
+  useEffect(() => {
+    if (role === 'main-admin') {
+      values.approved = true;
+      setValues({ ...values });
+    }
+    console.log(values);
+  }, [role]);
 
   const loadCategories = () =>
     getCategories().then((c) => setValues({ ...values, categories: c.data }));
@@ -79,6 +88,7 @@ const Product = ({ history }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
+    console.log(values);
     createProduct(values, token)
       .then((res) => {
         console.log(res);

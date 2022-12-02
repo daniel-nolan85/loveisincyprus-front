@@ -17,6 +17,7 @@ import {
   faShieldBlank,
   faDesktop,
   faFlag,
+  faBarcode,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { ChatState } from '../../context/ChatProvider';
@@ -30,6 +31,8 @@ const LeftSidebar = () => {
     setNewVerifs,
     reportedContent,
     setReportedContent,
+    productsForReview,
+    setProductsForReview,
   } = ChatState();
 
   let {
@@ -51,6 +54,7 @@ const LeftSidebar = () => {
     fetchNewAds();
     fetchNewVerifs();
     fetchReportedContent();
+    fetchProductsForReview();
   }, []);
 
   const fetchNewAds = async () => {
@@ -77,6 +81,15 @@ const LeftSidebar = () => {
       .then((res) => {
         console.log('reported content ==> ', res.data);
         setReportedContent(res.data);
+      });
+  };
+
+  const fetchProductsForReview = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-products-for-review`)
+      .then((res) => {
+        console.log('products for review ==> ', res.data);
+        setProductsForReview(res.data);
       });
   };
 
@@ -109,6 +122,17 @@ const LeftSidebar = () => {
               {reportedContent &&
                 reportedContent.content.length > 0 &&
                 reportedContent.content.length}
+            </span>
+          </Link>
+        )}
+        {role === 'main-admin' && (
+          <Link to='/admin/product-review'>
+            <FontAwesomeIcon icon={faBarcode} className='fa' />
+            Products to Review
+            <span>
+              {productsForReview &&
+                productsForReview.length > 0 &&
+                productsForReview.length}
             </span>
           </Link>
         )}
