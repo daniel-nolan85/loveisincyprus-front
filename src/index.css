@@ -3753,6 +3753,23 @@ select.decorated option:active {
   margin-right: 2%;
 }
 
+.message-box-aria img {
+  height: 45px;
+  width: 45px;
+  border-radius: 50%;
+  margin-left: 10px;
+}
+
+.msg-image {
+  margin-left: 65px;
+}
+
+.message-img {
+  display: block;
+  width: 100%;
+  margin-top: 5px;
+}
+
 /* --------------- photos page --------------- */
 /* .radio-inputs {
   display: none;

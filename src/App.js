@@ -9,7 +9,7 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { ChatState } from './context/ChatProvider';
 import io from 'socket.io-client';
 import axios from 'axios';
-import { logEvent } from 'firebase/analytics';
+// import { logEvent } from 'firebase/analytics';
 
 // modals
 import Popup from './components/modals/Popup';
@@ -153,11 +153,11 @@ const App = () => {
     setTheirId,
   } = ChatState();
 
-  useEffect(() => {
-    logEvent(analytics, 'page_view', {
-      page_location: window.location.pathname + window.location.search,
-    });
-  });
+  // useEffect(() => {
+  //   logEvent(analytics, 'page_view', {
+  //     page_location: window.location.pathname + window.location.search,
+  //   });
+  // });
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {

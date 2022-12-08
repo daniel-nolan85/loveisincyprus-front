@@ -10,6 +10,7 @@ import {
   faCalendarMinus,
   faStar,
   faCoins,
+  faCamera,
 } from '@fortawesome/free-solid-svg-icons';
 import UsersToSelect from '../../components/modals/UsersToSelect';
 import axios from 'axios';
@@ -17,10 +18,13 @@ import defaultProfile from '../../assets/defaultProfile.png';
 import { sendMassMail } from '../../functions/chat';
 import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 let socket;
 
 const initialState = {
+  image: {},
   content: 'hello there everybody',
   selected: [],
 };
@@ -28,6 +32,7 @@ const initialState = {
 const MassMail = ({ history }) => {
   const [optIns, setOptIns] = useState([]);
   const [values, setValues] = useState(initialState);
+  const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedUsersModalIsOpen, setSelectedUsersModalIsOpen] =
     useState(false);
@@ -76,6 +81,32 @@ const MassMail = ({ history }) => {
       });
   };
 
+  const handleImage = async (e) => {
+    const file = e.target.files[0];
+    let formData = new FormData();
+    formData.append('image', file);
+    setUploading(true);
+
+    await axios
+      .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
+        headers: {
+          authtoken: token,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setValues({
+          ...values,
+          image: { url: res.data.url, public_id: res.data.public_id },
+        });
+        setUploading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setUploading(false);
+      });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
@@ -99,9 +130,9 @@ const MassMail = ({ history }) => {
       });
   };
 
-  const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
+  // const handleChange = (e) => {
+  //   setValues({ ...values, [e.target.name]: e.target.value });
+  // };
 
   const removeSelected = (o) => {
     console.log(o);
@@ -113,7 +144,7 @@ const MassMail = ({ history }) => {
     setValues({ ...values, selected: [...values.selected] });
   };
 
-  const { content, selected } = values;
+  const { image, content, selected } = values;
 
   const messageForm = () => (
     <div className='form-box event'>
@@ -121,12 +152,30 @@ const MassMail = ({ history }) => {
         <p className='form-header'>Create Message</p>
       </div>
       <form>
-        <textarea
-          className='input-field bio'
+        <div className='add-post-links'>
+          <label>
+            {uploading ? (
+              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+            ) : image && image.url ? (
+              <img src={image.url} />
+            ) : (
+              <FontAwesomeIcon icon={faCamera} className='fa' />
+            )}
+            <input
+              onChange={handleImage}
+              type='file'
+              accept='images/*'
+              hidden
+            />
+          </label>
+        </div>
+        <ReactQuill
+          // className='input-field bio'
           placeholder='Write a message...'
           value={content}
           name='content'
-          onChange={handleChange}
+          // onChange={handleChange}
+          onChange={(e) => setValues({ ...values, content: e })}
         />
         <button
           onClick={() => setSelectedUsersModalIsOpen(true)}

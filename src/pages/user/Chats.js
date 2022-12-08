@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
+  faCamera,
   faFlag,
   faMagnifyingGlass,
   faPaperPlane,
+  faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 import defaultProfile from '../../assets/defaultProfile.png';
 import { useSelector, useDispatch } from 'react-redux';
@@ -24,6 +26,7 @@ import moment from 'moment';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import ReportMessage from '../../components/modals/ReportMessage';
+import renderHtml from 'react-render-html';
 
 let socket, selectedChatCompare;
 
@@ -42,6 +45,8 @@ const Chats = ({ history }) => {
   const [currentMessage, setCurrentMessage] = useState({});
   const [reportMessageModalIsOpen, setReportMessageModalIsOpen] =
     useState(false);
+  const [image, setImage] = useState({});
+  const [loadingImg, setLoadingImg] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -254,17 +259,50 @@ const Chats = ({ history }) => {
     }
   };
 
+  const handleImage = async (e) => {
+    const file = e.target.files[0];
+    let formData = new FormData();
+    formData.append('image', file);
+    setLoadingImg(true);
+    console.log('file => ', file);
+    console.log('formData => ', formData);
+
+    await axios
+      .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
+        headers: {
+          authtoken: user.token,
+        },
+      })
+      .then((res) => {
+        setImage({
+          url: res.data.url,
+          public_id: res.data.public_id,
+        });
+        setLoadingImg(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoadingImg(false);
+      });
+  };
+
   const sendMessage = async (e) => {
     e.preventDefault();
     if (newMessage) {
       setNewMessage('');
       setTypersId('');
+      setImage({});
 
       try {
         await axios
           .post(
             `${process.env.REACT_APP_API}/send-message`,
-            { _id: user._id, content: newMessage, chatId: selectedChat._id },
+            {
+              _id: user._id,
+              content: newMessage,
+              chatId: selectedChat._id,
+              image,
+            },
             {
               headers: {
                 authtoken: user.token,
@@ -286,6 +324,10 @@ const Chats = ({ history }) => {
           position: toast.POSITION.TOP_CENTER,
         });
       }
+    } else {
+      toast.error('Please add a message to send', {
+        position: toast.POSITION.TOP_CENTER,
+      });
     }
   };
 
@@ -401,12 +443,18 @@ const Chats = ({ history }) => {
                                       />
                                     </div>
                                   ) : chat.latestMessage.content.length > 25 ? (
-                                    chat.latestMessage.content.substring(
-                                      0,
-                                      26
-                                    ) + '...'
+                                    <p>
+                                      {renderHtml(
+                                        chat.latestMessage.content.substring(
+                                          0,
+                                          26
+                                        ) + '...'
+                                      )}
+                                    </p>
                                   ) : (
-                                    chat.latestMessage.content
+                                    <p>
+                                      {renderHtml(chat.latestMessage.content)}
+                                    </p>
                                   )}
                                 </p>
                                 <span className='time'>
@@ -473,54 +521,66 @@ const Chats = ({ history }) => {
                 {/* <ScrollableFeed> */}
                 {messages &&
                   messages.map((m, i, { length }) => (
-                    <div className='message-sender' key={m._id}>
-                      {(isSameSender(messages, m, i, user._id) ||
-                        isLastMessage(messages, i, user._id)) && (
-                        <div className='message-sender-avatar'>
+                    <div key={m._id}>
+                      {m.image && (
+                        <div className='msg-image'>
                           <img
-                            src={
-                              m.sender.profileImage
-                                ? m.sender.profileImage.url
-                                : defaultProfile
-                            }
-                            alt={`${
-                              m.sender.username || m.sender.name
-                            }'s profile picture`}
+                            src={m.image.url}
+                            alt={`${m.sender.username || m.sender.name}'s post`}
+                            className='message-img'
                           />
                         </div>
                       )}
-                      <div
-                        className='message-sender-message'
-                        style={{
-                          backgroundColor: `${
-                            m.sender._id === user._id ? '#bee3f8' : '#b9f5d0'
-                          }`,
-                          marginLeft: isSameSenderMargin(
-                            messages,
-                            m,
-                            i,
-                            user._id
-                          ),
-                          marginTop: isSameUser(messages, m, i, user._id)
-                            ? 3
-                            : 10,
-                        }}
-                      >
-                        {i + 1 === length ? (
-                          <p id='lastMessage'>{m.content}</p>
-                        ) : (
-                          <p>{m.content}</p>
+                      <div className='message-sender' key={m._id}>
+                        {(isSameSender(messages, m, i, user._id) ||
+                          isLastMessage(messages, i, user._id)) && (
+                          <div className='message-sender-avatar'>
+                            <img
+                              src={
+                                m.sender.profileImage
+                                  ? m.sender.profileImage.url
+                                  : defaultProfile
+                              }
+                              alt={`${
+                                m.sender.username || m.sender.name
+                              }'s profile picture`}
+                            />
+                          </div>
+                        )}
+                        <div
+                          className='message-sender-message'
+                          style={{
+                            backgroundColor: `${
+                              m.sender._id === user._id ? '#bee3f8' : '#b9f5d0'
+                            }`,
+                            marginLeft: isSameSenderMargin(
+                              messages,
+                              m,
+                              i,
+                              user._id
+                            ),
+                            marginTop: isSameUser(messages, m, i, user._id)
+                              ? 3
+                              : 10,
+                          }}
+                        >
+                          {i + 1 === length ? (
+                            <p id='lastMessage'>{renderHtml(m.content)}</p>
+                          ) : (
+                            <p>{renderHtml(m.content)}</p>
+                          )}
+                        </div>
+
+                        {m.sender._id !== user._id && (
+                          <span className='flag-message'>
+                            <FontAwesomeIcon
+                              icon={faFlag}
+                              className='fa'
+                              onClick={() => reportMessage(m)}
+                            />
+                          </span>
                         )}
                       </div>
-                      {m.sender._id !== user._id && (
-                        <span className='flag-message'>
-                          <FontAwesomeIcon
-                            icon={faFlag}
-                            className='fa'
-                            onClick={() => reportMessage(m)}
-                          />
-                        </span>
-                      )}
                     </div>
                   ))}
                 {/* </ScrollableFeed> */}
@@ -546,6 +606,32 @@ const Chats = ({ history }) => {
                   <form onSubmit={sendMessage}>
                     <div className='message-box'>
                       <div className='message-box-aria'>
+                        {loadingImg ? (
+                          <FontAwesomeIcon
+                            icon={faSpinner}
+                            className='fa send-message'
+                            spin
+                            style={{ marginLeft: '10px' }}
+                          />
+                        ) : (
+                          <label>
+                            {image && image.url ? (
+                              <img src={image.url} />
+                            ) : (
+                              <FontAwesomeIcon
+                                icon={faCamera}
+                                className='fa send-message'
+                                style={{ marginLeft: '10px' }}
+                              />
+                            )}
+                            <input
+                              onChange={handleImage}
+                              type='file'
+                              accept='images/*'
+                              hidden
+                            />
+                          </label>
+                        )}
                         <input
                           type='text'
                           placeholder='Type a message...'
