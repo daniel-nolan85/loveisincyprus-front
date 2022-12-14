@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import renderHtml from 'react-render-html';
 
 Modal.setAppElement('#root');
 
@@ -70,7 +71,7 @@ const MessageDelete = ({
     },
   };
 
-  const { content, sender } = messageToDelete;
+  const { content, sender, image } = messageToDelete;
 
   return (
     <Modal
@@ -82,16 +83,13 @@ const MessageDelete = ({
       <div className='match'>
         <h1>Are you sure you want to delete this message?</h1>
         <br />
-        <p>{content}</p>
-        {/* <br />
+        <p>{content && renderHtml(content)}</p>
+        <br />
         {image && (
           <div className='match-images'>
-            <img
-              src={image.url}
-              alt={`${postedBy.username || postedBy.name}'s post`}
-            />
+            <img src={image.url} alt='message image' />
           </div>
-        )} */}
+        )}
         <br />
         <button
           className='submit-btn'

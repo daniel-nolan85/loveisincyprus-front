@@ -21,6 +21,7 @@ import PassComment from '../../components/modals/PassComment';
 import CommentDelete from '../../components/modals/CommentDelete';
 import PassMessage from '../../components/modals/PassMessage';
 import MessageDelete from '../../components/modals/MessageDelete';
+import renderHtml from 'react-render-html';
 
 const ReportedContent = ({ history }) => {
   const [posts, setPosts] = useState([]);
@@ -332,14 +333,16 @@ const ReportedContent = ({ history }) => {
                     />
                   </div>
                 </div>
-                <p className='post-text'>{m.content}</p>
-                {/* {p.image && (
+                <p className='post-text'>
+                  {m.content && renderHtml(m.content)}
+                </p>
+                {m.image && (
                   <img
-                    src={p.image.url}
-                    alt={`${p.postedBy.username || p.postedBy.name}'s post`}
+                    src={m.image.url}
+                    alt='message image'
                     className='post-img'
                   />
-                )} */}
+                )}
               </div>
             ))}
           {posts.length < 1 && comments.length < 1 && messages.length < 1 && (

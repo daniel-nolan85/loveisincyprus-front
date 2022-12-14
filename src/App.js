@@ -79,6 +79,7 @@ import OrderSuccess from './pages/user/OrderSuccess';
 import IPBlock from './pages/admin/IPBlock';
 import ReportedContent from './pages/admin/ReportedContent';
 import ProductReview from './pages/admin/ProductReview';
+import HighCompat from './pages/user/HighCompat';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -157,6 +158,14 @@ const App = () => {
   //   logEvent(analytics, 'page_view', {
   //     page_location: window.location.pathname + window.location.search,
   //   });
+  // });
+
+  // useEffect(() => {
+  //   axios
+  //     .get(
+  //       'https://api.statcounter.com/stats/?vn=3&s=popular&f=json&pi=2292634&g=weekly&t=1670536605&u=demo_user&sha1=c1dd06507ef5874e2dd4ff5eca4f23c830b2bc4c'
+  //     )
+  //     .then((res) => console.log(res));
   // });
 
   useEffect(() => {
@@ -328,6 +337,7 @@ const App = () => {
       handleExpiredEvents();
       handleExpiredCoupons();
       handleExpiredSuspensions();
+      updateUserAge();
     }
   }, [user && user.token]);
 
@@ -518,6 +528,12 @@ const App = () => {
     await axios.put(`${process.env.REACT_APP_API}/expired-suspension`);
   };
 
+  const updateUserAge = async () => {
+    await axios.put(`${process.env.REACT_APP_API}/update-age`, {
+      user,
+    });
+  };
+
   return (
     // <Suspense
     //   fallback={
@@ -606,6 +622,11 @@ const App = () => {
           onLeave={() => setSelectedChat(undefined)}
         />
         <SubscriberRoute exact path='/swipe-to-match' component={Swipe} />
+        <SubscriberRoute
+          exact
+          path='/high-compatibility'
+          component={HighCompat}
+        />
         <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
         <AdminRoute exact path='/admin/posts' component={Posts} />
         <AdminRoute exact path='/admin/users' component={Users} />

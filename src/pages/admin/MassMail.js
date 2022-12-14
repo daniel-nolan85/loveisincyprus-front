@@ -25,7 +25,7 @@ let socket;
 
 const initialState = {
   image: {},
-  content: 'hello there everybody',
+  content: '',
   selected: [],
 };
 
@@ -109,25 +109,31 @@ const MassMail = ({ history }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
-    sendMassMail(values, token)
-      .then((res) => {
-        console.log(res);
-        setLoading(false);
-        setValues(initialState);
-        // socket.emit('new message', res.data);
-        socket.emit('new mass mail', res.data);
-        toast.success('Your message has been sent', {
-          position: toast.POSITION.TOP_CENTER,
+    if (content) {
+      setLoading(true);
+      sendMassMail(values, token)
+        .then((res) => {
+          console.log(res);
+          setLoading(false);
+          setValues(initialState);
+          // socket.emit('new message', res.data);
+          socket.emit('new mass mail', res.data);
+          toast.success('Your message has been sent', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
+          toast.error('Please fill in all fields', {
+            position: toast.POSITION.TOP_CENTER,
+          });
         });
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-        toast.error('Please fill in all fields', {
-          position: toast.POSITION.TOP_CENTER,
-        });
+    } else {
+      toast.error('Please add a message to send', {
+        position: toast.POSITION.TOP_CENTER,
       });
+    }
   };
 
   // const handleChange = (e) => {
@@ -176,6 +182,7 @@ const MassMail = ({ history }) => {
           name='content'
           // onChange={handleChange}
           onChange={(e) => setValues({ ...values, content: e })}
+          modules={{ toolbar: ['bold', 'italic', 'underline'] }}
         />
         <button
           onClick={() => setSelectedUsersModalIsOpen(true)}

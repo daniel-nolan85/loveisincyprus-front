@@ -6,6 +6,7 @@ import { useSelector } from 'react-redux';
 import { removePoints } from '../../functions/user';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import renderHtml from 'react-render-html';
 
 Modal.setAppElement('#root');
 
@@ -71,7 +72,7 @@ const PassMessage = ({
     },
   };
 
-  const { content, sender } = messageToPass;
+  const { content, sender, image } = messageToPass;
 
   return (
     <Modal
@@ -83,16 +84,13 @@ const PassMessage = ({
       <div className='match'>
         <h1>Are you sure you want to approve this message?</h1>
         <br />
-        <p>{content}</p>
-        {/* <br />
+        <p>{content && renderHtml(content)}</p>
+        <br />
         {image && (
           <div className='match-images'>
-            <img
-              src={image.url}
-              alt={`${postedBy.username || postedBy.name}'s post`}
-            />
+            <img src={image.url} alt='message image' />
           </div>
-        )} */}
+        )}
         <br />
         <button
           className='submit-btn'

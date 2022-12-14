@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import renderHtml from 'react-render-html';
 
 Modal.setAppElement('#root');
 
@@ -68,7 +69,7 @@ const ReportMessage = ({
     },
   };
 
-  const { content } = currentMessage;
+  const { content, image } = currentMessage;
   console.log(currentMessage);
 
   return (
@@ -81,7 +82,12 @@ const ReportMessage = ({
       <div className='match'>
         <h1>Are you sure you want to report this message?</h1>
         <br />
-        <p>{content}</p>
+        {image && (
+          <div className='match-images'>
+            <img src={image.url} alt='message image' />
+          </div>
+        )}
+        <p>{content && renderHtml(content)}</p>
         <br />
         <button
           className='submit-btn'

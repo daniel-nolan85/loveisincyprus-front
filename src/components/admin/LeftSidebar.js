@@ -18,6 +18,7 @@ import {
   faDesktop,
   faFlag,
   faBarcode,
+  faChartLine,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { ChatState } from '../../context/ChatProvider';
@@ -136,6 +137,15 @@ const LeftSidebar = () => {
             </span>
           </Link>
         )}
+        <Link
+          to={{
+            pathname: 'https://statcounter.com/p12198487/summary/',
+          }}
+          target='_blank'
+        >
+          <FontAwesomeIcon icon={faChartLine} className='fa' />
+          Analytics
+        </Link>
         {canPosts && (
           <Link to='/admin/posts'>
             <FontAwesomeIcon icon={faSignsPost} className='fa' />

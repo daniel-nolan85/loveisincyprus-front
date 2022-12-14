@@ -443,18 +443,18 @@ const Chats = ({ history }) => {
                                       />
                                     </div>
                                   ) : chat.latestMessage.content.length > 25 ? (
-                                    <p>
+                                    <span>
                                       {renderHtml(
                                         chat.latestMessage.content.substring(
                                           0,
                                           26
                                         ) + '...'
                                       )}
-                                    </p>
+                                    </span>
                                   ) : (
-                                    <p>
+                                    <span>
                                       {renderHtml(chat.latestMessage.content)}
-                                    </p>
+                                    </span>
                                   )}
                                 </p>
                                 <span className='time'>

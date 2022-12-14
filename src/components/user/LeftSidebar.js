@@ -9,6 +9,7 @@ import {
   faFaceGrinStars,
   faPeopleArrows,
   faMagnifyingGlass,
+  faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -57,6 +58,10 @@ const LeftSidebar = () => {
             <FontAwesomeIcon icon={faPeopleArrows} className='fa' />
             My Matches
             <span>{token && matches.length > 0 && matches.length}</span>
+          </Link>
+          <Link to='/high-compatibility'>
+            <FontAwesomeIcon icon={faUsers} className='fa' />
+            High Compatibility
           </Link>
         </div>
       )}
