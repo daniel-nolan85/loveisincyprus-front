@@ -34,8 +34,10 @@ const Header = ({
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [settingsMenu, setSettingsMenu] = useState(false);
+  const [deviceSize, changeDeviceSize] = useState(window.innerWidth);
 
   let { user, cart } = useSelector((state) => ({ ...state }));
+  console.log(deviceSize);
 
   const {
     notification,
@@ -226,7 +228,10 @@ const Header = ({
             <ul>
               <Link to='/chats'>
                 <li className='tooltip'>
-                  <Badge count={user.messages.length} offset={[-20, 0]}>
+                  <Badge
+                    count={user.messages.length}
+                    offset={deviceSize > 450 ? [-20, 0] : [-10, 0]}
+                  >
                     <FontAwesomeIcon icon={faMessage} className='menu-icon' />
                   </Badge>
                   <span className='tooltip-text'>Chats</span>
@@ -235,7 +240,10 @@ const Header = ({
             </ul>
             <div className='settings-links dropdown'>
               <Link to='/notifications'>
-                <Badge count={user.newNotifs.length} offset={[-20, 0]}>
+                <Badge
+                  count={user.newNotifs.length}
+                  offset={deviceSize > 450 ? [-20, 0] : [-10, 0]}
+                >
                   <FontAwesomeIcon
                     icon={faBell}
                     className='menu-icon'
@@ -266,7 +274,10 @@ const Header = ({
         )}
         <Link to='/cart'>
           <div className='tooltip'>
-            <Badge count={cart.length} offset={[-20, 0]}>
+            <Badge
+              count={cart.length}
+              offset={deviceSize > 450 ? [-20, 0] : [-10, 0]}
+            >
               <FontAwesomeIcon icon={faCartShopping} className='menu-icon ' />
             </Badge>
             <span className='tooltip-text'>Cart</span>

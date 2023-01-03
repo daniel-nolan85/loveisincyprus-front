@@ -16,6 +16,7 @@ import { addPoints } from '../../functions/user';
 import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
 import BecomePaid from '../../components/cards/BecomePaid';
+import Mobile from '../../components/user/Mobile';
 // import NotifPost from '../../components/modals/NotifPost';
 
 let socket;
@@ -387,6 +388,7 @@ const UserDashboard = () => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         {user.membership.paid ? (
           <Users users={users} handleFollow={handleFollow} />
         ) : (
