@@ -19,6 +19,7 @@ import {
   faFlag,
   faBarcode,
   faChartLine,
+  faPhone,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { ChatState } from '../../context/ChatProvider';
@@ -179,6 +180,10 @@ const LeftSidebar = () => {
             <Link to='/admin/ip-block'>
               <FontAwesomeIcon icon={faDesktop} className='fa' />
               IP-Block
+            </Link>
+            <Link to='/admin/calling-code-block'>
+              <FontAwesomeIcon icon={faPhone} className='fa' />
+              Calling Code-Block
             </Link>
           </>
         )}

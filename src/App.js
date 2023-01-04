@@ -80,6 +80,7 @@ import IPBlock from './pages/admin/IPBlock';
 import ReportedContent from './pages/admin/ReportedContent';
 import ProductReview from './pages/admin/ProductReview';
 import HighCompat from './pages/user/HighCompat';
+import CallingCodeBlock from './pages/admin/CallingCodeBlock';
 
 //using lazy
 // const Header = lazy(() => import('./components/nav/Header'));
@@ -632,6 +633,11 @@ const App = () => {
         <AdminRoute exact path='/admin/users' component={Users} />
         <AdminRoute exact path='/admin/geo-block' component={GeoBlock} />
         <AdminRoute exact path='/admin/ip-block' component={IPBlock} />
+        <AdminRoute
+          exact
+          path='/admin/calling-code-block'
+          component={CallingCodeBlock}
+        />
         <AdminRoute exact path='/admin/category' component={Category} />
         <AdminRoute exact path='/admin/sub' component={Sub} />
         <AdminRoute exact path='/admin/product' component={Products} />

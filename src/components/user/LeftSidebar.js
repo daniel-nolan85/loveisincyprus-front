@@ -15,7 +15,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 
 const LeftSidebar = () => {
-  const { token, following, followers, matches } = useSelector(
+  const { token, following, followers, matches, membership } = useSelector(
     (state) => state.user || {}
   );
   const { search } = useSelector((state) => ({ ...state }));
@@ -59,10 +59,12 @@ const LeftSidebar = () => {
             My Matches
             <span>{token && matches.length > 0 && matches.length}</span>
           </Link>
-          <Link to='/high-compatibility'>
-            <FontAwesomeIcon icon={faUsers} className='fa' />
-            High Compatibility
-          </Link>
+          {membership.paid && (
+            <Link to='/high-compatibility'>
+              <FontAwesomeIcon icon={faUsers} className='fa' />
+              High Compatibility
+            </Link>
+          )}
         </div>
       )}
       <div className='shortcut-links'>

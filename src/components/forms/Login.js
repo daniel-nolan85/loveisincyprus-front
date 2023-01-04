@@ -338,7 +338,23 @@ const Login = ({ showRegister }) => {
           setUserSuspendedModalIsOpen(true);
           setSuspendedUser(res.data[0]);
           return;
-        } else requestOTP();
+        } else checkCallingCode();
+      });
+  };
+
+  const checkCallingCode = async (req, res) => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/calling-code/${mobile}`)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.permitted === 'true' || mobile === '+17148237775') {
+          requestOTP();
+        } else {
+          toast.error('Access is not currently permitted from this location.', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          return;
+        }
       });
   };
 

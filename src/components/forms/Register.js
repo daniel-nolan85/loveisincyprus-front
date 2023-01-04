@@ -103,7 +103,8 @@ const Register = ({ showLogin }) => {
       .get(`${process.env.REACT_APP_API}/user-blocked/${mobile}`)
       .then((res) => {
         if (res.data.length === 0) {
-          requestOTP();
+          checkCallingCode();
+          // requestOTP();
         } else {
           toast.error(
             'Access from this mobile number is denied. Please use another.',
@@ -111,6 +112,22 @@ const Register = ({ showLogin }) => {
               position: toast.POSITION.TOP_CENTER,
             }
           );
+          return;
+        }
+      });
+  };
+
+  const checkCallingCode = async (req, res) => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/calling-code/${mobile}`)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.permitted === 'true') {
+          requestOTP();
+        } else {
+          toast.error('Access is not currently permitted from this location.', {
+            position: toast.POSITION.TOP_CENTER,
+          });
           return;
         }
       });
