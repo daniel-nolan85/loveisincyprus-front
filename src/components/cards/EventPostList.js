@@ -108,7 +108,7 @@ const EventPostList = ({
                   />
                   <FontAwesomeIcon
                     icon={faPenToSquare}
-                    className='fa edit'
+                    className='fa edit ml'
                     onClick={() => editPost(post)}
                   />
                 </div>

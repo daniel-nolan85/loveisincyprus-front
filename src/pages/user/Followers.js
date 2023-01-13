@@ -12,6 +12,7 @@ import Unfollow from '../../components/modals/Unfollow';
 import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
 import { addPoints } from '../../functions/user';
+import Mobile from '../../components/user/Mobile';
 
 let socket;
 
@@ -118,6 +119,7 @@ const Followers = ({ history }) => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         <h1 className='center'>
           {users.length > 0
             ? 'People Who Like Me'

@@ -7,6 +7,7 @@ import mastercard from '../../assets/mastercard.png';
 import visa from '../../assets/visa.png';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import Mobile from '../../components/user/Mobile';
 
 const OrderSuccess = (props) => {
   const [products, setProducts] = useState([]);
@@ -38,6 +39,7 @@ const OrderSuccess = (props) => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         <div className='ps-card'>
           <img
             src={card_brand === 'MasterCard' ? mastercard : visa}

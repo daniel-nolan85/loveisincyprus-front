@@ -6,6 +6,7 @@ import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import LargeImage from '../../components/modals/LargeImage';
 import ImagesDenied from '../../components/modals/ImagesDenied';
+import Mobile from '../../components/user/Mobile';
 
 const Photos = () => {
   const [photos, setPhotos] = useState([]);
@@ -111,6 +112,7 @@ const Photos = () => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         {/* <h1 className='center'>
           {photos[0].length > 0 || photos[1].length > 0 || photos[2].length > 0
             ? //   {photos.length > 0

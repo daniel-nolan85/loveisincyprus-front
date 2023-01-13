@@ -18,6 +18,7 @@ import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import DurationInfo from '../../components/modals/DurationInfo';
 import TargetingInfo from '../../components/modals/TargetingInfo';
+import Mobile from '../../components/user/Mobile';
 
 const AdSubmission = () => {
   const [content, setContent] = useState('');
@@ -142,6 +143,7 @@ const AdSubmission = () => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         <h1 className='center'>Advertisement submission</h1>
         <br />
         <div className='ad-section'>

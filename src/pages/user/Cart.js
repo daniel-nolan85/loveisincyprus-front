@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPaperPlane, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
+import Mobile from '../../components/user/Mobile';
 
 const Cart = ({ history }) => {
   const [loading, setLoading] = useState(false);
@@ -89,6 +90,7 @@ const Cart = ({ history }) => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         {!cart.length ? (
           <h1 className='center'>
             Your cart is currently empty.{' '}

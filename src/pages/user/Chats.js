@@ -27,6 +27,7 @@ import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import ReportMessage from '../../components/modals/ReportMessage';
 import renderHtml from 'react-render-html';
+import Mobile from '../../components/user/Mobile';
 
 let socket, selectedChatCompare;
 
@@ -372,6 +373,7 @@ const Chats = ({ history }) => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         <div className='main'>
           <div className='chats-container'>
             <div className='chat-list'>

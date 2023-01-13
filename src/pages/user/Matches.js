@@ -7,6 +7,7 @@ import axios from 'axios';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import Unfollow from '../../components/modals/Unfollow';
+import Mobile from '../../components/user/Mobile';
 
 const Matches = ({ history }) => {
   const [users, setUsers] = useState([]);
@@ -48,6 +49,7 @@ const Matches = ({ history }) => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         <h1 className='center'>
           {users.length > 0
             ? "People I've matched with"

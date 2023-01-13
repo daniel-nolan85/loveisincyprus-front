@@ -5,6 +5,7 @@ import { getProduct, productStar, getRelated } from '../../functions/product';
 import { useSelector } from 'react-redux';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
+import Mobile from '../../components/user/Mobile';
 
 const Product = ({ match }) => {
   const [product, setProduct] = useState({});
@@ -47,6 +48,7 @@ const Product = ({ match }) => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         <SingleProduct
           product={product}
           onStarClick={onStarClick}

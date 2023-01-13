@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import Modal from 'react-modal';
 import { getUsersByCount, fetchUsersByFilter } from '../../functions/user';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,7 +8,6 @@ import {
   faMagnifyingGlass,
   faFloppyDisk,
   faUndo,
-  faFilter,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
@@ -24,12 +24,17 @@ import {
 import UserInfo from '../../components/cards/UserInfo';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import UserSearchMobile from '../../components/modals/UserSearchMobile';
+
+Modal.setAppElement('#root');
 
 const { SubMenu, ItemGroup } = Menu;
 
-const UserSearch = () => {
-  const [users, setUsers] = useState([]);
+const UserSearchMobile = ({
+  userSearchModalIsOpen,
+  setUserSearchModalIsOpen,
+  users,
+  setUsers,
+}) => {
   const [loading, setLoading] = useState(false);
   const [range, setRange] = useState([0, 0]);
   //   const [ok, setOk] = useState(false);
@@ -61,7 +66,30 @@ const UserSearch = () => {
   const [params, setParams] = useState([]);
   const [loadingSave, setLoadingSave] = useState(false);
   const [loadingSearch, setLoadingSearch] = useState(false);
-  const [userSearchModalIsOpen, setUserSearchModalIsOpen] = useState(false);
+
+  const modalStyles = {
+    content: {
+      top: '180%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      width: '400px',
+    },
+    overlay: {
+      position: 'fixed',
+      display: 'flex',
+      justifyContent: 'center',
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'rgba(0,0,0, .8)',
+      zIndex: '1000',
+      overflowY: 'auto',
+    },
+  };
 
   const map = {
     ageOfPartner: setAgeOfPartner,
@@ -1608,6 +1636,7 @@ const UserSearch = () => {
   );
 
   const searchMembers = () => {
+    setUserSearchModalIsOpen(false);
     setLoadingSearch(true);
     const unique = Object.values(
       params.reduce((a, item) => {
@@ -1685,9 +1714,17 @@ const UserSearch = () => {
   // };
 
   return (
-    <div className='container search-container'>
-      <div className='left-sidebar search'>
+    <Modal
+      isOpen={userSearchModalIsOpen}
+      onRequestClose={() => setUserSearchModalIsOpen(false)}
+      style={modalStyles}
+      contentLabel='Example Modal'
+    >
+      <div className='left-sidebar search mobile-user-search'>
         <div className='shortcut-links'>
+          <div className='button-box user-search-box'>
+            <p className='form-header user-search'>Search Filters</p>
+          </div>
           <form onSubmit={handleSearch}>
             <div className='search-box'>
               <FontAwesomeIcon
@@ -1980,7 +2017,7 @@ const UserSearch = () => {
           {user.role === 'main-admin' ? (
             <div className='form-box search'>
               <div className='button-box'>
-                <p className='form-header'>Save Search</p>
+                <p className='form-header user-search'>Save Search</p>
               </div>
               <form>
                 <input
@@ -2009,7 +2046,7 @@ const UserSearch = () => {
             user.role === 'secondary-admin' && (
               <div className='form-box search'>
                 <div className='button-box'>
-                  <p className='form-header'>Save Search</p>
+                  <p className='form-header user-search'>Save Search</p>
                 </div>
                 <form>
                   <input
@@ -2060,63 +2097,8 @@ const UserSearch = () => {
           </button> */}
         </div>
       </div>
-      <div className='admin-main-content'>
-        <div className='mobile-search'>
-          <form onSubmit={handleSearch}>
-            <div className='search-box'>
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                onClick={handleSearch}
-              />
-              <input
-                type='search'
-                placeholder='Search Members'
-                onChange={handleChange}
-                value={text}
-              />
-            </div>
-            <input type='submit' hidden />
-          </form>
-          <button
-            onClick={() => setUserSearchModalIsOpen(!userSearchModalIsOpen)}
-            type='button'
-            className='submit-btn mobile-search-btn'
-            disabled={loadingSearch}
-          >
-            {loadingSearch ? (
-              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-            ) : (
-              <FontAwesomeIcon icon={faFilter} className='fa' />
-            )}
-            Filter
-          </button>
-        </div>
-        <div className='product-cards'>
-          {loading ? (
-            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-          ) : (
-            <>
-              {users.length < 1 && (
-                <h1 className='center'>No members match your current search</h1>
-              )}
-              {users &&
-                users.map((u) => (
-                  <div className='product-card' key={u._id}>
-                    <UserInfo u={u} />
-                  </div>
-                ))}
-            </>
-          )}
-        </div>
-        <UserSearchMobile
-          userSearchModalIsOpen={userSearchModalIsOpen}
-          setUserSearchModalIsOpen={setUserSearchModalIsOpen}
-          users={users}
-          setUsers={setUsers}
-        />
-      </div>
-    </div>
+    </Modal>
   );
 };
 
-export default UserSearch;
+export default UserSearchMobile;

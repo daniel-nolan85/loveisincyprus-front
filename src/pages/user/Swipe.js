@@ -12,6 +12,7 @@ import Match from '../../components/modals/Match';
 import { addPoints } from '../../functions/user';
 import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
+import Mobile from '../../components/user/Mobile';
 
 let socket;
 
@@ -144,6 +145,7 @@ const Swipe = ({ history }) => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         <div className='tinder-card-container'>
           {users.length < 1 && (
             <h1 className='center'>There is no one to swipe on right now...</h1>

@@ -7,6 +7,7 @@ import axios from 'axios';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import EventCard from '../../components/cards/EventCard';
+import Mobile from '../../components/user/Mobile';
 
 const Events = ({ history }) => {
   const [events, setEvents] = useState([]);
@@ -88,6 +89,7 @@ const Events = ({ history }) => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         {!events.length ? (
           <h1 className='center'>No events</h1>
         ) : (

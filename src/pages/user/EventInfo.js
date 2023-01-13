@@ -12,6 +12,7 @@ import EventPostList from '../../components/cards/EventPostList';
 import AddComment from '../../components/modals/AddComment';
 import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
+import Mobile from '../../components/user/Mobile';
 
 let socket;
 
@@ -55,7 +56,7 @@ const EventInfo = () => {
     if (user && user.token) {
       fetchEvent();
     }
-  }, [user && user.token]);
+  }, [user && user.token, params]);
 
   const fetchEvent = async () => {
     await axios
@@ -239,6 +240,7 @@ const EventInfo = () => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         <SingleEvent event={event} fetchEvent={fetchEvent} />
         <PostForm
           content={content}

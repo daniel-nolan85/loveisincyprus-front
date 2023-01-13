@@ -17,6 +17,7 @@ import AddressForm from '../../components/forms/AddressForm';
 import AddressList from '../../components/modals/AddressList';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
+import Mobile from '../../components/user/Mobile';
 
 const Checkout = ({ history }) => {
   const [products, setProducts] = useState([]);
@@ -276,6 +277,7 @@ const Checkout = ({ history }) => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         <div>
           <br />
           <h1 className='center'>

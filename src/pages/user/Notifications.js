@@ -13,6 +13,7 @@ import { ChatState } from '../../context/ChatProvider';
 import { toast } from 'react-toastify';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import Mobile from '../../components/user/Mobile';
 
 let socket;
 
@@ -441,6 +442,7 @@ const Notifications = () => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         <h1 className='center'>
           You have{' '}
           {numOfNewNotifs === 0 ? (

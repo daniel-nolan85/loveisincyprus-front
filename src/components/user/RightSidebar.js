@@ -5,10 +5,23 @@ import moment from 'moment';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
+import { ChatState } from '../../context/ChatProvider';
 
 const RightSidebar = () => {
+  const [numOfUpcomingEvents, setNumOfUpcomingEvents] = useState('');
   const [ads, setAds] = useState([]);
   const [targetedAds, setTargetedAds] = useState([]);
+
+  const {
+    newAds,
+    setNewAds,
+    newVerifs,
+    setNewVerifs,
+    reportedContent,
+    setReportedContent,
+    productsForReview,
+    setProductsForReview,
+  } = ChatState();
 
   const { _id, token, events, gender, age, location } =
     useSelector((state) => state.user) || {};
@@ -16,12 +29,73 @@ const RightSidebar = () => {
   const history = useHistory();
 
   useEffect(() => {
+    fetchNewAds();
+    fetchNewVerifs();
+    fetchReportedContent();
+    fetchProductsForReview();
+  }, []);
+
+  const fetchNewAds = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-new-ads`)
+      .then((res) => {
+        console.log('new ads ==> ', res.data);
+        setNewAds(res.data);
+      });
+  };
+
+  const fetchNewVerifs = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-new-verifs`)
+      .then((res) => {
+        console.log('new verifs ==> ', res.data);
+        setNewVerifs(res.data);
+      });
+  };
+
+  const fetchReportedContent = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-reported-content`)
+      .then((res) => {
+        console.log('reported content ==> ', res.data);
+        setReportedContent(res.data);
+      });
+  };
+
+  const fetchProductsForReview = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-products-for-review`)
+      .then((res) => {
+        console.log('products for review ==> ', res.data);
+        setProductsForReview(res.data);
+      });
+  };
+
+  useEffect(() => {
+    fetchNumOfUpcomingEvents();
     fetchApprovedAds();
   }, []);
 
   useEffect(() => {
     filterTargeted();
   }, [ads]);
+
+  const fetchNumOfUpcomingEvents = async () => {
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/fetch-num-upcoming-events`,
+        { _id },
+        {
+          headers: {
+            authtoken: token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        setNumOfUpcomingEvents(res.data);
+      });
+  };
 
   const fetchApprovedAds = async () => {
     await axios
@@ -107,7 +181,7 @@ const RightSidebar = () => {
           <Link to='/events'>All Events</Link>
         </div>
       )}
-      {events &&
+      {events && numOfUpcomingEvents > 0 ? (
         events.map(
           (e) =>
             !e.expired && (
@@ -135,7 +209,11 @@ const RightSidebar = () => {
                 </div>
               </div>
             )
-        )}
+        )
+      ) : (
+        <p>There are no upcoming events to display right now</p>
+      )}
+      <br />
       <div className='sidebar-title'>
         <h4>Advertisements</h4>
         <Link to='/ad-submission'>Submit an Ad</Link>

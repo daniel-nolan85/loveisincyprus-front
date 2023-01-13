@@ -12,6 +12,7 @@ import {
 import PaymentForm from '../../components/forms/PaymentForm';
 import { toast } from 'react-toastify';
 import { createMembershipPayment } from '../../functions/cardinity';
+import Mobile from '../../components/user/Mobile';
 
 const BecomePaid = ({ history }) => {
   const [succeeded, setSucceeded] = useState(false);
@@ -120,6 +121,7 @@ const BecomePaid = ({ history }) => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         {user.membership.paid ? (
           <h1 className='center'>
             You currently have{' '}

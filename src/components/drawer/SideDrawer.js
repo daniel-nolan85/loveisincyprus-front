@@ -37,7 +37,9 @@ const SideDrawer = () => {
         className='submit-btn'
         onClick={() => dispatch({ type: 'SET_VISIBLE', payload: false })}
       >
-        <Link to='/cart'>Go to Cart</Link>
+        <Link to='/cart' className='form-header'>
+          Go to Cart
+        </Link>
       </button>
     </Drawer>
   );

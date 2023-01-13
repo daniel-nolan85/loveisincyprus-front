@@ -25,6 +25,7 @@ import { useLocation } from 'react-router-dom';
 import { ChatState } from '../../context/ChatProvider';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import Mobile from '../../components/user/Mobile';
 
 const Points = () => {
   const [points, setPoints] = useState(0);
@@ -439,6 +440,7 @@ const Points = () => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         <h1 className='center'>
           You currently have a total of{' '}
           {points === 1 ? `${points} point` : `${points} points`}

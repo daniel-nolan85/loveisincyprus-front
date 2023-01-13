@@ -2,6 +2,7 @@ import React from 'react';
 import CardinityCheckout from '../../components/cards/CardinityCheckout';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
+import Mobile from '../../components/user/Mobile';
 
 const Payment = (props) => {
   const { deliverTo, userAddress, couponApplied, deliveryFee } =
@@ -11,6 +12,7 @@ const Payment = (props) => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         <h1 className='center'>Complete your purchase</h1>
         <CardinityCheckout
           deliverTo={deliverTo}

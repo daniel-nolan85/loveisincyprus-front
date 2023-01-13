@@ -8,6 +8,7 @@ import visa from '../../assets/visa.png';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
+import Mobile from '../../components/user/Mobile';
 
 const SubscriptionSuccess = (props) => {
   const [fortnight, setFortnight] = useState('');
@@ -28,6 +29,7 @@ const SubscriptionSuccess = (props) => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         <div className='ps-card'>
           <img
             src={cardBrand === 'MasterCard' ? mastercard : visa}

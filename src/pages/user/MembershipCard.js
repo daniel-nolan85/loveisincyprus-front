@@ -12,6 +12,7 @@ import {
   faStar,
   faCalendarDays,
 } from '@fortawesome/free-solid-svg-icons';
+import Mobile from '../../components/user/Mobile';
 
 const MembershipCard = () => {
   const [points, setPoints] = useState(0);
@@ -43,6 +44,7 @@ const MembershipCard = () => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         <div className='ms-center'>
           <div className='ms-card'>
             <div className='ms-additional'>

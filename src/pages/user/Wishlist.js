@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import ProductInfo from '../../components/cards/ProductInfo';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
+import Mobile from '../../components/user/Mobile';
 
 const Wishlist = () => {
   const [wishlist, setWishlist] = useState([]);
@@ -33,6 +34,7 @@ const Wishlist = () => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         {!wishlist.length ? (
           <h1 className='center'>
             Your wishlist is currently empty.{' '}

@@ -10,7 +10,7 @@ const TsAndCs = () => {
       <div className='info-white-bg shadow'>
         <div className='info-content'>
           <h2>Dating Services Terms of Use</h2>
-          <p>(Terms of Use revised on September 25th, 2022)</p>
+          <p>(Terms of Use revised on January 5th, 2023)</p>
           <h3>Preamble</h3>
           <p>
             These Terms of Use are entered into between Loveisincyprus.com
@@ -153,21 +153,18 @@ const TsAndCs = () => {
           </p>
           <br />
           <p>
-            Once the necessary conditions for registration are met, every Member
-            creates a strictly confidential and personal username and password,
-            which allows him/her to access his/her Account. The Member or
-            Subscriber is responsible for the use of his/her identification
-            elements by third parties or the actions or statements made by an
-            intermediary on his/her Account, whether they are fraudulent or not,
-            and will indemnify Love is in Cyprus for any claim arising in
-            connection with these, other than in the event of fault exclusively
-            attributable to Love is in Cyprus or technical failure of the
-            Services. Moreover, Love is in Cyprus is not obliged and does not
-            have the technical means to verify the identity of individuals
-            registering to the Services. If the Member or Subscriber has reason
-            to believe that another person is using his/her identification
-            elements or his/her Account, he/she must inform Love is in Cyprus
-            immediately.
+            The Member or Subscriber is responsible for the use of his/her
+            identification elements by third parties or the actions or
+            statements made by an intermediary on his/her Account, whether they
+            are fraudulent or not, and will indemnify Love is in Cyprus for any
+            claim arising in connection with these, other than in the event of
+            fault exclusively attributable to Love is in Cyprus or technical
+            failure of the Services. Moreover, Love is in Cyprus is not obliged
+            and does not have the technical means to verify the identity of
+            individuals registering to the Services. If the Member or Subscriber
+            has reason to believe that another person is using his/her
+            identification elements or his/her Account, he/she must inform Love
+            is in Cyprus immediately.
           </p>
           <br />
           <h4>2.2. Procedure and conditions for Subscription</h4>
@@ -175,15 +172,14 @@ const TsAndCs = () => {
             Subscription to the Services is paid for. The Member may purchase a
             Subscription and, thus, become a Subscriber and benefit from the
             functionalities of his/her Subscription. In order to do this, the
-            Member must first identify him/herself using his/her email address,
-            his/her mobile number and his/her confidential password. After
-            choosing his/her Subscription and way of payment, the Member must
-            submit his/her payment. This last step formally concludes the
-            membership contract to the Paid Services and the complete,
-            unreserved acceptance of the Terms of Use. Once the payment has been
-            submitted, the Subscriber is directed to a payment confirmation
-            page. Love is in Cyprus acknowledges receipt of the purchase of a
-            Subscription by sending an email.
+            Member must first identify him/herself using his/her email address
+            and his/her mobile number. After choosing his/her Subscription and
+            way of payment, the Member must submit his/her payment. This last
+            step formally concludes the membership contract to the Paid Services
+            and the complete, unreserved acceptance of the Terms of Use. Once
+            the payment has been submitted, the Subscriber is directed to a
+            payment confirmation page. Love is in Cyprus acknowledges receipt of
+            the purchase of a Subscription by sending an email.
           </p>
           <h3>Article 3. Right to cancel</h3>
           <p>
@@ -411,8 +407,9 @@ const TsAndCs = () => {
                 Not post photo(s) or other visual content which features minors;
               </li>
               <li>
-                Use the confidential password and username of the Member or
-                Subscriber strictly to log in to the Services.
+                Use the mobile phone number of the Member or Subscriber and
+                confidential one time password strictly to log in to the
+                Services.
               </li>
             </ul>
           </div>

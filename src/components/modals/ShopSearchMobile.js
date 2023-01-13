@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Modal from 'react-modal';
 import {
   getProductsByCount,
   fetchProductsByFilter,
@@ -21,12 +22,17 @@ import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { Menu, Slider, Checkbox } from 'antd';
 import Star from '../../components/forms/Star';
-import ShopSearchMobile from '../../components/modals/ShopSearchMobile';
+
+Modal.setAppElement('#root');
 
 const { SubMenu, ItemGroup } = Menu;
 
-const ShopSearch = () => {
-  const [products, setProducts] = useState([]);
+const ShopSearchMobile = ({
+  shopSearchModalIsOpen,
+  setShopSearchModalIsOpen,
+  products,
+  setProducts,
+}) => {
   const [loading, setLoading] = useState(false);
   const [price, setPrice] = useState([0, 0]);
   const [ok, setOk] = useState(false);
@@ -35,7 +41,30 @@ const ShopSearch = () => {
   const [star, setStar] = useState('');
   const [subs, setSubs] = useState([]);
   const [sub, setSub] = useState('');
-  const [shopSearchModalIsOpen, setShopSearchModalIsOpen] = useState(false);
+
+  const modalStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      width: '400px',
+    },
+    overlay: {
+      position: 'fixed',
+      display: 'flex',
+      justifyContent: 'center',
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'rgba(0,0,0, .8)',
+      zIndex: '1000',
+      overflowY: 'auto',
+    },
+  };
 
   const { search } = useSelector((state) => ({ ...state }));
   const { text } = search;
@@ -188,9 +217,17 @@ const ShopSearch = () => {
   };
 
   return (
-    <div className='container search-container'>
-      <div className='left-sidebar search'>
+    <Modal
+      isOpen={shopSearchModalIsOpen}
+      onRequestClose={() => setShopSearchModalIsOpen(false)}
+      style={modalStyles}
+      contentLabel='Example Modal'
+    >
+      <div className='left-sidebar search mobile-user-search'>
         <div className='shortcut-links'>
+          <div className='button-box user-search-box'>
+            <p className='form-header user-search'>Search Filters</p>
+          </div>
           <form onSubmit={handleSearch}>
             <div className='search-box'>
               <FontAwesomeIcon
@@ -206,7 +243,6 @@ const ShopSearch = () => {
             </div>
             <input type='submit' hidden />
           </form>
-
           <Menu mode='inline' defaultOpenKeys={['1', '2', '3', '4']}>
             <SubMenu
               key='1'
@@ -263,60 +299,8 @@ const ShopSearch = () => {
           </Menu>
         </div>
       </div>
-      <div className='admin-main-content'>
-        <div className='mobile-search'>
-          <form onSubmit={handleSearch}>
-            <div className='search-box'>
-              <FontAwesomeIcon
-                icon={faMagnifyingGlass}
-                onClick={handleSearch}
-              />
-              <input
-                type='search'
-                placeholder='Search Products'
-                onChange={handleChange}
-                value={text}
-              />
-            </div>
-            <input type='submit' hidden />
-          </form>
-          <button
-            onClick={() => setShopSearchModalIsOpen(!shopSearchModalIsOpen)}
-            type='button'
-            className='submit-btn mobile-search-btn'
-          >
-            <FontAwesomeIcon icon={faFilter} className='fa' />
-            Filter
-          </button>
-        </div>
-        <div className='product-cards'>
-          {loading ? (
-            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-          ) : (
-            <>
-              {products.length < 1 && (
-                <h1 className='center'>
-                  No products match your current search
-                </h1>
-              )}
-              {products &&
-                products.map((product) => (
-                  <div className='product-card' key={product._id}>
-                    <ProductInfo product={product} />
-                  </div>
-                ))}
-            </>
-          )}
-        </div>
-        <ShopSearchMobile
-          shopSearchModalIsOpen={shopSearchModalIsOpen}
-          setShopSearchModalIsOpen={setShopSearchModalIsOpen}
-          products={products}
-          setProducts={setProducts}
-        />
-      </div>
-    </div>
+    </Modal>
   );
 };
 
-export default ShopSearch;
+export default ShopSearchMobile;

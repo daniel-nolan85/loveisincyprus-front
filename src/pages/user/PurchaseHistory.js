@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import SingleOrder from '../../components/cards/SingleOrder';
+import Mobile from '../../components/user/Mobile';
 
 const PurchaseHistory = () => {
   const [orders, setOrders] = useState([]);
@@ -31,6 +32,7 @@ const PurchaseHistory = () => {
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
+        <Mobile />
         <h1 className='center'>
           {orders.length > 0 ? 'User Purchase Orders' : 'No Purchase Orders'}
         </h1>
