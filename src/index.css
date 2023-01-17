@@ -3629,11 +3629,15 @@ select.decorated option:active {
 }
 
 .chats-container {
-  width: 60rem;
+  width: 100%;
   height: 95%;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.chat-list .search-box input::placeholder {
+  font-size: 12px;
 }
 
 .chat-list {
@@ -3713,16 +3717,17 @@ select.decorated option:active {
   justify-content: space-between;
 }
 
-.time {
-  margin-right: 20px;
-}
-
 .action p {
   margin-bottom: 0;
 }
 
 .action span {
   font-size: 12px;
+}
+
+.time {
+  margin: 2px 20px 0 10px;
+  font-size: 10px !important;
 }
 
 .chat {
@@ -3817,6 +3822,7 @@ select.decorated option:active {
   height: auto;
   width: auto;
   max-width: 75%;
+  margin: 5px 0;
   /* margin-right: 1rem; */
   /* background: #fff; */
   border-radius: 30px;
@@ -3826,7 +3832,7 @@ select.decorated option:active {
 }
 
 .message-sender-message p {
-  padding: 10px;
+  padding: 5px 10px;
   font-size: 0.8rem;
   margin: 0;
   /* text-align: center; */
@@ -4623,7 +4629,7 @@ table.product-info tbody {
     flex-wrap: wrap;
   }
 
-  .search-box:not(.mobile-search .search-box) {
+  .search-box:not(.mobile-search .search-box):not(.chat-list .search-box) {
     display: none;
   }
 
@@ -5322,5 +5328,75 @@ table.product-info tbody {
     font-size: 14px;
     text-align: center;
     width: 300px;
+  }
+}
+
+/* --------------- media query for shop-pages --------------- */
+@media (max-width: 1400px) {
+  .checkout-container .contact-container,
+  .row {
+    flex-direction: column;
+  }
+
+  /* .small-container.single-product {
+    width: 400px;
+    margin: 0;
+  } */
+
+  /* .col-2.s-p {
+    width: 400px;
+    margin: 0 auto;
+  } */
+
+  .form-box.address,
+  .form-box.deliver-to,
+  .form-box.apply-coupon {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .form-box.add-payment {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 450px) {
+  .checkout-container,
+  .small-container.checkout-page,
+  .form-box.add-payment {
+    width: 350px;
+  }
+}
+
+/* --------------- media query for advertisement-pages --------------- */
+@media (max-width: 900px) {
+  .form-box.ad-contact,
+  .form-box.ad-payment {
+    width: 90%;
+  }
+}
+
+@media (max-width: 450px) {
+  .form-box.ad-contact,
+  .form-box.ad-payment {
+    width: 80%;
+  }
+}
+
+/* --------------- media query for chats page --------------- */
+@media (max-width: 1300px) {
+  .chats-container {
+    display: block;
+  }
+
+  .chat-list {
+    width: 100%;
+    height: fit-content;
+    border-bottom: 1px solid #ccc;
+  }
+
+  .chat {
+    width: 100%;
   }
 }

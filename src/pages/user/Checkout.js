@@ -278,7 +278,7 @@ const Checkout = ({ history }) => {
       <LeftSidebar />
       <div className='main-content'>
         <Mobile />
-        <div>
+        <div className='checkout-container'>
           <br />
           <h1 className='center'>
             Please confirm recipient's name and address

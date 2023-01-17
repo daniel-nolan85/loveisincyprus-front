@@ -112,6 +112,17 @@ const SideNav = () => {
                         <br />
                       </>
                     )}
+                    {user.canOrders && (
+                      <>
+                        <Link
+                          to='/admin/orders'
+                          onClick={() => setOpenNav(false)}
+                        >
+                          Orders
+                        </Link>
+                        <br />
+                      </>
+                    )}
                     <>
                       <Link
                         to={{
@@ -190,17 +201,6 @@ const SideNav = () => {
                           onClick={() => setOpenNav(false)}
                         >
                           Calling Code-Block
-                        </Link>
-                        <br />
-                      </>
-                    )}
-                    {user.canOrders && (
-                      <>
-                        <Link
-                          to='/admin/orders'
-                          onClick={() => setOpenNav(false)}
-                        >
-                          Orders
                         </Link>
                         <br />
                       </>

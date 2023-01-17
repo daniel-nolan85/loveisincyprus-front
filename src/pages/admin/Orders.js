@@ -7,10 +7,14 @@ import LeftSidebar from '../../components/admin/LeftSidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import ShowPaymentInfo from '../../components/cards/ShowPaymentInfo';
+import axios from 'axios';
+import { ChatState } from '../../context/ChatProvider';
 
 const Orders = ({ history }) => {
   const [orders, setOrders] = useState([]);
   const [query, setQuery] = useState('');
+
+  const { setNewOrders } = ChatState();
 
   const { token, canOrders } = useSelector((state) => state.user);
 
@@ -30,12 +34,22 @@ const Orders = ({ history }) => {
       setOrders(res.data);
     });
 
+  const fetchNewOrders = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-new-orders`)
+      .then((res) => {
+        console.log('new orders ==> ', res.data);
+        setNewOrders(res.data);
+      });
+  };
+
   const handleStatusChange = (orderId, orderStatus) => {
     changeStatus(orderId, orderStatus, token).then((res) => {
       toast.success(`Order status has been successfully updated.`, {
         position: toast.POSITION.TOP_CENTER,
       });
       loadOrders();
+      fetchNewOrders();
     });
   };
 

@@ -144,6 +144,7 @@ const Cart = ({ history }) => {
                       pathname: '/authentication',
                       state: { from: 'cart' },
                     }}
+                    className='form-header'
                   >
                     Login to Checkout
                   </Link>

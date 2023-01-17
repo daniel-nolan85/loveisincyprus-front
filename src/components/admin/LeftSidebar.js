@@ -35,6 +35,8 @@ const LeftSidebar = () => {
     setReportedContent,
     productsForReview,
     setProductsForReview,
+    newOrders,
+    setNewOrders,
   } = ChatState();
 
   let {
@@ -57,6 +59,7 @@ const LeftSidebar = () => {
     fetchNewVerifs();
     fetchReportedContent();
     fetchProductsForReview();
+    fetchNewOrders();
   }, []);
 
   const fetchNewAds = async () => {
@@ -92,6 +95,15 @@ const LeftSidebar = () => {
       .then((res) => {
         console.log('products for review ==> ', res.data);
         setProductsForReview(res.data);
+      });
+  };
+
+  const fetchNewOrders = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-new-orders`)
+      .then((res) => {
+        console.log('new orders ==> ', res.data);
+        setNewOrders(res.data);
       });
   };
 
@@ -136,6 +148,13 @@ const LeftSidebar = () => {
                 productsForReview.length > 0 &&
                 productsForReview.length}
             </span>
+          </Link>
+        )}
+        {canOrders && (
+          <Link to='/admin/orders'>
+            <FontAwesomeIcon icon={faFolderOpen} className='fa' />
+            Orders
+            <span>{newOrders && newOrders.length > 0 && newOrders.length}</span>
           </Link>
         )}
         <Link
@@ -186,12 +205,6 @@ const LeftSidebar = () => {
               Calling Code-Block
             </Link>
           </>
-        )}
-        {canOrders && (
-          <Link to='/admin/orders'>
-            <FontAwesomeIcon icon={faFolderOpen} className='fa' />
-            Orders
-          </Link>
         )}
         {canProducts && (
           <Link to='/admin/product'>

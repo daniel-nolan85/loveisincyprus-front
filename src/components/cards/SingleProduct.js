@@ -125,7 +125,7 @@ const SingleProduct = ({ product, onStarClick, star }) => {
   return (
     <div className='small-container single-product'>
       <div className='row'>
-        <div className='col-2'>
+        <div className='col-2 s-p'>
           {images && images.length ? (
             <Carousel showArrows autoPlay infiniteLoop>
               {images.map((i) => (
@@ -138,7 +138,7 @@ const SingleProduct = ({ product, onStarClick, star }) => {
             ></Card>
           )}
         </div>
-        <div className='col-2'>
+        <div className='col-2 s-p'>
           <Card
             actions={[
               <div className='tooltip'>
