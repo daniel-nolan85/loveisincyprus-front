@@ -17,16 +17,26 @@ const SubList = () => {
   }, []);
 
   const showSubs = () => (
-    <div className='admin-cards'>
+    // <div className='admin-cards'>
+    //   {subs &&
+    //     subs.map((s) => (
+    //       <div className='admin-card' key={s._id}>
+    //         <div>
+    //           <Link to={`/sub/${s.slug}`}>
+    //             <h3>{s.name}</h3>
+    //           </Link>
+    //         </div>
+    //       </div>
+    //     ))}
+    // </div>
+    <div className='cat-list'>
       {subs &&
         subs.map((s) => (
-          <div className='admin-card' key={s._id}>
-            <div>
-              <Link to={`/sub/${s.slug}`}>
-                <h3>{s.name}</h3>
-              </Link>
-            </div>
-          </div>
+          <button key={s._id} type='button' className='submit-btn cat-list'>
+            <Link to={`/sub/${s.slug}`} className='form-header'>
+              {s.name}
+            </Link>
+          </button>
         ))}
     </div>
   );

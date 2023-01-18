@@ -69,7 +69,7 @@ const ProductReview = ({ history }) => {
   };
 
   return (
-    <div className='container'>
+    <div className='container search-container'>
       <LeftSidebar />
       <div className='admin-main-content'>
         {products.length > 0 ? (

@@ -181,38 +181,36 @@ const RightSidebar = () => {
           <Link to='/events'>All Events</Link>
         </div>
       )}
-      {events && numOfUpcomingEvents > 0 ? (
-        events.map(
-          (e) =>
-            !e.expired && (
-              <div key={e._id}>
-                <div className='events'>
-                  <div className='left-event'>
-                    <h3>{moment(e.when).format('DD')}</h3>
-                    <span>{moment(e.when).format('MMMM')}</span>
-                  </div>
-                  <div className='right-event'>
-                    <h4>{e.name}</h4>
-                    <p>
-                      <FontAwesomeIcon icon={faLocationDot} className='fa' />{' '}
-                      {e.location}
-                    </p>
-                    <p
-                      className='link'
-                      onClick={() => {
-                        history.push(`/event/${e._id}`);
-                      }}
-                    >
-                      More Info
-                    </p>
+      {events && numOfUpcomingEvents > 0
+        ? events.map(
+            (e) =>
+              !e.expired && (
+                <div key={e._id}>
+                  <div className='events'>
+                    <div className='left-event'>
+                      <h3>{moment(e.when).format('DD')}</h3>
+                      <span>{moment(e.when).format('MMMM')}</span>
+                    </div>
+                    <div className='right-event'>
+                      <h4>{e.name}</h4>
+                      <p>
+                        <FontAwesomeIcon icon={faLocationDot} className='fa' />{' '}
+                        {e.location}
+                      </p>
+                      <p
+                        className='link'
+                        onClick={() => {
+                          history.push(`/event/${e._id}`);
+                        }}
+                      >
+                        More Info
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )
-        )
-      ) : (
-        <p>There are no upcoming events to display right now</p>
-      )}
+              )
+          )
+        : token && <p>There are no upcoming events to display right now</p>}
       <br />
       <div className='sidebar-title'>
         <h4>Advertisements</h4>

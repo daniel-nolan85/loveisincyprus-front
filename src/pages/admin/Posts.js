@@ -109,7 +109,7 @@ const Posts = ({ history }) => {
     (q.postedBy.username && q.postedBy.username.toLowerCase().includes(query));
 
   return (
-    <div className='container'>
+    <div className='container search-container'>
       <LeftSidebar />
       <div className='admin-main-content'>
         {/* <form onSubmit={searchPosts}> */}

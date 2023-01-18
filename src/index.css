@@ -2459,6 +2459,14 @@ select.gray {
   align-items: center;
 }
 
+.ql-toolbar .ql-stroke {
+  stroke: var(--nav-color) !important;
+}
+
+.ql-toolbar .ql-fill {
+  stroke: var(--nav-color) !important;
+}
+
 /* --------------- profile-page --------------- */
 .profile-container {
   padding: 20px 15%;
@@ -4051,11 +4059,23 @@ input[name='Photos'] {
 }
 
 /* --------------- shop pages --------------- */
+.cat-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+}
+
+.cat-list .submit-btn {
+  width: fit-content;
+}
+
 .product-cards {
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   flex-wrap: wrap;
 }
 
@@ -4188,6 +4208,14 @@ input[name='Photos'] {
 .antd-pagination {
   text-align: center;
   margin-bottom: 60px;
+}
+
+.related-products {
+  margin-top: 40px;
+}
+
+.related-products .product-cards {
+  text-align: center;
 }
 
 .home-rating {
@@ -4629,7 +4657,9 @@ table.product-info tbody {
     flex-wrap: wrap;
   }
 
-  .search-box:not(.mobile-search .search-box):not(.chat-list .search-box) {
+  .search-box:not(.mobile-search .search-box):not(.chat-list .search-box):not(
+      .admin-main-content .search-box
+    ) {
     display: none;
   }
 
@@ -5289,6 +5319,7 @@ table.product-info tbody {
   .search-container {
     display: block;
   }
+
   .mobile-search {
     display: flex;
     justify-content: space-between;
@@ -5337,16 +5368,6 @@ table.product-info tbody {
   .row {
     flex-direction: column;
   }
-
-  /* .small-container.single-product {
-    width: 400px;
-    margin: 0;
-  } */
-
-  /* .col-2.s-p {
-    width: 400px;
-    margin: 0 auto;
-  } */
 
   .form-box.address,
   .form-box.deliver-to,
@@ -5398,5 +5419,16 @@ table.product-info tbody {
 
   .chat {
     width: 100%;
+  }
+}
+
+/* --------------- media query for geo-block page --------------- */
+@media (max-width: 450px) {
+  .geo-block thead tr td {
+    font-size: 18px;
+  }
+
+  .geo-block tbody tr td {
+    font-size: 16px;
   }
 }

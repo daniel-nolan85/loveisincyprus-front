@@ -3,6 +3,9 @@ import { getSub } from '../../functions/sub';
 import ProductInfo from '../../components/cards/ProductInfo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import LeftSidebar from '../../components/user/LeftSidebar';
+import RightSidebar from '../../components/user/RightSidebar';
+import Mobile from '../../components/user/Mobile';
 
 const SubHome = ({ match }) => {
   const [sub, setSub] = useState({});
@@ -22,28 +25,35 @@ const SubHome = ({ match }) => {
   }, []);
 
   return (
-    <div>
-      {loading ? (
-        <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-      ) : (
-        <>
-          <h1 className='center'>
-            {products.length === 1
-              ? `We have ${products.length} product in the "${sub.name}" sub-category`
-              : `We have ${products.length} products in the "${sub.name}" sub-category`}
-          </h1>
-          <div className='container'>
-            <>
-              {products &&
-                products.map((product) => (
-                  <div className='product-card' key={product._id}>
-                    <ProductInfo product={product} />
-                  </div>
-                ))}
-            </>
-          </div>
-        </>
-      )}
+    <div className='container search-container'>
+      <LeftSidebar />
+      <div className='admin-main-content'>
+        <Mobile />
+        {loading ? (
+          <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+        ) : (
+          <>
+            <h1 className='center'>
+              {products.length === 1
+                ? `We have ${products.length} product in the "${sub.name}" sub-category`
+                : `We have ${products.length} products in the "${sub.name}" sub-category`}
+            </h1>
+            <div className='container'>
+              <div className='product-cards'>
+                <>
+                  {products &&
+                    products.map((product) => (
+                      <div className='product-card' key={product._id}>
+                        <ProductInfo product={product} />
+                      </div>
+                    ))}
+                </>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+      <RightSidebar />
     </div>
   );
 };

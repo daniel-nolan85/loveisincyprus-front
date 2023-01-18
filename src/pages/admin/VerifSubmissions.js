@@ -70,7 +70,7 @@ const VerifSubmissions = ({ history }) => {
   };
 
   return (
-    <div className='container'>
+    <div className='container search-container'>
       <LeftSidebar />
       <div className='admin-main-content'>
         <div className='admin-cards'>
@@ -130,6 +130,7 @@ const VerifSubmissions = ({ history }) => {
                       verif.postedBy.username || verif.postedBy.name
                     }'s advertisement`}
                     className='post-img'
+                    style={{ marginTop: '10px' }}
                   />
                 )}
               </div>

@@ -87,7 +87,7 @@ const CallingCodeBlock = ({ history }) => {
   };
 
   return (
-    <div className='container'>
+    <div className='container search-container'>
       <LeftSidebar />
       <div className='admin-main-content'>
         <form onSubmit={searchCodes}>

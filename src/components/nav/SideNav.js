@@ -9,16 +9,8 @@ const SideNav = () => {
   const [openNav, setOpenNav] = useState(false);
   const [deviceSize, changeDeviceSize] = useState(window.innerWidth);
 
-  const {
-    newAds,
-    setNewAds,
-    newVerifs,
-    setNewVerifs,
-    reportedContent,
-    setReportedContent,
-    productsForReview,
-    setProductsForReview,
-  } = ChatState();
+  const { newAds, newVerifs, reportedContent, productsForReview, newOrders } =
+    ChatState();
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -119,6 +111,11 @@ const SideNav = () => {
                           onClick={() => setOpenNav(false)}
                         >
                           Orders
+                          <span className='sidenav-count'>
+                            {newOrders &&
+                              newOrders.length > 0 &&
+                              newOrders.length}
+                          </span>
                         </Link>
                         <br />
                       </>

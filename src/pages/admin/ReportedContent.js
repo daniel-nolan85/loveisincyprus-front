@@ -154,7 +154,7 @@ const ReportedContent = ({ history }) => {
   };
 
   return (
-    <div className='container'>
+    <div className='container search-container'>
       <LeftSidebar />
       <div className='admin-main-content'>
         <div className='admin-cards'>

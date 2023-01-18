@@ -66,7 +66,7 @@ const Orders = ({ history }) => {
       q.paymentIntent.status.toLowerCase().includes(query));
 
   return (
-    <div className='container'>
+    <div className='container search-container'>
       <LeftSidebar />
       <div className='admin-main-content'>
         <div className='search-box'>

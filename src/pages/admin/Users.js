@@ -204,7 +204,7 @@ const Users = ({ history }) => {
     q.role.toLowerCase().includes(query);
 
   return (
-    <div className='container'>
+    <div className='container search-container'>
       <LeftSidebar />
       <div className='admin-main-content'>
         {/* <form onSubmit={searchUsers}> */}

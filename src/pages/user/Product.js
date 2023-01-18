@@ -54,9 +54,9 @@ const Product = ({ match }) => {
           onStarClick={onStarClick}
           star={star}
         />
-        <div>
+        <div className='related-products'>
           <h1 className='center'>Related Products</h1>
-          <div className='container'>
+          <div className='product-cards'>
             {related.length
               ? related.map((r) => (
                   <div
