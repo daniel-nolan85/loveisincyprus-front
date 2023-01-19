@@ -33,8 +33,6 @@ const Declined = ({ declinedModalIsOpen, setDeclinedModalIsOpen, post }) => {
     },
   };
 
-  // console.log(post);
-
   return (
     <Modal
       isOpen={declinedModalIsOpen}

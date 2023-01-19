@@ -3,22 +3,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAddressCard,
   faArrowRightFromBracket,
-  faBullseye,
   faEject,
   faEnvelope,
-  faGear,
-  faLock,
-  faNewspaper,
   faPlay,
-  faToolbox,
   faTrash,
-  faUnlockKeyhole,
 } from '@fortawesome/free-solid-svg-icons';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import defaultProfile from '../../assets/defaultProfile.png';
-import axios from 'axios';
-import { toast } from 'react-toastify';
 
 const SettingsMenu = ({
   settingsMenu,
@@ -35,8 +27,6 @@ const SettingsMenu = ({
 
   const box = useRef(null);
   useOutsideAlerter(box);
-
-  let dispatch = useDispatch();
 
   useEffect(() => {
     if (localStorage.getItem('theme') === 'light') {
@@ -73,7 +63,6 @@ const SettingsMenu = ({
         }
       }
 
-      // Adding click event listener
       document.addEventListener('click', handleOutsideClick);
       return () => document.removeEventListener('click', handleOutsideClick);
     }, [ref, settingsMenu]);

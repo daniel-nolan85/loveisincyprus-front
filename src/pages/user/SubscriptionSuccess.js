@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
-import amex from '../../assets/amex.png';
-import discover from '../../assets/discover.png';
 import mastercard from '../../assets/mastercard.png';
 import visa from '../../assets/visa.png';
-import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import Mobile from '../../components/user/Mobile';
@@ -20,7 +17,6 @@ const SubscriptionSuccess = (props) => {
     setFortnight(moment(twoWeeks).format('MMMM Do YYYY'));
   }, []);
 
-  console.log(props);
   const { cardBrand, cardHolder, cardNumber, expiry } =
     props.location.state.userBankDetails[0];
   const payable = props.location.state.payable;

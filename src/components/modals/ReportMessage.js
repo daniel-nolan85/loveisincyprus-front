@@ -19,7 +19,6 @@ const ReportMessage = ({
   let { _id, token } = useSelector((state) => state.user);
 
   const reportMessage = async (message) => {
-    console.log('message => ', message);
     setReporting(true);
     await axios
       .put(
@@ -32,7 +31,6 @@ const ReportMessage = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         toast.warning('This message has been reported', {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -70,7 +68,6 @@ const ReportMessage = ({
   };
 
   const { content, image } = currentMessage;
-  console.log(currentMessage);
 
   return (
     <Modal

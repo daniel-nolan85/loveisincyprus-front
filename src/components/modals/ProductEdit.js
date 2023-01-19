@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
-import { getProduct, updateProduct } from '../../functions/product';
+import { getProduct } from '../../functions/product';
 import { getCategories, getCategorySubs } from '../../functions/category';
 import FileUpload from '../../components/forms/FileUpload';
 import { Select } from 'antd';
@@ -34,7 +34,6 @@ const ProductEdit = ({
 }) => {
   const [values, setValues] = useState(initialState);
   const [subOptions, setSubOptions] = useState([]);
-  const [showSub, setShowSub] = useState(false);
   const [categories, setCategories] = useState([]);
   const [arrayOfSubs, setArrayOfSubs] = useState([]);
 
@@ -62,7 +61,6 @@ const ProductEdit = ({
       p.data.subs.map((s) => {
         arr.push(s._id);
       });
-      console.log('arr => ', arr);
       setArrayOfSubs((prev) => arr);
     });
   };
@@ -100,10 +98,8 @@ const ProductEdit = ({
 
   const handleCategoryChange = (e) => {
     e.preventDefault();
-    // console.log('clicked category => ', e.target.value);
     setValues({ ...values, subs: [], category: e.target.value });
     getCategorySubs(e.target.value).then((res) => {
-      // console.log('sub options on category click => ', res);
       setSubOptions(res.data);
     });
     if (values.category._id === e.target.value) {
@@ -112,8 +108,7 @@ const ProductEdit = ({
     setArrayOfSubs([]);
   };
 
-  const { title, description, price, category, subs, quantity, images } =
-    values;
+  const { title, description, price, category, quantity } = values;
 
   const productForm = () => (
     <div className='form-box product update'>

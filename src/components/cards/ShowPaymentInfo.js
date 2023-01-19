@@ -2,7 +2,6 @@ import React from 'react';
 import moment from 'moment';
 
 const ShowPaymentInfo = ({ order }) => {
-  // console.log('order => ', order);
   return (
     <>
       <h2 className='center'>User Info</h2>
@@ -39,7 +38,6 @@ const ShowPaymentInfo = ({ order }) => {
             <span>
               Ordered on:{' '}
               {moment(order.paymentIntent.created).format('MMMM Do YYYY')}
-              {/* {new Date(order.paymentIntent.created * 1000).toLocaleString()} */}
             </span>{' '}
             <br />
             <span>Order status: {order.orderStatus}</span>

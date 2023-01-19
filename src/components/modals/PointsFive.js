@@ -63,7 +63,6 @@ const PointsFive = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         socket.emit('new message', res.data);
         toast.success(
           'Congratulations! Check your inbox, you will soon receive a new message containing your coupon code.',

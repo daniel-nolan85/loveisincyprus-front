@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
 import defaultProfile from '../../assets/defaultProfile.png';
@@ -29,7 +29,6 @@ import Accepted from '../../components/modals/Accepted';
 import Maybe from '../../components/modals/Maybe';
 import Declined from '../../components/modals/Declined';
 import Comments from '../cards/Comments';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 
 Modal.setAppElement('#root');
@@ -44,7 +43,6 @@ const NotifPost = ({
   handleComment,
   removeComment,
   reportComment,
-  // newsFeed,
   postToDelete,
   postDeleteModalIsOpen,
   setPostDeleteModalIsOpen,
@@ -59,8 +57,6 @@ const NotifPost = ({
   postOfCommentToEdit,
   fetchNotifications,
   populateNotifications,
-  // notifToDelete,
-  // setNotifToDelete,
   acceptInvite,
   maybe,
   declineInvite,
@@ -131,8 +127,6 @@ const NotifPost = ({
     },
   };
 
-  console.log(post);
-
   return (
     <Modal
       isOpen={notifModalIsOpen}
@@ -159,7 +153,6 @@ const NotifPost = ({
                 className='fa trash'
                 onClick={() => {
                   handleDelete(post.notif);
-                  // setNotifModalIsOpen(false);
                 }}
               />
               <FontAwesomeIcon
@@ -250,7 +243,6 @@ const NotifPost = ({
                 <Comments
                   post={post.notif}
                   removeComment={removeComment}
-                  // newsFeed={newsFeed}
                   commentDeleteModalIsOpen={commentDeleteModalIsOpen}
                   setCommentDeleteModalIsOpen={setCommentDeleteModalIsOpen}
                   commentToDelete={commentToDelete}
@@ -430,18 +422,13 @@ const NotifPost = ({
         postDeleteModalIsOpen={postDeleteModalIsOpen}
         setPostDeleteModalIsOpen={setPostDeleteModalIsOpen}
         postToDelete={postToDelete}
-        // newsFeed={newsFeed}
         fetchNotifications={fetchNotifications}
-        // deleteNotif={deleteNotif}
-        // notifToDelete={notifToDelete}
-        // setNotifToDelete={setNotifToDelete}
         setNotifModalIsOpen={setNotifModalIsOpen}
       />
       <SinglePost
         postModalIsOpen={postModalIsOpen}
         setPostModalIsOpen={setPostModalIsOpen}
         post={currentPost}
-        // newsFeed={newsFeed}
         setNotifModalIsOpen={setNotifModalIsOpen}
       />
       <ShowLikes

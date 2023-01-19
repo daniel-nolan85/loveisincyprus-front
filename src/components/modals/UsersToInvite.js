@@ -29,8 +29,6 @@ const UsersToInvite = ({
 
   const { token } = useSelector((state) => state.user);
 
-  console.log('values => ', values);
-
   useEffect(() => {
     fetchSearches();
   }, []);
@@ -39,23 +37,18 @@ const UsersToInvite = ({
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-user-searches`)
       .then((res) => {
-        console.log(res.data);
         setSearches(res.data);
       });
   };
 
   const userSearch = async (arg) => {
-    console.log('arg => ', arg);
     fetchUsersByFilter(arg, token).then((res) => {
       const filtered = res.data.filter((u) => u.eventsEligible);
-      console.log('res.data => ', res.data);
-      console.log('filtered => ', filtered);
       filtered.map((u) => {
         setValues((prevValues) => ({
           ...prevValues,
           invitees: [...prevValues.invitees, u],
         }));
-        // };
       });
     });
     setUsersToInviteModalIsOpen(false);
@@ -88,8 +81,6 @@ const UsersToInvite = ({
       overflowY: 'auto',
     },
   };
-
-  // console.log(values);
 
   return (
     <Modal

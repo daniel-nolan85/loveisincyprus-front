@@ -3,8 +3,6 @@ import { Link } from 'react-router-dom';
 import defaultProfile from '../../assets/defaultProfile.png';
 import axios from 'axios';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
-// import { Swiper } from 'swiper/react/swiper';
-// import { SwiperSlide } from 'swiper/react/swiper-slide';
 import SwiperCore, { Autoplay, EffectCoverflow } from 'swiper';
 import 'swiper/swiper-bundle.min.css';
 import 'swiper/swiper.min.css';
@@ -24,7 +22,6 @@ const FeaturedMembers = () => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-featured-members`)
       .then((res) => {
-        console.log(res.data);
         setFeaturedMembers(res.data);
       })
       .catch((err) => {
@@ -36,7 +33,6 @@ const FeaturedMembers = () => {
     <div className='featured-members-container'>
       <h1>Our Featured Members</h1>
       <Swiper
-        // spaceBetween={5}
         slidesPerView={window.innerWidth / 300}
         effect='coverflow'
         grabCursor='true'

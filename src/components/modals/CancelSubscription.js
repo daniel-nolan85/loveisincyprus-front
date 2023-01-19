@@ -41,7 +41,6 @@ const CancelSubscription = ({
   const cancelSubscription = async () => {
     refundSubscription(user, user.token)
       .then((res) => {
-        console.log(res.data);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {

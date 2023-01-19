@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import LeftSidebar from '../../components/admin/LeftSidebar';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTrashCan,
@@ -68,7 +67,6 @@ const ReportedContent = ({ history }) => {
     await axios
       .post(`${process.env.REACT_APP_API}/fetch-reported-posts`)
       .then((res) => {
-        console.log(res.data);
         setPosts(res.data);
       })
       .catch((err) => {
@@ -94,7 +92,6 @@ const ReportedContent = ({ history }) => {
     await axios
       .post(`${process.env.REACT_APP_API}/fetch-reported-messages`)
       .then((res) => {
-        console.log(res.data);
         setMessages(res.data);
       })
       .catch((err) => {
@@ -106,7 +103,6 @@ const ReportedContent = ({ history }) => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-reported-content`)
       .then((res) => {
-        console.log('reported content ==> ', res.data);
         setReportedContent(res.data);
       });
   };

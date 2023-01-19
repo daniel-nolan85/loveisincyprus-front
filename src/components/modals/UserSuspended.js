@@ -1,13 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Modal from 'react-modal';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
 import defaultImage from '../../assets/defaultProfile.png';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 

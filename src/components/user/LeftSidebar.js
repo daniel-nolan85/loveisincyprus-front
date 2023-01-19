@@ -68,7 +68,6 @@ const LeftSidebar = () => {
         </div>
       )}
       <div className='shortcut-links'>
-        {/* <p>Shopping</p> */}
         <form onSubmit={handleSearch}>
           <div className='search-box'>
             <FontAwesomeIcon icon={faMagnifyingGlass} onClick={handleSearch} />

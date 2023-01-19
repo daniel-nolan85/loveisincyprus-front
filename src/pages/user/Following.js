@@ -32,7 +32,6 @@ const Following = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log('following ==> ', res);
         setUsers(res.data);
       })
       .catch((err) => {

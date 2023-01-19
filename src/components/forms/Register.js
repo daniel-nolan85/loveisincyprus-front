@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { auth } from '../../firebase';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { toast } from 'react-toastify';
@@ -6,8 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowRightToBracket,
   faSpinner,
-  faEye,
-  faEyeSlash,
   faCircleQuestion,
 } from '@fortawesome/free-solid-svg-icons';
 import PhoneInput from 'react-phone-input-2';
@@ -32,44 +30,6 @@ const Register = ({ showLogin }) => {
     useState(false);
   const [whyNeedThisPhoneModalIsOpen, setWhyNeedThisPhoneModalIsOpen] =
     useState(false);
-  // const [newUser, setNewUser] = useState({});
-  // const [password, setPassword] = useState('');
-  // const [showPassword, setShowPassword] = useState(false);
-
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-
-  //   const config = {
-  //     url: process.env.REACT_APP_REGISTER_REDIRECT_URL,
-  //     handleCodeInApp: true,
-  //   };
-  //   await auth.sendSignInLinkToEmail(email, config);
-
-  //   toast.success(
-  //     `An email has been sent to ${email}. Please click the link to complete your registration.`,
-  //     {
-  //       position: toast.POSITION.TOP_CENTER,
-  //     }
-  //   );
-  //   window.localStorage.setItem('emailForRegistration', email);
-  //   setEmail('');
-  //   setMobile('');
-  //   setLoading(false);
-  // };
-
-  // const isFirstRun = useRef(true);
-
-  // useEffect(async () => {
-  //   if (isFirstRun.current) {
-  //     isFirstRun.current = false;
-  //     return;
-  //   } else {
-  //     console.log(newUser);
-  //     const idTokenResult = await newUser.getIdTokenResult();
-  //     console.log('newUser', newUser, 'idTokenResult', idTokenResult);
-  //   }
-  // }, [newUser]);
 
   let dispatch = useDispatch();
   const history = useHistory();
@@ -84,7 +44,6 @@ const Register = ({ showLogin }) => {
       .get(`${process.env.REACT_APP_API}/user-exists/${mobile}`)
       .then((res) => {
         if (res.data.length === 0) {
-          // requestOTP();
           checkAllowedAccess();
         } else {
           toast.error(
@@ -104,7 +63,6 @@ const Register = ({ showLogin }) => {
       .then((res) => {
         if (res.data.length === 0) {
           checkCallingCode();
-          // requestOTP();
         } else {
           toast.error(
             'Access from this mobile number is denied. Please use another.',
@@ -121,7 +79,6 @@ const Register = ({ showLogin }) => {
     await axios
       .get(`${process.env.REACT_APP_API}/calling-code/${mobile}`)
       .then((res) => {
-        console.log(res.data);
         if (res.data.permitted === 'true') {
           requestOTP();
         } else {
@@ -138,9 +95,7 @@ const Register = ({ showLogin }) => {
       'recaptcha-container',
       {
         size: 'invisible',
-        callback: (response) => {
-          // reCAPTCHA solved, allow signInWithPhoneNumber.
-        },
+        callback: (response) => {},
       },
       auth
     );
@@ -184,7 +139,6 @@ const Register = ({ showLogin }) => {
           const idTokenResult = await user.getIdTokenResult();
           createUser(idTokenResult.token, name, email, mobile)
             .then((res) => {
-              console.log(res.data);
               dispatch({
                 type: 'LOGGED_IN_USER',
                 payload: {
@@ -355,7 +309,6 @@ const Register = ({ showLogin }) => {
           placeholder='Enter your mobile phone number'
           value={mobile}
           onChange={(phone) => {
-            console.log(phone);
             setMobile(`+${phone}`);
           }}
         />

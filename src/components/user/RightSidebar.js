@@ -12,16 +12,8 @@ const RightSidebar = () => {
   const [ads, setAds] = useState([]);
   const [targetedAds, setTargetedAds] = useState([]);
 
-  const {
-    newAds,
-    setNewAds,
-    newVerifs,
-    setNewVerifs,
-    reportedContent,
-    setReportedContent,
-    productsForReview,
-    setProductsForReview,
-  } = ChatState();
+  const { setNewAds, setNewVerifs, setReportedContent, setProductsForReview } =
+    ChatState();
 
   const { _id, token, events, gender, age, location } =
     useSelector((state) => state.user) || {};
@@ -39,7 +31,6 @@ const RightSidebar = () => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-new-ads`)
       .then((res) => {
-        console.log('new ads ==> ', res.data);
         setNewAds(res.data);
       });
   };
@@ -48,7 +39,6 @@ const RightSidebar = () => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-new-verifs`)
       .then((res) => {
-        console.log('new verifs ==> ', res.data);
         setNewVerifs(res.data);
       });
   };
@@ -57,7 +47,6 @@ const RightSidebar = () => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-reported-content`)
       .then((res) => {
-        console.log('reported content ==> ', res.data);
         setReportedContent(res.data);
       });
   };
@@ -66,7 +55,6 @@ const RightSidebar = () => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-products-for-review`)
       .then((res) => {
-        console.log('products for review ==> ', res.data);
         setProductsForReview(res.data);
       });
   };
@@ -92,7 +80,6 @@ const RightSidebar = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setNumOfUpcomingEvents(res.data);
       });
   };
@@ -101,7 +88,6 @@ const RightSidebar = () => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-approved-ads`)
       .then((res) => {
-        console.log(res.data);
         setAds(res.data);
       });
   };
@@ -171,8 +157,6 @@ const RightSidebar = () => {
     }
   };
 
-  // let exists = Object.values(obj).includes('test1');
-
   return (
     <div className='right-sidebar'>
       {token && (
@@ -238,19 +222,6 @@ const RightSidebar = () => {
       ) : (
         <p>There are no ads to display right now</p>
       )}
-      {/* <div className='sidebar-title'>
-        <h4>Conversation</h4>
-        <Link to='#'>Hide Chat</Link>
-      </div>
-      <div className='online-list'>
-        <p>Jennifer Justice</p>
-      </div>
-      <div className='online-list'>
-        <p>Lennon Gray</p>
-      </div>
-      <div className='online-list'>
-        <p>Luna Tuna</p>
-      </div> */}
     </div>
   );
 };

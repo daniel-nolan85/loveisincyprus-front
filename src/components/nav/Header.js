@@ -1,19 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import Logo from '../../assets/logo.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faBell,
-  faBolt,
   faCircleInfo,
   faMagnifyingGlass,
   faMessage,
-  faNewspaper,
   faRightToBracket,
   faShop,
-  faToolbox,
   faCartShopping,
-  faCoins,
-  faUsers,
 } from '@fortawesome/free-solid-svg-icons';
 import SettingsMenu from './SettingsMenu';
 import { useSelector, useDispatch } from 'react-redux';
@@ -23,7 +18,6 @@ import SearchResults from './SearchResults';
 import firebase from 'firebase/compat/app';
 import { Link, useHistory } from 'react-router-dom';
 import { Badge } from 'antd';
-import { ChatState } from '../../context/ChatProvider';
 import SideNav from './SideNav';
 
 const Header = ({
@@ -37,22 +31,10 @@ const Header = ({
   const [deviceSize, changeDeviceSize] = useState(window.innerWidth);
 
   let { user, cart } = useSelector((state) => ({ ...state }));
-  console.log(deviceSize);
-
-  const {
-    notification,
-    setNotification,
-    // thisPost,
-    // setThisPost,
-    // notifModalIsOpen,
-    // setNotifModalIsOpen,
-  } = ChatState();
 
   let history = useHistory();
 
   let dispatch = useDispatch();
-
-  const isFirstRun = useRef(true);
 
   const searchUser = async (e) => {
     e.preventDefault();
@@ -68,7 +50,6 @@ const Header = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         setSearchResults(res.data);
       })
       .catch((err) => {
@@ -76,35 +57,7 @@ const Header = ({
       });
   };
 
-  // const resetCount = async () => {
-  //   console.log('reset count');
-  //   await axios
-  //     .put(
-  //       `${process.env.REACT_APP_API}/reset-message-count`,
-  //       { user },
-  //       {
-  //         headers: {
-  //           authtoken: user.token,
-  //         },
-  //       }
-  //     )
-  //     .then((res) => {
-  //       // console.log(res.data);
-  //       dispatch({
-  //         type: 'LOGGED_IN_USER',
-  //         payload: {
-  //           ...user,
-  //           messages: res.data.messages,
-  //         },
-  //       });
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
   const resetNotifCount = async () => {
-    console.log('reset count');
     await axios
       .put(
         `${process.env.REACT_APP_API}/reset-notification-count`,
@@ -116,7 +69,6 @@ const Header = ({
         }
       )
       .then((res) => {
-        // console.log(res.data);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
@@ -129,11 +81,6 @@ const Header = ({
         console.log(err);
       });
   };
-
-  // const notifPost = (post) => {
-  //   setThisPost(post);
-  //   setNotifModalIsOpen(true);
-  // };
 
   const logout = () => {
     setSettingsMenu(false);
@@ -162,69 +109,6 @@ const Header = ({
         </Link>
         {user && (
           <>
-            {/* {user.role === 'admin' && (
-              <div className='settings-links dropdown'>
-                <Link to='/admin/dashboard'>
-                  <FontAwesomeIcon icon={faToolbox} className='menu-icon' />
-                </Link>
-                <div className='dropdown-content information'>
-                  <Link to='/admin/dashboard'>Dashboard</Link>
-                  <br />
-                  <Link to='/admin/posts'>Posts</Link>
-                  <br />
-                  <Link to='/admin/users'>Users</Link>
-                  <br />
-                  <Link to='/admin/mass-mail'>Mass Mail</Link>
-                  <br />
-                  <Link to='/admin/event'>Events</Link>
-                  <br />
-                  <Link to='/admin/geo-block'>Geo-Block</Link>
-                  <br />
-                  <Link to='/admin/ip-block'>IP-Block</Link>
-                  <br />
-                  <Link to='/admin/orders'>Orders</Link>
-                  <br />
-                  <Link to='/admin/product'>Products</Link>
-                  <br />
-                  <Link to='/admin/category'>Categories</Link>
-                  <br />
-                  <Link to='/admin/sub'>Sub-Categories</Link>
-                  <br />
-                  <Link to='/admin/coupon'>Coupon</Link>
-                  <br />
-                  <Link to='/ad-submissions'>Ad Submissions</Link>
-                  <br />
-                  <Link to='/verif-submissions'>Verified User Submissions</Link>
-                </div>
-              </div>
-            )}
-            <ul>
-              <Link to='/user/dashboard'>
-                <li className='tooltip'>
-                  <FontAwesomeIcon icon={faNewspaper} className='menu-icon' />
-                  <span className='tooltip-text'>Dashboard</span>
-                </li>
-              </Link>
-              <Link to='/search-users'>
-                <li className='tooltip'>
-                  <FontAwesomeIcon icon={faUsers} className='menu-icon' />
-                  <span className='tooltip-text'>Search members</span>
-                </li>
-              </Link>
-              {user.membership.paid && (
-                <Link to='/swipe-to-match'>
-                  <li className='tooltip'>
-                    <FontAwesomeIcon icon={faBolt} className='menu-icon' />
-                    <span className='tooltip-text'>Swipe</span>
-                  </li>
-                </Link>
-              )}
-              <Link to='/points'>
-                <li className='tooltip'>
-                  <FontAwesomeIcon icon={faCoins} className='menu-icon' />
-                  <span className='tooltip-text'>Points</span>
-                </li>
-              </Link> */}
             <ul>
               <Link to='/chats'>
                 <li className='tooltip'>

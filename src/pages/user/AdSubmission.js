@@ -81,7 +81,6 @@ const AdSubmission = () => {
           toast.success(`Your ad has been submitted for approval.`, {
             position: toast.POSITION.TOP_CENTER,
           });
-          console.log('post submit => ', res.data);
           setContent('');
           setImage({});
           setDuration('one day');
@@ -119,25 +118,6 @@ const AdSubmission = () => {
         setUploading(false);
       });
   };
-
-  // const handleCheck = (e) => {
-  //   let checkedItems = demographic;
-  //   let index;
-
-  //   if (e.target.checked) {
-  //     checkedItems.push(e.target.name);
-  //   } else {
-  //     index = checkedItems.indexOf(e.target.value);
-  //     checkedItems.splice(index, 1);
-  //   }
-  //   console.log('checkedItems => ', checkedItems);
-  //   setDemographic(checkedItems);
-  // };
-
-  // const handleSelect = (e) => {
-  //   const values = [...e.target.selectedOptions].map((opt) => opt.value);
-  //   console.log(values);
-  // };
 
   return (
     <div className='container'>
@@ -235,10 +215,6 @@ const AdSubmission = () => {
           <p>
             If you skip this section your ad will be displayed to all users.
           </p>
-          {/* <Checkbox name='everyone' onChange={handleCheck}>
-            Everyone
-          </Checkbox>
-          <br /> */}
           <div className='ad-demographic'>
             <div className='ad-select-options'>
               <label
@@ -347,24 +323,6 @@ const AdSubmission = () => {
                 selectedLocation.map((l, i) => <span key={i}>{l}</span>)}
             </div>
           </div>
-          {/* <Checkbox name='male' onChange={handleCheck}>
-            Males
-          </Checkbox>
-          <Checkbox name='female' onChange={handleCheck}> 
-            Females
-          </Checkbox> */}
-          {/* <Checkbox name='18-30' onChange={handleCheck}>
-              18-30 year olds
-            </Checkbox>
-            <Checkbox name='30-45' onChange={handleCheck}>
-              30-45 year olds
-            </Checkbox>
-            <Checkbox name='45-60' onChange={handleCheck}>
-              45-60 year olds
-            </Checkbox>
-            <Checkbox name='over 60' onChange={handleCheck}>
-              Over 60 year olds
-            </Checkbox> */}
         </div>
         <div className='ad-section'>
           <div className='ad-header'>

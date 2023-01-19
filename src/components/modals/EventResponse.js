@@ -1,16 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faSpinner,
   faThumbsUp,
   faQuestion,
   faThumbsDown,
-  faCalendarDays,
-  faLocationDot,
 } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
@@ -25,7 +21,6 @@ const EventResponse = ({
   const { user } = useSelector((state) => ({ ...state }));
 
   const acceptInvite = async (post) => {
-    console.log(post);
     toast.success(`Great! We can't wait to see you there!`, {
       position: toast.POSITION.TOP_CENTER,
     });
@@ -41,7 +36,6 @@ const EventResponse = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         fetchEvent();
       })
       .catch((err) => {
@@ -50,7 +44,6 @@ const EventResponse = ({
   };
 
   const maybe = async (post) => {
-    console.log(post);
     toast.success(`Ok, we'll keep our fingers crossed!`, {
       position: toast.POSITION.TOP_CENTER,
     });
@@ -66,7 +59,6 @@ const EventResponse = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         fetchEvent();
       })
       .catch((err) => {
@@ -75,7 +67,6 @@ const EventResponse = ({
   };
 
   const declineInvite = async (post) => {
-    console.log(post);
     toast.success(`Too bad! We hope to see you at the next one!`, {
       position: toast.POSITION.TOP_CENTER,
     });
@@ -91,7 +82,6 @@ const EventResponse = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         fetchEvent();
       })
       .catch((err) => {
@@ -122,8 +112,6 @@ const EventResponse = ({
       overflowY: 'auto',
     },
   };
-
-  console.log('event reponse => ', post);
 
   return (
     <Modal

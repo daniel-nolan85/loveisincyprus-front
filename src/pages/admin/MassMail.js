@@ -17,7 +17,6 @@ import axios from 'axios';
 import defaultProfile from '../../assets/defaultProfile.png';
 import { sendMassMail } from '../../functions/chat';
 import io from 'socket.io-client';
-import { ChatState } from '../../context/ChatProvider';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
@@ -38,8 +37,6 @@ const MassMail = ({ history }) => {
     useState(false);
 
   const { token, _id, canMassMail } = useSelector((state) => state.user);
-
-  const { setSocketConnected } = ChatState();
 
   useEffect(() => {
     if (!canMassMail) {
@@ -73,7 +70,6 @@ const MassMail = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setOptIns(res.data);
       })
       .catch((err) => {
@@ -94,7 +90,6 @@ const MassMail = ({ history }) => {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setValues({
           ...values,
           image: { url: res.data.url, public_id: res.data.public_id },
@@ -113,10 +108,8 @@ const MassMail = ({ history }) => {
       setLoading(true);
       sendMassMail(values, token)
         .then((res) => {
-          console.log(res);
           setLoading(false);
           setValues(initialState);
-          // socket.emit('new message', res.data);
           socket.emit('new mass mail', res.data);
           toast.success('Your message has been sent', {
             position: toast.POSITION.TOP_CENTER,
@@ -136,12 +129,7 @@ const MassMail = ({ history }) => {
     }
   };
 
-  // const handleChange = (e) => {
-  //   setValues({ ...values, [e.target.name]: e.target.value });
-  // };
-
   const removeSelected = (o) => {
-    console.log(o);
     for (var s = 0; s < values.selected.length; s++) {
       if (values.selected[s]._id == o._id) {
         values.selected.splice(s, 1);
@@ -176,11 +164,9 @@ const MassMail = ({ history }) => {
           </label>
         </div>
         <ReactQuill
-          // className='input-field bio'
           placeholder='Write a message...'
           value={content}
           name='content'
-          // onChange={handleChange}
           onChange={(e) => setValues({ ...values, content: e })}
           modules={{ toolbar: ['bold', 'italic', 'underline'] }}
         />

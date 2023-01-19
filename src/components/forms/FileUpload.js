@@ -34,14 +34,12 @@ const FileUpload = ({ values, setValues }) => {
                 }
               )
               .then((res) => {
-                console.log('image upload response data => ', res);
                 setLoading(false);
                 allUploadedFiles.push(res.data);
                 setValues({ ...values, images: allUploadedFiles });
               })
               .catch((err) => {
                 setLoading(false);
-                console.log('cloudinary upload err => ', err);
               });
           },
           'base64'

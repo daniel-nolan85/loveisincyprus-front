@@ -6,7 +6,6 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSpinner,
-  faArrowsLeftRight,
   faCaretUp,
   faCaretDown,
 } from '@fortawesome/free-solid-svg-icons';
@@ -23,9 +22,6 @@ const Analyse = ({
   const [showAnalysis, setShowAnalysis] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
-
-  console.log('userToAnalyse => ', userToAnalyse);
-  console.log('user => ', user);
 
   useEffect(() => {
     analyseUsers(userToAnalyse);
@@ -45,7 +41,6 @@ const Analyse = ({
       )
       .then((res) => {
         setAnalysing(false);
-        console.log(res.data);
         setBreakdown(res.data);
       })
       .catch((err) => {

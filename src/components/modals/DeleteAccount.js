@@ -35,7 +35,6 @@ const DeleteAccount = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         toast.error('User deleted', {
           position: toast.POSITION.TOP_CENTER,
         });

@@ -49,8 +49,6 @@ const Checkout = ({ history }) => {
 
   const isFirstRun = useRef(true);
 
-  console.log('totalAfterDiscount => ', totalAfterDiscount);
-
   useEffect(() => {
     fetchUserCart();
     fetchUserAddress();
@@ -156,14 +154,11 @@ const Checkout = ({ history }) => {
           <button
             type='submit'
             className='submit-btn'
-            onClick={
-              () =>
-                // history.push({ pathName: '/payment', state: userAddress })
-                history.push({
-                  pathname: '/payment',
-                  state: { deliverTo, userAddress, couponApplied, deliveryFee },
-                })
-              // history.push('/payment')
+            onClick={() =>
+              history.push({
+                pathname: '/payment',
+                state: { deliverTo, userAddress, couponApplied, deliveryFee },
+              })
             }
             disabled={
               !addressSaved || !products.length || loading || loadingAddress
@@ -225,7 +220,6 @@ const Checkout = ({ history }) => {
     e.preventDefault();
     setLoadingCoupon(true);
     applyUserCoupon(coupon, token).then((res) => {
-      console.log('response on coupon applied', res.data);
       if (res.data.err) {
         setLoadingCoupon(false);
         setDiscountError(res.data.err);
@@ -239,7 +233,6 @@ const Checkout = ({ history }) => {
         return;
       }
       if (res.data) {
-        console.log(res.data);
         setLoadingCoupon(false);
         setTotalAfterDiscount(parseFloat(res.data.totalAfterDiscount));
         setCouponApplied(res.data.validCoupon);

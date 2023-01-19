@@ -11,8 +11,6 @@ const AdRemove = ({
   setAdRemoveModalIsOpen,
   currentAd,
   fetchAds,
-  loading,
-  setLoading,
 }) => {
   let { token, _id } = useSelector((state) => state.user);
 
@@ -60,7 +58,6 @@ const AdRemove = ({
   };
 
   const { content, image } = currentAd;
-  console.log(currentAd);
 
   return (
     <Modal

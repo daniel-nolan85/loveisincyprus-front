@@ -31,7 +31,6 @@ const EventEdit = ({
   loadEvents,
   uploading,
   setUploading,
-  // handleMainImage,
 }) => {
   const [values, setValues] = useState(initialState);
 
@@ -43,7 +42,6 @@ const EventEdit = ({
 
   const loadEvent = () => {
     getEvent(eventToEdit._id).then((e) => {
-      console.log(e);
       setValues({ ...values, ...e.data });
     });
   };
@@ -61,11 +59,6 @@ const EventEdit = ({
         },
       })
       .then((res) => {
-        console.log(res.data);
-        // setMainImage({
-        //   url: res.data.url,
-        //   public_id: res.data.public_id,
-        // });
         setValues({
           ...values,
           mainImage: { url: res.data.url, public_id: res.data.public_id },
@@ -83,7 +76,6 @@ const EventEdit = ({
     setLoading(true);
     updateEvent(values, token)
       .then((res) => {
-        console.log(res.data);
         setLoading(false);
         toast.success(`${res.data.name} has been updated`, {
           position: toast.POSITION.TOP_CENTER,

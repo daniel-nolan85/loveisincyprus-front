@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUserCheck,
@@ -51,7 +51,6 @@ const SingleEvent = ({ event, fetchEvent }) => {
   };
 
   const {
-    invitees,
     accepted,
     maybe,
     declined,
@@ -115,7 +114,6 @@ const SingleEvent = ({ event, fetchEvent }) => {
                     pathname: link,
                   }}
                   target='_blank'
-                  // className='link'
                 >
                   <FontAwesomeIcon icon={faMap} className='fa' /> View map
                 </Link>

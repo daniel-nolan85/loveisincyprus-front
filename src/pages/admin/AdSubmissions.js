@@ -6,8 +6,6 @@ import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTrashCan,
-  faComments,
-  faMagnifyingGlass,
   faThumbsDown,
   faThumbsUp,
   faUser,
@@ -55,7 +53,6 @@ const AdSubmissions = ({ history }) => {
       isFirstRun.current = false;
       return;
     } else if (payable && userAgent) {
-      console.log('ready to go');
       runPayment(currentAd);
     }
   }, [payable && userAgent]);
@@ -64,7 +61,6 @@ const AdSubmissions = ({ history }) => {
     await axios
       .post(`${process.env.REACT_APP_API}/fetch-ads`)
       .then((res) => {
-        console.log(res.data);
         setAds(res.data);
       })
       .catch((err) => {
@@ -99,7 +95,6 @@ const AdSubmissions = ({ history }) => {
   };
 
   const preparePayment = (ad) => {
-    console.log('preparing => ', ad);
     if (ad.duration === 'one day') {
       setPayable('5.00');
     }
@@ -116,11 +111,9 @@ const AdSubmissions = ({ history }) => {
   };
 
   const runPayment = async (ad) => {
-    console.log('running => ', ad);
     setProcessing(true);
     createAdPayment(ad.accountInfo, payable, userAgent, token, ad._id).then(
       (res) => {
-        console.log('create payment', res.data);
         if (res.data.errors) {
           toast.error(res.data.errors[0].message, {
             position: toast.POSITION.TOP_CENTER,

@@ -71,7 +71,6 @@ const Photos = () => {
         }
       )
       .then((res) => {
-        console.log('res.data => ', res.data);
         setPhotos(res.data);
       });
   };
@@ -93,7 +92,6 @@ const Photos = () => {
           }
         )
         .then((res) => {
-          console.log('visitorPhotos res => ', res.data);
           if (res.data < 2) {
             setDeniedModalIsOpen(true);
           }
@@ -104,21 +102,13 @@ const Photos = () => {
     }
   };
 
-  const { name, username, clearPhoto, membership } = thisUser;
-
-  // console.log('photos => ', photos);
+  const { clearPhoto, membership } = thisUser;
 
   return (
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
         <Mobile />
-        {/* <h1 className='center'>
-          {photos[0].length > 0 || photos[1].length > 0 || photos[2].length > 0
-            ? //   {photos.length > 0
-              'Photo Gallery'
-            : `${username || name} has not uploaded any photos yet`}
-        </h1> */}
         <input type='radio' name='Photos' id='check1' defaultChecked />
         <input type='radio' name='Photos' id='check2' />
         <input type='radio' name='Photos' id='check3' />

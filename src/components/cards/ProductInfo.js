@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import defaultItem from '../../assets/defaultItem.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -28,7 +28,6 @@ const ProductInfo = ({ product, wishlist, handleRemove }) => {
       }
       cart.push({ ...product, count: 1 });
       let unique = _.uniqWith(cart, _.isEqual);
-      // console.log('unique => ', unique);
       localStorage.setItem('cart', JSON.stringify(unique));
       dispatch({
         type: 'ADD_TO_CART',
@@ -88,7 +87,6 @@ const ProductInfo = ({ product, wishlist, handleRemove }) => {
                 <div className='tooltip'>
                   {cart.some((ele) => ele._id === _id) ? (
                     <div onClick={handleRemoveFromCart}>
-                      {/* <div> */}
                       <FontAwesomeIcon
                         icon={faCartArrowDown}
                         className='fa minus'
@@ -128,7 +126,6 @@ const ProductInfo = ({ product, wishlist, handleRemove }) => {
                 <div className='tooltip'>
                   {cart.some((ele) => ele._id === _id) ? (
                     <div onClick={handleRemoveFromCart}>
-                      {/* <div> */}
                       <FontAwesomeIcon
                         icon={faCartArrowDown}
                         className='fa minus'

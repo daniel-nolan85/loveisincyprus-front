@@ -15,7 +15,6 @@ const SubscriberRoute = ({ children, ...rest }) => {
           setOk(true);
         })
         .catch((err) => {
-          console.log('SUBSCRIBER ROUTE ERR', err);
           setOk(false);
         });
     }

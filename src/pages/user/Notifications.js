@@ -3,13 +3,10 @@ import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import { useSelector, useDispatch } from 'react-redux';
 import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChartLine } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import AddComment from '../../components/modals/AddComment';
 import NotifPost from '../../components/modals/NotifPost';
 import io from 'socket.io-client';
-import { ChatState } from '../../context/ChatProvider';
 import { toast } from 'react-toastify';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -26,7 +23,6 @@ const Notifications = () => {
   const [post, setPost] = useState({});
   const [currentPost, setCurrentPost] = useState({});
   const [image, setImage] = useState({});
-  // const [notifToDelete, setNotifToDelete] = useState([]);
   const [postToDelete, setPostToDelete] = useState([]);
   const [postDeleteModalIsOpen, setPostDeleteModalIsOpen] = useState(false);
   const [comment, setComment] = useState('');
@@ -54,8 +50,6 @@ const Notifications = () => {
   const dispatch = useDispatch();
 
   const isFirstRun = useRef(true);
-
-  const { socketConnected, setSocketConnected } = ChatState();
 
   useEffect(() => {
     fetchNotifications();
@@ -94,7 +88,6 @@ const Notifications = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setNotifications(res.data.notifications);
       })
       .catch((err) => {
@@ -129,7 +122,6 @@ const Notifications = () => {
         }
       }
     }
-    // console.log(notifications);
     setPopulatedNotifs(notifications);
   };
 
@@ -190,7 +182,6 @@ const Notifications = () => {
   }, [startDate]);
 
   const viewNotif = async (n) => {
-    // console.log(n);
     await axios
       .post(
         `${process.env.REACT_APP_API}/mark-notif-as-read`,
@@ -204,10 +195,8 @@ const Notifications = () => {
       .then((res) => {
         fetchNotifications();
       });
-    console.log(n);
     setNotifModalIsOpen(true);
     setPost(n);
-    // setNotifToDelete(n);
     n.new = false;
   };
 
@@ -307,9 +296,7 @@ const Notifications = () => {
         }
       )
       .then((res) => {
-        // console.log(res.data);
         if (res.data.postedBy !== user._id) {
-          // socket.emit('like post', res.data);
         }
         fetchNotifications();
         populateNotifications();
@@ -340,7 +327,6 @@ const Notifications = () => {
   };
 
   const acceptInvite = async (post) => {
-    console.log(post);
     toast.success(`Great! We can't wait to see you there!`, {
       position: toast.POSITION.TOP_CENTER,
     });
@@ -356,7 +342,6 @@ const Notifications = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         fetchNotifications();
         populateNotifications();
         dispatch({
@@ -373,7 +358,6 @@ const Notifications = () => {
   };
 
   const maybe = async (post) => {
-    console.log(post);
     toast.success(`Ok, we'll keep our fingers crossed!`, {
       position: toast.POSITION.TOP_CENTER,
     });
@@ -389,7 +373,6 @@ const Notifications = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         fetchNotifications();
         populateNotifications();
         dispatch({
@@ -406,7 +389,6 @@ const Notifications = () => {
   };
 
   const declineInvite = async (post) => {
-    console.log(post);
     toast.success(`Too bad! We hope to see you at the next one!`, {
       position: toast.POSITION.TOP_CENTER,
     });
@@ -422,7 +404,6 @@ const Notifications = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         fetchNotifications();
         populateNotifications();
         dispatch({
@@ -501,111 +482,69 @@ const Notifications = () => {
                   <th>Date</th>
                   <th>Action</th>
                 </tr>
-                {notifsDisplay.map(
-                  (n) => (
-                    // typeof n.notif === 'object' ? (
-                    <tr key={n._id}>
-                      <td>
-                        <p className={n.new === true ? 'new ' : ''}>
-                          {moment(n.occurred).format('MMMM Do YYYY')}
+                {notifsDisplay.map((n) => (
+                  <tr key={n._id}>
+                    <td>
+                      <p className={n.new === true ? 'new ' : ''}>
+                        {moment(n.occurred).format('MMMM Do YYYY')}
+                      </p>
+                    </td>
+                    <td>
+                      {n.action === 'liked post' && (
+                        <p
+                          className={
+                            n.new === true ? 'new notification' : 'notification'
+                          }
+                        >
+                          Someone liked your{' '}
+                          <span className='link' onClick={() => viewNotif(n)}>
+                            post
+                          </span>
                         </p>
-                      </td>
-                      <td>
-                        {n.action === 'liked post' && (
-                          <p
-                            className={
-                              n.new === true
-                                ? 'new notification'
-                                : 'notification'
-                            }
-                          >
-                            {/* {n.notif.likes.length > 1
-                            ? n.notif.likes[
-                                n.notif.likes.length - 1
-                              ].email.split('@')[0]
-                            : n.notif.likes[0].email.split('@')[0]}{' '} */}
-                            Someone liked your{' '}
-                            <span className='link' onClick={() => viewNotif(n)}>
-                              post
-                            </span>
-                          </p>
-                        )}
-                        {n.action === 'commented post' && (
-                          <p
-                            className={
-                              n.new === true
-                                ? 'new notification'
-                                : 'notification'
-                            }
-                            onClick={() => viewNotif(n)}
-                          >
-                            {/* {n.notif.comments.length > 1
-                            ? n.notif.comments[
-                                n.notif.comments.length - 1
-                              ].postedBy.email.split('@')[0]
-                            : n.notif.comments[0].postedBy.email.split(
-                                '@'
-                              )[0]}{' '} */}
-                            Someone commented on your post
-                          </p>
-                        )}
-                        {n.action === 'new event' && (
-                          <p
-                            className={
-                              n.new === true
-                                ? 'new notification'
-                                : 'notification'
-                            }
-                            onClick={() => viewNotif(n)}
-                          >
-                            You have been invited to an event
-                          </p>
-                        )}
-                        {n.action === 'user liked you' && (
-                          <p
-                            className={
-                              n.new === true
-                                ? 'new notification'
-                                : 'notification'
-                            }
-                            onClick={() => viewNotif(n)}
-                          >
-                            You have a new follower
-                          </p>
-                        )}
-                        {n.action === 'user visited you' && (
-                          <p
-                            className={
-                              n.new === true
-                                ? 'new notification'
-                                : 'notification'
-                            }
-                            onClick={() => viewNotif(n)}
-                          >
-                            You received a new visitor
-                          </p>
-                        )}
-                      </td>
-                    </tr>
-                  )
-                  // ) : (
-                  //   <tr key={n._id}>
-                  //     <td>
-                  //       <p className={n.new === true ? 'new' : ''}>
-                  //         {moment(n.occurred).format('MMMM Do YYYY')}
-                  //       </p>
-                  //     </td>
-                  //     <td>
-                  //       <p className={n.new === true ? 'new' : ''}>
-                  //         Someone interacted with your{' '}
-                  //         <span className='link' onClick={() => viewNotif(n)}>
-                  //           post
-                  //         </span>
-                  //       </p>
-                  //     </td>
-                  //   </tr>
-                  // )
-                )}
+                      )}
+                      {n.action === 'commented post' && (
+                        <p
+                          className={
+                            n.new === true ? 'new notification' : 'notification'
+                          }
+                          onClick={() => viewNotif(n)}
+                        >
+                          Someone commented on your post
+                        </p>
+                      )}
+                      {n.action === 'new event' && (
+                        <p
+                          className={
+                            n.new === true ? 'new notification' : 'notification'
+                          }
+                          onClick={() => viewNotif(n)}
+                        >
+                          You have been invited to an event
+                        </p>
+                      )}
+                      {n.action === 'user liked you' && (
+                        <p
+                          className={
+                            n.new === true ? 'new notification' : 'notification'
+                          }
+                          onClick={() => viewNotif(n)}
+                        >
+                          You have a new follower
+                        </p>
+                      )}
+                      {n.action === 'user visited you' && (
+                        <p
+                          className={
+                            n.new === true ? 'new notification' : 'notification'
+                          }
+                          onClick={() => viewNotif(n)}
+                        >
+                          You received a new visitor
+                        </p>
+                      )}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           )}
@@ -644,8 +583,6 @@ const Notifications = () => {
           postOfCommentToEdit={postOfCommentToEdit}
           fetchNotifications={fetchNotifications}
           populateNotifications={populateNotifications}
-          // notifToDelete={notifToDelete}
-          // setNotifToDelete={setNotifToDelete}
           acceptInvite={acceptInvite}
           maybe={maybe}
           declineInvite={declineInvite}

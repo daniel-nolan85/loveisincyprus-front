@@ -99,14 +99,8 @@ const Category = ({ history }) => {
           onChange={(e) => setName(e.target.value)}
           autoFocus
           required
-          // disabled={loading}
         />
-        <button
-          onClick={handleSubmit}
-          type='submit'
-          className='submit-btn'
-          //   disabled={password.length < 6 || loading}
-        >
+        <button onClick={handleSubmit} type='submit' className='submit-btn'>
           {loading ? (
             <FontAwesomeIcon icon={faSpinner} className='fa' spin />
           ) : (

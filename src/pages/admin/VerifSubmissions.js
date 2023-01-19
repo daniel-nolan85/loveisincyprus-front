@@ -2,15 +2,8 @@ import React, { useState, useEffect } from 'react';
 import LeftSidebar from '../../components/admin/LeftSidebar';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faTrashCan,
-  faComments,
-  faMagnifyingGlass,
-  faThumbsDown,
-  faThumbsUp,
-} from '@fortawesome/free-solid-svg-icons';
+import { faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import defaultProfile from '../../assets/defaultProfile.png';
@@ -51,7 +44,6 @@ const VerifSubmissions = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setVerifs(res.data);
       })
       .catch((err) => {

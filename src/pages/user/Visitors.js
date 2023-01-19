@@ -10,7 +10,6 @@ import { toast } from 'react-toastify';
 import Match from '../../components/modals/Match';
 import Unfollow from '../../components/modals/Unfollow';
 import io from 'socket.io-client';
-import { ChatState } from '../../context/ChatProvider';
 import { addPoints } from '../../functions/user';
 import Mobile from '../../components/user/Mobile';
 
@@ -25,8 +24,6 @@ const Visitors = ({ history }) => {
 
   const { user } = useSelector((state) => ({ ...state }));
 
-  const { socketConnected, setSocketConnected } = ChatState();
-
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -38,7 +35,6 @@ const Visitors = ({ history }) => {
   }, []);
 
   useEffect(() => {
-    console.log(user);
     if (user && user.token) fetchVisitors();
   }, [user && user.token]);
 
@@ -54,7 +50,6 @@ const Visitors = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log('visitors ==> ', res);
         setUsers(res.data);
       })
       .catch((err) => {

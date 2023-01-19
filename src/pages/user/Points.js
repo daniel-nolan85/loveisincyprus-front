@@ -30,8 +30,6 @@ import Mobile from '../../components/user/Mobile';
 const Points = () => {
   const [points, setPoints] = useState(0);
   const [pointsInfoModalIsOpen, setPointsInfoModalIsOpen] = useState(false);
-  // const [pointsQuestionsModalIsOpen, setPointsQuestionsModalIsOpen] =
-  //   useState(false);
   const [spendPointsModalIsOpen, setSpendPointsModalIsOpen] = useState(false);
   const [pointsFeaturedModalIsOpen, setPointsFeaturedModalIsOpen] =
     useState(false);
@@ -126,83 +124,29 @@ const Points = () => {
 
   const fetchUserPointsTotal = () =>
     getUserPointsTotal(user.token).then((res) => {
-      console.log('fetchUserPointsTotal');
       setPoints(res.data);
     });
 
   const fetchUserPointsGainedData = () => {
     getUserPointsGainedData(user.token).then((res) => {
-      console.log('getUserPointsGainedData => ', res.data.pointsGained);
       setPointsGainedData(res.data.pointsGained);
       setPointsGainedDisplay(res.data.pointsGained);
-      // setPointsGainedGraph({
-      //   labels: res.data.pointsGained.map((date) => moment(date.awarded)),
-      //   datasets: [
-      //     {
-      //       label: 'Points Accumulated',
-      //       data: res.data.pointsGained.map((pg) => pg.amount),
-      //       backgroundColor: '#7cfc00',
-      //     },
-      //   ],
-      // });
     });
   };
 
   const fetchUserPointsLostData = () => {
     getUserPointsLostData(user.token).then((res) => {
-      console.log('getUserPointsLostData => ', res.data.pointsLost);
       setPointsLostData(res.data.pointsLost);
       setPointsLostDisplay(res.data.pointsLost);
-      // setPointsLostGraph({
-      //   labels: res.data.pointsLost.map((date) => moment(date.removed)),
-      //   datasets: [
-      //     {
-      //       label: 'Points Lost',
-      //       data: res.data.pointsLost.map((pl) => pl.amount),
-      //       backgroundColor: '#c70000',
-      //     },
-      //   ],
-      // });
     });
   };
 
   const fetchUserPointsSpentData = () => {
     getUserPointsSpentData(user.token).then((res) => {
-      console.log('getUserPointsSpentData => ', res.data.pointsSpent);
       setPointsSpentData(res.data.pointsSpent);
       setPointsSpentDisplay(res.data.pointsSpent);
-      // setPointsSpentGraph({
-      //   labels: res.data.pointsSpent.map((date) => moment(date.removed)),
-      //   datasets: [
-      //     {
-      //       label: 'Points Spent',
-      //       data: res.data.pointsSpent.map((pl) => pl.amount),
-      //       backgroundColor: '#c70000',
-      //     },
-      //   ],
-      // });
     });
   };
-
-  // const allTime = () => {
-  //   const now = new Date();
-  //   const beginning = new Date(null);
-  //   const pGained = pointsGainedData.filter((d) => {
-  //     var time = new Date(d.awarded).getTime();
-  //     return beginning < time && time < now;
-  //   });
-  //   const pLost = pointsLostData.filter((d) => {
-  //     var time = new Date(d.removed).getTime();
-  //     return beginning < time && time < now;
-  //   });
-  //   const pSpent = pointsSpentData.filter((d) => {
-  //     var time = new Date(d.spent).getTime();
-  //     return beginning < time && time < now;
-  //   });
-  //   setPointsGainedDisplay(pGained);
-  //   setPointsLostDisplay(pLost);
-  //   setPointsSpentDisplay(pSpent);
-  // };
 
   const today = () => {
     const now = new Date();
@@ -262,23 +206,6 @@ const Points = () => {
     setPointsGainedDisplay(pg);
     setPointsLostDisplay(pl);
     setPointsSpentDisplay(ps);
-    // const now = new Date();
-    // const lastMonth = new Date(new Date().setDate(new Date().getDate() - 31));
-    // const pg = pointsGainedData.filter((d) => {
-    //   var time = new Date(d.awarded).getTime();
-    //   return lastMonth < time && time < now;
-    // });
-    // const pl = pointsLostData.filter((d) => {
-    //   var time = new Date(d.removed).getTime();
-    //   return lastMonth < time && time < now;
-    // });
-    // const ps = pointsSpentData.filter((d) => {
-    //   var time = new Date(d.spent).getTime();
-    //   return lastMonth < time && time < now;
-    // });
-    // setPointsGainedDisplay(pg);
-    // setPointsLostDisplay(pl);
-    // setPointsSpentDisplay(ps);
   };
 
   const select = () => {
@@ -290,7 +217,6 @@ const Points = () => {
       isFirstRun.current = false;
       return;
     } else {
-      console.log('startDate => ', startDate);
       const selectedMonth = new Date(startDate).getMonth() + 1;
       const selectedYear = new Date(startDate).getFullYear();
       const pg = pointsGainedData.filter((d) => {
@@ -310,31 +236,6 @@ const Points = () => {
       setPointsSpentDisplay(ps);
     }
   }, [startDate]);
-
-  // const accumulatePoints = () => {
-  //   const res1 = pointsGainedDisplay.reduce(
-  //     (c, n) =>
-  //       c.find((el) => el.awarded.split('T')[0] == n.awarded.split('T')[0])
-  //         ? c
-  //         : [...c, n],
-  //     []
-  //   );
-  //   console.log('res1 => ', res1);
-
-  //   const res2 = Array.from(
-  //     pointsGainedDisplay.reduce(
-  //       (pg, { awarded, amount }) =>
-  //         pg.set(
-  //           awarded.split('T')[0],
-  //           (pg.get(awarded.split('T')[0]) || 0) + amount
-  //         ),
-  //       new Map()
-  //     ),
-  //     ([awarded, amount]) => ({ awarded, amount })
-  //   );
-  //   console.log('res2 => ', res2);
-  //   console.log('pointsGainedDisplay => ', pointsGainedDisplay);
-  // };
 
   const updateGainedChart = () => {
     const pgLabels = pointsGainedDisplay.reduce(
@@ -474,9 +375,6 @@ const Points = () => {
           )}
         </div>
         <div className='points-filter-btns'>
-          {/* <button className='submit-btn' onClick={allTime}>
-            All
-          </button> */}
           <button className='submit-btn' onClick={today}>
             Today
           </button>

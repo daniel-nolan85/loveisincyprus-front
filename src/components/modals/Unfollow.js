@@ -40,7 +40,6 @@ const Unfollow = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         toast.error(`You no longer like ${u.username || u.name}.`, {
           position: toast.POSITION.TOP_CENTER,
         });

@@ -28,7 +28,6 @@ import EventCancel from '../../components/modals/EventCancel';
 import EventEdit from '../../components/modals/EventEdit';
 import moment from 'moment';
 import io from 'socket.io-client';
-import { ChatState } from '../../context/ChatProvider';
 
 let socket;
 
@@ -44,7 +43,6 @@ const initialState = {
 
 const Events = ({ history }) => {
   const [users, setUsers] = useState([]);
-  // const [mainImage, setMainImage] = useState({});
   const [values, setValues] = useState(initialState);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -58,8 +56,6 @@ const Events = ({ history }) => {
   const [query, setQuery] = useState('');
 
   const { token, _id, canEvents } = useSelector((state) => state.user);
-
-  const { setSocketConnected } = ChatState();
 
   useEffect(() => {
     if (!canEvents) {
@@ -81,7 +77,6 @@ const Events = ({ history }) => {
 
   const loadEvents = () =>
     getEvents().then((res) => {
-      // console.log(res.data);
       setEvents(res.data);
     });
 
@@ -123,11 +118,6 @@ const Events = ({ history }) => {
         },
       })
       .then((res) => {
-        console.log(res.data);
-        // setMainImage({
-        //   url: res.data.url,
-        //   public_id: res.data.public_id,
-        // });
         setValues({
           ...values,
           mainImage: { url: res.data.url, public_id: res.data.public_id },
@@ -145,7 +135,6 @@ const Events = ({ history }) => {
     setLoading(true);
     createEvent(values, token)
       .then((res) => {
-        // console.log(res);
         setLoading(false);
         setValues(initialState);
         toast.success(`${res.data.name} has been created`, {
@@ -168,7 +157,6 @@ const Events = ({ history }) => {
   };
 
   const removeInvitee = (u) => {
-    // console.log(u);
     for (var i = 0; i < values.invitees.length; i++) {
       if (values.invitees[i]._id == u._id) {
         values.invitees.splice(i, 1);
@@ -193,7 +181,6 @@ const Events = ({ history }) => {
   };
 
   const searched = (query) => (e) =>
-    // e.name.toLowerCase().includes(query) ||
     e.location.toLowerCase().includes(query) || e.when.includes(query);
 
   const { mainImage, name, location, link, when, notes, invitees } = values;
@@ -230,7 +217,6 @@ const Events = ({ history }) => {
           onChange={handleChange}
           autoFocus
           required
-          // disabled={loading}
         />
         <input
           type='text'
@@ -403,7 +389,6 @@ const Events = ({ history }) => {
           loadEvents={loadEvents}
           uploading={uploading}
           setUploading={setUploading}
-          // handleMainImage={handleMainImage}
         />
       </div>
     </div>

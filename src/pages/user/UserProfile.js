@@ -3,11 +3,8 @@ import defaultCover from '../../assets/defaultCover.jpg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHeart,
-  faHeartBroken,
   faMessage,
   faSignsPost,
-  faEllipsisV,
-  faTrashCan,
   faComments,
   faCaretDown,
   faCaretUp,
@@ -31,7 +28,6 @@ import Match from '../../components/modals/Match';
 import Unfollow from '../../components/modals/Unfollow';
 import { addPoints } from '../../functions/user';
 import io from 'socket.io-client';
-import { ChatState } from '../../context/ChatProvider';
 import Analyse from '../../components/modals/Analyse';
 
 let socket;
@@ -69,8 +65,6 @@ const UserProfile = ({ history }) => {
 
   const { user } = useSelector((state) => ({ ...state }));
 
-  const { socketConnected, setSocketConnected } = ChatState();
-
   const { userId } = useParams();
 
   let dispatch = useDispatch();
@@ -98,7 +92,6 @@ const UserProfile = ({ history }) => {
         }
       )
       .then((res) => {
-        // console.log('res.data => ', res.data);
         if (res.data === 0) {
           setMorePosts(false);
         }
@@ -107,12 +100,10 @@ const UserProfile = ({ history }) => {
   }, [page, userId]);
 
   useEffect(() => {
-    // newVisitor();
     fetchUser();
     fetchVisitor();
     fetchThisUsersPhotos();
     visitorPhotosCount();
-    // addPoints(1, 'visit', user.token); need to ensure this is first visit to users page first
   }, [userId]);
 
   useEffect(() => {
@@ -131,7 +122,6 @@ const UserProfile = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log('fetch user response => ', res.data);
         setThisUser(res.data);
       })
       .catch((err) => {
@@ -180,7 +170,6 @@ const UserProfile = ({ history }) => {
           }
         )
         .then((res) => {
-          console.log(res.data);
           if (!res.data.visitors.includes(user._id)) {
             socket.emit('new visitor', res.data, user);
             addPoints(5, 'new visitor', user.token, res.data);
@@ -211,7 +200,6 @@ const UserProfile = ({ history }) => {
           }
         )
         .then((res) => {
-          console.log('visitorPhotos res => ', res.data);
           setVisitorPhotos(res.data);
         });
     } catch (err) {
@@ -406,7 +394,6 @@ const UserProfile = ({ history }) => {
   const showLikes = (post) => {
     setCurrentPost(post);
     setLikesModalIsOpen(true);
-    console.log(post.likes);
   };
 
   const {

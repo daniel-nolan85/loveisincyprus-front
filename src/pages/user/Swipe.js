@@ -53,9 +53,7 @@ const Swipe = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setUsers(res.data);
-        console.log('users rendered');
       })
       .catch((err) => {
         console.log(err);
@@ -79,7 +77,6 @@ const Swipe = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         toast.error(`You don't like ${u.username || u.name}.`, {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -105,7 +102,6 @@ const Swipe = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         if (res.data.matches.includes(u._id)) {
           setMatchModalIsOpen(true);
           setMatch(u);

@@ -34,7 +34,6 @@ const AdDisapprove = ({
       )
       .then((res) => {
         setLoading(false);
-        console.log(res.data);
         toast.error(
           `You have rejected this ad. A confirmation email has been sent to the user.`,
           {

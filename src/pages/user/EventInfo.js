@@ -11,14 +11,12 @@ import RightSidebar from '../../components/user/RightSidebar';
 import EventPostList from '../../components/cards/EventPostList';
 import AddComment from '../../components/modals/AddComment';
 import io from 'socket.io-client';
-import { ChatState } from '../../context/ChatProvider';
 import Mobile from '../../components/user/Mobile';
 
 let socket;
 
 const EventInfo = () => {
   const [event, setEvent] = useState({});
-  const [posts, setPosts] = useState([]);
   const [content, setContent] = useState('');
   const [uploading, setUploading] = useState(false);
   const [image, setImage] = useState({});
@@ -41,8 +39,6 @@ const EventInfo = () => {
   const { user } = useSelector((state) => ({ ...state }));
 
   let params = useParams();
-
-  const { socketConnected, setSocketConnected } = ChatState();
 
   useEffect(() => {
     socket = io(
@@ -70,7 +66,6 @@ const EventInfo = () => {
         }
       )
       .then((res) => {
-        console.log('event ==> ', res.data);
         setEvent(res.data);
       });
   };
@@ -105,7 +100,6 @@ const EventInfo = () => {
           toast.success(`Event post added. You have been awarded 3 points!`, {
             position: toast.POSITION.TOP_CENTER,
           });
-          console.log('post submit => ', res.data);
           setContent('');
           setImage({});
           fetchEvent();
@@ -159,7 +153,6 @@ const EventInfo = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         if (res.data.postedBy !== user._id) {
           socket.emit('like post', res.data);
         }

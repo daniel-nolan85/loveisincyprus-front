@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import io from 'socket.io-client';
-import { ChatState } from '../../context/ChatProvider';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
@@ -24,8 +23,6 @@ const PointsTen = ({
   const [loading, setLoading] = useState(false);
 
   const { _id, token } = useSelector((state) => state.user);
-
-  const { setSocketConnected } = ChatState();
 
   useEffect(() => {
     socket = io(
@@ -63,7 +60,6 @@ const PointsTen = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         socket.emit('new message', res.data);
         toast.success(
           'Congratulations! Check your inbox, you will soon receive a new message containing your coupon code.',

@@ -21,7 +21,6 @@ const DeleteEvent = ({
   const dispatch = useDispatch();
 
   const removeEvent = async (event) => {
-    console.log(event);
     await axios
       .put(
         `${process.env.REACT_APP_API}/remove-user-event`,
@@ -33,7 +32,6 @@ const DeleteEvent = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         toast.error('This event has been removed', {
           position: toast.POSITION.TOP_CENTER,
         });

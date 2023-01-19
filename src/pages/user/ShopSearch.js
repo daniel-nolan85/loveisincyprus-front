@@ -17,13 +17,12 @@ import {
   faTags,
   faFilter,
 } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { Menu, Slider, Checkbox } from 'antd';
 import Star from '../../components/forms/Star';
 import ShopSearchMobile from '../../components/modals/ShopSearchMobile';
 
-const { SubMenu, ItemGroup } = Menu;
+const { SubMenu } = Menu;
 
 const ShopSearch = () => {
   const [products, setProducts] = useState([]);

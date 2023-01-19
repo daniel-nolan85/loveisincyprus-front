@@ -75,9 +75,7 @@ const ProductInCheckout = ({ p }) => {
             )}
           </div>
           <div>
-            {/* <a href='product-details.html'> */}
             <p>{p.title}</p>
-            {/* </a> */}
             <small>€{p.price}</small>
             <br />
             <FontAwesomeIcon

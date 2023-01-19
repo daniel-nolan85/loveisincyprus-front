@@ -1,7 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
-import defaultProfile from '../../assets/defaultProfile.png';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 import LeftSidebar from '../../components/user/LeftSidebar';
@@ -21,7 +18,6 @@ const Events = ({ history }) => {
       fetchUserEvents();
       fetchPrevEvents();
       fetchComingEvents();
-      console.log('events => ', events);
     }
   }, [token]);
 
@@ -37,7 +33,6 @@ const Events = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log('events ==> ', res.data);
         setEvents(res.data);
       })
       .catch((err) => {
@@ -57,7 +52,6 @@ const Events = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log('previous events ==> ', res.data);
         setPrevEvents(res.data);
       })
       .catch((err) => {
@@ -77,7 +71,6 @@ const Events = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log('upcoming events ==> ', res.data);
         setComingEvents(res.data);
       })
       .catch((err) => {

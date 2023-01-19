@@ -1,22 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import defaultProfile from '../../assets/defaultProfile.png';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCartShopping,
-  faCartArrowDown,
-  faEye,
-  faTrash,
-} from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import { Card } from 'antd';
-import { showAverage } from '../../functions/rating';
 import _ from 'lodash';
 
 const { Meta } = Card;
 
 const UserInfo = ({ u }) => {
-  // console.log(u);
-
   const { _id, name, profileImage, age, about, username } = u;
 
   return (

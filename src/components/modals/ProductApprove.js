@@ -33,7 +33,6 @@ const ProductApprove = ({
       )
       .then((res) => {
         setLoading(false);
-        console.log(res.data);
         toast.success(
           `You have approved this product. It will now be displayed in the store`,
           {

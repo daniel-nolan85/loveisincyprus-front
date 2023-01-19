@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import LeftSidebar from '../../components/admin/LeftSidebar';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCheckCircle,
@@ -66,40 +65,6 @@ const GeoBlock = ({ history }) => {
       });
   };
 
-  //   const getData = async (e) => {
-  //     e = e || window.event;
-  //     var data = [];
-  //     var target = e.srcElement || e.target;
-  //     while (target && target.nodeName !== 'TR') {
-  //       target = target.parentNode;
-  //     }
-  //     if (target) {
-  //       var cells = target.getElementsByTagName('td');
-  //       for (var i = 0; i < cells.length; i++) {
-  //         data.push(cells[i].innerHTML);
-  //         // cells[2].classList.toggle('check');
-  //       }
-  //     }
-  //     // const whitelistEntry = data.slice(0, 2);
-
-  //     await axios
-  //       .post(
-  //         `${process.env.REACT_APP_API}/admin/handle-whitelist`,
-  //         { user, data },
-  //         {
-  //           headers: {
-  //             authtoken: user.token,
-  //           },
-  //         }
-  //       )
-  //       .then((res) => {
-  //         console.log(res.data);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   };
-
   const handleWhitelist = async (l) => {
     await axios
       .post(
@@ -112,7 +77,6 @@ const GeoBlock = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         fetchLocations();
       })
       .catch((err) => {

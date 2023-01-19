@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import LeftSidebar from '../../components/admin/LeftSidebar';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTrashCan,
@@ -17,7 +16,6 @@ const Posts = ({ history }) => {
   const [currentPost, setCurrentPost] = useState({});
   const [commentsModalIsOpen, setCommentsModalIsOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
   const [postToDelete, setPostToDelete] = useState([]);
   const [postDeleteModalIsOpen, setPostDeleteModalIsOpen] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState([]);
@@ -52,33 +50,11 @@ const Posts = ({ history }) => {
       )
       .then((res) => {
         setPosts(res.data);
-        // console.log(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-  // const searchPosts = async (e) => {
-  //   e.preventDefault();
-
-  //   await axios
-  //     .post(
-  //       `${process.env.REACT_APP_API}/admin/search-posts/${query}`,
-  //       { _id },
-  //       {
-  //         headers: {
-  //           authtoken: token,
-  //         },
-  //       }
-  //     )
-  //     .then((res) => {
-  //       setPosts(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
 
   const handleDelete = async (post) => {
     setPostDeleteModalIsOpen(true);
@@ -94,7 +70,6 @@ const Posts = ({ history }) => {
   const showComments = (post) => {
     setCurrentPost(post);
     setCommentsModalIsOpen(true);
-    console.log(post.comments);
   };
 
   const handleSearch = (e) => {
@@ -112,7 +87,6 @@ const Posts = ({ history }) => {
     <div className='container search-container'>
       <LeftSidebar />
       <div className='admin-main-content'>
-        {/* <form onSubmit={searchPosts}> */}
         <div className='search-box'>
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
@@ -123,15 +97,10 @@ const Posts = ({ history }) => {
             type='search'
             placeholder='Search Posts'
             onChange={handleSearch}
-            // onChange={(e) => {
-            //   setQuery(e.target.value);
-            //   setSearchResults([]);
-            // }}
             value={query}
           />
           <input type='submit' hidden />
         </div>
-        {/* </form> */}
         <div className='admin-cards'>
           {posts &&
             posts.filter(searched(query)).map((post) => (

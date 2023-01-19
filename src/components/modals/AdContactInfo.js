@@ -35,7 +35,6 @@ const AdContactInfo = ({
   };
 
   const { contactInfo } = currentAd;
-  console.log('contactInfo => ', contactInfo);
 
   return (
     <Modal

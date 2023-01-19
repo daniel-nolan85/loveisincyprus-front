@@ -48,7 +48,6 @@ const SingleProduct = ({ product, onStarClick, star }) => {
       }
       cart.push({ ...product, count: 1 });
       let unique = _.uniqWith(cart, _.isEqual);
-      console.log('unique => ', unique);
       localStorage.setItem('cart', JSON.stringify(unique));
       dispatch({
         type: 'ADD_TO_CART',
@@ -107,20 +106,10 @@ const SingleProduct = ({ product, onStarClick, star }) => {
           wishlist: res.data.wishlist,
         },
       });
-      // window.location.reload();
     });
 
-  const {
-    title,
-    description,
-    images,
-    slug,
-    price,
-    category,
-    subs,
-    _id,
-    quantity,
-  } = product;
+  const { title, description, images, price, category, subs, _id, quantity } =
+    product;
 
   return (
     <div className='small-container single-product'>
@@ -144,7 +133,6 @@ const SingleProduct = ({ product, onStarClick, star }) => {
               <div className='tooltip'>
                 {cart.some((ele) => ele._id === _id) ? (
                   <div onClick={handleRemoveFromCart}>
-                    {/* <div> */}
                     <FontAwesomeIcon
                       icon={faCartArrowDown}
                       className='fa minus'
@@ -169,9 +157,6 @@ const SingleProduct = ({ product, onStarClick, star }) => {
               </div>,
 
               <div className='tooltip'>
-                {/* {user !== null &&
-                user.wishlist &&
-                user.wishlist.includes(_id) ? ( */}
                 {wishlist.some((ele) => ele._id === _id) ? (
                   <div onClick={handleRemoveFromWishlist}>
                     <FontAwesomeIcon icon={faHeart} className='fa view' />

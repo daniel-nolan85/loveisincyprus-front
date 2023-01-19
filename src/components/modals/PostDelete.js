@@ -19,8 +19,6 @@ const PostDelete = ({
   fetchUserPoints,
   fetchNotifications,
   setNotifModalIsOpen,
-  // deleteNotif,
-  // notifToDelete,
 }) => {
   const [deleting, setDeleting] = useState(false);
 
@@ -47,11 +45,9 @@ const PostDelete = ({
         setPostDeleteModalIsOpen(false);
         newsFeed && newsFeed();
         fetchUserPosts && fetchUserPosts();
-        // setUploading(false);
         fetchUserTotalPosts && fetchUserTotalPosts();
         fetchUserPoints && fetchUserPoints();
         fetchNotifications && fetchNotifications();
-        // deleteNotif && deleteNotif(notifToDelete);
         setNotifModalIsOpen(false);
       })
       .catch((err) => {

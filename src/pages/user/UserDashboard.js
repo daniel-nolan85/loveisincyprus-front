@@ -14,10 +14,8 @@ import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import Match from '../../components/modals/Match';
 import { addPoints } from '../../functions/user';
 import io from 'socket.io-client';
-import { ChatState } from '../../context/ChatProvider';
 import BecomePaid from '../../components/cards/BecomePaid';
 import Mobile from '../../components/user/Mobile';
-// import NotifPost from '../../components/modals/NotifPost';
 
 let socket;
 
@@ -31,7 +29,6 @@ const UserDashboard = () => {
   const [commentModalIsOpen, setCommentModalIsOpen] = useState(false);
   const [currentPost, setCurrentPost] = useState({});
   const [showComments, setShowComments] = useState(-1);
-  const [totalPosts, setTotalPosts] = useState(0);
   const [page, setPage] = useState(1);
   const [morePosts, setMorePosts] = useState(true);
   const [match, setMatch] = useState({});
@@ -54,22 +51,7 @@ const UserDashboard = () => {
 
   const { user } = useSelector((state) => ({ ...state }));
 
-  const {
-    socketConnected,
-    setSocketConnected,
-    // thisPost,
-    // setThisPost,
-    // notifModalIsOpen,
-    // setNotifModalIsOpen,
-  } = ChatState();
-
   const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   axios.get(`${process.env.REACT_APP_API}/total-posts`).then((res) => {
-  //     setTotalPosts(res.data);
-  //   });
-  // }, [page]);
 
   useEffect(() => {
     followersPostsNum();
@@ -95,7 +77,6 @@ const UserDashboard = () => {
         }
       )
       .then((res) => {
-        // console.log(res.data);
         if (res.data === 0) {
           setMorePosts(false);
         }
@@ -125,7 +106,6 @@ const UserDashboard = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setUsers(res.data);
       })
       .catch((err) => {
@@ -241,7 +221,6 @@ const UserDashboard = () => {
           toast.success(`Post added. You have been awarded 3 points!`, {
             position: toast.POSITION.TOP_CENTER,
           });
-          // console.log('post submit => ', res.data);
           setContent('');
           setImage({});
           newsFeed();
@@ -258,8 +237,6 @@ const UserDashboard = () => {
     let formData = new FormData();
     formData.append('image', file);
     setLoadingImg(true);
-    console.log('file => ', file);
-    console.log('formData => ', formData);
 
     await axios
       .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
@@ -297,7 +274,6 @@ const UserDashboard = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         if (res.data.postedBy !== user._id) {
           socket.emit('like post', res.data);
         }
@@ -380,10 +356,6 @@ const UserDashboard = () => {
     setPostOfCommentToReport(postId);
   };
 
-  {
-    console.log('posts => ', posts);
-  }
-
   return (
     <div className='container'>
       <LeftSidebar />
@@ -463,29 +435,6 @@ const UserDashboard = () => {
           setMatchModalIsOpen={setMatchModalIsOpen}
           match={match}
         />
-        {/* <NotifPost
-          notifModalIsOpen={notifModalIsOpen}
-          setNotifModalIsOpen={setNotifModalIsOpen}
-          post={thisPost}
-          handleDelete={handleDelete}
-          handleLike={handleLike}
-          handleUnlike={handleUnlike}
-          handleComment={handleComment}
-          removeComment={removeComment}
-          newsFeed={newsFeed}
-          postDeleteModalIsOpen={postDeleteModalIsOpen}
-          setPostDeleteModalIsOpen={setPostDeleteModalIsOpen}
-          postToDelete={postToDelete}
-          commentDeleteModalIsOpen={commentDeleteModalIsOpen}
-          setCommentDeleteModalIsOpen={setCommentDeleteModalIsOpen}
-          commentToDelete={commentToDelete}
-          postOfCommentToDelete={postOfCommentToDelete}
-          editComment={editComment}
-          commentEditModalIsOpen={commentEditModalIsOpen}
-          setCommentEditModalIsOpen={setCommentEditModalIsOpen}
-          commentToEdit={commentToEdit}
-          postOfCommentToEdit={postOfCommentToEdit}
-        /> */}
       </div>
       <RightSidebar />
     </div>

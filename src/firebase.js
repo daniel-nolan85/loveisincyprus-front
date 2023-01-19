@@ -1,6 +1,5 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-// import { getAnalytics } from 'firebase/analytics';
 
 // firebase config
 const config = {
@@ -19,4 +18,3 @@ if (!firebase.apps.length) {
 // export
 export const auth = firebase.auth();
 export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
-// export const analytics = getAnalytics();

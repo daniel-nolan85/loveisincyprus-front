@@ -32,7 +32,6 @@ const Matches = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log('matches ==> ', res);
         setUsers(res.data);
       })
       .catch((err) => {
@@ -82,14 +81,7 @@ const Matches = ({ history }) => {
                 </>
               ) : (
                 <>
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    className='fa'
-                    // onClick={(e) => {
-                    //   e.stopPropagation();
-                    //   handleFollow(u);
-                    // }}
-                  />
+                  <FontAwesomeIcon icon={faHeart} className='fa' />
                   <p>{u.username || u.name}</p>
                 </>
               )}

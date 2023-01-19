@@ -41,7 +41,6 @@ const ProductReview = ({ history }) => {
     await axios
       .post(`${process.env.REACT_APP_API}/fetch-products-to-review`)
       .then((res) => {
-        console.log(res.data);
         setProducts(res.data);
       })
       .catch((err) => {
@@ -53,7 +52,6 @@ const ProductReview = ({ history }) => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-products-for-review`)
       .then((res) => {
-        console.log('products for review ==> ', res.data);
         setProductsForReview(res.data);
       });
   };

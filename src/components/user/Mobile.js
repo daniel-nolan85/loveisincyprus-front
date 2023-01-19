@@ -61,7 +61,6 @@ const Mobile = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setNumOfUpcomingEvents(res.data);
       });
   };
@@ -70,7 +69,6 @@ const Mobile = () => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-approved-ads`)
       .then((res) => {
-        console.log(res.data);
         setAds(res.data);
       });
   };
@@ -262,7 +260,6 @@ const Mobile = () => {
       </div>
 
       <div className='mobile-shortcut-links'>
-        {/* <p>Shopping</p> */}
         <form onSubmit={handleSearch}>
           <div className='mobile-search-box'>
             <FontAwesomeIcon icon={faMagnifyingGlass} onClick={handleSearch} />

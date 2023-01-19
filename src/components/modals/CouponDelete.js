@@ -19,7 +19,6 @@ const CouponDelete = ({
   let { token } = useSelector((state) => state.user);
 
   const deleteCoupon = async (coupon) => {
-    console.log(coupon);
     setLoading(true);
     removeCoupon(coupon._id, token)
       .then((res) => {

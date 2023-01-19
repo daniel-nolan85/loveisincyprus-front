@@ -66,7 +66,6 @@ const LeftSidebar = () => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-new-ads`)
       .then((res) => {
-        console.log('new ads ==> ', res.data);
         setNewAds(res.data);
       });
   };
@@ -75,7 +74,6 @@ const LeftSidebar = () => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-new-verifs`)
       .then((res) => {
-        console.log('new verifs ==> ', res.data);
         setNewVerifs(res.data);
       });
   };
@@ -84,7 +82,6 @@ const LeftSidebar = () => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-reported-content`)
       .then((res) => {
-        console.log('reported content ==> ', res.data);
         setReportedContent(res.data);
       });
   };
@@ -93,7 +90,6 @@ const LeftSidebar = () => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-products-for-review`)
       .then((res) => {
-        console.log('products for review ==> ', res.data);
         setProductsForReview(res.data);
       });
   };
@@ -102,7 +98,6 @@ const LeftSidebar = () => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-new-orders`)
       .then((res) => {
-        console.log('new orders ==> ', res.data);
         setNewOrders(res.data);
       });
   };

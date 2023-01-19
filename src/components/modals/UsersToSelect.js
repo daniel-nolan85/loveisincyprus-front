@@ -42,7 +42,6 @@ const UsersToSelect = ({
   };
 
   const userSearch = async (arg) => {
-    console.log('arg => ', arg);
     fetchUsersByFilter(arg, token).then((res) => {
       const filtered = res.data.filter((u) => u.optIn);
       filtered.map((u) => {
@@ -50,7 +49,6 @@ const UsersToSelect = ({
           ...prevValues,
           selected: [...prevValues.selected, u],
         }));
-        // };
       });
     });
     setSelectedUsersModalIsOpen(false);
@@ -83,9 +81,6 @@ const UsersToSelect = ({
       overflowY: 'auto',
     },
   };
-
-  console.log(values);
-  console.log(optIns);
 
   return (
     <Modal

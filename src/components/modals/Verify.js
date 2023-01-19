@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -21,8 +21,6 @@ const Verify = ({
   setUploading,
   verifImg,
   setVerifImg,
-  loadingImg,
-  setLoadingImg,
 }) => {
   const [webcamEnabled, setWebcamEnabled] = useState(false);
 
@@ -55,7 +53,6 @@ const Verify = ({
         }
       )
       .then((res) => {
-        console.log(res);
         setUploading(false);
         if (res.data.error) {
           toast.error(res.data.error, {

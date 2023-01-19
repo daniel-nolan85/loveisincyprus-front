@@ -34,7 +34,6 @@ const IPToRemove = ({
   };
 
   const { ip, city, country, postal, region, timezone } = ipToRemove;
-  console.log('ipToRemove => ', ipToRemove);
 
   return (
     <Modal

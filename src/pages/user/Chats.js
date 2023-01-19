@@ -34,15 +34,8 @@ let socket, selectedChatCompare;
 const Chats = ({ history }) => {
   const [users, setUsers] = useState([]);
   const [query, setQuery] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [loadingChat, setLoadingChat] = useState(false);
-  // const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState('');
-  // const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
-  // const [isTyping, setIsTyping] = useState(false);
-  const [lastMessage, setLastMessage] = useState(false);
-  const [theirChatUsers, setTheirChatUsers] = useState([]);
   const [currentMessage, setCurrentMessage] = useState({});
   const [reportMessageModalIsOpen, setReportMessageModalIsOpen] =
     useState(false);
@@ -60,18 +53,12 @@ const Chats = ({ history }) => {
     setSelectedChat,
     chats,
     setChats,
-    notification,
-    setNotification,
     messages,
     setMessages,
     isTyping,
-    setIsTyping,
     socketConnected,
-    setSocketConnected,
     chatUsers,
     setChatUsers,
-    theirChats,
-    setTheirChats,
     typersId,
     setTypersId,
     theirId,
@@ -146,8 +133,6 @@ const Chats = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log('users ==> ', res.data);
-        // setChatUsers(res.data);
         setUsers(res.data);
         fetchChats();
       })
@@ -169,13 +154,10 @@ const Chats = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log('access chat => ', res);
         if (!chats.find((c) => c._id === res.data._id)) {
           setChats([res.data, ...chats]);
         }
         setSelectedChat(res.data);
-        // scrollToBottom();
-        // console.log('selectedChat => ', res.data);
         markRead(u);
       })
       .catch((err) => {
@@ -190,7 +172,6 @@ const Chats = ({ history }) => {
         u,
       })
       .then((res) => {
-        console.log(res.data);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
@@ -216,7 +197,6 @@ const Chats = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res);
         setChats(res.data);
       })
       .catch((err) => {
@@ -246,8 +226,6 @@ const Chats = ({ history }) => {
         })
         .then((res) => {
           setMessages(res.data);
-          console.log('messages => ', res.data);
-          console.log('selectedChat => ', selectedChat);
           socket.emit('join chat', selectedChat._id);
         })
         .catch((err) => {
@@ -265,8 +243,6 @@ const Chats = ({ history }) => {
     let formData = new FormData();
     formData.append('image', file);
     setLoadingImg(true);
-    console.log('file => ', file);
-    console.log('formData => ', formData);
 
     await axios
       .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
@@ -311,7 +287,6 @@ const Chats = ({ history }) => {
             }
           )
           .then((res) => {
-            console.log('message sent ==> ', res.data);
             socket.emit('new message', res.data);
             setMessages([...messages, res.data]);
             socket.emit('stop typing', selectedChat._id);
@@ -340,7 +315,6 @@ const Chats = ({ history }) => {
     if (!typing) {
       setTyping(true);
       socket.emit('typing', user._id, theirId);
-      console.log('typing');
     }
 
     let lastTypingTime = new Date().getTime();
@@ -439,9 +413,6 @@ const Chats = ({ history }) => {
                                         }}
                                         width={50}
                                         height={22}
-                                        // style={{
-                                        //   paddingTop: '15px',
-                                        // }}
                                       />
                                     </div>
                                   ) : chat.latestMessage.content.length > 25 ? (
@@ -520,7 +491,6 @@ const Chats = ({ history }) => {
                 )}
               </div>
               <div className='chat-body'>
-                {/* <ScrollableFeed> */}
                 {messages &&
                   messages.map((m, i, { length }) => (
                     <div key={m._id}>
@@ -586,7 +556,6 @@ const Chats = ({ history }) => {
                       </div>
                     </div>
                   ))}
-                {/* </ScrollableFeed> */}
               </div>
               {selectedChat && (
                 <div>

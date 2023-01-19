@@ -31,7 +31,6 @@ const Comments = ({
   setCommentEditModalIsOpen,
   commentToEdit,
   postOfCommentToEdit,
-  notifModalIsOpen,
   setNotifModalIsOpen,
   eventCommentDeleteModalIsOpen,
   setEventCommentDeleteModalIsOpen,
@@ -47,13 +46,10 @@ const Comments = ({
 }) => {
   const { token, _id } = useSelector((state) => state.user);
 
-  console.log(post);
-
   return (
     <>
       {post.comments.map((c) => (
         <div className='comments-container-inner' key={c._id}>
-          {/* {console.log(c)} */}
           <div className='comment-row'>
             <div className='user-profile'>
               <Link
@@ -94,7 +90,6 @@ const Comments = ({
                   className='fa trash'
                   onClick={() => {
                     removeComment(post._id, c);
-                    // notifModalIsOpen && setNotifModalIsOpen(false);
                   }}
                 />
                 <FontAwesomeIcon
@@ -102,7 +97,6 @@ const Comments = ({
                   className='fa edit'
                   onClick={() => {
                     editComment(post._id, c);
-                    // notifModalIsOpen && setNotifModalIsOpen(false);
                   }}
                 />
               </div>

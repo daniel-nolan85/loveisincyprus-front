@@ -68,7 +68,6 @@ const Product = ({ history }) => {
       values.approved = true;
       setValues({ ...values });
     }
-    console.log(values);
   }, [role]);
 
   const loadCategories = () =>
@@ -77,7 +76,6 @@ const Product = ({ history }) => {
   const loadAllProducts = () => {
     getProductsByCount(100)
       .then((res) => {
-        // console.log(res.data);
         setProducts(res.data);
       })
       .catch((err) => {
@@ -88,10 +86,8 @@ const Product = ({ history }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log(values);
     createProduct(values, token)
       .then((res) => {
-        console.log(res);
         setLoading(false);
         toast.success(`${res.data.title} has been created`, {
           position: toast.POSITION.TOP_CENTER,
@@ -114,19 +110,12 @@ const Product = ({ history }) => {
 
   const handleCategoryChange = (e) => {
     e.preventDefault();
-    // console.log('clicked category => ', e.target.value);
     setValues({ ...values, subs: [], category: e.target.value });
     getCategorySubs(e.target.value).then((res) => {
-      // console.log('sub options on category click => ', res);
       setSubOptions(res.data);
     });
     setShowSub(true);
   };
-
-  // const handleSubChange = (e) => {
-  //   setValues({ ...values, subs: [...subs, e.target.value] });
-  //   console.log(subs);
-  // };
 
   const handleDelete = async (product) => {
     setProductDeleteModalIsOpen(true);
@@ -162,7 +151,6 @@ const Product = ({ history }) => {
       <div className='button-box'>
         <p className='form-header'>Create Product</p>
       </div>
-      {/* {JSON.stringify(values.images)} */}
       <FileUpload values={values} setValues={setValues} />
       <form>
         <input
@@ -235,32 +223,8 @@ const Product = ({ history }) => {
               ))}
           </Select>
         )}
-        {/* <select
-          name='subs'
-          className='gray'
-          onChange={(e) => {
-            setValues({ ...values, subs: [...subs, e.target.value] });
-            console.log(subs);
-          }}
-          onChange={handleSubChange}
-          multiple
-          value={subs}
-        >
-          <option>Select a sub-category</option>
-          {subOptions.length &&
-            subOptions.map((s) => (
-              <option key={s._id} value={s._id}>
-                {s.name}
-              </option>
-            ))}
-        </select> */}
 
-        <button
-          onClick={handleSubmit}
-          type='submit'
-          className='submit-btn'
-          //   disabled={password.length < 6 || loading}
-        >
+        <button onClick={handleSubmit} type='submit' className='submit-btn'>
           {loading ? (
             <FontAwesomeIcon icon={faSpinner} className='fa' spin />
           ) : (

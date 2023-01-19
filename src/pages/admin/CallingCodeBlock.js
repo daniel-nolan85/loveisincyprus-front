@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import LeftSidebar from '../../components/admin/LeftSidebar';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCheckCircle,
@@ -78,7 +77,6 @@ const CallingCodeBlock = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         fetchCodes();
       })
       .catch((err) => {

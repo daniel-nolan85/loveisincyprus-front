@@ -10,14 +10,12 @@ import { toast } from 'react-toastify';
 import Match from '../../components/modals/Match';
 import Unfollow from '../../components/modals/Unfollow';
 import io from 'socket.io-client';
-import { ChatState } from '../../context/ChatProvider';
 import { addPoints } from '../../functions/user';
 import Mobile from '../../components/user/Mobile';
 
 let socket;
 
 const HighCompat = ({ history }) => {
-  //   const [users, setUsers] = useState([]);
   const [highCompats, setHighCompats] = useState({});
   const [veryHighCompats, setVeryHighCompats] = useState({});
   const [superCompats, setSuperCompats] = useState({});
@@ -27,8 +25,6 @@ const HighCompat = ({ history }) => {
   const [unfollowModalIsOpen, setUnfollowModalIsOpen] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
-
-  const { socketConnected, setSocketConnected } = ChatState();
 
   const dispatch = useDispatch();
 
@@ -56,7 +52,6 @@ const HighCompat = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log('users ==> ', res);
         setHighCompats(res.data.highCompats);
         setVeryHighCompats(res.data.veryHighCompats);
         setSuperCompats(res.data.superCompats);
@@ -151,7 +146,6 @@ const HighCompat = ({ history }) => {
                 }}
                 onClick={() => history.push(`/user/${u._id}`)}
               >
-                {/* {user.following.includes(u._id) ? ( */}
                 {user.following.some((e) => e._id === u._id) ||
                 user.following.includes(u._id) ? (
                   <>
@@ -203,7 +197,6 @@ const HighCompat = ({ history }) => {
                 }}
                 onClick={() => history.push(`/user/${u._id}`)}
               >
-                {/* {user.following.includes(u._id) ? ( */}
                 {user.following.some((e) => e._id === u._id) ||
                 user.following.includes(u._id) ? (
                   <>
@@ -255,7 +248,6 @@ const HighCompat = ({ history }) => {
                 }}
                 onClick={() => history.push(`/user/${u._id}`)}
               >
-                {/* {user.following.includes(u._id) ? ( */}
                 {user.following.some((e) => e._id === u._id) ||
                 user.following.includes(u._id) ? (
                   <>

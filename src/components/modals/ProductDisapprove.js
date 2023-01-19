@@ -29,7 +29,6 @@ const ProductDisapprove = ({
       })
       .then((res) => {
         setLoading(false);
-        console.log(res.data);
         toast.error(`You have rejected this product. It has now been deleted`, {
           position: toast.POSITION.TOP_CENTER,
         });

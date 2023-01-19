@@ -63,7 +63,6 @@ const CropProfilePic = ({
         crop.height
       );
       const base64Image = canvas.toDataURL('image/jpeg', 1);
-      console.log('base64Image => ', base64Image);
       setCroppedProfile(base64Image);
     } catch (err) {
       console.log(err);
@@ -82,7 +81,6 @@ const CropProfilePic = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         setProfileImage({
           url: res.data.url,
           public_id: res.data.public_id,
@@ -95,8 +93,6 @@ const CropProfilePic = ({
   };
 
   const submitCropProfile = async (e) => {
-    // setLoading(true);
-
     await axios
       .put(
         `${process.env.REACT_APP_API}/profile-update`,
@@ -111,9 +107,6 @@ const CropProfilePic = ({
         }
       )
       .then((res) => {
-        // setLoading(false);
-        console.log('submitCropProfile response ==> ', res.data);
-
         if (res.data.error) {
           toast.error(res.data.error, {
             position: toast.POSITION.TOP_CENTER,
@@ -133,7 +126,6 @@ const CropProfilePic = ({
         setCropModalIsOpen(false);
       })
       .catch((err) => {
-        // setLoading(false);
         console.log(err);
       });
   };
@@ -183,9 +175,6 @@ const CropProfilePic = ({
         <FontAwesomeIcon
           icon={faFloppyDisk}
           className='fa save-crop'
-          // disabled={
-          //   !profileCropCompleted.width || !profileCropCompleted?.height
-          // }
           onClick={saveCropProfile}
         />
       </div>

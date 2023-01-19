@@ -10,7 +10,6 @@ import { toast } from 'react-toastify';
 import Match from '../../components/modals/Match';
 import Unfollow from '../../components/modals/Unfollow';
 import io from 'socket.io-client';
-import { ChatState } from '../../context/ChatProvider';
 import { addPoints } from '../../functions/user';
 import Mobile from '../../components/user/Mobile';
 
@@ -24,10 +23,6 @@ const Followers = ({ history }) => {
   const [unfollowModalIsOpen, setUnfollowModalIsOpen] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
-  console.log(user);
-  console.log(users);
-
-  const { socketConnected, setSocketConnected } = ChatState();
 
   const dispatch = useDispatch();
 
@@ -55,7 +50,6 @@ const Followers = ({ history }) => {
         }
       )
       .then((res) => {
-        // console.log('followers ==> ', res);
         setUsers(res.data);
       })
       .catch((err) => {
@@ -137,7 +131,6 @@ const Followers = ({ history }) => {
               }}
               onClick={() => history.push(`/user/${u._id}`)}
             >
-              {/* {user.following.includes(u._id) ? ( */}
               {user.following.some((e) => e._id === u._id) ||
               user.following.includes(u._id) ? (
                 <>

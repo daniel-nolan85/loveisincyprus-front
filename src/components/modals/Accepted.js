@@ -33,8 +33,6 @@ const Accepted = ({ acceptedModalIsOpen, setAcceptedModalIsOpen, post }) => {
     },
   };
 
-  // console.log(post);
-
   return (
     <Modal
       isOpen={acceptedModalIsOpen}

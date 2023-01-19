@@ -32,7 +32,6 @@ const AdApprove = ({
       )
       .then((res) => {
         setLoading(false);
-        console.log(res.data);
         toast.success(
           `You have approved this ad. A confirmation email has been sent to the user.`,
           {

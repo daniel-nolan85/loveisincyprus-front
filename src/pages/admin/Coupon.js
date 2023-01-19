@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -45,9 +45,7 @@ const Coupon = ({ history }) => {
     loadCoupons();
   }, []);
 
-  useEffect(() => {
-    console.log(expiry);
-  }, [expiry]);
+  useEffect(() => {}, [expiry]);
 
   const loadCoupons = () => getCoupons().then((c) => setCoupons(c.data));
 
@@ -102,7 +100,6 @@ const Coupon = ({ history }) => {
           onChange={(e) => setName(e.target.value)}
           autoFocus
           required
-          // disabled={loading}
         />
         <input
           type='text'
@@ -111,13 +108,11 @@ const Coupon = ({ history }) => {
           value={discount}
           onChange={(e) => setDiscount(e.target.value)}
           required
-          // disabled={loading}
         />
         <DatePicker
           selected={new Date()}
           value={expiry}
           onChange={(date) => {
-            console.log('date => ', date);
             setExpiry(date);
           }}
           dateFormat='dd/MM/yyyy'

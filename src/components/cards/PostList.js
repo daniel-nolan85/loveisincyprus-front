@@ -57,7 +57,6 @@ const PostList = ({
   const showLikes = (post) => {
     setCurrentPost(post);
     setLikesModalIsOpen(true);
-    // console.log(post.likes);
   };
 
   const reportPost = (post) => {
@@ -143,7 +142,6 @@ const PostList = ({
             <div className='post-row'>
               <div className='activity-icons'>
                 <div>
-                  {/* {post.likes.includes(user._id) ? ( */}
                   {post.likes.some((e) => e._id === _id) ? (
                     <FontAwesomeIcon
                       icon={faHeart}

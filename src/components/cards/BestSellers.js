@@ -23,7 +23,6 @@ const BestSellers = () => {
     getProducts('sold', 'desc', page)
       .then((res) => {
         setLoading(false);
-        console.log(res.data);
         setProducts(res.data);
       })
       .catch((err) => {

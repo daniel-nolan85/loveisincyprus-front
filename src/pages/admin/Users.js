@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import LeftSidebar from '../../components/admin/LeftSidebar';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import defaultProfile from '../../assets/defaultProfile.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -34,7 +33,6 @@ import AdminPreferences from '../../components/modals/AdminPreferences';
 const Users = ({ history }) => {
   const [users, setUsers] = useState([]);
   const [query, setQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
   const [userDeleteModalIsOpen, setUserDeleteModalIsOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState({});
   const [addToAdminModalIsOpen, setAddToAdminModalIsOpen] = useState(false);
@@ -103,34 +101,12 @@ const Users = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setUsers(res.data);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-
-  // const searchUsers = async (e) => {
-  //   e.preventDefault();
-
-  //   await axios
-  //     .post(
-  //       `${process.env.REACT_APP_API}/admin/search-users/${query}`,
-  //       { _id },
-  //       {
-  //         headers: {
-  //           authtoken: token,
-  //         },
-  //       }
-  //     )
-  //     .then((res) => {
-  //       setUsers(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
 
   const removeFromEventsEligible = (u) => {
     setRemoveFromEventsEligibleModalIsOpen(true);
@@ -207,7 +183,6 @@ const Users = ({ history }) => {
     <div className='container search-container'>
       <LeftSidebar />
       <div className='admin-main-content'>
-        {/* <form onSubmit={searchUsers}> */}
         <div className='search-box'>
           <FontAwesomeIcon
             icon={faMagnifyingGlass}
@@ -218,15 +193,10 @@ const Users = ({ history }) => {
             type='search'
             placeholder='Search Users'
             onChange={handleSearch}
-            // onChange={(e) => {
-            //   setQuery(e.target.value);
-            //   setSearchResults([]);
-            // }}
             value={query}
           />
           <input type='submit' hidden />
         </div>
-        {/* </form> */}
         <div className='admin-cards'>
           {users &&
             users.filter(searched(query)).map((u) => (

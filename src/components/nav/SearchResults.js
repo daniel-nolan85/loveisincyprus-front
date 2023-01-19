@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faHeartBroken } from '@fortawesome/free-solid-svg-icons';
+import { faHeart } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import defaultProfile from '../../assets/defaultProfile.png';
@@ -9,7 +9,6 @@ import { Link } from 'react-router-dom';
 import Match from '../../components/modals/Match';
 import Unfollow from '../../components/modals/Unfollow';
 import io from 'socket.io-client';
-import { ChatState } from '../../context/ChatProvider';
 import { addPoints } from '../../functions/user';
 
 let socket;
@@ -21,8 +20,6 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
   const [unfollowModalIsOpen, setUnfollowModalIsOpen] = useState(false);
 
   let { user } = useSelector((state) => ({ ...state }));
-
-  const { socketConnected, setSocketConnected } = ChatState();
 
   const box = useRef(null);
   useOutsideAlerter(box);
@@ -69,7 +66,6 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
           position: toast.POSITION.TOP_CENTER,
         });
         socket.emit('new follower', res.data);
-        console.log(res.data);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
@@ -92,14 +88,12 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
 
   function useOutsideAlerter(ref) {
     useEffect(() => {
-      // Function for click event
       function handleOutsideClick(event) {
         if (ref.current && !ref.current.contains(event.target)) {
           setSearchResults([]);
         }
       }
 
-      // Adding click event listener
       document.addEventListener('click', handleOutsideClick);
       return () => document.removeEventListener('click', handleOutsideClick);
     }, [ref]);

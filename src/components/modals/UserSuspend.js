@@ -23,7 +23,7 @@ const UserSuspend = ({
   const [datePickerIsOpen, setDatePickerIsOpen] = useState(false);
   const [reason, setReason] = useState('');
 
-  let { _id, token } = useSelector((state) => state.user);
+  let { token } = useSelector((state) => state.user);
 
   const suspendUser = async (u) => {
     setSuspending(true);
@@ -38,7 +38,6 @@ const UserSuspend = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         toast.error('User suspended', {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -122,7 +121,6 @@ const UserSuspend = ({
           startDate={startDate}
           endDate={endDate}
           selectsRange
-          //   inline
           open={datePickerIsOpen}
           onClickOutside={() => setDatePickerIsOpen(false)}
         />

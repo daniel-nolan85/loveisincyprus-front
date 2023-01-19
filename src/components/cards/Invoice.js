@@ -54,7 +54,6 @@ const Invoice = ({ order }) => (
         <Text>
           Date: {'               '}
           {moment(order.paymentIntent.created).format('MMMM Do YYYY')}
-          {/* {new Date(order.paymentIntent.created * 1000).toLocaleString()} */}
         </Text>
         {'\n'}
         <Text>

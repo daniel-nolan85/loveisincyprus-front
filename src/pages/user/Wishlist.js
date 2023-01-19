@@ -54,7 +54,6 @@ const Wishlist = () => {
                           wishlist={wishlist}
                           handleRemove={handleRemove}
                         />
-                        {/* <span onClick={() => handleRemove(product)}>X</span> */}
                       </div>
                     ))}
                 </>

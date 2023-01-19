@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
 import { Input, TextArea } from './TextFields';
 import * as yup from 'yup';
-import { contactFormEmail } from '../../functions/sendMessage';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -41,15 +40,12 @@ const ContactForm = () => {
       });
       return;
     } else {
-      console.log(values);
       setLoading(true);
       await axios
         .post(`${process.env.REACT_APP_API}/contact-form-email`, {
           values,
         })
-        // contactFormEmail(values)
         .then((res) => {
-          console.log(res);
           setLoading(false);
           toast.success(`Your message has been sent.`, {
             position: toast.POSITION.TOP_CENTER,
@@ -138,7 +134,6 @@ const ContactForm = () => {
               sitekey={process.env.REACT_APP_SITE_KEY}
               onChange={handleRecaptcha}
               onExpired={handleExpire}
-              // name='recaptcha'
             />
             <div className='contact-form-btns'>
               {loading ? (

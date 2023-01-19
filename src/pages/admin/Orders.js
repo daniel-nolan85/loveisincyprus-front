@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { getOrders, changeStatus } from '../../functions/admin';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import OrdersList from '../../components/lists/OrdersList';
 import LeftSidebar from '../../components/admin/LeftSidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import ShowPaymentInfo from '../../components/cards/ShowPaymentInfo';
 import axios from 'axios';
 import { ChatState } from '../../context/ChatProvider';
 
@@ -30,7 +29,6 @@ const Orders = ({ history }) => {
 
   const loadOrders = () =>
     getOrders(token).then((res) => {
-      console.log(JSON.stringify(res.data, null, 4));
       setOrders(res.data);
     });
 
@@ -38,7 +36,6 @@ const Orders = ({ history }) => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-new-orders`)
       .then((res) => {
-        console.log('new orders ==> ', res.data);
         setNewOrders(res.data);
       });
   };

@@ -1,16 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Formik, Form } from 'formik';
 import { Input } from './TextFields';
 import * as yup from 'yup';
-import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSpinner,
-  faUndo,
-  faFloppyDisk,
-  faTruck,
-  faHouse,
-} from '@fortawesome/free-solid-svg-icons';
+import { faSpinner, faTruck, faHouse } from '@fortawesome/free-solid-svg-icons';
 
 const AddressForm = ({
   userAddress,

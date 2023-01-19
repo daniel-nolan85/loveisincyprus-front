@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import LeftSidebar from '../../components/admin/LeftSidebar';
-import axios from 'axios';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -39,7 +38,6 @@ const IPBlock = ({ history }) => {
 
   useEffect(() => {
     fetchIps();
-    console.log(ips);
   }, []);
 
   useEffect(() => {
@@ -73,7 +71,6 @@ const IPBlock = ({ history }) => {
   const handleLookup = () => {
     const ipinfo = new IPinfoWrapper(`${process.env.REACT_APP_IP_INFO_TOKEN}`);
     ipinfo.lookupIp(address).then((res) => {
-      console.log(res);
       setIpToLookup(res);
     });
     setIpInfoModalIsOpen(true);
@@ -83,7 +80,6 @@ const IPBlock = ({ history }) => {
     setLoading(true);
     const ipinfo = new IPinfoWrapper(`${process.env.REACT_APP_IP_INFO_TOKEN}`);
     ipinfo.lookupIp(address).then((res) => {
-      console.log(res);
       setIpToBan(res);
     });
   };
@@ -96,7 +92,6 @@ const IPBlock = ({ history }) => {
   const deleteIp = () => {
     removeIp(ipToRemove._id, token)
       .then((res) => {
-        console.log(res);
         toast.success(`${res.data.ip} has been removed from the blacklist`, {
           position: toast.POSITION.TOP_CENTER,
         });

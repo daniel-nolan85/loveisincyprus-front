@@ -17,18 +17,6 @@ const CategoryList = () => {
   }, []);
 
   const showCategories = () => (
-    // <div className='admin-cards'>
-    //   {categories &&
-    //     categories.map((c) => (
-    //       <div className='admin-card' key={c._id}>
-    //         <div>
-    //           <Link to={`/category/${c.slug}`}>
-    //             <h3>{c.name}</h3>
-    //           </Link>
-    //         </div>
-    //       </div>
-    //     ))}
-    // </div>
     <div className='cat-list'>
       {categories &&
         categories.map((c) => (

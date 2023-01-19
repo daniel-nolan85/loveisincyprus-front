@@ -2,13 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createPayment } from '../../functions/cardinity';
 import { createOrder, emptyUserCart } from '../../functions/user';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Card } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faEuroSign,
-  faCheck,
-  faTruck,
   faTruckFast,
   faCashRegister,
 } from '@fortawesome/free-solid-svg-icons';
@@ -43,14 +41,10 @@ const CardinityCheckout = ({
   let history = useHistory();
 
   const isFirstRun = useRef(true);
-  console.log(coupon);
-  console.log('payable => ', payable);
-  console.log('payable => ', Math.floor(payable / 100));
 
   useEffect(() => {
     calcFinalAmount();
     setUserAgent(window.navigator.userAgent);
-    console.log(window.navigator.userAgent);
   }, []);
 
   useEffect(() => {
@@ -79,7 +73,6 @@ const CardinityCheckout = ({
         }
       )
       .then((res) => {
-        console.log('final amount => ', res.data);
         setCartTotal(res.data.cartTotal);
         setTotalAfterDiscount(res.data.totalAfterDiscount);
         setPayable(res.data.payable);
@@ -92,7 +85,6 @@ const CardinityCheckout = ({
     setProcessing(true);
     createPayment(values, payable, userAgent, token, deliveryFee).then(
       (res) => {
-        console.log('create payment', res.data);
         if (res.data.errors) {
           toast.error(res.data.errors[0].message, {
             position: toast.POSITION.TOP_CENTER,
@@ -119,7 +111,6 @@ const CardinityCheckout = ({
             discount,
             deliveryFee
           ).then((response) => {
-            console.log('createOrder response => ', response);
             if (response.data.paymentIntent.status === 'approved') {
               if (typeof window !== 'undefined')
                 localStorage.removeItem('cart');
@@ -155,32 +146,18 @@ const CardinityCheckout = ({
   };
 
   const deleteCoupon = async () => {
-    await axios
-      .delete(
-        `${process.env.REACT_APP_API}/delete-coupon/${couponApplied._id}`,
-        {
-          headers: {
-            authtoken: token,
-          },
-        }
-      )
-      .then((res) => {
-        console.log('coupon => ', res.data);
-      })
-      .catch((err) => console.log(err));
+    await axios.delete(
+      `${process.env.REACT_APP_API}/delete-coupon/${couponApplied._id}`,
+      {
+        headers: {
+          authtoken: token,
+        },
+      }
+    );
   };
 
   return (
     <div className='payment-amount'>
-      {/* {!succeeded && (
-        <div>
-          {coupon && totalAfterDiscount !== undefined ? (
-            <p>{`Total after discount: €${totalAfterDiscount}`}</p>
-          ) : (
-            <p>No coupon applied</p>
-          )}
-        </div>
-      )} */}
       {cart.length > 1 ? (
         <Carousel
           showArrows
@@ -235,7 +212,6 @@ const CardinityCheckout = ({
           <>
             <FontAwesomeIcon icon={faCashRegister} className='fa euro' />
             <br />
-            {/* Total payable: €{(payable / 100).toFixed(2)} */}
             {coupon && totalAfterDiscount !== undefined ? (
               <p className='price'>{`Total after discount: €${(
                 totalAfterDiscount + deliveryFee

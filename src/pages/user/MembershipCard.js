@@ -36,7 +36,6 @@ const MembershipCard = () => {
 
   const fetchUserPointsTotal = () =>
     getUserPointsTotal(token).then((res) => {
-      console.log('fetchUserPointsTotal');
       setPoints(res.data);
     });
 

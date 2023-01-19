@@ -26,7 +26,6 @@ const AddUserToAdmin = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         toast.success(`${u.username || u.name} added to admin`, {
           position: toast.POSITION.TOP_CENTER,
         });

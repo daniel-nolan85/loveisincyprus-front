@@ -6,33 +6,21 @@ import {
   faSpinner,
   faMagnifyingGlass,
   faFloppyDisk,
-  faUndo,
   faFilter,
 } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
-import {
-  Menu,
-  Slider,
-  Checkbox,
-  Radio,
-  Dropdown,
-  message,
-  Space,
-  Input,
-} from 'antd';
+import { Menu, Slider, Radio, Dropdown, Input } from 'antd';
 import UserInfo from '../../components/cards/UserInfo';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import UserSearchMobile from '../../components/modals/UserSearchMobile';
 
-const { SubMenu, ItemGroup } = Menu;
+const { SubMenu } = Menu;
 
 const UserSearch = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [range, setRange] = useState([0, 0]);
-  //   const [ok, setOk] = useState(false);
   const [ageOfPartner, setAgeOfPartner] = useState('');
   const [relWanted, setRelWanted] = useState('');
   const [location, setLocation] = useState('');
@@ -110,7 +98,6 @@ const UserSearch = () => {
     } else {
       const delayed = setTimeout(() => {
         fetchUsers({ query: text });
-        console.log('called');
         if (!text) {
           loadAllUsers();
         }
@@ -118,10 +105,6 @@ const UserSearch = () => {
       return () => clearTimeout(delayed);
     }
   }, [text]);
-
-  useEffect(() => {
-    console.log('params => ', params);
-  }, [params]);
 
   const loadAllUsers = () => {
     setLoading(true);
@@ -133,8 +116,6 @@ const UserSearch = () => {
 
   const fetchUsers = (arg) => {
     fetchUsersByFilter(arg, user.token).then((res) => {
-      console.log('users => ', users);
-      console.log('res.data => ', res.data);
       setUsers(res.data);
     });
   };
@@ -1615,7 +1596,6 @@ const UserSearch = () => {
         return a;
       }, {})
     );
-    // setParams(unique);
     fetchUsers(unique);
     setLoadingSearch(false);
   };
@@ -1643,46 +1623,12 @@ const UserSearch = () => {
         toast.success(`${searchName} saved successfully.`, {
           position: toast.POSITION.TOP_CENTER,
         });
-        console.log(res.data);
       })
       .catch((err) => {
         setLoadingSave(false);
         console.log(err);
       });
   };
-
-  // const resetSearch = () => {
-  //   setParams([]);
-  //   setUsers([]);
-  //   setRange([0, 0]);
-  //   setAgeOfPartner('');
-  //   setRelWanted('');
-  //   setLocation('');
-  //   setLanguage('');
-  //   setNationality('');
-  //   setEthnicity('');
-  //   setMaritalStatus('');
-  //   setHeight('');
-  //   setBuild('');
-  //   setEyeColor('');
-  //   setHairColor('');
-  //   setHairLength('');
-  //   setHairStyle('');
-  //   setFeetType('');
-  //   setDrinks('');
-  //   setSmokes('');
-  //   setEducation('');
-  //   setPolitics('');
-  //   setReligion('');
-  //   setFoods('');
-  //   setLivesWith('');
-  //   setRelocate('');
-  //   setSexLikes('');
-  //   setSexFrequency('');
-  //   setSearchName('');
-  //   setLoadingSearch(false);
-  //   setLoadingSave(false);
-  // };
 
   return (
     <div className='container search-container'>
@@ -1861,18 +1807,6 @@ const UserSearch = () => {
                 maxLength={25}
                 name='occupation'
               />
-              {/* <Input
-                onChange={handleTextInput}
-                placeholder='Their views on marriage'
-                maxLength={25}
-                name='marriage'
-              /> */}
-              {/* <Input
-                onChange={handleTextInput}
-                placeholder='What they would change'
-                maxLength={25}
-                name='changes'
-              /> */}
               <Input
                 onChange={handleInputArray}
                 placeholder='Their pets'
@@ -2049,15 +1983,6 @@ const UserSearch = () => {
             )}
             Search
           </button>
-          {/* <button
-            type='button'
-            className='submit-btn reset'
-            onClick={resetSearch}
-            // disabled={!products.length || loading}
-          >
-            <FontAwesomeIcon icon={faUndo} className='fa' />
-            Reset
-          </button> */}
         </div>
       </div>
       <div className='admin-main-content'>

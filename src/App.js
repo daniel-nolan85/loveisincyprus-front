@@ -1,15 +1,12 @@
-import React, { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { auth, analytics } from './firebase';
+import { auth } from './firebase';
 import { useSelector, useDispatch } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { ChatState } from './context/ChatProvider';
 import io from 'socket.io-client';
 import axios from 'axios';
-// import { logEvent } from 'firebase/analytics';
 
 // modals
 import Popup from './components/modals/Popup';
@@ -82,38 +79,6 @@ import ProductReview from './pages/admin/ProductReview';
 import HighCompat from './pages/user/HighCompat';
 import CallingCodeBlock from './pages/admin/CallingCodeBlock';
 
-//using lazy
-// const Header = lazy(() => import('./components/nav/Header'));
-// const Home = lazy(() => import('./pages/Home'));
-// const LoginAndRegister = lazy(() => import('./pages/LoginAndRegister'));
-// const RegisterComplete = lazy(() =>
-//   import('./components/forms/RegisterComplete')
-// );
-// const ForgotPassword = lazy(() => import('./components/forms/ForgotPassword'));
-// const { currentUser } = lazy(() => import('./functions/auth'));
-// const UserRoute = lazy(() => import('./components/routes/UserRoute'));
-// const AdminRoute = lazy(() => import('./components/routes/AdminRoute'));
-// const ChangePassword = lazy(() => import('./components/forms/ChangePassword'));
-// const UserDashboard = lazy(() => import('./pages/user/UserDashboard'));
-// const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
-// const Profile = lazy(() => import('./pages/user/Profile'));
-// const Following = lazy(() => import('./pages/user/Following'));
-// const Followers = lazy(() => import('./pages/user/Followers'));
-// const UserProfile = lazy(() => import('./pages/user/UserProfile'));
-// const Posts = lazy(() => import('./pages/admin/Posts'));
-// const Users = lazy(() => import('./pages/admin/Users'));
-// const About = lazy(() => import('./pages/About'));
-// const Help = lazy(() => import('./pages/Help'));
-// const Contact = lazy(() => import('./pages/Contact'));
-// const RelCoach = lazy(() => import('./pages/RelCoach'));
-// const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
-// const TsAndCs = lazy(() => import('./pages/TsAndCs'));
-// const Matches = lazy(() => import('./pages/user/Matches'));
-// const Swipe = lazy(() => import('./pages/user/Swipe'));
-// const Visitors = lazy(() => import('./pages/user/Visitors'));
-// const Photos = lazy(() => import('./pages/user/Photos'));
-// const GeoBlock = lazy(() => import('./pages/admin/GeoBlock'));
-
 let socket, selectedChatCompare;
 
 const App = () => {
@@ -135,39 +100,13 @@ const App = () => {
   const {
     selectedChat,
     setSelectedChat,
-    chats,
     setChats,
-    notification,
-    setNotification,
     messages,
     setMessages,
-    isTyping,
     setIsTyping,
-    socketConnected,
     setSocketConnected,
-    chatUsers,
-    setChatUsers,
-    theirChats,
-    setTheirChats,
-    typersId,
     setTypersId,
-    theirId,
-    setTheirId,
   } = ChatState();
-
-  // useEffect(() => {
-  //   logEvent(analytics, 'page_view', {
-  //     page_location: window.location.pathname + window.location.search,
-  //   });
-  // });
-
-  // useEffect(() => {
-  //   axios
-  //     .get(
-  //       'https://api.statcounter.com/stats/?vn=3&s=popular&f=json&pi=2292634&g=weekly&t=1670536605&u=demo_user&sha1=c1dd06507ef5874e2dd4ff5eca4f23c830b2bc4c'
-  //     )
-  //     .then((res) => console.log(res));
-  // });
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -270,22 +209,12 @@ const App = () => {
                 canCoupon: res.data.canCoupon,
               },
             });
-            console.log('logged in user ==> ', res);
           })
           .catch((err) => console.log(err));
       }
     });
     return () => unsubscribe();
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (user && user.profileComplete === false) {
-  //     const timer = setTimeout(() => {
-  //       setPopupModalIsOpen(true);
-  //     }, 2000);
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [user && user.token]);
 
   useEffect(() => {
     if (user) {
@@ -296,27 +225,6 @@ const App = () => {
       );
       socket.emit('setup', user);
       socket.on('connected', () => setSocketConnected(true));
-      // socket.on('message received', (newMessageReceived, theirId) => {
-      //   // console.log('newMessageReceived => ', newMessageReceived);
-      //   // fetchChats();
-      //   fetchTheirChats(theirId);
-      //   if (
-      //     !selectedChatCompare ||
-      //     selectedChatCompare._id != newMessageReceived.chat._id
-      //   ) {
-      //     // if (!notification.includes(newMessageReceived)) {
-      //     //   setNotification([newMessageReceived, ...notification]);
-      //     // }
-      //     incrementNewMessages(newMessageReceived);
-      //   } else {
-      //     setMessages([...messages, newMessageReceived]);
-      //   }
-      // });
-      // socket.on('typing', (_id) => {
-      //   setTypersId(_id);
-      //   setIsTyping(true);
-      // });
-      // socket.on('stop typing', () => setIsTyping(false));
       socket.on('post liked', (post) => {
         incrementNewNotifications(post, 'like');
       });
@@ -352,34 +260,22 @@ const App = () => {
       return;
     } else if (user) {
       socket.on('message received', (newMessageReceived, theirId) => {
-        console.log('theirId => ', theirId);
-
-        console.log('newMessageReceived => ', newMessageReceived);
-        // fetchChats();
         fetchTheirChats(theirId);
         if (
           !selectedChatCompare ||
           selectedChatCompare._id != newMessageReceived.chat._id
         ) {
-          // if (!notification.includes(newMessageReceived)) {
-          //   setNotification([newMessageReceived, ...notification]);
-          // }
           incrementNewMessages(newMessageReceived);
         } else {
           setMessages([...messages, newMessageReceived]);
         }
       });
       socket.on('mass mail received', (newMessageReceived) => {
-        console.log('new mass mail received => ', newMessageReceived);
-        console.log('theirId => ', user._id);
         fetchTheirChats(user._id);
         if (
           !selectedChatCompare ||
           selectedChatCompare._id != newMessageReceived.chat._id
         ) {
-          // if (!notification.includes(newMessageReceived)) {
-          //   setNotification([newMessageReceived, ...notification]);
-          // }
           incrementNewMessages(newMessageReceived);
         } else {
           setMessages([...messages, newMessageReceived]);
@@ -394,7 +290,6 @@ const App = () => {
   }, [user && user.token]);
 
   const incrementNewNotifications = async (notif, reason) => {
-    console.log('message received');
     await axios
       .put(
         `${process.env.REACT_APP_API}/new-notification-count`,
@@ -406,7 +301,6 @@ const App = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
@@ -432,7 +326,6 @@ const App = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
@@ -458,7 +351,6 @@ const App = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setChats(res.data);
       })
       .catch((err) => {
@@ -466,33 +358,12 @@ const App = () => {
       });
   };
 
-  // const fetchChats = async () => {
-  //   await axios
-  //     .post(
-  //       `${process.env.REACT_APP_API}/fetch-chats`,
-  //       { user },
-  //       {
-  //         headers: {
-  //           authtoken: user.token,
-  //         },
-  //       }
-  //     )
-  //     .then((res) => {
-  //       setChats(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
   const removeExpiredFeatures = async () => {
     await axios.put(`${process.env.REACT_APP_API}/remove-expired-features`);
-    // .then((res) => console.log(res.data));
   };
 
   const handleExpiredAds = async () => {
     await axios.put(`${process.env.REACT_APP_API}/expired-ad`);
-    // .then((res) => console.log(res.data));
   };
 
   const handleExpiredMemberships = async () => {
@@ -536,13 +407,6 @@ const App = () => {
   };
 
   return (
-    // <Suspense
-    //   fallback={
-    //     <div className='fallback'>
-    //       <FontAwesomeIcon icon={faSpinner} spin />
-    //     </div>
-    //   }
-    // >
     <>
       <Header
         setCancelSubscriptionModalIsOpen={setCancelSubscriptionModalIsOpen}
@@ -666,7 +530,6 @@ const App = () => {
           component={ProductReview}
         />
       </Switch>
-      {/* </Suspense> */}
     </>
   );
 };

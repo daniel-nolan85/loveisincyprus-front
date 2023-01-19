@@ -24,7 +24,7 @@ const VerifDisapprove = ({
 
   let { token } = useSelector((state) => state.user);
 
-  const { setSocketConnected, setNewVerifs } = ChatState();
+  const { setNewVerifs } = ChatState();
 
   useEffect(() => {
     socket = io(
@@ -38,7 +38,6 @@ const VerifDisapprove = ({
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-new-verifs`)
       .then((res) => {
-        console.log('new verifs ==> ', res.data);
         setNewVerifs(res.data);
       });
   };
@@ -57,7 +56,6 @@ const VerifDisapprove = ({
       )
       .then((res) => {
         setLoading(false);
-        console.log(res.data);
         socket.emit('new message', res.data);
         toast.error(
           `You have rejected this verification. A confirmation message has been sent to the user.`,

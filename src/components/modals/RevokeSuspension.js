@@ -4,8 +4,6 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import defaultImage from '../../assets/defaultProfile.png';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
@@ -19,7 +17,7 @@ const RevokeSuspension = ({
 }) => {
   const [revoking, setRevoking] = useState(false);
 
-  let { _id, token } = useSelector((state) => state.user);
+  let { token } = useSelector((state) => state.user);
 
   const revokeUser = async (u) => {
     setRevoking(true);
@@ -34,7 +32,6 @@ const RevokeSuspension = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         toast.error('User revoked', {
           position: toast.POSITION.TOP_CENTER,
         });

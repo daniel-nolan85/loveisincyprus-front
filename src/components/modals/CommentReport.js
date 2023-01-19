@@ -31,7 +31,6 @@ const CommentReport = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         toast.warning('This comment has been reported', {
           position: toast.POSITION.TOP_CENTER,
         });

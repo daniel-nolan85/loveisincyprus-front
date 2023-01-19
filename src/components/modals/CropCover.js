@@ -81,7 +81,6 @@ const CropCover = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         setCoverImage({
           url: res.data.url,
           public_id: res.data.public_id,
@@ -94,8 +93,6 @@ const CropCover = ({
   };
 
   const submitCropCover = async (e) => {
-    // setLoading(true);
-
     await axios
       .put(
         `${process.env.REACT_APP_API}/profile-update`,
@@ -110,9 +107,6 @@ const CropCover = ({
         }
       )
       .then((res) => {
-        // setLoading(false);
-        console.log('submitCropCover response ==> ', res.data);
-
         if (res.data.error) {
           toast.error(res.data.error, {
             position: toast.POSITION.TOP_CENTER,
@@ -132,7 +126,6 @@ const CropCover = ({
         setCropCoverModalIsOpen(false);
       })
       .catch((err) => {
-        // setLoading(false);
         console.log(err);
       });
   };
@@ -182,9 +175,6 @@ const CropCover = ({
         <FontAwesomeIcon
           icon={faFloppyDisk}
           className='fa save-crop'
-          // disabled={
-          //   !profileCropCompleted.width || !profileCropCompleted?.height
-          // }
           onClick={saveCropCover}
         />
       </div>

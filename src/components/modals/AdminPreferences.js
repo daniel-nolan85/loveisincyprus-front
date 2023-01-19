@@ -27,7 +27,6 @@ const AdminPreferences = ({
       isFirstRun.current = false;
       return;
     } else {
-      console.log('handlePreferences');
       handlePreferences();
     }
   }, [preferences]);
@@ -58,7 +57,6 @@ const AdminPreferences = ({
 
   const handleChecked = (e) => {
     e.preventDefault();
-    console.log(e);
 
     let checkedItems = [];
     let uncheckedItems = [];
@@ -72,16 +70,11 @@ const AdminPreferences = ({
       }
     }
 
-    console.log('checkedItems => ', checkedItems);
-    console.log('uncheckedItems => ', uncheckedItems);
     let prefs = checkedItems.filter((el) => !uncheckedItems.includes(el));
-    console.log('prefs => ', prefs);
-
     setPreferences(prefs);
   };
 
   const handlePreferences = async () => {
-    console.log('preferences => ', preferences);
     setLoading(true);
     await axios
       .put(
@@ -110,7 +103,6 @@ const AdminPreferences = ({
               position: toast.POSITION.TOP_CENTER,
             }
           );
-          console.log(res.data);
           fetchUsers();
           setAdminPreferencesModalIsOpen(false);
         }

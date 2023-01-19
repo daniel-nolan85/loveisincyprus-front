@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
-import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import defaultProfile from '../../assets/defaultProfile.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCamera,
@@ -43,7 +41,6 @@ const EventCommentEdit = ({
       )
       .then((res) => {
         setUploading(false);
-        console.log(res.data);
 
         if (res.data.error) {
           toast.error(res.data.error, {
@@ -153,7 +150,6 @@ const EventCommentEdit = ({
               onClick={() => updateComment(postOfCommentToEdit, commentToEdit)}
               type='submit'
               className='submit-btn'
-              //   disabled={!comment || uploading}
             >
               {uploading ? (
                 <FontAwesomeIcon icon={faSpinner} className='fa' spin />

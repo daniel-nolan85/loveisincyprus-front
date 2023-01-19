@@ -53,7 +53,6 @@ const Profile = ({ history }) => {
   const [coverImage, setCoverImage] = useState({});
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
-  // const [modalIsOpen, setModalIsOpen] = useState(false);
   const [verifyModalIsOpen, setVerifyModalIsOpen] = useState(false);
   const [cropCoverModalIsOpen, setCropCoverModalIsOpen] = useState(false);
   const [cropModalIsOpen, setCropModalIsOpen] = useState(false);
@@ -185,13 +184,6 @@ const Profile = ({ history }) => {
       setProfileImage(user.profileImage);
       setCoverImage(user.coverImage);
       setGender(user.gender);
-      // setBirthday(user.birthday.slice(1, 11).split('-').reverse().join('-'));
-      // setBirthday(user.birthday);
-      // onChange={(date) => {
-      //   let formatDate = JSON.stringify(date).slice(1, 11);
-      //   formatDate = formatDate.split('-').reverse().join('-');
-      //   setBirthday(formatDate);
-      // }}
       setLocation(user.location);
       setGenderWanted(user.genderWanted);
       setRelWanted(user.relWanted);
@@ -243,10 +235,8 @@ const Profile = ({ history }) => {
     }
   }, [user && user.token]);
 
-  // console.log('progress => ', progress);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log('birthday => ', birthday);
     setLoading(true);
 
     await axios
@@ -314,7 +304,6 @@ const Profile = ({ history }) => {
       )
       .then((res) => {
         setLoading(false);
-        console.log('update response ==> ', res.data);
 
         if (res.data.error) {
           toast.error(res.data.error, {
@@ -399,7 +388,6 @@ const Profile = ({ history }) => {
       profileImgRef.current,
       new faceapi.TinyFaceDetectorOptions()
     );
-    console.log('detections => ', detections);
     setFaces(detections);
   };
 
@@ -415,7 +403,6 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
@@ -427,7 +414,6 @@ const Profile = ({ history }) => {
   };
 
   const handleLiveImage = async (url) => {
-    console.log(url);
     setProfileImageUpdateModalIsOpen(false);
     setLoadingProfileImg(true);
     await axios
@@ -441,7 +427,6 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setProfileImage({
           url: res.data.url,
           public_id: res.data.public_id,
@@ -564,7 +549,6 @@ const Profile = ({ history }) => {
 
   const fetchUserPoints = () =>
     getUserPointsTotal(user.token).then((res) => {
-      console.log(res.data);
       setPoints(res.data);
     });
 
@@ -582,14 +566,6 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
-        // let newPosts = posts;
-        // newPosts = newPosts.concat(res.data);
-        // setPosts(newPosts);
-        // setPage(page + 1);
-        // let newPostsLength = newPosts.length;
-        // if (postsLength === newPostsLength) {
-        //   setMorePosts(false);
-        // }
         setPosts(res.data);
       })
       .catch((err) => {
@@ -615,9 +591,6 @@ const Profile = ({ history }) => {
           setMorePosts(false);
         }
         setTotalPosts(res.data);
-        // if (totalPosts < 10) {
-        //   setMorePosts(false);
-        // }
       });
   };
 
@@ -635,8 +608,6 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
-        console.log('user => ', user);
         setProgress(res.data);
         if (res.data.percentage == 100 && user.profileComplete == false) {
           addPoints(35, 'profile complete', user.token);
@@ -824,7 +795,6 @@ const Profile = ({ history }) => {
   const showLikes = (post) => {
     setCurrentPost(post);
     setLikesModalIsOpen(true);
-    // console.log(post.likes);
   };
 
   const editPost = (post) => {
@@ -858,11 +828,6 @@ const Profile = ({ history }) => {
           className='cover-img'
         />
       )}
-      {/* <img
-        src={user.coverImage ? user.coverImage.url : defaultCover}
-        alt={`${user.name || user.email.split('@'[0])}'s cover photo`}
-        className='cover-img'
-      /> */}
       <div className='profile-details'>
         <div className='pd-left'>
           <div className='pd-row'>

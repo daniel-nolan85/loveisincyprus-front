@@ -19,7 +19,6 @@ const Expiring = ({ expiringModalIsOpen, setExpiringModalIsOpen }) => {
   const getDaysLeft = () => {
     const date1 = Date.now();
     const date2 = new Date(membership.expiry);
-    console.log(date2.getTime());
     const timeDifference = date2.getTime() - date1;
     const dayDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
     setDaysLeft(dayDifference);

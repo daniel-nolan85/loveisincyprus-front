@@ -6,12 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSpinner,
   faUndo,
-  faFloppyDisk,
   faMoneyCheck,
 } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
 
-const PaymentForm = ({ handleSubmit, processing, succeeded, cartTotal }) => {
+const PaymentForm = ({ handleSubmit, processing, succeeded }) => {
   const validate = yup.object({
     cardHolder: yup.string().required('Please enter your full name'),
     cardNumber: yup
@@ -104,16 +102,6 @@ const PaymentForm = ({ handleSubmit, processing, succeeded, cartTotal }) => {
                 Reset
               </button>
             </div>
-            {/* {cartTotal && (
-              <p
-                className={
-                  succeeded ? 'result-message' : 'result-message hidden'
-                }
-              >
-                Thanks for your purchase.{' '}
-                <Link to='purchase/history'>View purchase history</Link>
-              </p>
-            )} */}
           </Form>
         </div>
       )}

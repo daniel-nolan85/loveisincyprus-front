@@ -16,8 +16,6 @@ const Cart = ({ history }) => {
   const { token } = useSelector((state) => state.user) || {};
   const { cart } = useSelector((state) => ({ ...state }));
 
-  console.log(cart);
-
   useEffect(() => {
     getDeliveryFee();
   }, [cart || deliveryFee]);
@@ -48,7 +46,6 @@ const Cart = ({ history }) => {
     userCart(cart, token)
       .then((res) => {
         setLoading(false);
-        console.log('CART POST RES', res);
         if (res.data.ok)
           history.push({
             pathname: '/checkout',
@@ -61,9 +58,6 @@ const Cart = ({ history }) => {
       });
   };
 
-  // const totalItems =
-  //   cart.length && cart.map((c) => c.count).reduce((a, b) => a + b);
-
   const totalItems = cart.reduce((accumulator, c) => {
     return accumulator + parseInt(c.count);
   }, 0);
@@ -74,7 +68,6 @@ const Cart = ({ history }) => {
       cart.reduce((accumulator, c) => {
         return accumulator + c.count * c.weight;
       }, 0);
-    console.log(weight);
     if (weight <= 2) {
       setDeliveryFee(3.4);
     } else if (weight <= 5) {
@@ -100,7 +93,6 @@ const Cart = ({ history }) => {
           <>
             <h1 className='center'>
               Your cart contains{' '}
-              {/* {cart.length > 1 ? `${cart.length} items` : `${cart.length} item`} */}
               {totalItems > 1 ? `${totalItems} items` : `${totalItems} item`}
             </h1>
             <div className='small-container cart-page'>

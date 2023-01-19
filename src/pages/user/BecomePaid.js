@@ -4,8 +4,6 @@ import RightSidebar from '../../components/user/RightSidebar';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faCashRegister,
-  faChartLine,
   faCircleInfo,
   faCircleQuestion,
 } from '@fortawesome/free-solid-svg-icons';
@@ -32,7 +30,6 @@ const BecomePaid = ({ history }) => {
     setUserAgent(window.navigator.userAgent);
     const date1 = Date.now();
     const date2 = new Date(user.membership.expiry);
-    console.log(date2.getTime());
     const timeDifference = date2.getTime() - date1;
     const dayDifference = Math.ceil(timeDifference / (1000 * 3600 * 24));
     setDaysLeft(dayDifference);
@@ -43,7 +40,6 @@ const BecomePaid = ({ history }) => {
       isFirstRun.current = false;
       return;
     } else {
-      console.log(userBankDetails);
       history.push({
         pathname: '/subscription-successful',
         state: { userBankDetails, payable },
@@ -53,10 +49,8 @@ const BecomePaid = ({ history }) => {
 
   const handleSubmit = async (values) => {
     setProcessing(true);
-    console.log('payable => ', payable);
     createMembershipPayment(values, payable, userAgent, user, user.token).then(
       (res) => {
-        console.log('create payment', res.data);
         if (res.data.response.errors) {
           toast.error(res.data.response.errors[0].message, {
             position: toast.POSITION.TOP_CENTER,
@@ -137,19 +131,11 @@ const BecomePaid = ({ history }) => {
         <>
           <div className='points-icons'>
             <div className='tooltip'>
-              <FontAwesomeIcon
-                icon={faCircleInfo}
-                className='fa'
-                // onClick={handleInfo}
-              />
+              <FontAwesomeIcon icon={faCircleInfo} className='fa' />
               <span className='tooltip-text'>Info about memberships</span>
             </div>
             <div className='tooltip'>
-              <FontAwesomeIcon
-                icon={faCircleQuestion}
-                className='fa'
-                // onClick={handleQuestions}
-              />
+              <FontAwesomeIcon icon={faCircleQuestion} className='fa' />
               <span className='tooltip-text'>Questions about memberships</span>
             </div>
           </div>

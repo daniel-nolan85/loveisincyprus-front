@@ -25,7 +25,7 @@ const VerifApprove = ({
 
   let { token } = useSelector((state) => state.user);
 
-  const { setSocketConnected, setNewVerifs } = ChatState();
+  const { setNewVerifs } = ChatState();
 
   useEffect(() => {
     socket = io(
@@ -39,7 +39,6 @@ const VerifApprove = ({
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-new-verifs`)
       .then((res) => {
-        console.log('new verifs ==> ', res.data);
         setNewVerifs(res.data);
       });
   };
@@ -58,7 +57,6 @@ const VerifApprove = ({
       )
       .then((res) => {
         setLoading(false);
-        console.log(res.data);
         socket.emit('new message', res.data.message);
         toast.success(
           `You have approved this verification. A confirmation message has been sent to the user.`,

@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Modal from 'react-modal';
-import axios from 'axios';
-import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import { ChatState } from '../../context/ChatProvider';
@@ -99,9 +97,6 @@ const Popup = ({ popupModalIsOpen, setPopupModalIsOpen }) => {
           </>
         )}
         <br />
-        {/* <Link className='popup-links'>
-          Learn more about how you can spend points
-        </Link> */}
         <button
           className='submit-btn trash'
           onClick={() => setPopupModalIsOpen(false)}

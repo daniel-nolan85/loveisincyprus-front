@@ -52,7 +52,6 @@ const AdminDashboard = () => {
 
   const fetchIncomeTaken = async () => {
     await axios.get(`${process.env.REACT_APP_API}/income-taken`).then((res) => {
-      console.log('income => ', res.data);
       setIncomeTaken(res.data);
     });
   };

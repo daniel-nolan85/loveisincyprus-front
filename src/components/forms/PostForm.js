@@ -1,7 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faUser,
   faCamera,
   faSpinner,
   faPaperPlane,
@@ -17,7 +16,6 @@ const PostForm = ({
   uploading,
   handleImage,
   image,
-  update,
   loadingImg,
 }) => {
   let { _id, profileImage, name, username } = useSelector(

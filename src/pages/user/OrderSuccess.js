@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
-import amex from '../../assets/amex.png';
-import discover from '../../assets/discover.png';
 import mastercard from '../../assets/mastercard.png';
 import visa from '../../assets/visa.png';
 import axios from 'axios';
@@ -20,7 +18,6 @@ const OrderSuccess = (props) => {
     await axios
       .post(`${process.env.REACT_APP_API}/fetch-products`, { _id })
       .then((res) => {
-        console.log('products ==> ', res);
         setProducts(res.data.products);
       })
       .catch((err) => {
@@ -28,9 +25,7 @@ const OrderSuccess = (props) => {
       });
   };
 
-  console.log(props);
-  const { _id, orderStatus, deliveryFee, discount } =
-    props.location.state.order;
+  const { _id, deliveryFee, discount } = props.location.state.order;
   const { amount } = props.location.state.order.paymentIntent;
   const { card_brand, pan, exp_month, exp_year, holder } =
     props.location.state.order.paymentIntent.payment_instrument;

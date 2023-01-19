@@ -22,13 +22,9 @@ const CouponEdit = ({
   const [discount, setDiscount] = useState(couponToEdit.discount);
   const [expiry, setExpiry] = useState(couponToEdit.expiry);
 
-  console.log(couponToEdit);
-  console.log(name, discount, expiry);
-
   let { token } = useSelector((state) => state.user);
 
   const editCoupon = async (e, coupon) => {
-    console.log(e);
     e.preventDefault();
     setLoading(true);
     updateCoupon(coupon._id, { name, discount, expiry }, token)
@@ -61,12 +57,10 @@ const CouponEdit = ({
           placeholder='Name'
           defaultValue={couponToEdit.name}
           onChange={(e) => {
-            console.log(e);
             setName(e.target.value);
           }}
           autoFocus
           required
-          // disabled={loading}
         />
         <input
           type='text'
@@ -75,7 +69,6 @@ const CouponEdit = ({
           defaultValue={couponToEdit.discount}
           onChange={(e) => setDiscount(e.target.value)}
           required
-          // disabled={loading}
         />
         <DatePicker
           selected={new Date()}
@@ -94,7 +87,6 @@ const CouponEdit = ({
           onClick={(e) => editCoupon(e, couponToEdit)}
           type='submit'
           className='submit-btn'
-          //   disabled={password.length < 6 || loading}
         >
           {loading ? (
             <FontAwesomeIcon icon={faSpinner} className='fa' spin />

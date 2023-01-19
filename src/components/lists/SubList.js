@@ -17,18 +17,6 @@ const SubList = () => {
   }, []);
 
   const showSubs = () => (
-    // <div className='admin-cards'>
-    //   {subs &&
-    //     subs.map((s) => (
-    //       <div className='admin-card' key={s._id}>
-    //         <div>
-    //           <Link to={`/sub/${s.slug}`}>
-    //             <h3>{s.name}</h3>
-    //           </Link>
-    //         </div>
-    //       </div>
-    //     ))}
-    // </div>
     <div className='cat-list'>
       {subs &&
         subs.map((s) => (

@@ -7,30 +7,25 @@ import {
 import { getCategories } from '../../functions/category';
 import { getSubs } from '../../functions/sub';
 import { useSelector, useDispatch } from 'react-redux';
-import ProductInfo from '../../components/cards/ProductInfo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faSpinner,
   faMagnifyingGlass,
   faEuroSign,
   faTag,
   faStar,
   faTags,
-  faFilter,
 } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import { Menu, Slider, Checkbox } from 'antd';
 import Star from '../../components/forms/Star';
 
 Modal.setAppElement('#root');
 
-const { SubMenu, ItemGroup } = Menu;
+const { SubMenu } = Menu;
 
 const ShopSearchMobile = ({
   shopSearchModalIsOpen,
   setShopSearchModalIsOpen,
-  products,
   setProducts,
 }) => {
   const [loading, setLoading] = useState(false);

@@ -28,7 +28,6 @@ const LoginAndRegister = ({ history }) => {
 
   const getThisIP = async () => {
     const res = await axios.get('https://geolocation-db.com/json/');
-    console.log(res.data);
     setIp(res.data.IPv4);
   };
 
@@ -36,7 +35,6 @@ const LoginAndRegister = ({ history }) => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-ips`)
       .then((res) => {
-        console.log(res.data);
         setBlacklist(res.data);
       })
       .catch((err) => {
@@ -48,7 +46,6 @@ const LoginAndRegister = ({ history }) => {
   //   axios
   //     .get(`${process.env.REACT_APP_API}/fetch-whitelist`)
   //     .then((res) => {
-  //       // console.log(res.data);
   //       setWhitelist(res.data);
   //     })
   //     .catch((err) => {
@@ -74,8 +71,6 @@ const LoginAndRegister = ({ history }) => {
   //     })
   //     .then(function (payload) {
   //       const userCountryCode = payload['location']['country']['code'];
-  //       console.log('userCountryCode => ', userCountryCode);
-  //       console.log('whitelist => ', whitelist);
 
   //       if (!whitelist.some((e) => e.countryCode === userCountryCode)) {
   //         history.push('/');

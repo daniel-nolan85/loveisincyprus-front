@@ -254,12 +254,6 @@ const ProfileUpdate = ({
                   className='fa'
                 ></FontAwesomeIcon>
               )}
-              {/* <input
-                onChange={handleProfileImage}
-                type='file'
-                accept='images/*'
-                hidden
-              /> */}
             </label>
           )}
         </div>
@@ -315,21 +309,12 @@ const ProfileUpdate = ({
           onChange={(e) => setAbout(e.target.value)}
         />
 
-        {/* <input
-            type='email'
-            className='input-field'
-            value={email}
-            readOnly
-            disabled
-          /> */}
-
         <DatePicker
           selected={birthday}
           onChange={(date) => setBirthday(date)}
           dateFormat='dd/MM/yyyy'
           minDate={new Date('01-01-1900')}
           maxDate={new Date()}
-          // isClearable
           showMonthDropdown
           showYearDropdown
           scrollableMonthDropdown
@@ -763,27 +748,6 @@ const ProfileUpdate = ({
         />
         <label className='csv'>Please separate each pet with a comma</label>
 
-        {/* <select
-        name='interests'
-        onChange={(e) => setInterests([...interests, e.target.value])}
-        value={interests}
-        multiple
-        // type='select-multiple'
-      >
-        <option value=''>What do you enjoy?</option>
-        <option value='art'>Art</option>
-        <option value='cooking'>Cooking</option>
-        <option value='film'>Film</option>
-        <option value='history'>History</option>
-        <option value='literature'>Literature</option>
-        <option value='nature'>Nature</option>
-        <option value='science'>Science</option>
-        <option value='shopping'>Shopping</option>
-        <option value='sport'>Sport</option>
-        <option value='theatre'>Theatre</option>
-        <option value='travel'>Travel</option>
-        <option value='walking'>Walking</option>
-      </select> */}
         <input
           type='text'
           className='input-field'
@@ -798,31 +762,6 @@ const ProfileUpdate = ({
           Please separate each interest with a comma
         </label>
 
-        {/* <select
-        name='music'
-        onChange={(e) => setMusic([...music, e.target.value])}
-        value={music}
-        multiple
-        // type='select-multiple'
-      >
-        <option value=''>What are you favourite genres of music?</option>
-        <option value='blues'>Blues</option>
-        <option value='classical'>Classical</option>
-        <option value='country'>Country</option>
-        <option value='dance'>Dance</option>
-        <option value='disco'>Disco</option>
-        <option value='easy listening'>Easy listening</option>
-        <option value='folk'>folk</option>
-        <option value='garage'>Garage</option>
-        <option value='heavy metal'>Heavy metal</option>
-        <option value='hip hop'>Hip hop</option>
-        <option value='house'>House</option>
-        <option value='jazz'>Jazz</option>
-        <option value='new wave'>New wave</option>
-        <option value='opera'>Opera</option>
-        <option value='rock'>Rock</option>
-        <option value='traditional'>Traditional</option>
-      </select> */}
         <input
           type='text'
           className='input-field'
@@ -1004,25 +943,6 @@ const ProfileUpdate = ({
           <option value='town'>Yes, in the same town</option>
         </select>
 
-        {/* <select
-        name='treat self'
-        onChange={(e) => setTreatSelf([...treatSelf, e.target.value])}
-        value={treatSelf}
-        multiple
-        // type='select-multiple'
-      >
-        <option value=''>What ways do you like to treat yourself?</option>
-        <option value='acupuncture'>Acupuncture</option>
-        <option value='allopathy'>Allopathy</option>
-        <option value='chinese remedies'>Chinese remedies</option>
-        <option value='flower remedies'>Flower remedies</option>
-        <option value='homeopathy'>Homeopathy</option>
-        <option value='natural remedies'>Natural remedies</option>
-        <option value='old-wives remedies'>Old-wives remedies</option>
-        <option value='plants'>Plants</option>
-        <option value='none'>None (no need to)</option>
-        <option value='other'>Other</option>
-      </select> */}
         <input
           type='text'
           className='input-field'

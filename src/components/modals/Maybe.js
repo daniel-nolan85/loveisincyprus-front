@@ -33,8 +33,6 @@ const Maybe = ({ maybeModalIsOpen, setMaybeModalIsOpen, post }) => {
     },
   };
 
-  // console.log(post);
-
   return (
     <Modal
       isOpen={maybeModalIsOpen}
