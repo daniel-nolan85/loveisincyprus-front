@@ -531,6 +531,9 @@ const Login = ({ showRegister }) => {
         })
         .catch((err) => {
           console.log(err);
+          toast.error(err.message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
           setLoading(false);
           setMobile('');
         });
