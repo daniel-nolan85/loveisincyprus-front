@@ -172,8 +172,6 @@ const Header = ({
           <div className='dropdown-content information'>
             <Link to='/about-us'>About Us</Link>
             <br />
-            <Link to='/help'>Help</Link>
-            <br />
             <Link to='/contact-us'>Contact Us</Link>
             <br />
             <Link to='/relationship-coaching'>Relationship Coaching</Link>

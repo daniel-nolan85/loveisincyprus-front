@@ -39,7 +39,7 @@ const WhyNeedThisPhone = ({
       contentLabel='Example Modal'
     >
       <div className='why-do-we-need-this'>
-        <h2>
+        <h2 className='center'>
           We will use the phone number you provide us to send you a one time
           password (OTP).
         </h2>

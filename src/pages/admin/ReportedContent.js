@@ -79,7 +79,7 @@ const ReportedContent = ({ history }) => {
       .post(`${process.env.REACT_APP_API}/fetch-reported-comments`)
       .then((res) => {
         res.data.forEach((o) => {
-          o.comments = o.comments.filter((s) => s.reported == true);
+          o.comments = o.comments.filter((s) => s.reported === true);
         });
         setComments(res.data);
       })

@@ -41,6 +41,7 @@ import { Badge } from 'antd';
 import Verify from '../../components/modals/Verify';
 import { ChatState } from '../../context/ChatProvider';
 import * as faceapi from 'face-api.js';
+import firebase from 'firebase/compat/app';
 
 const { Ribbon } = Badge;
 
@@ -48,6 +49,11 @@ const Profile = ({ history }) => {
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [updatedMobile, setUpdatedMobile] = useState('');
+  const [secondMobile, setSecondMobile] = useState('');
+  const [statement, setStatement] = useState('');
+  const [answer, setAnswer] = useState('');
   const [about, setAbout] = useState('');
   const [profileImage, setProfileImage] = useState({});
   const [coverImage, setCoverImage] = useState({});
@@ -141,6 +147,7 @@ const Profile = ({ history }) => {
   const [loadingProfileImg, setLoadingProfileImg] = useState(false);
   const [profileImageUpdateModalIsOpen, setProfileImageUpdateModalIsOpen] =
     useState(false);
+  const [profileUpdated, setProfileUpdated] = useState(false);
 
   const { modalIsOpen, setModalIsOpen } = ChatState();
 
@@ -176,11 +183,28 @@ const Profile = ({ history }) => {
   }, [faces]);
 
   useEffect(() => {
+    if (updatedMobile && profileUpdated) {
+      setTimeout(() => {
+        firebase.auth().signOut();
+        dispatch({
+          type: 'LOGOUT',
+          payload: null,
+        });
+        history.push('/authentication');
+      }, 500);
+    }
+  }, [updatedMobile && profileUpdated]);
+
+  useEffect(() => {
     if (user && user.token) {
       setUsername(user.username);
       setAbout(user.about);
       setName(user.name);
       setEmail(user.email);
+      setMobile(user.mobile);
+      setSecondMobile(user.secondMobile);
+      setStatement(user.statement);
+      setAnswer(user.answer);
       setProfileImage(user.profileImage);
       setCoverImage(user.coverImage);
       setGender(user.gender);
@@ -247,6 +271,11 @@ const Profile = ({ history }) => {
           about,
           name,
           email,
+          mobile,
+          updatedMobile,
+          secondMobile,
+          statement,
+          answer,
           user,
           profileImage,
           coverImage,
@@ -304,12 +333,12 @@ const Profile = ({ history }) => {
       )
       .then((res) => {
         setLoading(false);
-
         if (res.data.error) {
           toast.error(res.data.error, {
             position: toast.POSITION.TOP_CENTER,
           });
         } else {
+          console.log(res.data);
           toast.success(`Profile updated.`, {
             position: toast.POSITION.TOP_CENTER,
           });
@@ -321,6 +350,10 @@ const Profile = ({ history }) => {
               coverImage: res.data.coverImage,
               name: res.data.name,
               email: res.data.email,
+              mobile: res.data.mobile,
+              secondMobile: res.data.secondMobile,
+              statement: res.data.statement,
+              answer: res.data.answer,
               username: res.data.username,
               about: res.data.about,
               gender: res.data.gender,
@@ -376,6 +409,7 @@ const Profile = ({ history }) => {
           .then(detectfaces)
           .catch((err) => console.log(err));
         setModalIsOpen(false);
+        setProfileUpdated(true);
       })
       .catch((err) => {
         setLoading(false);
@@ -870,7 +904,7 @@ const Profile = ({ history }) => {
             </div>
           </div>
         </div>
-        <div className='pd-right'>
+        <div className='pd-right pd-r-prof'>
           <button type='button'>
             <FontAwesomeIcon
               icon={faPenToSquare}
@@ -883,11 +917,13 @@ const Profile = ({ history }) => {
               <Ribbon text='Verify me' color={'#ef5b85'}></Ribbon>
             </div>
           ) : user.verified === 'pending' ? (
-            <Ribbon
-              text='Verifying...'
-              color={'#ef5b85'}
-              className='verifying'
-            ></Ribbon>
+            <div>
+              <Ribbon
+                text='Verifying...'
+                color={'#ef5b85'}
+                className='verifying'
+              ></Ribbon>
+            </div>
           ) : (
             user.verified === 'true' && (
               <button className='tooltip'>
@@ -1233,6 +1269,16 @@ const Profile = ({ history }) => {
         setName={setName}
         email={email}
         setEmail={setEmail}
+        mobile={mobile}
+        setMobile={setMobile}
+        updatedMobile={updatedMobile}
+        setUpdatedMobile={setUpdatedMobile}
+        secondMobile={secondMobile}
+        setSecondMobile={setSecondMobile}
+        statement={statement}
+        setStatement={setStatement}
+        answer={answer}
+        setAnswer={setAnswer}
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
         handleSubmit={handleSubmit}

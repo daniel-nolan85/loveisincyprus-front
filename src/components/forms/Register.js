@@ -17,18 +17,29 @@ import { addPoints } from '../../functions/user';
 import axios from 'axios';
 import WhyNeedThisEmail from '../modals/WhyNeedThisEmail';
 import WhyNeedThisPhone from '../modals/WhyNeedThisPhone';
+import WhyNeedThisSecondaryPhone from '../modals/WhyNeedThisSecondaryPhone';
+import WhyNeedThisSecret from '../modals/WhyNeedThisSecret';
 
 const Register = ({ showLogin }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [validEmail, setValidEmail] = useState(false);
   const [mobile, setMobile] = useState('');
+  const [secondMobile, setSecondMobile] = useState('');
+  const [statement, setStatement] = useState('');
+  const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
   const [OTP, setOTP] = useState('');
   const [whyNeedThisEmailModalIsOpen, setWhyNeedThisEmailModalIsOpen] =
     useState(false);
   const [whyNeedThisPhoneModalIsOpen, setWhyNeedThisPhoneModalIsOpen] =
+    useState(false);
+  const [
+    whyNeedThisSecondaryPhoneModalIsOpen,
+    setWhyNeedThisSecondaryPhoneModalIsOpen,
+  ] = useState(false);
+  const [whyNeedThisSecretModalIsOpen, setWhyNeedThisSecretModalIsOpen] =
     useState(false);
 
   let dispatch = useDispatch();
@@ -44,10 +55,50 @@ const Register = ({ showLogin }) => {
       .get(`${process.env.REACT_APP_API}/user-exists/${mobile}`)
       .then((res) => {
         if (res.data.length === 0) {
-          checkAllowedAccess();
+          secondMobileExists();
         } else {
           toast.error(
             'A user with this phone number already exists. Try logging in.',
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+          return;
+        }
+      });
+  };
+
+  const secondMobileExists = async () => {
+    if (secondMobile) {
+      await axios
+        .get(
+          `${process.env.REACT_APP_API}/second-mobile-exists/${secondMobile}`
+        )
+        .then((res) => {
+          if (res.data.length === 0) {
+            emailExists();
+          } else {
+            toast.error(
+              'A user with this secondary phone number already exists. Have an account? Try logging in.',
+              {
+                position: toast.POSITION.TOP_CENTER,
+              }
+            );
+            return;
+          }
+        });
+    } else emailExists();
+  };
+
+  const emailExists = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/email-exists/${email}`)
+      .then((res) => {
+        if (res.data.length === 0) {
+          checkAllowedAccess();
+        } else {
+          toast.error(
+            'A user with this email address already exists. Have an account? Try logging in.',
             {
               position: toast.POSITION.TOP_CENTER,
             }
@@ -62,7 +113,7 @@ const Register = ({ showLogin }) => {
       .get(`${process.env.REACT_APP_API}/user-blocked/${mobile}`)
       .then((res) => {
         if (res.data.length === 0) {
-          checkCallingCode();
+          checkAllowedAccessSecondMobile();
         } else {
           toast.error(
             'Access from this mobile number is denied. Please use another.',
@@ -75,12 +126,34 @@ const Register = ({ showLogin }) => {
       });
   };
 
+  const checkAllowedAccessSecondMobile = async (req, res) => {
+    if (secondMobile) {
+      await axios
+        .get(
+          `${process.env.REACT_APP_API}/second-mobile-blocked/${secondMobile}`
+        )
+        .then((res) => {
+          if (res.data.length === 0) {
+            checkCallingCode();
+          } else {
+            toast.error(
+              'Access from this secondary mobile number is denied. Please use another.',
+              {
+                position: toast.POSITION.TOP_CENTER,
+              }
+            );
+            return;
+          }
+        });
+    } else checkCallingCode();
+  };
+
   const checkCallingCode = async (req, res) => {
     await axios
       .get(`${process.env.REACT_APP_API}/calling-code/${mobile}`)
       .then((res) => {
         if (res.data.permitted === 'true') {
-          requestOTP();
+          checkCallingCodeSecondMobile();
         } else {
           toast.error('Access is not currently permitted from this location.', {
             position: toast.POSITION.TOP_CENTER,
@@ -88,6 +161,28 @@ const Register = ({ showLogin }) => {
           return;
         }
       });
+  };
+
+  const checkCallingCodeSecondMobile = async (req, res) => {
+    if (secondMobile) {
+      await axios
+        .get(
+          `${process.env.REACT_APP_API}/second-mobile-calling-code/${secondMobile}`
+        )
+        .then((res) => {
+          if (res.data.permitted === 'true') {
+            requestOTP();
+          } else {
+            toast.error(
+              'Access from this secondary mobile number is denied. Please use another.',
+              {
+                position: toast.POSITION.TOP_CENTER,
+              }
+            );
+            return;
+          }
+        });
+    } else requestOTP();
   };
 
   const generateRecaptcha = (e) => {
@@ -137,7 +232,15 @@ const Register = ({ showLogin }) => {
         .then(async (res) => {
           const user = res.user;
           const idTokenResult = await user.getIdTokenResult();
-          createUser(idTokenResult.token, name, email, mobile)
+          createUser(
+            idTokenResult.token,
+            name,
+            email,
+            mobile,
+            secondMobile,
+            statement,
+            answer
+          )
             .then((res) => {
               dispatch({
                 type: 'LOGGED_IN_USER',
@@ -147,6 +250,9 @@ const Register = ({ showLogin }) => {
                   name: res.data.name,
                   email: res.data.email,
                   mobile: res.data.mobile,
+                  secondMobile: res.data.secondMobile,
+                  statement: res.data.statement,
+                  answer: res.data.answer,
                   username: res.data.username,
                   about: res.data.about,
                   gender: res.data.gender,
@@ -245,6 +351,9 @@ const Register = ({ showLogin }) => {
               setName('');
               setEmail('');
               setMobile('');
+              setSecondMobile('');
+              setStatement('');
+              setAnswer('');
             })
             .catch((err) => {
               console.log(err);
@@ -259,6 +368,9 @@ const Register = ({ showLogin }) => {
           setName('');
           setEmail('');
           setMobile('');
+          setSecondMobile('');
+          setStatement('');
+          setAnswer('');
         });
     }
   };
@@ -269,6 +381,14 @@ const Register = ({ showLogin }) => {
 
   const whyPhone = () => {
     setWhyNeedThisPhoneModalIsOpen(true);
+  };
+
+  const whyPhone2 = () => {
+    setWhyNeedThisSecondaryPhoneModalIsOpen(true);
+  };
+
+  const whySecret = () => {
+    setWhyNeedThisSecretModalIsOpen(true);
   };
 
   const validateEmail = (email) => {
@@ -304,9 +424,8 @@ const Register = ({ showLogin }) => {
       </div>
       <div className='info-questions phone'>
         <PhoneInput
-          country={'cy'}
           className='input-field'
-          placeholder='Enter your mobile phone number'
+          placeholder='Enter your mobile number'
           value={mobile}
           onChange={(phone) => {
             setMobile(`+${phone}`);
@@ -321,6 +440,59 @@ const Register = ({ showLogin }) => {
           <span className='tooltip-text'>Why do we need this?</span>
         </div>
       </div>
+      <div className='info-questions phone'>
+        <PhoneInput
+          className='input-field'
+          placeholder='Enter your secondary mobile number*'
+          value={secondMobile}
+          onChange={(phone) => {
+            setSecondMobile(`+${phone}`);
+          }}
+        />
+        <div className='tooltip'>
+          <FontAwesomeIcon
+            icon={faCircleQuestion}
+            className='fa'
+            onClick={whyPhone2}
+          />
+          <span className='tooltip-text'>Why do we need this?</span>
+        </div>
+      </div>
+      <div className='info-questions secret'>
+        <select
+          name='statement'
+          id='statement'
+          onChange={(e) => setStatement(e.target.value)}
+          value={statement}
+        >
+          <option value=''>Select a secret statement*</option>
+          <option value='city'>Where you met your partner</option>
+          <option value='middle'>Your youngest child's middle name</option>
+          <option value='animal'>Name of your first stuffed toy</option>
+          <option value='parents'>Where your parents met</option>
+          <option value='cousin'>Your oldest cousin's middle name</option>
+          <option value='exam'>First exam you failed</option>
+        </select>
+        <div className='tooltip'>
+          <FontAwesomeIcon
+            icon={faCircleQuestion}
+            className='fa'
+            onClick={whySecret}
+          />
+          <span className='tooltip-text'>Why do we need this?</span>
+        </div>
+      </div>
+      <input
+        type='text'
+        className={
+          statement
+            ? 'input-field otp-container otp-container-show'
+            : 'otp-container'
+        }
+        placeholder='Enter your answer'
+        value={answer}
+        onChange={(e) => setAnswer(e.target.value)}
+      />
       <input
         type='number'
         className={
@@ -332,6 +504,7 @@ const Register = ({ showLogin }) => {
         value={OTP}
         onChange={verifyOTP}
       />
+      <p>* Optional fields</p>
       <button
         onClick={userExists}
         type='submit'
@@ -356,6 +529,18 @@ const Register = ({ showLogin }) => {
       <WhyNeedThisPhone
         whyNeedThisPhoneModalIsOpen={whyNeedThisPhoneModalIsOpen}
         setWhyNeedThisPhoneModalIsOpen={setWhyNeedThisPhoneModalIsOpen}
+      />
+      <WhyNeedThisSecondaryPhone
+        whyNeedThisSecondaryPhoneModalIsOpen={
+          whyNeedThisSecondaryPhoneModalIsOpen
+        }
+        setWhyNeedThisSecondaryPhoneModalIsOpen={
+          setWhyNeedThisSecondaryPhoneModalIsOpen
+        }
+      />
+      <WhyNeedThisSecret
+        whyNeedThisSecretModalIsOpen={whyNeedThisSecretModalIsOpen}
+        setWhyNeedThisSecretModalIsOpen={setWhyNeedThisSecretModalIsOpen}
       />
     </form>
   );

@@ -22,8 +22,9 @@ const SettingsMenu = ({
 }) => {
   const [darkMode, setDarkMode] = useState(false);
 
-  let { _id, name, username, profileImage, role, membership, optin } =
-    useSelector((state) => state.user);
+  let { _id, name, username, profileImage, membership } = useSelector(
+    (state) => state.user
+  );
 
   const box = useRef(null);
   useOutsideAlerter(box);
@@ -44,7 +45,7 @@ const SettingsMenu = ({
     setDarkMode(!darkMode);
     document.body.classList.toggle('dark-theme');
 
-    if (localStorage.getItem('theme') == 'light') {
+    if (localStorage.getItem('theme') === 'light') {
       localStorage.setItem('theme', 'dark');
     } else {
       localStorage.setItem('theme', 'light');

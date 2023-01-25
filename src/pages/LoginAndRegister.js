@@ -181,7 +181,7 @@ const LoginAndRegister = ({ history }) => {
   };
 
   return (
-    <div className='form-box'>
+    <div className='form-box authorisation'>
       <div className='button-box'>
         <div id='btn' />
         <button type='button' className='toggle-btn' onClick={showLogin}>

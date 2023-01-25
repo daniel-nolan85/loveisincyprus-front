@@ -104,7 +104,7 @@ const AdminDashboard = () => {
               <h1>{numPosts}</h1>
               <h3>Posts</h3>
             </div>
-            <FontAwesomeIcon icon={faSignsPost} className='fa' />
+            <FontAwesomeIcon icon={faSignsPost} className='fa no-cursor' />
           </div>
 
           <div className='admin-card'>
@@ -112,7 +112,7 @@ const AdminDashboard = () => {
               <h1>{numUsers}</h1>
               <h3>Users</h3>
             </div>
-            <FontAwesomeIcon icon={faUsers} className='fa' />
+            <FontAwesomeIcon icon={faUsers} className='fa no-cursor' />
           </div>
 
           <div className='admin-card'>
@@ -120,7 +120,7 @@ const AdminDashboard = () => {
               <h1>{numMessages}</h1>
               <h3>Messages</h3>
             </div>
-            <FontAwesomeIcon icon={faMessage} className='fa' />
+            <FontAwesomeIcon icon={faMessage} className='fa no-cursor' />
           </div>
 
           <div className='admin-card'>
@@ -128,7 +128,7 @@ const AdminDashboard = () => {
               <h1>€{incomeTaken.toFixed(2)}</h1>
               <h3>Income</h3>
             </div>
-            <FontAwesomeIcon icon={faMoneyBill1Wave} className='fa' />
+            <FontAwesomeIcon icon={faMoneyBill1Wave} className='fa no-cursor' />
           </div>
         </div>
 

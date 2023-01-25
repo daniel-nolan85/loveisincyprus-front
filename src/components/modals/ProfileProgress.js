@@ -235,7 +235,7 @@ const ProfileProgress = ({
                   You haven't updated what ways you enjoy treating yourself yet
                 </li>
               )}
-              {percentage == 100 && (
+              {percentage === 100 && (
                 <li>
                   Amazing! Your chances of finding your ideal partner will have
                   improved significantly. Well done!

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, Button } from 'antd';
+import { Modal } from 'antd';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -46,6 +46,8 @@ const Rating = ({ children }) => {
           });
         }}
         onCancel={() => setRatingModalIsOpen(false)}
+        header={null}
+        footer={null}
       >
         {children}
       </Modal>

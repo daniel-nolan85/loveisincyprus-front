@@ -138,7 +138,7 @@ const UsersToInvite = ({
                     }, 0)}
                 </p>
               </div>
-              {!values.invitees.some((ele) => ele._id == u._id) ? (
+              {!values.invitees.some((ele) => ele._id === u._id) ? (
                 <FontAwesomeIcon
                   icon={faCalendarPlus}
                   className='fa add'

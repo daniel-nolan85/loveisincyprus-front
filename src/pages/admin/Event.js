@@ -158,7 +158,7 @@ const Events = ({ history }) => {
 
   const removeInvitee = (u) => {
     for (var i = 0; i < values.invitees.length; i++) {
-      if (values.invitees[i]._id == u._id) {
+      if (values.invitees[i]._id === u._id) {
         values.invitees.splice(i, 1);
       }
     }

@@ -131,7 +131,7 @@ const MassMail = ({ history }) => {
 
   const removeSelected = (o) => {
     for (var s = 0; s < values.selected.length; s++) {
-      if (values.selected[s]._id == o._id) {
+      if (values.selected[s]._id === o._id) {
         values.selected.splice(s, 1);
       }
     }

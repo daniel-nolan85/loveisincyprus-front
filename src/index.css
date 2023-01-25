@@ -1909,6 +1909,9 @@ nav {
 .admin-card .fa {
   font-size: 40px;
   color: var(--nav-color);
+}
+
+.admin-card .fa:not(.no-cursor) {
   cursor: pointer;
 }
 
@@ -2709,6 +2712,24 @@ label.verif-upload .fa {
   color: var(--nav-color);
 }
 
+.prof-update-form-box input[type='tel'] {
+  background-color: #fff !important;
+  width: 100%;
+  padding-left: 40px;
+}
+
+.prof-update-form-box .flag-dropdown {
+  position: absolute;
+  left: 0;
+}
+
+.prof-update-form-box .react-tel-input .selected-flag,
+.prof-update-form-box .react-tel-input .selected-flag:hover,
+.prof-update-form-box .react-tel-input .selected-flag:focus,
+.prof-update-form-box .react-tel-input .flag-dropdown.open .selected-flag {
+  background-color: #fff !important;
+}
+
 .progress {
   cursor: pointer;
 }
@@ -2752,13 +2773,17 @@ progress::-webkit-progress-value {
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .progress-container::-webkit-scrollbar,
-.analysis-container-show::-webkit-scrollbar {
+.analysis-container-show::-webkit-scrollbar,
+.alt-secondary::-webkit-scrollbar,
+.alt-secret::-webkit-scrollbar {
   display: none;
 }
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .progress-container,
-.analysis-container-show {
+.analysis-container-show,
+.alt-secondary::-webkit-scrollbar,
+.alt-secret::-webkit-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
@@ -3073,6 +3098,10 @@ span.link {
   overflow: hidden;
 }
 
+.form-box.authorisation {
+  height: 620px;
+}
+
 .prof-update-form-box {
   height: 90%;
   width: 100%;
@@ -3253,6 +3282,11 @@ select {
   top: 15px;
 }
 
+.info-questions.secret .fa {
+  position: absolute;
+  top: 10px;
+}
+
 .why-do-we-need-this ul {
   display: table;
   margin: 0 auto;
@@ -3277,8 +3311,90 @@ select {
   visibility: visible;
 }
 
+.alt-secondary {
+  max-height: 0;
+  transition: max-height 0.3s;
+  overflow: auto;
+  visibility: hidden;
+}
+
+.alt-secondary-show {
+  max-height: 300px;
+  visibility: visible;
+}
+
+.alt-secondary input[type='email'],
+.alt-secondary input[type='number'] {
+  padding-top: 20px;
+  margin-left: 10px;
+  width: 290px;
+}
+
+.alt-secret {
+  max-height: 0;
+  transition: max-height 0.3s;
+  overflow: auto;
+  visibility: hidden;
+}
+
+.alt-secret-show {
+  max-height: 200px;
+  visibility: visible;
+}
+
+.alt-secret select,
+.alt-secret input {
+  width: 280px;
+}
+
 .hide {
   display: none;
+}
+
+.info-questions.phone {
+  position: relative;
+}
+
+.flag-dropdown {
+  position: absolute;
+  left: -40px;
+}
+
+.react-tel-input .selected-flag:hover,
+.react-tel-input .selected-flag:focus,
+.react-tel-input .flag-dropdown.open .selected-flag {
+  background-color: #efefef !important;
+}
+
+.info-questions.phone input.form-control {
+  padding: 0;
+}
+
+.info-questions.secret select {
+  background-color: #efefef;
+  border-bottom: none;
+}
+
+.secondary-login-form .flag-dropdown {
+  position: absolute;
+  left: 0;
+}
+
+.secondary-login-form .react-tel-input .selected-flag,
+.secondary-login-form .react-tel-input .selected-flag:hover,
+.secondary-login-form .react-tel-input .selected-flag:focus,
+.secondary-login-form .react-tel-input .flag-dropdown.open .selected-flag {
+  background-color: #fff !important;
+}
+
+.react-tel-input.input-field.secondary {
+  border-bottom: none !important;
+}
+
+.secondary-login-form input.form-control {
+  background-color: #fff !important;
+  padding: 30px 10px;
+  border-bottom: 1px solid #626262 !important;
 }
 
 /* --------------- ad pages --------------- */
@@ -4621,6 +4737,29 @@ table.product-info tbody {
   }
 }
 
+@media (max-width: 650px) {
+  .pd-right .ant-ribbon {
+    padding: 4px 5px;
+    height: 30px;
+  }
+
+  .pd-right .ant-ribbon-text {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 500px) {
+  .pd-right.pd-r-prof {
+    position: relative;
+  }
+
+  .pd-right.pd-r-prof div,
+  .pd-right.pd-r-prof button {
+    position: absolute;
+    right: 0;
+  }
+}
+
 /* --------------- media query for information pages --------------- */
 @media (max-width: 900px) {
   .info-img-bg h1 {
@@ -5164,5 +5303,18 @@ table.product-info tbody {
 
   .geo-block tbody tr td {
     font-size: 16px;
+  }
+}
+
+/* --------------- media query for authorisation page --------------- */
+@media (max-width: 900px) {
+  .form-box.authorisation {
+    margin: 6% auto;
+  }
+}
+
+@media (max-width: 450px) {
+  #statement option {
+    width: 400px;
   }
 }

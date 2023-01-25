@@ -3,9 +3,9 @@ import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
-const WhyNeedThisEmail = ({
-  whyNeedThisEmailModalIsOpen,
-  setWhyNeedThisEmailModalIsOpen,
+const WhyNeedThisSecondaryPhone = ({
+  whyNeedThisSecondaryPhoneModalIsOpen,
+  setWhyNeedThisSecondaryPhoneModalIsOpen,
 }) => {
   const modalStyles = {
     content: {
@@ -33,23 +33,23 @@ const WhyNeedThisEmail = ({
 
   return (
     <Modal
-      isOpen={whyNeedThisEmailModalIsOpen}
-      onRequestClose={() => setWhyNeedThisEmailModalIsOpen(false)}
+      isOpen={whyNeedThisSecondaryPhoneModalIsOpen}
+      onRequestClose={() => setWhyNeedThisSecondaryPhoneModalIsOpen(false)}
       style={modalStyles}
       contentLabel='Example Modal'
     >
       <div className='why-do-we-need-this'>
         <h2 className='center'>
-          We will use the email address you provide us to send you a
-          confirmation when you...
+          You can add an optional second number for your own security if you
+          wish.
         </h2>
-        <ul>
-          <li>Purchase a subscription to the site</li>
-          <li>Purchase an item from our online store</li>
-        </ul>
+        <p>
+          This number may be used to access your account in the event that you
+          lose or change your primary mobile number.
+        </p>
         <br />
         <p>
-          Your email address will not be displayed to any of our other members
+          Your phone number will not be displayed to any of our other members
           and will not be sold to any third-party entities.
         </p>
       </div>
@@ -57,4 +57,4 @@ const WhyNeedThisEmail = ({
   );
 };
 
-export default WhyNeedThisEmail;
+export default WhyNeedThisSecondaryPhone;

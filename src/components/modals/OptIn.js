@@ -54,7 +54,7 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
             optIn: res.data.optIn,
           },
         });
-        if (res.data.optIn == true) {
+        if (res.data.optIn === true) {
           toast.success(
             'You will now receive occasional inbox messages from our admin team informing you about upcoming events and other exciting updates',
             {

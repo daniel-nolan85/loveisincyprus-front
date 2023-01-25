@@ -33,7 +33,6 @@ import UserProfile from './pages/user/UserProfile';
 import Posts from './pages/admin/Posts';
 import Users from './pages/admin/Users';
 import About from './pages/About';
-import Help from './pages/Help';
 import Contact from './pages/Contact';
 import RelCoach from './pages/RelCoach';
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -123,6 +122,9 @@ const App = () => {
                 name: res.data.name,
                 email: res.data.email,
                 mobile: res.data.mobile,
+                secondMobile: res.data.secondMobile,
+                statement: res.data.statement,
+                answer: res.data.answer,
                 username: res.data.username,
                 about: res.data.about,
                 gender: res.data.gender,
@@ -443,7 +445,6 @@ const App = () => {
         <Route exact path='/' component={Home} />
         <Route exact path='/authentication' component={LoginAndRegister} />
         <Route exact path='/about-us' component={About} />
-        <Route exact path='/help' component={Help} />
         <Route exact path='/contact-us' component={Contact} />
         <Route exact path='/relationship-coaching' component={RelCoach} />
         <Route exact path='/privacy-policy' component={PrivacyPolicy} />

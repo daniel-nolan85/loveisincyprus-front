@@ -3,9 +3,9 @@ import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
-const WhyNeedThisEmail = ({
-  whyNeedThisEmailModalIsOpen,
-  setWhyNeedThisEmailModalIsOpen,
+const WhyNeedThisSecret = ({
+  whyNeedThisSecretModalIsOpen,
+  setWhyNeedThisSecretModalIsOpen,
 }) => {
   const modalStyles = {
     content: {
@@ -33,28 +33,28 @@ const WhyNeedThisEmail = ({
 
   return (
     <Modal
-      isOpen={whyNeedThisEmailModalIsOpen}
-      onRequestClose={() => setWhyNeedThisEmailModalIsOpen(false)}
+      isOpen={whyNeedThisSecretModalIsOpen}
+      onRequestClose={() => setWhyNeedThisSecretModalIsOpen(false)}
       style={modalStyles}
       contentLabel='Example Modal'
     >
       <div className='why-do-we-need-this'>
         <h2 className='center'>
-          We will use the email address you provide us to send you a
-          confirmation when you...
+          You can add an optional secret statement for your own security if you
+          wish.
         </h2>
-        <ul>
-          <li>Purchase a subscription to the site</li>
-          <li>Purchase an item from our online store</li>
-        </ul>
+        <p>
+          The answer you provide to your selected secret statement may be used
+          to access your account in the event that you lose or change your
+          mobile number.
+        </p>
         <br />
         <p>
-          Your email address will not be displayed to any of our other members
-          and will not be sold to any third-party entities.
+          This information will not be displayed to any of our other members.
         </p>
       </div>
     </Modal>
   );
 };
 
-export default WhyNeedThisEmail;
+export default WhyNeedThisSecret;

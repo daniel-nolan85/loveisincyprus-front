@@ -136,7 +136,7 @@ const UsersToSelect = ({
                         }, 0)}
                     </p>
                   </div>
-                  {!values.selected.some((ele) => ele._id == o._id) ? (
+                  {!values.selected.some((ele) => ele._id === o._id) ? (
                     <FontAwesomeIcon
                       icon={faCalendarPlus}
                       className='fa add'

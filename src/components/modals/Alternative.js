@@ -1,31 +1,45 @@
-import React, { useState, useEffect } from 'react';
-import { auth } from '../../firebase';
-import { toast } from 'react-toastify';
+import React, { useState, useEffect, useRef } from 'react';
+import Modal from 'react-modal';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSpinner,
   faArrowRightToBracket,
 } from '@fortawesome/free-solid-svg-icons';
-import { useSelector, useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import axios from 'axios';
+import { auth } from '../../firebase';
+import { toast } from 'react-toastify';
+import UserSuspended from '../modals/UserSuspended';
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { loginUser } from '../../functions/auth';
 import { addPoints } from '../../functions/user';
-import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css';
-import axios from 'axios';
-import UserSuspended from '../modals/UserSuspended';
-import Alternative from '../modals/Alternative';
+import { useSelector, useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
-const Login = ({ showRegister }) => {
+Modal.setAppElement('#root');
+
+const Alternative = ({
+  alternativeModalIsOpen,
+  setAlternativeModalIsOpen,
+  userSuspendedModalIsOpen,
+  setUserSuspendedModalIsOpen,
+  suspendedUser,
+  setSuspendedUser,
+}) => {
+  const [showSecondary, setShowSecondary] = useState(false);
+  const [showSecret, setShowSecret] = useState(false);
+  const [email, setEmail] = useState('');
+  const [validEmail, setValidEmail] = useState(false);
   const [mobile, setMobile] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [prevMobile, setPrevMobile] = useState('');
+  const [statement, setStatement] = useState('');
+  const [answer, setAnswer] = useState('');
   const [showOTP, setShowOTP] = useState(false);
   const [OTP, setOTP] = useState('');
-  const [userSuspendedModalIsOpen, setUserSuspendedModalIsOpen] =
-    useState(false);
-  const [suspendedUser, setSuspendedUser] = useState({});
-  const [alternativeModalIsOpen, setAlternativeModalIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const isFirstRun = useRef(true);
 
   const { token } = useSelector((state) => state.user) || {};
 
@@ -56,6 +70,19 @@ const Login = ({ showRegister }) => {
     }
   };
 
+  useEffect(() => {
+    setValidEmail(validateEmail(email));
+  }, [email]);
+
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      updateMobileFirebase();
+    }
+  }, [prevMobile]);
+
   const checkBlocked = async (req, res) => {
     await axios
       .get(`${process.env.REACT_APP_API}/user-blocked/${mobile}`)
@@ -80,6 +107,7 @@ const Login = ({ showRegister }) => {
       .then((res) => {
         if (res.data.length > 0) {
           checkAllowedAccess();
+          //   checkCallingCode();
         } else {
           toast.error('No user exists with this phone number.', {
             position: toast.POSITION.TOP_CENTER,
@@ -106,13 +134,48 @@ const Login = ({ showRegister }) => {
       .get(`${process.env.REACT_APP_API}/calling-code/${mobile}`)
       .then((res) => {
         if (res.data.permitted === 'true' || mobile === '+17148237775') {
-          requestOTP();
+          updateMobileDatabase();
         } else {
           toast.error('Access is not currently permitted from this location.', {
             position: toast.POSITION.TOP_CENTER,
           });
           return;
         }
+      });
+  };
+
+  const updateMobileDatabase = async () => {
+    await axios
+      .put(`${process.env.REACT_APP_API}/update-mobile-numbers`, {
+        mobile,
+        email,
+      })
+      .then((res) => {
+        console.log(res);
+        setPrevMobile(res.data.mobile);
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error('No user exists with the given information.', {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        return;
+      });
+  };
+
+  const updateMobileFirebase = async () => {
+    console.log('prevMobile => ', prevMobile);
+    await axios
+      .put(`${process.env.REACT_APP_API}/update-firestore-user`, {
+        prevMobile,
+        mobile,
+      })
+      .then((res) => {
+        requestOTP();
+      })
+      .catch((err) => {
+        console.log(err);
+        return;
       });
   };
 
@@ -265,19 +328,28 @@ const Login = ({ showRegister }) => {
               roleBasedRedirect(res);
               addPoints(1, 'login', idTokenResult.token).then((res) => {
                 if (res.data.ok) {
-                  toast.success(`Welcome to Love is in Cyprus.`, {
-                    position: toast.POSITION.TOP_CENTER,
-                  });
+                  toast.success(
+                    `Welcome to Love is in Cyprus.
+                  Your mobile number has now been updated to ${mobile}.
+                  You can amend this any time from your profile page.`,
+                    {
+                      position: toast.POSITION.TOP_CENTER,
+                    }
+                  );
                 } else {
                   toast.success(
-                    `Welcome to Love is in Cyprus. You have been awarded 1 point!`,
+                    `Welcome to Love is in Cyprus. You have been awarded 1 point!
+                    Your mobile number has now been updated to ${mobile}.
+                    You can amend this any time from your profile page.`,
                     {
                       position: toast.POSITION.TOP_CENTER,
                     }
                   );
                 }
               });
+              setEmail('');
               setMobile('');
+              setAlternativeModalIsOpen(false);
             })
             .catch((err) => {
               console.log(err);
@@ -292,73 +364,169 @@ const Login = ({ showRegister }) => {
             position: toast.POSITION.TOP_CENTER,
           });
           setLoading(false);
+          setEmail('');
           setMobile('');
+          setAlternativeModalIsOpen(false);
         });
     }
   };
 
-  const showAlternative = () => {
-    setAlternativeModalIsOpen(true);
+  const validateEmail = (email) => {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  };
+
+  const modalStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+      width: '400px',
+    },
+    overlay: {
+      position: 'fixed',
+      display: 'flex',
+      justifyContent: 'center',
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: '100%',
+      backgroundColor: 'rgba(0,0,0, .8)',
+      zIndex: '1000',
+      overflowY: 'auto',
+    },
   };
 
   return (
-    <form id='login' className='input-group'>
-      <div className='info-questions phone'>
-        <PhoneInput
-          className='input-field'
-          placeholder='Enter your mobile number'
-          value={mobile}
-          onChange={(phone) => {
-            setMobile(`+${phone}`);
-          }}
-        />
+    <Modal
+      isOpen={alternativeModalIsOpen}
+      onRequestClose={() => setAlternativeModalIsOpen(false)}
+      style={modalStyles}
+      contentLabel='Example Modal'
+    >
+      <div className='match'>
+        <>
+          <h1 className='center'>How would you like to log in?</h1>
+          <div className='contact-form-btns'>
+            <button
+              type='button'
+              className='submit-btn'
+              onClick={() => {
+                setShowSecondary(true);
+                setShowSecret(false);
+              }}
+            >
+              Secondary phone
+            </button>
+            <button
+              type='button'
+              className='submit-btn reset'
+              onClick={() => {
+                setShowSecret(true);
+                setShowSecondary(false);
+              }}
+            >
+              Secret statement
+            </button>
+          </div>
+          <div
+            className={
+              showSecondary
+                ? 'alt-secondary alt-secondary-show'
+                : 'alt-secondary'
+            }
+          >
+            <input
+              type='email'
+              className='input-field'
+              placeholder='Enter your email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <div className='secondary-login-form'>
+              <PhoneInput
+                className='input-field secondary'
+                placeholder='Enter your secondary mobile number'
+                value={mobile}
+                onChange={(phone) => {
+                  setMobile(`+${phone}`);
+                }}
+              />
+            </div>
+            <input
+              type='number'
+              className={
+                showOTP
+                  ? 'input-field otp-container otp-container-show'
+                  : 'otp-container'
+              }
+              placeholder='Enter your verification code'
+              value={OTP}
+              onChange={verifyOTP}
+            />
+            <button
+              onClick={checkBlocked}
+              type='button'
+              className='submit-btn'
+              disabled={!email || !validEmail || !mobile || showOTP}
+            >
+              {loading ? (
+                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+              ) : (
+                <FontAwesomeIcon icon={faArrowRightToBracket} className='fa' />
+              )}
+              Request OTP
+            </button>
+            <div id='recaptcha-container'></div>
+          </div>
+          <div
+            className={showSecret ? 'alt-secret alt-secret-show' : 'alt-secret'}
+          >
+            <input
+              type='email'
+              className='input-field'
+              placeholder='Enter your email'
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <select
+              name='statement'
+              id='statement'
+              onChange={(e) => setStatement(e.target.value)}
+              value={statement}
+            >
+              <option value=''>Select a secret statement*</option>
+              <option value='city'>Where you met your partner</option>
+              <option value='middle'>Your youngest child's middle name</option>
+              <option value='animal'>Name of your first stuffed toy</option>
+              <option value='parents'>Where your parents met</option>
+              <option value='cousin'>Your oldest cousin's middle name</option>
+              <option value='exam'>First exam you failed</option>
+            </select>
+            <input
+              type='text'
+              className={
+                statement
+                  ? 'input-field otp-container otp-container-show'
+                  : 'otp-container'
+              }
+              placeholder='Enter your answer'
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+            />
+          </div>
+        </>
       </div>
-      <input
-        type='number'
-        className={
-          showOTP
-            ? 'input-field otp-container otp-container-show'
-            : 'otp-container'
-        }
-        placeholder='Enter your verification code'
-        value={OTP}
-        onChange={verifyOTP}
-      />
-      <button
-        onClick={checkBlocked}
-        type='button'
-        className='submit-btn'
-        disabled={!mobile || showOTP}
-      >
-        {loading ? (
-          <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-        ) : (
-          <FontAwesomeIcon icon={faArrowRightToBracket} className='fa' />
-        )}
-        Request OTP
-      </button>
-      <div id='recaptcha-container'></div>
-      <p className='center link' onClick={showRegister}>
-        Don't have an account?
-      </p>
-      <p className='center link' onClick={showAlternative}>
-        Alternative ways to log in
-      </p>
       <UserSuspended
         userSuspendedModalIsOpen={userSuspendedModalIsOpen}
         setUserSuspendedModalIsOpen={setUserSuspendedModalIsOpen}
         suspendedUser={suspendedUser}
       />
-      <Alternative
-        alternativeModalIsOpen={alternativeModalIsOpen}
-        setAlternativeModalIsOpen={setAlternativeModalIsOpen}
-        userSuspendedModalIsOpen={userSuspendedModalIsOpen}
-        setUserSuspendedModalIsOpen={setUserSuspendedModalIsOpen}
-        suspendedUser={suspendedUser}
-        setSuspendedUser={setSuspendedUser}
-      />
-    </form>
+    </Modal>
   );
 };
 
-export default Login;
+export default Alternative;

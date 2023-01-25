@@ -79,7 +79,7 @@ const SpendPoints = ({
         <button
           className='submit-btn'
           onClick={becomeFeatured}
-          disabled={points < 100 || featuredMember == true}
+          disabled={points < 100 || featuredMember === true}
         >
           Become a Featured Member
         </button>
@@ -100,7 +100,7 @@ const SpendPoints = ({
         <button
           className='submit-btn'
           onClick={eventInvites}
-          disabled={points < 300 || eventsEligible == true}
+          disabled={points < 300 || eventsEligible === true}
         >
           Become eligible for event invites
         </button>

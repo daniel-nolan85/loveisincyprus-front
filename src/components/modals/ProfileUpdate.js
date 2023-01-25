@@ -9,6 +9,8 @@ import Modal from 'react-modal';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ProfileImageUpdate from '../modals/ProfileImageUpdate';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 Modal.setAppElement('#root');
 
@@ -23,6 +25,16 @@ const ProfileUpdate = ({
   setAbout,
   name,
   setName,
+  mobile,
+  setMobile,
+  updatedMobile,
+  setUpdatedMobile,
+  secondMobile,
+  setSecondMobile,
+  statement,
+  setStatement,
+  answer,
+  setAnswer,
   email,
   setEmail,
   loading,
@@ -283,6 +295,29 @@ const ProfileUpdate = ({
           Your username will be how you are referred to throughout the site.
           (Can be changed anytime)
         </label>
+
+        <PhoneInput
+          className='input-field'
+          placeholder='Enter your mobile number'
+          value={updatedMobile || mobile}
+          onChange={(phone) => {
+            setUpdatedMobile(`+${phone}`);
+          }}
+        />
+        <label className='csv'>
+          Updating your primary mobile number will result in you being logged
+          out. To return to the site, please re-authenticate using your new
+          mobile number.
+        </label>
+
+        <PhoneInput
+          className='input-field'
+          placeholder='Enter your secondary mobile number*'
+          value={secondMobile}
+          onChange={(phone) => {
+            setSecondMobile(`+${phone}`);
+          }}
+        />
 
         <input
           type='email'
