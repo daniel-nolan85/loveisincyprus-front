@@ -32,6 +32,18 @@ export const loginUser = async (authtoken, mobile) => {
   );
 };
 
+export const loginUserWithSecret = async (authtoken, email) => {
+  return await axios.post(
+    `${process.env.REACT_APP_API}/login-user-with-secret`,
+    { email },
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
+};
+
 export const currentUser = async (authtoken) => {
   return await axios.post(
     `${process.env.REACT_APP_API}/current-user`,

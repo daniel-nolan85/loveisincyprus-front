@@ -42,6 +42,8 @@ import Verify from '../../components/modals/Verify';
 import { ChatState } from '../../context/ChatProvider';
 import * as faceapi from 'face-api.js';
 import firebase from 'firebase/compat/app';
+import { updateEmail, updatePassword } from 'firebase/auth';
+import { auth } from '../../firebase';
 
 const { Ribbon } = Badge;
 
@@ -262,6 +264,12 @@ const Profile = ({ history }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    // if (!statement) setAnswer('');
+    updateEmail(auth.currentUser, email).then(() => {
+      updatePassword(auth.currentUser, answer).then(() => {
+        console.log('currentUser => ', auth.currentUser);
+      });
+    });
 
     await axios
       .put(

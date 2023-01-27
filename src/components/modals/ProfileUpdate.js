@@ -4,6 +4,8 @@ import {
   faArrowRightToBracket,
   faSpinner,
   faCamera,
+  faEye,
+  faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import Modal from 'react-modal';
 import DatePicker from 'react-datepicker';
@@ -26,7 +28,6 @@ const ProfileUpdate = ({
   name,
   setName,
   mobile,
-  setMobile,
   updatedMobile,
   setUpdatedMobile,
   secondMobile,
@@ -141,6 +142,7 @@ const ProfileUpdate = ({
   const [showBackground, setShowBackground] = useState(false);
   const [showAppearance, setShowAppearance] = useState(false);
   const [showPlus, setShowPlus] = useState(false);
+  const [showAnswer, setShowAnswer] = useState(false);
 
   const modalStyles = {
     content: {
@@ -306,8 +308,8 @@ const ProfileUpdate = ({
         />
         <label className='csv'>
           Updating your primary mobile number will result in you being logged
-          out. To return to the site, please re-authenticate using your new
-          mobile number.
+          out. To return to the site, please re-authenticate using the new
+          mobile number you have provided.
         </label>
 
         <PhoneInput
@@ -327,6 +329,40 @@ const ProfileUpdate = ({
           onChange={(e) => setEmail(e.target.value)}
         />
 
+        <div className='update-s-and-a'>
+          <select
+            name='statement'
+            id='statement'
+            onChange={(e) => setStatement(e.target.value)}
+            value={statement}
+          >
+            <option value=''>Select a secret statement</option>
+            <option value='city'>Where you met your partner</option>
+            <option value='middle'>Your youngest child's middle name</option>
+            <option value='animal'>Name of your first stuffed toy</option>
+            <option value='parents'>Where your parents met</option>
+            <option value='cousin'>Your oldest cousin's middle name</option>
+            <option value='exam'>First exam you failed</option>
+          </select>
+
+          <input
+            type={showAnswer ? 'text' : 'password'}
+            className={
+              statement
+                ? 'input-field otp-container otp-container-show'
+                : 'otp-container'
+            }
+            placeholder='Enter your answer'
+            value={answer}
+            onChange={(e) => setAnswer(e.target.value)}
+          />
+          <FontAwesomeIcon
+            icon={showAnswer ? faEyeSlash : faEye}
+            // className='fa update-eye'
+            className={statement ? 'fa update-eye' : 'hide'}
+            onClick={() => setShowAnswer(!showAnswer)}
+          />
+        </div>
         <select
           name='gender'
           onChange={(e) => setGender(e.target.value)}

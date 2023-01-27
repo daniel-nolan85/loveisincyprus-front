@@ -47,7 +47,6 @@ const WhyNeedThisPhone = ({
           This 6 digit code will be sent to the number you give us and enable
           you to log in to the site.
         </p>
-        <br />
         <p>
           Your phone number will not be displayed to any of our other members
           and will not be sold to any third-party entities.

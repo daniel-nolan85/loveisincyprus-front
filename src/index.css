@@ -2730,6 +2730,22 @@ label.verif-upload .fa {
   background-color: #fff !important;
 }
 
+.update-s-and-a {
+  position: relative;
+}
+
+.update-s-and-a input {
+  padding-left: 30px;
+}
+
+.update-eye {
+  color: var(--nav-color);
+  font-size: 20px;
+  cursor: pointer;
+  position: absolute;
+  top: 70px;
+}
+
 .progress {
   cursor: pointer;
 }
@@ -3287,9 +3303,30 @@ select {
   top: 10px;
 }
 
+.eye {
+  position: absolute;
+  top: -38px;
+  left: -30px;
+  font-size: 20px !important;
+}
+
+.info-questions.answer {
+  border-bottom: none;
+}
+
+.info-questions.answer .tooltip {
+  position: absolute;
+  top: -42px;
+  right: -30px;
+}
+
 .why-do-we-need-this ul {
   display: table;
   margin: 0 auto;
+}
+
+.required {
+  margin-top: 10px;
 }
 
 .react-tel-input .form-control,
@@ -3304,6 +3341,7 @@ select {
   transition: max-height 0.3s;
   overflow: auto;
   visibility: hidden;
+  display: flex;
 }
 
 .otp-container-show {
@@ -3319,7 +3357,7 @@ select {
 }
 
 .alt-secondary-show {
-  max-height: 300px;
+  max-height: 390px;
   visibility: visible;
 }
 
@@ -3338,13 +3376,17 @@ select {
 }
 
 .alt-secret-show {
-  max-height: 200px;
+  max-height: 220px;
   visibility: visible;
 }
 
 .alt-secret select,
 .alt-secret input {
   width: 280px;
+}
+
+.alt-secret input[type='text'] {
+  margin: 0 auto;
 }
 
 .hide {

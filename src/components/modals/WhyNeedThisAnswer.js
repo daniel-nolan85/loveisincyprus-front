@@ -3,9 +3,9 @@ import Modal from 'react-modal';
 
 Modal.setAppElement('#root');
 
-const WhyNeedThisSecret = ({
-  whyNeedThisSecretModalIsOpen,
-  setWhyNeedThisSecretModalIsOpen,
+const WhyNeedThisAnswer = ({
+  whyNeedThisAnswerModalIsOpen,
+  setWhyNeedThisAnswerModalIsOpen,
 }) => {
   const modalStyles = {
     content: {
@@ -33,19 +33,19 @@ const WhyNeedThisSecret = ({
 
   return (
     <Modal
-      isOpen={whyNeedThisSecretModalIsOpen}
-      onRequestClose={() => setWhyNeedThisSecretModalIsOpen(false)}
+      isOpen={whyNeedThisAnswerModalIsOpen}
+      onRequestClose={() => setWhyNeedThisAnswerModalIsOpen(false)}
       style={modalStyles}
       contentLabel='Example Modal'
     >
       <div className='why-do-we-need-this'>
         <h2 className='center'>
-          You can add an optional secret statement for your own security if you
-          wish.
+          The answer you provide to your secret statement will act as your
+          password.
         </h2>
         <p>
-          Your selected secret statement combined with the answer you provide
-          may be used as an alternative way to log in to your account.
+          Due to this, your answer needs to be at least 6 characters long and
+          will be case-sensitive.
         </p>
         <p>
           This information will not be displayed to any of our other members.
@@ -55,4 +55,4 @@ const WhyNeedThisSecret = ({
   );
 };
 
-export default WhyNeedThisSecret;
+export default WhyNeedThisAnswer;

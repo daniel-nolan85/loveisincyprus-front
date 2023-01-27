@@ -47,7 +47,6 @@ const WhyNeedThisSecondaryPhone = ({
           This number may be used to access your account in the event that you
           lose or change your primary mobile number.
         </p>
-        <br />
         <p>
           Your phone number will not be displayed to any of our other members
           and will not be sold to any third-party entities.

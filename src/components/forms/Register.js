@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { auth } from '../../firebase';
-import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import {
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+  updateEmail,
+  updatePassword,
+  sendEmailVerification,
+} from 'firebase/auth';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowRightToBracket,
   faSpinner,
   faCircleQuestion,
+  faEye,
+  faEyeSlash,
 } from '@fortawesome/free-solid-svg-icons';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
@@ -19,6 +27,7 @@ import WhyNeedThisEmail from '../modals/WhyNeedThisEmail';
 import WhyNeedThisPhone from '../modals/WhyNeedThisPhone';
 import WhyNeedThisSecondaryPhone from '../modals/WhyNeedThisSecondaryPhone';
 import WhyNeedThisSecret from '../modals/WhyNeedThisSecret';
+import WhyNeedThisAnswer from '../modals/WhyNeedThisAnswer';
 
 const Register = ({ showLogin }) => {
   const [name, setName] = useState('');
@@ -41,6 +50,9 @@ const Register = ({ showLogin }) => {
   ] = useState(false);
   const [whyNeedThisSecretModalIsOpen, setWhyNeedThisSecretModalIsOpen] =
     useState(false);
+  const [whyNeedThisAnswerModalIsOpen, setWhyNeedThisAnswerModalIsOpen] =
+    useState(false);
+  const [showAnswer, setShowAnswer] = useState(false);
 
   let dispatch = useDispatch();
   const history = useHistory();
@@ -339,6 +351,7 @@ const Register = ({ showLogin }) => {
                   canCoupon: res.data.canCoupon,
                 },
               });
+
               history.push('/user/dashboard');
               addPoints(1, 'login', idTokenResult.token).then(
                 toast.success(
@@ -348,6 +361,19 @@ const Register = ({ showLogin }) => {
                   }
                 )
               );
+              if (statement && answer) {
+                updateEmail(auth.currentUser, email).then(() => {
+                  updatePassword(auth.currentUser, answer).then(() => {
+                    console.log('currentUser => ', auth.currentUser);
+                  });
+                });
+                toast.success(
+                  `An email has been sent to ${email}. Please click the link to complete your registration.`,
+                  {
+                    position: toast.POSITION.TOP_CENTER,
+                  }
+                );
+              }
               setName('');
               setEmail('');
               setMobile('');
@@ -391,6 +417,10 @@ const Register = ({ showLogin }) => {
     setWhyNeedThisSecretModalIsOpen(true);
   };
 
+  const whyAnswer = () => {
+    setWhyNeedThisAnswerModalIsOpen(true);
+  };
+
   const validateEmail = (email) => {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
@@ -401,7 +431,7 @@ const Register = ({ showLogin }) => {
       <input
         type='text'
         className='input-field'
-        placeholder='Enter your name'
+        placeholder='Enter your name *'
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
@@ -409,7 +439,7 @@ const Register = ({ showLogin }) => {
         <input
           type='email'
           className='input-field'
-          placeholder='Enter your email'
+          placeholder='Enter your email *'
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
@@ -425,7 +455,7 @@ const Register = ({ showLogin }) => {
       <div className='info-questions phone'>
         <PhoneInput
           className='input-field'
-          placeholder='Enter your mobile number'
+          placeholder='Enter your mobile number *'
           value={mobile}
           onChange={(phone) => {
             setMobile(`+${phone}`);
@@ -443,7 +473,7 @@ const Register = ({ showLogin }) => {
       <div className='info-questions phone'>
         <PhoneInput
           className='input-field'
-          placeholder='Enter your secondary mobile number*'
+          placeholder='Enter your secondary mobile number'
           value={secondMobile}
           onChange={(phone) => {
             setSecondMobile(`+${phone}`);
@@ -455,7 +485,7 @@ const Register = ({ showLogin }) => {
             className='fa'
             onClick={whyPhone2}
           />
-          <span className='tooltip-text'>Why do we need this?</span>
+          <span className='tooltip-text'>What is this for?</span>
         </div>
       </div>
       <div className='info-questions secret'>
@@ -465,7 +495,7 @@ const Register = ({ showLogin }) => {
           onChange={(e) => setStatement(e.target.value)}
           value={statement}
         >
-          <option value=''>Select a secret statement*</option>
+          <option value=''>Select a secret statement</option>
           <option value='city'>Where you met your partner</option>
           <option value='middle'>Your youngest child's middle name</option>
           <option value='animal'>Name of your first stuffed toy</option>
@@ -479,20 +509,37 @@ const Register = ({ showLogin }) => {
             className='fa'
             onClick={whySecret}
           />
-          <span className='tooltip-text'>Why do we need this?</span>
+          <span className='tooltip-text'>What is this for?</span>
         </div>
       </div>
-      <input
-        type='text'
-        className={
-          statement
-            ? 'input-field otp-container otp-container-show'
-            : 'otp-container'
-        }
-        placeholder='Enter your answer'
-        value={answer}
-        onChange={(e) => setAnswer(e.target.value)}
-      />
+      <>
+        <input
+          type={showAnswer ? 'text' : 'password'}
+          className={
+            statement
+              ? 'input-field otp-container otp-container-show'
+              : 'otp-container'
+          }
+          placeholder='Enter your answer'
+          value={answer}
+          onChange={(e) => setAnswer(e.target.value)}
+        />
+        <div className={statement ? 'info-questions answer' : 'hide'}>
+          <div className='tooltip'>
+            <FontAwesomeIcon
+              icon={faCircleQuestion}
+              className='fa'
+              onClick={whyAnswer}
+            />
+            <span className='tooltip-text'>What is this?</span>
+          </div>
+          <FontAwesomeIcon
+            icon={showAnswer ? faEyeSlash : faEye}
+            className='fa eye'
+            onClick={() => setShowAnswer(!showAnswer)}
+          />
+        </div>
+      </>
       <input
         type='number'
         className={
@@ -504,12 +551,21 @@ const Register = ({ showLogin }) => {
         value={OTP}
         onChange={verifyOTP}
       />
-      <p>* Optional fields</p>
+      <p className='required'>
+        * <span className='link'>Required fields</span>
+      </p>
       <button
         onClick={userExists}
         type='submit'
         className='submit-btn'
-        disabled={!name || !email || !validEmail || !mobile || showOTP}
+        disabled={
+          !name ||
+          !email ||
+          !validEmail ||
+          !mobile ||
+          showOTP ||
+          (statement && answer.length < 6)
+        }
       >
         {loading ? (
           <FontAwesomeIcon icon={faSpinner} className='fa' spin />
@@ -541,6 +597,10 @@ const Register = ({ showLogin }) => {
       <WhyNeedThisSecret
         whyNeedThisSecretModalIsOpen={whyNeedThisSecretModalIsOpen}
         setWhyNeedThisSecretModalIsOpen={setWhyNeedThisSecretModalIsOpen}
+      />
+      <WhyNeedThisAnswer
+        whyNeedThisAnswerModalIsOpen={whyNeedThisAnswerModalIsOpen}
+        setWhyNeedThisAnswerModalIsOpen={setWhyNeedThisAnswerModalIsOpen}
       />
     </form>
   );
