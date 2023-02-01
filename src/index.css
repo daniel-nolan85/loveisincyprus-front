@@ -2746,6 +2746,30 @@ label.verif-upload .fa {
   top: 70px;
 }
 
+.reauthenticate {
+  height: 500px;
+  width: 100%;
+  margin: 0;
+  text-align: center;
+}
+
+.reauthenticate form {
+  margin-top: 130px;
+  margin-left: 40px;
+}
+
+.reauthenticate input.form-control {
+  background-color: #fff;
+}
+
+.reauthenticate .grecaptcha-badge {
+  margin: 0;
+  position: absolute;
+  bottom: 2%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .progress {
   cursor: pointer;
 }
@@ -3425,7 +3449,11 @@ select {
 .secondary-login-form .react-tel-input .selected-flag,
 .secondary-login-form .react-tel-input .selected-flag:hover,
 .secondary-login-form .react-tel-input .selected-flag:focus,
-.secondary-login-form .react-tel-input .flag-dropdown.open .selected-flag {
+.secondary-login-form .react-tel-input .flag-dropdown.open .selected-flag,
+.reauthenticate .react-tel-input .selected-flag,
+.reauthenticate .react-tel-input .selected-flag:hover,
+.reauthenticate .react-tel-input .selected-flag:focus,
+.reauthenticate .react-tel-input .flag-dropdown.open .selected-flag {
   background-color: #fff !important;
 }
 

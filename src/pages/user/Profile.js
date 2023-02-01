@@ -42,8 +42,9 @@ import Verify from '../../components/modals/Verify';
 import { ChatState } from '../../context/ChatProvider';
 import * as faceapi from 'face-api.js';
 import firebase from 'firebase/compat/app';
-import { updateEmail, updatePassword } from 'firebase/auth';
+import { updateEmail, updatePassword, updatePhoneNumber } from 'firebase/auth';
 import { auth } from '../../firebase';
+import Reauthenticate from '../../components/modals/Reauthenticate';
 
 const { Ribbon } = Badge;
 
@@ -51,11 +52,13 @@ const Profile = ({ history }) => {
   const [username, setUsername] = useState('');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [updatedEmail, setUpdatedEmail] = useState('');
   const [mobile, setMobile] = useState('');
   const [updatedMobile, setUpdatedMobile] = useState('');
   const [secondMobile, setSecondMobile] = useState('');
   const [statement, setStatement] = useState('');
   const [answer, setAnswer] = useState('');
+  const [updatedAnswer, setUpdatedAnswer] = useState('');
   const [about, setAbout] = useState('');
   const [profileImage, setProfileImage] = useState({});
   const [coverImage, setCoverImage] = useState({});
@@ -150,6 +153,13 @@ const Profile = ({ history }) => {
   const [profileImageUpdateModalIsOpen, setProfileImageUpdateModalIsOpen] =
     useState(false);
   const [profileUpdated, setProfileUpdated] = useState(false);
+  const [reauthenticateModalIsOpen, setReauthenticateModalIsOpen] =
+    useState(false);
+  // const [reauthenticated, setReauthenticated] = useState(false);
+  const [showOTP, setShowOTP] = useState(false);
+  const [OTP, setOTP] = useState('');
+  const [reauthMobile, setReauthMobile] = useState('');
+  const [loadingReauth, setLoadingReauth] = useState(false);
 
   const { modalIsOpen, setModalIsOpen } = ChatState();
 
@@ -185,17 +195,25 @@ const Profile = ({ history }) => {
   }, [faces]);
 
   useEffect(() => {
-    if (updatedMobile && profileUpdated) {
-      setTimeout(() => {
-        firebase.auth().signOut();
-        dispatch({
-          type: 'LOGOUT',
-          payload: null,
-        });
-        history.push('/authentication');
-      }, 500);
+    if ((updatedMobile || updatedEmail || updatedAnswer) && profileUpdated) {
+      setReauthenticateModalIsOpen(true);
+      // setTimeout(() => {
+      //   firebase.auth().signOut();
+      //   dispatch({
+      //     type: 'LOGOUT',
+      //     payload: null,
+      //   });
+      //   history.push('/authentication');
+      // }, 500);
     }
-  }, [updatedMobile && profileUpdated]);
+  }, [(updatedMobile || updatedEmail || updatedAnswer) && profileUpdated]);
+
+  // useEffect(() => {
+  //   if (reauthenticated) {
+  //     handleSubmit();
+  //     setReauthenticated(false);
+  //   }
+  // }, [reauthenticated]);
 
   useEffect(() => {
     if (user && user.token) {
@@ -261,16 +279,98 @@ const Profile = ({ history }) => {
     }
   }, [user && user.token]);
 
-  const handleSubmit = async (e) => {
+  const checkInfoExists = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    // if (!statement) setAnswer('');
-    updateEmail(auth.currentUser, email).then(() => {
-      updatePassword(auth.currentUser, answer).then(() => {
-        console.log('currentUser => ', auth.currentUser);
-      });
-    });
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/check-info-exists`,
+        {
+          _id: user._id,
+          email,
+          updatedEmail,
+          mobile,
+          updatedMobile,
+          secondMobile,
+        },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        if (
+          res.data.some((e) => e.mobile === updatedMobile) ||
+          res.data.some((e) => e.secondMobile === updatedMobile)
+        ) {
+          toast.error('The mobile number you have entered is already in use.', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          return;
+        }
+        if (
+          res.data.some((e) => e.mobile === secondMobile) ||
+          res.data.some((e) => e.secondMobile === secondMobile)
+        ) {
+          toast.error(
+            'The secondary mobile number you have entered is already in use.',
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+          return;
+        }
+        if (res.data.some((e) => e.email === updatedEmail)) {
+          toast.error('The email address you have entered is already in use.', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          return;
+        }
+        if (res.data.length === 0) handleSubmit();
+      })
+      .catch((err) => console.log(err));
+  };
 
+  // const updateFirebase = async () => {
+  //   // this function should be invoked after checkInfoExists has passed,
+  //   // and should check whether the users email and answer match what is
+  //   // stored in firebase. If not then it should update the firestore.
+  //   // Once checked and updated, it should then invoke handleSubmit.
+  //   console.log('auth.currentUser => ', auth.currentUser);
+  //   if (updatedMobile) {
+  //     updatePhoneNumber(auth.currentUser, updatedMobile)
+  //       .then(() => {
+  //         if (!updateEmail && !updatedAnswer) setReauthenticated(true);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //         setReauthenticateModalIsOpen(true);
+  //       });
+  //   }
+  //   if (updatedEmail) {
+  //     updateEmail(auth.currentUser, updatedEmail)
+  //       .then(() => {
+  //         if (!updatedAnswer) setReauthenticated(true);
+  //       })
+  //       .catch((err) => {
+  //         console.log(err);
+  //         setReauthenticateModalIsOpen(true);
+  //       });
+  //   }
+  //   if (updatedAnswer) {
+  //     updatePassword(auth.currentUser, answer)
+  //       .then(() => {
+  //         setReauthenticated(true);
+  //       })
+  //       .catch((err) => {
+  //         setReauthenticateModalIsOpen(true);
+  //       });
+  //   }
+  // };
+
+  const handleSubmit = async () => {
+    setLoading(true);
     await axios
       .put(
         `${process.env.REACT_APP_API}/profile-update`,
@@ -279,11 +379,13 @@ const Profile = ({ history }) => {
           about,
           name,
           email,
+          updatedEmail,
           mobile,
           updatedMobile,
           secondMobile,
           statement,
           answer,
+          updatedAnswer,
           user,
           profileImage,
           coverImage,
@@ -340,6 +442,7 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
+        console.log(res);
         setLoading(false);
         if (res.data.error) {
           toast.error(res.data.error, {
@@ -422,6 +525,9 @@ const Profile = ({ history }) => {
       .catch((err) => {
         setLoading(false);
         console.log(err);
+        toast.error('Profile update failed.', {
+          position: toast.POSITION.TOP_CENTER,
+        });
       });
   };
 
@@ -917,7 +1023,17 @@ const Profile = ({ history }) => {
             <FontAwesomeIcon
               icon={faPenToSquare}
               className='fa'
-              onClick={() => setModalIsOpen(true)}
+              onClick={() => {
+                setProfileUpdated(false);
+                setUpdatedMobile('');
+                setUpdatedEmail('');
+                setUpdatedAnswer('');
+                setReauthMobile('');
+                setShowOTP(false);
+                setOTP('');
+                setLoadingReauth(false);
+                setModalIsOpen(true);
+              }}
             />
           </button>
           {user.verified === 'false' ? (
@@ -1276,9 +1392,9 @@ const Profile = ({ history }) => {
         name={name}
         setName={setName}
         email={email}
-        setEmail={setEmail}
+        updatedEmail={updatedEmail}
+        setUpdatedEmail={setUpdatedEmail}
         mobile={mobile}
-        setMobile={setMobile}
         updatedMobile={updatedMobile}
         setUpdatedMobile={setUpdatedMobile}
         secondMobile={secondMobile}
@@ -1286,7 +1402,8 @@ const Profile = ({ history }) => {
         statement={statement}
         setStatement={setStatement}
         answer={answer}
-        setAnswer={setAnswer}
+        updatedAnswer={updatedAnswer}
+        setUpdatedAnswer={setUpdatedAnswer}
         modalIsOpen={modalIsOpen}
         setModalIsOpen={setModalIsOpen}
         handleSubmit={handleSubmit}
@@ -1386,6 +1503,7 @@ const Profile = ({ history }) => {
         profileImageUpdateModalIsOpen={profileImageUpdateModalIsOpen}
         setProfileImageUpdateModalIsOpen={setProfileImageUpdateModalIsOpen}
         handleLiveImage={handleLiveImage}
+        checkInfoExists={checkInfoExists}
       />
       {user.coverImage && user.coverImage.url && (
         <CropCover
@@ -1468,6 +1586,20 @@ const Profile = ({ history }) => {
         setVerifImg={setVerifImg}
         loadingImg={loadingImg}
         setLoadingImg={setLoadingImg}
+      />
+      <Reauthenticate
+        reauthenticateModalIsOpen={reauthenticateModalIsOpen}
+        setReauthenticateModalIsOpen={setReauthenticateModalIsOpen}
+        updatedEmail={updatedEmail}
+        updatedAnswer={updatedAnswer}
+        reauthMobile={reauthMobile}
+        setReauthMobile={setReauthMobile}
+        showOTP={showOTP}
+        setShowOTP={setShowOTP}
+        OTP={OTP}
+        setOTP={setOTP}
+        loadingReauth={loadingReauth}
+        setLoadingReauth={setLoadingReauth}
       />
     </div>
   );

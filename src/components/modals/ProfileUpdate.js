@@ -35,9 +35,11 @@ const ProfileUpdate = ({
   statement,
   setStatement,
   answer,
-  setAnswer,
+  updatedAnswer,
+  setUpdatedAnswer,
   email,
-  setEmail,
+  updatedEmail,
+  setUpdatedEmail,
   loading,
   modalIsOpen,
   setModalIsOpen,
@@ -137,6 +139,7 @@ const ProfileUpdate = ({
   profileImageUpdateModalIsOpen,
   setProfileImageUpdateModalIsOpen,
   handleLiveImage,
+  checkInfoExists,
 }) => {
   const [showAboutMe, setShowAboutMe] = useState(true);
   const [showBackground, setShowBackground] = useState(false);
@@ -306,11 +309,11 @@ const ProfileUpdate = ({
             setUpdatedMobile(`+${phone}`);
           }}
         />
-        <label className='csv'>
+        {/* <label className='csv'>
           Updating your primary mobile number will result in you being logged
           out. To return to the site, please re-authenticate using the new
           mobile number you have provided.
-        </label>
+        </label> */}
 
         <PhoneInput
           className='input-field'
@@ -325,8 +328,8 @@ const ProfileUpdate = ({
           type='email'
           className='input-field'
           placeholder='What is your email'
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={updatedEmail || email}
+          onChange={(e) => setUpdatedEmail(e.target.value)}
         />
 
         <div className='update-s-and-a'>
@@ -353,8 +356,8 @@ const ProfileUpdate = ({
                 : 'otp-container'
             }
             placeholder='Enter your answer'
-            value={answer}
-            onChange={(e) => setAnswer(e.target.value)}
+            value={updatedAnswer || answer}
+            onChange={(e) => setUpdatedAnswer(e.target.value)}
           />
           <FontAwesomeIcon
             icon={showAnswer ? faEyeSlash : faEye}
@@ -1087,10 +1090,11 @@ const ProfileUpdate = ({
           {myAppearanceSection()}
           {profilePlusSection()}
           <button
-            onClick={handleSubmit}
+            // onClick={handleSubmit}
+            onClick={checkInfoExists}
             type='submit'
             className='submit-btn'
-            disabled={loading}
+            disabled={loading || (answer.length > 0 && answer.length < 6)}
           >
             {loading ? (
               <FontAwesomeIcon icon={faSpinner} className='fa' spin />

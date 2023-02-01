@@ -156,7 +156,6 @@ const Alternative = ({
         email,
       })
       .then((res) => {
-        console.log(res);
         setPrevMobile(res.data.mobile);
       })
       .catch((err) => {
@@ -169,7 +168,6 @@ const Alternative = ({
   };
 
   const updateMobileFirebase = async () => {
-    console.log('prevMobile => ', prevMobile);
     await axios
       .put(`${process.env.REACT_APP_API}/update-firestore-user`, {
         prevMobile,
@@ -380,7 +378,6 @@ const Alternative = ({
     await axios
       .get(`${process.env.REACT_APP_API}/check-credentials/${email}`)
       .then((res) => {
-        console.log(res.data);
         if (res.data === null) {
           toast.error('No user exists with this email address.', {
             position: toast.POSITION.TOP_CENTER,
@@ -408,7 +405,6 @@ const Alternative = ({
   };
 
   const secretLogin = () => {
-    console.log(email, statement, answer);
     setLoading(true);
     generateRecaptcha();
     let appVerifier = window.recaptchaVerifier;
