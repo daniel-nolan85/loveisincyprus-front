@@ -2246,8 +2246,8 @@ nav {
 }
 
 .form-box.product.update {
-  height: 550px;
-  width: 350px;
+  height: 600px !important;
+  width: 350px !important;
   margin: 0 auto;
 }
 
@@ -2282,7 +2282,7 @@ nav {
 }
 
 .form-box.product {
-  height: 500px;
+  height: 580px;
 }
 
 .form-box.address {
@@ -2815,7 +2815,8 @@ progress::-webkit-progress-value {
 .progress-container::-webkit-scrollbar,
 .analysis-container-show::-webkit-scrollbar,
 .alt-secondary::-webkit-scrollbar,
-.alt-secret::-webkit-scrollbar {
+.alt-secret::-webkit-scrollbar,
+.form-box.product.update::-webkit-scrollbar {
   display: none;
 }
 
@@ -2823,7 +2824,8 @@ progress::-webkit-progress-value {
 .progress-container,
 .analysis-container-show,
 .alt-secondary::-webkit-scrollbar,
-.alt-secret::-webkit-scrollbar {
+.alt-secret::-webkit-scrollbar,
+.form-box.product.update::-webkit-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
@@ -4105,7 +4107,7 @@ input[name='Photos'] {
 }
 
 .col-2 h1 {
-  font-size: 45px;
+  font-size: 30px;
   margin-bottom: 25px;
 }
 

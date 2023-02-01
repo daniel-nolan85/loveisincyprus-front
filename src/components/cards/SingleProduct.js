@@ -108,8 +108,17 @@ const SingleProduct = ({ product, onStarClick, star }) => {
       });
     });
 
-  const { title, description, images, price, category, subs, _id, quantity } =
-    product;
+  const {
+    title,
+    description,
+    more,
+    images,
+    price,
+    category,
+    subs,
+    _id,
+    quantity,
+  } = product;
 
   return (
     <div className='small-container single-product'>
@@ -187,7 +196,7 @@ const SingleProduct = ({ product, onStarClick, star }) => {
               </Rating>,
             ]}
           >
-            <h1>{title}</h1>
+            <h1 className='prod-title'>{title}</h1>
             {product && product.ratings && product.ratings.length > 0
               ? showAverage(product)
               : 'No rating yet'}
@@ -217,9 +226,11 @@ const SingleProduct = ({ product, onStarClick, star }) => {
         <TabPane tab='Description' key='1'>
           {description && description}
         </TabPane>
-        <TabPane tab='More' key='2'>
-          Call us on xxx-xxxx-xxxx to learn more about this product
-        </TabPane>
+        {more && (
+          <TabPane tab='More' key='2'>
+            {more}
+          </TabPane>
+        )}
       </Tabs>
     </div>
   );

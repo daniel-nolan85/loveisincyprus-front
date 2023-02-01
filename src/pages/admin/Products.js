@@ -27,6 +27,7 @@ const { Option } = Select;
 const initialState = {
   title: '',
   description: '',
+  more: '',
   price: '',
   category: '',
   categories: [],
@@ -137,6 +138,7 @@ const Product = ({ history }) => {
   const {
     title,
     description,
+    more,
     price,
     category,
     categories,
@@ -168,6 +170,14 @@ const Product = ({ history }) => {
           className='input-field'
           placeholder='Description'
           value={description}
+          onChange={handleChange}
+        />
+        <input
+          type='text'
+          name='more'
+          className='input-field'
+          placeholder='More'
+          value={more}
           onChange={handleChange}
         />
         <input

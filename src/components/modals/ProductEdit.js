@@ -16,6 +16,7 @@ Modal.setAppElement('#root');
 const initialState = {
   title: '',
   description: '',
+  more: '',
   price: '',
   category: '',
   subs: [],
@@ -108,7 +109,7 @@ const ProductEdit = ({
     setArrayOfSubs([]);
   };
 
-  const { title, description, price, category, quantity } = values;
+  const { title, description, more, price, category, quantity } = values;
 
   const productForm = () => (
     <div className='form-box product update'>
@@ -132,6 +133,14 @@ const ProductEdit = ({
           className='input-field'
           placeholder='Description'
           value={description}
+          onChange={handleChange}
+        />
+        <input
+          type='text'
+          name='more'
+          className='input-field'
+          placeholder='More'
+          value={more}
           onChange={handleChange}
         />
         <input
@@ -198,7 +207,7 @@ const ProductEdit = ({
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
       width: '400px',
-      height: '600px',
+      height: '620px',
     },
     overlay: {
       position: 'fixed',

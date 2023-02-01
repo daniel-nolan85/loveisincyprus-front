@@ -75,6 +75,7 @@ const ProductReview = ({ history }) => {
             const {
               title,
               description,
+              more,
               images,
               slug,
               price,
@@ -128,6 +129,7 @@ const ProductReview = ({ history }) => {
                         <h4>€{price}</h4>
                         <br />
                         <p>{description}</p>
+                        <p>{more}</p>
                         <div className='cat-links'>
                           <p>Quantity:</p>
                           {quantity}
