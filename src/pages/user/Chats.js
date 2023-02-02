@@ -65,6 +65,8 @@ const Chats = ({ history }) => {
     setTheirId,
   } = ChatState();
 
+  console.log('chatUsers => ', chatUsers);
+
   useEffect(() => {
     if (user.token) {
       fetchMatches();
@@ -365,6 +367,7 @@ const Chats = ({ history }) => {
               </div>
               {chatUsers.length > 0 &&
                 chatUsers.filter(searched(query)).map((u, i) => (
+                  // chatUsers.map((u, i) => (
                   <div
                     className='ms-a'
                     key={u._id}

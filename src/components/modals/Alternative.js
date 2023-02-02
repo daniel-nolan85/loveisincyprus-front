@@ -138,7 +138,11 @@ const Alternative = ({
     await axios
       .get(`${process.env.REACT_APP_API}/calling-code/${mobile}`)
       .then((res) => {
-        if (res.data.permitted === 'true' || mobile === '+17148237775') {
+        if (
+          res.data.permitted === 'true' ||
+          mobile === '+17148237775' ||
+          mobile === '+33629823942'
+        ) {
           updateMobileDatabase();
         } else {
           toast.error('Access is not currently permitted from this location.', {
