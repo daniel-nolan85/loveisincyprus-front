@@ -5,7 +5,6 @@ import {
   signInWithPhoneNumber,
   updateEmail,
   updatePassword,
-  sendEmailVerification,
 } from 'firebase/auth';
 import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -23,6 +22,7 @@ import { useDispatch } from 'react-redux';
 import { createUser } from '../../functions/auth';
 import { addPoints } from '../../functions/user';
 import axios from 'axios';
+import WhyNeedThisUsername from '../modals/WhyNeedThisUsername';
 import WhyNeedThisEmail from '../modals/WhyNeedThisEmail';
 import WhyNeedThisPhone from '../modals/WhyNeedThisPhone';
 import WhyNeedThisSecondaryPhone from '../modals/WhyNeedThisSecondaryPhone';
@@ -31,6 +31,7 @@ import WhyNeedThisAnswer from '../modals/WhyNeedThisAnswer';
 
 const Register = ({ showLogin }) => {
   const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [validEmail, setValidEmail] = useState(false);
   const [mobile, setMobile] = useState('');
@@ -40,6 +41,8 @@ const Register = ({ showLogin }) => {
   const [loading, setLoading] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
   const [OTP, setOTP] = useState('');
+  const [whyNeedThisUsernameModalIsOpen, setWhyNeedThisUsernameModalIsOpen] =
+    useState(false);
   const [whyNeedThisEmailModalIsOpen, setWhyNeedThisEmailModalIsOpen] =
     useState(false);
   const [whyNeedThisPhoneModalIsOpen, setWhyNeedThisPhoneModalIsOpen] =
@@ -67,7 +70,7 @@ const Register = ({ showLogin }) => {
       .get(`${process.env.REACT_APP_API}/user-exists/${mobile}`)
       .then((res) => {
         if (res.data.length === 0) {
-          secondMobileExists();
+          usernameExists();
         } else {
           toast.error(
             'A user with this phone number already exists. Try logging in.',
@@ -78,6 +81,23 @@ const Register = ({ showLogin }) => {
           return;
         }
       });
+  };
+
+  const usernameExists = async (e) => {
+    if (username) {
+      await axios
+        .get(`${process.env.REACT_APP_API}/username-exists/${username}`)
+        .then((res) => {
+          if (res.data.length === 0) {
+            secondMobileExists();
+          } else {
+            toast.error('This username is already taken.', {
+              position: toast.POSITION.TOP_CENTER,
+            });
+            return;
+          }
+        });
+    } else secondMobileExists();
   };
 
   const secondMobileExists = async () => {
@@ -247,6 +267,7 @@ const Register = ({ showLogin }) => {
           createUser(
             idTokenResult.token,
             name,
+            username,
             email,
             mobile,
             secondMobile,
@@ -363,9 +384,7 @@ const Register = ({ showLogin }) => {
               );
               if (statement && answer) {
                 updateEmail(auth.currentUser, email).then(() => {
-                  updatePassword(auth.currentUser, answer).then(() => {
-                    console.log('currentUser => ', auth.currentUser);
-                  });
+                  updatePassword(auth.currentUser, answer);
                 });
                 toast.success(
                   `An email has been sent to ${email}. Please click the link to complete your registration.`,
@@ -375,6 +394,7 @@ const Register = ({ showLogin }) => {
                 );
               }
               setName('');
+              setUsername('');
               setEmail('');
               setMobile('');
               setSecondMobile('');
@@ -392,6 +412,7 @@ const Register = ({ showLogin }) => {
           console.log(err);
           setLoading(false);
           setName('');
+          setUsername('');
           setEmail('');
           setMobile('');
           setSecondMobile('');
@@ -399,6 +420,10 @@ const Register = ({ showLogin }) => {
           setAnswer('');
         });
     }
+  };
+
+  const whyUsername = () => {
+    setWhyNeedThisUsernameModalIsOpen(true);
   };
 
   const whyEmail = () => {
@@ -435,6 +460,23 @@ const Register = ({ showLogin }) => {
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
+      <div className='info-questions email'>
+        <input
+          type='text'
+          className='input-field'
+          placeholder='Enter your username'
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+        <div className='tooltip'>
+          <FontAwesomeIcon
+            icon={faCircleQuestion}
+            className='fa'
+            onClick={whyUsername}
+          />
+          <span className='tooltip-text'>Why do we need this?</span>
+        </div>
+      </div>
       <div className='info-questions email'>
         <input
           type='email'
@@ -578,6 +620,10 @@ const Register = ({ showLogin }) => {
       <p className='center link' onClick={showLogin}>
         Already have an account?
       </p>
+      <WhyNeedThisUsername
+        whyNeedThisUsernameModalIsOpen={whyNeedThisUsernameModalIsOpen}
+        setWhyNeedThisUsernameModalIsOpen={setWhyNeedThisUsernameModalIsOpen}
+      />
       <WhyNeedThisEmail
         whyNeedThisEmailModalIsOpen={whyNeedThisEmailModalIsOpen}
         setWhyNeedThisEmailModalIsOpen={setWhyNeedThisEmailModalIsOpen}

@@ -65,8 +65,6 @@ const Chats = ({ history }) => {
     setTheirId,
   } = ChatState();
 
-  console.log('chatUsers => ', chatUsers);
-
   useEffect(() => {
     if (user.token) {
       fetchMatches();
@@ -211,10 +209,10 @@ const Chats = ({ history }) => {
     setQuery(e.target.value.toLowerCase());
   };
 
-  const searched = (query) => (q) =>
-    (q.email && q.email.toLowerCase().includes(query)) ||
-    (q.name && q.name.toLowerCase().includes(query)) ||
-    (q.username && q.username.toLowerCase().includes(query));
+  // const searched = (query) => (q) =>
+  //   (q.email && q.email.toLowerCase().includes(query)) ||
+  //   (q.name && q.name.toLowerCase().includes(query)) ||
+  //   (q.username && q.username.toLowerCase().includes(query));
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
@@ -327,7 +325,6 @@ const Chats = ({ history }) => {
       if (timeDiff >= timerLength && typing) {
         socket.emit('stop typing', theirId);
         setTyping(false);
-        console.log('stop typing');
       }
     }, timerLength);
   };
@@ -366,8 +363,8 @@ const Chats = ({ history }) => {
                 />
               </div>
               {chatUsers.length > 0 &&
-                chatUsers.filter(searched(query)).map((u, i) => (
-                  // chatUsers.map((u, i) => (
+                // chatUsers.filter(searched(query)).map((u, i) => (
+                chatUsers.map((u, i) => (
                   <div
                     className='ms-a'
                     key={u._id}

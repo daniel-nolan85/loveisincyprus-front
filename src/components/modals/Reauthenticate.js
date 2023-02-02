@@ -73,7 +73,6 @@ const Reauthenticate = ({
       confirmationResult
         .confirm(otp)
         .then(async (res) => {
-          console.log(res);
           updatedEmail && updateEmail(auth.currentUser, updatedEmail);
           updatedAnswer && updatePassword(auth.currentUser, updatedAnswer);
           //   setReauthenticated(true);

@@ -3,6 +3,7 @@ import axios from 'axios';
 export const createUser = async (
   authtoken,
   name,
+  username,
   email,
   mobile,
   secondMobile,
@@ -11,7 +12,7 @@ export const createUser = async (
 ) => {
   return await axios.post(
     `${process.env.REACT_APP_API}/create-user`,
-    { name, email, mobile, secondMobile, statement, answer },
+    { name, username, email, mobile, secondMobile, statement, answer },
     {
       headers: {
         authtoken,

@@ -155,7 +155,6 @@ const Profile = ({ history }) => {
   const [profileUpdated, setProfileUpdated] = useState(false);
   const [reauthenticateModalIsOpen, setReauthenticateModalIsOpen] =
     useState(false);
-  // const [reauthenticated, setReauthenticated] = useState(false);
   const [showOTP, setShowOTP] = useState(false);
   const [OTP, setOTP] = useState('');
   const [reauthMobile, setReauthMobile] = useState('');
@@ -197,23 +196,8 @@ const Profile = ({ history }) => {
   useEffect(() => {
     if ((updatedMobile || updatedEmail || updatedAnswer) && profileUpdated) {
       setReauthenticateModalIsOpen(true);
-      // setTimeout(() => {
-      //   firebase.auth().signOut();
-      //   dispatch({
-      //     type: 'LOGOUT',
-      //     payload: null,
-      //   });
-      //   history.push('/authentication');
-      // }, 500);
     }
   }, [(updatedMobile || updatedEmail || updatedAnswer) && profileUpdated]);
-
-  // useEffect(() => {
-  //   if (reauthenticated) {
-  //     handleSubmit();
-  //     setReauthenticated(false);
-  //   }
-  // }, [reauthenticated]);
 
   useEffect(() => {
     if (user && user.token) {
@@ -299,7 +283,6 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         if (
           res.data.some((e) => e.mobile === updatedMobile) ||
           res.data.some((e) => e.secondMobile === updatedMobile)
@@ -331,43 +314,6 @@ const Profile = ({ history }) => {
       })
       .catch((err) => console.log(err));
   };
-
-  // const updateFirebase = async () => {
-  //   // this function should be invoked after checkInfoExists has passed,
-  //   // and should check whether the users email and answer match what is
-  //   // stored in firebase. If not then it should update the firestore.
-  //   // Once checked and updated, it should then invoke handleSubmit.
-  //   console.log('auth.currentUser => ', auth.currentUser);
-  //   if (updatedMobile) {
-  //     updatePhoneNumber(auth.currentUser, updatedMobile)
-  //       .then(() => {
-  //         if (!updateEmail && !updatedAnswer) setReauthenticated(true);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         setReauthenticateModalIsOpen(true);
-  //       });
-  //   }
-  //   if (updatedEmail) {
-  //     updateEmail(auth.currentUser, updatedEmail)
-  //       .then(() => {
-  //         if (!updatedAnswer) setReauthenticated(true);
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         setReauthenticateModalIsOpen(true);
-  //       });
-  //   }
-  //   if (updatedAnswer) {
-  //     updatePassword(auth.currentUser, answer)
-  //       .then(() => {
-  //         setReauthenticated(true);
-  //       })
-  //       .catch((err) => {
-  //         setReauthenticateModalIsOpen(true);
-  //       });
-  //   }
-  // };
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -442,14 +388,12 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res);
         setLoading(false);
         if (res.data.error) {
           toast.error(res.data.error, {
             position: toast.POSITION.TOP_CENTER,
           });
         } else {
-          console.log(res.data);
           toast.success(`Profile updated.`, {
             position: toast.POSITION.TOP_CENTER,
           });
