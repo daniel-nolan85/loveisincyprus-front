@@ -36,10 +36,10 @@ const PaymentForm = ({ handleSubmit, processing, succeeded }) => {
   return (
     <Formik
       initialValues={{
-        cardHolder: 'Daniel Nolan',
-        cardNumber: '5555555555554444',
-        expiry: '122024',
-        cvc: '222',
+        cardHolder: '',
+        cardNumber: '',
+        expiry: '',
+        cvc: '',
       }}
       validationSchema={validate}
       onSubmit={(values) => {

@@ -86,10 +86,10 @@ const ContactForm = () => {
   return (
     <Formik
       initialValues={{
-        name: 'Daniel Nolan',
-        email: 'danielnolan85@yahoo.com',
-        subject: 'Test subject',
-        message: 'This is a test email',
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
       }}
       validationSchema={validate}
       onSubmit={(values) => {
