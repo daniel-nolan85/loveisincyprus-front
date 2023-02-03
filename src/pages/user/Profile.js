@@ -194,10 +194,10 @@ const Profile = ({ history }) => {
   }, [faces]);
 
   useEffect(() => {
-    if ((updatedMobile || updatedEmail || updatedAnswer) && profileUpdated) {
+    if ((updatedEmail || updatedAnswer) && profileUpdated) {
       setReauthenticateModalIsOpen(true);
     }
-  }, [(updatedMobile || updatedEmail || updatedAnswer) && profileUpdated]);
+  }, [(updatedEmail || updatedAnswer) && profileUpdated]);
 
   useEffect(() => {
     if (user && user.token) {
@@ -388,11 +388,14 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
+        console.log(res);
         setLoading(false);
         if (res.data.error) {
           toast.error(res.data.error, {
             position: toast.POSITION.TOP_CENTER,
           });
+        } else if (res.data.timeout === true) {
+          setReauthenticateModalIsOpen(true);
         } else {
           toast.success(`Profile updated.`, {
             position: toast.POSITION.TOP_CENTER,
@@ -1534,6 +1537,7 @@ const Profile = ({ history }) => {
       <Reauthenticate
         reauthenticateModalIsOpen={reauthenticateModalIsOpen}
         setReauthenticateModalIsOpen={setReauthenticateModalIsOpen}
+        updatedMobile={updatedMobile}
         updatedEmail={updatedEmail}
         updatedAnswer={updatedAnswer}
         reauthMobile={reauthMobile}

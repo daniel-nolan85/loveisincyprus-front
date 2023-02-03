@@ -209,10 +209,10 @@ const Chats = ({ history }) => {
     setQuery(e.target.value.toLowerCase());
   };
 
-  // const searched = (query) => (q) =>
-  //   (q.email && q.email.toLowerCase().includes(query)) ||
-  //   (q.name && q.name.toLowerCase().includes(query)) ||
-  //   (q.username && q.username.toLowerCase().includes(query));
+  const searched = (query) => (q) =>
+    (q.email && q.email.toLowerCase().includes(query)) ||
+    (q.name && q.name.toLowerCase().includes(query)) ||
+    (q.username && q.username.toLowerCase().includes(query));
 
   const fetchMessages = async () => {
     if (!selectedChat) return;
@@ -363,8 +363,7 @@ const Chats = ({ history }) => {
                 />
               </div>
               {chatUsers.length > 0 &&
-                // chatUsers.filter(searched(query)).map((u, i) => (
-                chatUsers.map((u, i) => (
+                chatUsers.filter(searched(query)).map((u, i) => (
                   <div
                     className='ms-a'
                     key={u._id}
@@ -534,7 +533,8 @@ const Chats = ({ history }) => {
                             marginTop: isSameUser(messages, m, i, user._id)
                               ? 3
                               : 10,
-                            padding: m.sender._id === user._id && '5px 10px',
+                            // padding: m.sender._id === user._id && '5px 10px',
+                            padding: '5px 10px',
                           }}
                         >
                           {i + 1 === length ? (

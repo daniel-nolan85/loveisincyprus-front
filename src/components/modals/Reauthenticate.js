@@ -1,7 +1,12 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { auth } from '../../firebase';
-import { RecaptchaVerifier, updateEmail, updatePassword } from 'firebase/auth';
+import {
+  RecaptchaVerifier,
+  updateEmail,
+  updatePassword,
+  updatePhoneNumber,
+} from 'firebase/auth';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { toast } from 'react-toastify';
@@ -16,6 +21,7 @@ Modal.setAppElement('#root');
 const Reauthenticate = ({
   reauthenticateModalIsOpen,
   setReauthenticateModalIsOpen,
+  updatedMobile,
   updatedEmail,
   updatedAnswer,
   showOTP,
@@ -73,6 +79,7 @@ const Reauthenticate = ({
       confirmationResult
         .confirm(otp)
         .then(async (res) => {
+          updatedMobile && updatePhoneNumber(auth.currentUser, updatedMobile);
           updatedEmail && updateEmail(auth.currentUser, updatedEmail);
           updatedAnswer && updatePassword(auth.currentUser, updatedAnswer);
           //   setReauthenticated(true);
