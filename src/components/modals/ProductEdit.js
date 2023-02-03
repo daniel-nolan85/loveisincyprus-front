@@ -22,6 +22,7 @@ const initialState = {
   subs: [],
   quantity: '',
   images: [],
+  weight: '',
 };
 
 const ProductEdit = ({
@@ -109,7 +110,8 @@ const ProductEdit = ({
     setArrayOfSubs([]);
   };
 
-  const { title, description, more, price, category, quantity } = values;
+  const { title, description, more, price, category, quantity, weight } =
+    values;
 
   const productForm = () => (
     <div className='form-box product update'>
@@ -149,6 +151,14 @@ const ProductEdit = ({
           className='input-field'
           placeholder='Price'
           value={price}
+          onChange={handleChange}
+        />
+        <input
+          type='number'
+          name='weight'
+          className='input-field'
+          placeholder='Weight'
+          value={weight}
           onChange={handleChange}
         />
         <input
@@ -207,7 +217,6 @@ const ProductEdit = ({
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
       width: '400px',
-      height: '620px',
     },
     overlay: {
       position: 'fixed',
