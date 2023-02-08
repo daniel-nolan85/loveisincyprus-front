@@ -38,7 +38,7 @@ const Footer = () => {
           >
             <FontAwesomeIcon icon={faFacebook} className='fa' />
           </Link>
-          <Link
+          {/* <Link
             to={{
               pathname: 'https://www.instagram.com',
             }}
@@ -53,7 +53,7 @@ const Footer = () => {
             target='_blank'
           >
             <FontAwesomeIcon icon={faTwitter} className='fa' />
-          </Link>
+          </Link> */}
         </div>
         <p className='credit'>
           LoveIsInCyprus &copy; {new Date().getFullYear()}

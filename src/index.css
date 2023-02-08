@@ -360,10 +360,7 @@ nav {
   background: #fff;
   width: fit-content;
   text-decoration: none;
-}
-
-.carousel-text .submit-btn:hover {
-  color: #626262;
+  color: #000;
 }
 
 .carousel-slider {
@@ -510,6 +507,7 @@ nav {
 
 .main-content {
   flex-basis: 47%;
+  position: relative;
 }
 
 .imp-links a,
@@ -1009,10 +1007,7 @@ nav {
   width: fit-content;
   text-decoration: none;
   background: var(--body-color);
-}
-
-.footer .submit-btn:hover {
-  color: #626262;
+  color: #000;
 }
 
 .footer .fa {
@@ -1464,30 +1459,6 @@ nav {
 
 .ms-coords span + span {
   float: right;
-}
-
-.ms-stats {
-  font-size: 20px;
-  display: flex;
-  justify-content: space-around;
-  position: absolute;
-  bottom: 1rem;
-  left: 1rem;
-  right: 1rem;
-  top: auto;
-  color: #fff;
-}
-
-.ms-stats .fa {
-  display: block;
-}
-
-.ms-stats .fa.star {
-  color: gold;
-}
-
-.ms-stats .fa.verified {
-  color: #7cfc00;
 }
 
 .ms-general {
@@ -2480,6 +2451,10 @@ select.gray {
   margin-top: 12px;
 }
 
+.pd-right {
+  display: flex;
+}
+
 .pd-right button {
   background: var(--nav-color);
   border: 0;
@@ -2493,14 +2468,7 @@ select.gray {
   cursor: pointer;
 }
 
-.pd-right .ant-ribbon {
-  padding: 10px;
-  height: 45px;
-  cursor: pointer;
-  margin-right: 8px;
-}
-
-.pd-right .ant-ribbon-text {
+.pd-right button.ribbon {
   font-size: 25px;
 }
 
@@ -4810,25 +4778,8 @@ table.product-info tbody {
 }
 
 @media (max-width: 650px) {
-  .pd-right .ant-ribbon {
-    padding: 4px 5px;
-    height: 30px;
-  }
-
-  .pd-right .ant-ribbon-text {
+  .pd-right button.ribbon {
     font-size: 16px;
-  }
-}
-
-@media (max-width: 500px) {
-  .pd-right.pd-r-prof {
-    position: relative;
-  }
-
-  .pd-right.pd-r-prof div,
-  .pd-right.pd-r-prof button {
-    position: absolute;
-    right: 0;
   }
 }
 
@@ -5388,5 +5339,63 @@ table.product-info tbody {
 @media (max-width: 450px) {
   #statement option {
     width: 400px;
+  }
+}
+
+/* --------------- media query for membership-status-page --------------- */
+@media (max-width: 1200px) {
+  .ms-card {
+    width: 380px;
+    height: 220px;
+  }
+
+  .ms-additional {
+    width: 130px;
+  }
+
+  .ms-user-card {
+    width: 130px;
+  }
+
+  .ms-card h1 {
+    margin: 10px 0 0 0;
+    font-size: 22px;
+  }
+
+  .ms-more-info {
+    width: 250px;
+  }
+
+  .ms-coords.small {
+    font-size: 12px;
+  }
+
+  .ms-coords {
+    font-size: 12px;
+  }
+
+  .ms-stats {
+    font-size: 15px;
+  }
+
+  .ms-general {
+    width: 250px;
+  }
+
+  .ms-image {
+    height: 90px;
+    width: 90px;
+  }
+
+  .ms-more-info {
+    left: 130px;
+  }
+}
+
+@media (max-width: 900px) {
+  .ms-center:not(.ms-level.ms-center):not(.ms-points.ms-center):not(
+      .ms-image.ms-center
+    ) {
+    margin-top: 350px;
   }
 }

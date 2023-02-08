@@ -37,7 +37,6 @@ import SinglePost from '../../components/modals/SinglePost';
 import PostDelete from '../../components/modals/PostDelete';
 import { getUserPointsTotal, addPoints } from '../../functions/user';
 import ProfileProgress from '../../components/modals/ProfileProgress';
-import { Badge } from 'antd';
 import Verify from '../../components/modals/Verify';
 import { ChatState } from '../../context/ChatProvider';
 import * as faceapi from 'face-api.js';
@@ -45,8 +44,6 @@ import firebase from 'firebase/compat/app';
 import { updateEmail, updatePassword, updatePhoneNumber } from 'firebase/auth';
 import { auth } from '../../firebase';
 import Reauthenticate from '../../components/modals/Reauthenticate';
-
-const { Ribbon } = Badge;
 
 const Profile = ({ history }) => {
   const [username, setUsername] = useState('');
@@ -388,7 +385,6 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res);
         setLoading(false);
         if (res.data.error) {
           toast.error(res.data.error, {
@@ -965,7 +961,7 @@ const Profile = ({ history }) => {
             </div>
           </div>
         </div>
-        <div className='pd-right pd-r-prof'>
+        <div className='pd-right'>
           <button type='button'>
             <FontAwesomeIcon
               icon={faPenToSquare}
@@ -984,17 +980,14 @@ const Profile = ({ history }) => {
             />
           </button>
           {user.verified === 'false' ? (
-            <div onClick={() => setVerifyModalIsOpen(true)}>
-              <Ribbon text='Verify me' color={'#ef5b85'}></Ribbon>
-            </div>
+            <button
+              onClick={() => setVerifyModalIsOpen(true)}
+              className='ribbon'
+            >
+              Verify me
+            </button>
           ) : user.verified === 'pending' ? (
-            <div>
-              <Ribbon
-                text='Verifying...'
-                color={'#ef5b85'}
-                className='verifying'
-              ></Ribbon>
-            </div>
+            <button className='ribbon verifying'>Verifying...</button>
           ) : (
             user.verified === 'true' && (
               <button className='tooltip'>

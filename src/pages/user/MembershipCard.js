@@ -6,12 +6,6 @@ import defaultProfile from '../../assets/defaultProfile.png';
 import { Link } from 'react-router-dom';
 import { getUserPointsTotal } from '../../functions/user';
 import moment from 'moment';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faUserShield,
-  faStar,
-  faCalendarDays,
-} from '@fortawesome/free-solid-svg-icons';
 import Mobile from '../../components/user/Mobile';
 
 const MembershipCard = () => {
@@ -99,27 +93,17 @@ const MembershipCard = () => {
                   <span>Verified user:</span>
                   <span>{verified === 'true' ? 'Yes' : 'No'}</span>
                 </div>
-                <div className='ms-stats'>
-                  {eventsEligible && (
-                    <FontAwesomeIcon icon={faCalendarDays} className='fa' />
-                  )}
-                  {featuredMember && (
-                    <FontAwesomeIcon icon={faStar} className='fa star' />
-                  )}
-                  {verified === 'true' && (
-                    <FontAwesomeIcon
-                      icon={faUserShield}
-                      className='fa verified'
-                    />
-                  )}
-                </div>
               </div>
             </div>
             <div className='ms-general'>
               <Link to={`/user/profile/${_id}`}>
                 <h1>{username || name}</h1>
               </Link>
-              <p>{about}</p>
+              {about && about.length > 250 ? (
+                <p>{about.substring(0, 251) + '...'}</p>
+              ) : (
+                <p>{about}</p>
+              )}
               <span className='ms-more'>Hover the card for more info</span>
             </div>
           </div>
