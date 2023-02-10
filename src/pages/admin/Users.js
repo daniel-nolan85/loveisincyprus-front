@@ -15,6 +15,8 @@ import {
   faFolderOpen,
   faUserTie,
   faUserGraduate,
+  faSpinner,
+  faUndo,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import UserDeleteAdmin from '../../components/modals/UserDeleteAdmin';
@@ -29,10 +31,15 @@ import RemoveUserFromEventsEligible from '../../components/modals/RemoveUserFrom
 import ShowMain from '../../components/modals/ShowMain';
 import ShowSecondary from '../../components/modals/ShowSecondary';
 import AdminPreferences from '../../components/modals/AdminPreferences';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const Users = ({ history }) => {
   const [users, setUsers] = useState([]);
+  const [page, setPage] = useState(1);
+  const [moreUsers, setMoreUsers] = useState(true);
+  const [totalUsers, setTotalUsers] = useState(0);
   const [query, setQuery] = useState('');
+  const [searched, setSearched] = useState(false);
   const [userDeleteModalIsOpen, setUserDeleteModalIsOpen] = useState(false);
   const [userToDelete, setUserToDelete] = useState({});
   const [addToAdminModalIsOpen, setAddToAdminModalIsOpen] = useState(false);
@@ -86,13 +93,16 @@ const Users = ({ history }) => {
   useEffect(() => {
     if (token) {
       fetchUsers();
+      fetchTotalUsers();
     }
-  }, [token]);
+  }, [token, page]);
 
   const fetchUsers = async () => {
+    setSearched(false);
+    setQuery('');
     await axios
       .post(
-        `${process.env.REACT_APP_API}/users`,
+        `${process.env.REACT_APP_API}/users/${page}`,
         { _id },
         {
           headers: {
@@ -102,6 +112,51 @@ const Users = ({ history }) => {
       )
       .then((res) => {
         setUsers(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const fetchTotalUsers = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/total-users`)
+      .then((res) => {
+        console.log(res);
+        if (res.data === 0) {
+          setMoreUsers(false);
+        }
+        setTotalUsers(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const infinity = () => {
+    let usersLength = users.length;
+    if (usersLength === totalUsers) {
+      setMoreUsers(false);
+    }
+    setPage(page + 1);
+  };
+
+  const searchUsers = async (e) => {
+    e.preventDefault();
+
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/admin/search-users/${query}`,
+        { _id },
+        {
+          headers: {
+            authtoken: token,
+          },
+        }
+      )
+      .then((res) => {
+        setUsers(res.data);
+        setSearched(true);
       })
       .catch((err) => {
         console.log(err);
@@ -168,115 +223,130 @@ const Users = ({ history }) => {
     setSecondaryAdmin(u);
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    setQuery(e.target.value.toLowerCase());
-  };
-
-  const searched = (query) => (q) =>
-    (q.name && q.name.toLowerCase().includes(query)) ||
-    (q.email && q.email.toLowerCase().includes(query)) ||
-    (q.username && q.username.toLowerCase().includes(query)) ||
-    q.role.toLowerCase().includes(query);
-
   return (
     <div className='container search-container'>
       <LeftSidebar />
       <div className='admin-main-content'>
-        <div className='search-box'>
-          <FontAwesomeIcon
-            icon={faMagnifyingGlass}
-            onClick={handleSearch}
-            className='fa'
-          />
-          <input
-            type='search'
-            placeholder='Search Users'
-            onChange={handleSearch}
-            value={query}
-          />
-          <input type='submit' hidden />
-        </div>
+        <form onSubmit={searchUsers}>
+          <div className='search-box'>
+            <FontAwesomeIcon
+              icon={faMagnifyingGlass}
+              onClick={searchUsers}
+              className='fa'
+            />
+            <input
+              type='search'
+              placeholder='Search Users'
+              onChange={(e) => {
+                setQuery(e.target.value);
+              }}
+              value={query}
+            />
+            <input type='submit' hidden />
+          </div>
+        </form>
+        {searched && (
+          <button
+            className='submit-btn reset'
+            onClick={fetchUsers}
+            style={{ width: 'fit-content' }}
+          >
+            <FontAwesomeIcon icon={faUndo} className='fa' />
+            Reset search
+          </button>
+        )}
         <div className='admin-cards'>
-          {users &&
-            users.filter(searched(query)).map((u) => (
-              <div
-                className={
-                  u.userStatus.suspended ? 'admin-card suspended' : 'admin-card'
-                }
-                key={u._id}
-              >
-                <Link
-                  to={_id === u._id ? `/user/profile/${_id}` : `/user/${u._id}`}
+          <InfiniteScroll
+            dataLength={users.length}
+            next={infinity}
+            hasMore={moreUsers}
+            loader={
+              <div className='loader'>
+                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+              </div>
+            }
+            endMessage={
+              <p style={{ textAlign: 'center' }}>
+                <b>All current users successfully loaded</b>
+              </p>
+            }
+          >
+            {users &&
+              users.map((u) => (
+                <div
+                  className={
+                    u.userStatus.suspended
+                      ? 'admin-card suspended'
+                      : 'admin-card'
+                  }
+                  key={u._id}
                 >
-                  <img
-                    src={u.profileImage ? u.profileImage.url : defaultProfile}
-                    alt={`${u.username || u.name}'s profile picture`}
-                    className='admin-user-img'
-                  />
-                </Link>
-                <Link
-                  to={_id === u._id ? `/user/profile/${_id}` : `/user/${u._id}`}
-                >
-                  <p>{u.username || u.name}</p>
-                </Link>
-                {u.eventsEligible === true ? (
-                  <span>
-                    <FontAwesomeIcon
-                      icon={faCalendarDays}
-                      className='fa event green'
-                      onClick={() => removeFromEventsEligible(u)}
+                  <Link
+                    to={
+                      _id === u._id ? `/user/profile/${_id}` : `/user/${u._id}`
+                    }
+                  >
+                    <img
+                      src={u.profileImage ? u.profileImage.url : defaultProfile}
+                      alt={`${u.username || u.name}'s profile picture`}
+                      className='admin-user-img'
                     />
-                  </span>
-                ) : (
-                  u.eventsEligible === false && (
+                  </Link>
+                  <Link
+                    to={
+                      _id === u._id ? `/user/profile/${_id}` : `/user/${u._id}`
+                    }
+                  >
+                    <p>{u.username || u.name}</p>
+                  </Link>
+                  {u.eventsEligible === true ? (
                     <span>
                       <FontAwesomeIcon
                         icon={faCalendarDays}
-                        className='fa event grey'
-                        onClick={() => addToEventsEligible(u)}
+                        className='fa event green'
+                        onClick={() => removeFromEventsEligible(u)}
                       />
                     </span>
-                  )
-                )}
-                {u.featuredMember === true ? (
-                  <span>
-                    <FontAwesomeIcon
-                      icon={faStar}
-                      className='fa star gold'
-                      onClick={() => removeFromFeaturedMembers(u)}
-                    />
-                  </span>
-                ) : (
-                  u.featuredMember === false && (
+                  ) : (
+                    u.eventsEligible === false && (
+                      <span>
+                        <FontAwesomeIcon
+                          icon={faCalendarDays}
+                          className='fa event grey'
+                          onClick={() => addToEventsEligible(u)}
+                        />
+                      </span>
+                    )
+                  )}
+                  {u.featuredMember === true ? (
                     <span>
                       <FontAwesomeIcon
                         icon={faStar}
-                        className='fa star grey'
-                        onClick={() => addToFeaturedMembers(u)}
+                        className='fa star gold'
+                        onClick={() => removeFromFeaturedMembers(u)}
                       />
                     </span>
-                  )
-                )}
-                {u.role === 'subscriber' && (
-                  <span>
-                    <FontAwesomeIcon
-                      icon={faLock}
-                      className='fa admin'
-                      onClick={() => addToAdmin(u)}
-                    />
-                  </span>
-                )}
-                {u.role === 'main-admin' ? (
-                  <span>
-                    <FontAwesomeIcon
-                      icon={faKey}
-                      className='fa admin'
-                      onClick={() => removeFromAdmin(u)}
-                    />
-                  </span>
-                ) : (
-                  u.role === 'secondary-admin' && (
+                  ) : (
+                    u.featuredMember === false && (
+                      <span>
+                        <FontAwesomeIcon
+                          icon={faStar}
+                          className='fa star grey'
+                          onClick={() => addToFeaturedMembers(u)}
+                        />
+                      </span>
+                    )
+                  )}
+                  {u.role === 'subscriber' && (
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faLock}
+                        className='fa admin'
+                        onClick={() => addToAdmin(u)}
+                      />
+                    </span>
+                  )}
+                  {u.role === 'main-admin' ? (
                     <span>
                       <FontAwesomeIcon
                         icon={faKey}
@@ -284,59 +354,69 @@ const Users = ({ history }) => {
                         onClick={() => removeFromAdmin(u)}
                       />
                     </span>
-                  )
-                )}
-                <span>
-                  <FontAwesomeIcon
-                    icon={faTrashCan}
-                    className='fa trash'
-                    onClick={() => handleDelete(u)}
-                  />
-                </span>
-                <span>
-                  {!u.userStatus.suspended ? (
-                    <FontAwesomeIcon
-                      icon={faClock}
-                      className='fa suspend grey'
-                      onClick={() => handleSuspend(u)}
-                    />
                   ) : (
-                    <FontAwesomeIcon
-                      icon={faClock}
-                      className='fa suspend'
-                      onClick={() => handleRevoke(u)}
-                    />
+                    u.role === 'secondary-admin' && (
+                      <span>
+                        <FontAwesomeIcon
+                          icon={faKey}
+                          className='fa admin'
+                          onClick={() => removeFromAdmin(u)}
+                        />
+                      </span>
+                    )
                   )}
-                </span>
-                {u.role === 'main-admin' && (
                   <span>
                     <FontAwesomeIcon
-                      icon={faUserTie}
-                      className='fa admin-member'
-                      onClick={() => showMain(u)}
+                      icon={faTrashCan}
+                      className='fa trash'
+                      onClick={() => handleDelete(u)}
                     />
                   </span>
-                )}
-                {u.role === 'secondary-admin' && (
                   <span>
-                    <FontAwesomeIcon
-                      icon={faUserGraduate}
-                      className='fa admin-member'
-                      onClick={() => showSecondary(u)}
-                    />
+                    {!u.userStatus.suspended ? (
+                      <FontAwesomeIcon
+                        icon={faClock}
+                        className='fa suspend grey'
+                        onClick={() => handleSuspend(u)}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={faClock}
+                        className='fa suspend'
+                        onClick={() => handleRevoke(u)}
+                      />
+                    )}
                   </span>
-                )}
-                {role === 'main-admin' && u.role === 'secondary-admin' && (
-                  <span>
-                    <FontAwesomeIcon
-                      icon={faFolderOpen}
-                      className='fa folder'
-                      onClick={() => handlePreferences(u)}
-                    />
-                  </span>
-                )}
-              </div>
-            ))}
+                  {u.role === 'main-admin' && (
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faUserTie}
+                        className='fa admin-member'
+                        onClick={() => showMain(u)}
+                      />
+                    </span>
+                  )}
+                  {u.role === 'secondary-admin' && (
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faUserGraduate}
+                        className='fa admin-member'
+                        onClick={() => showSecondary(u)}
+                      />
+                    </span>
+                  )}
+                  {role === 'main-admin' && u.role === 'secondary-admin' && (
+                    <span>
+                      <FontAwesomeIcon
+                        icon={faFolderOpen}
+                        className='fa folder'
+                        onClick={() => handlePreferences(u)}
+                      />
+                    </span>
+                  )}
+                </div>
+              ))}
+          </InfiniteScroll>
         </div>
       </div>
       <UserDeleteAdmin

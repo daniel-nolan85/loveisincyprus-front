@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Modal from 'react-modal';
-import { getUsersByCount, fetchUsersByFilter } from '../../functions/user';
+import { getRandomUsers, fetchUsersByFilter } from '../../functions/user';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -135,7 +135,7 @@ const UserSearchMobile = ({
 
   const loadAllUsers = () => {
     setLoading(true);
-    getUsersByCount(12, user.token).then((res) => {
+    getRandomUsers(user.token).then((res) => {
       setUsers(res.data);
       setLoading(false);
     });

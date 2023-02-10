@@ -1851,6 +1851,14 @@ nav {
   font-size: 20px;
 }
 
+.admin-cards .infinite-scroll-component {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
 .admin-cards {
   padding: 20px 15px;
   display: flex;
@@ -2784,7 +2792,8 @@ progress::-webkit-progress-value {
 .analysis-container-show::-webkit-scrollbar,
 .alt-secondary::-webkit-scrollbar,
 .alt-secret::-webkit-scrollbar,
-.form-box.product.update::-webkit-scrollbar {
+.form-box.product.update::-webkit-scrollbar,
+.left-sidebar.search::-webkit-scrollbar {
   display: none;
 }
 
@@ -2793,7 +2802,8 @@ progress::-webkit-progress-value {
 .analysis-container-show,
 .alt-secondary::-webkit-scrollbar,
 .alt-secret::-webkit-scrollbar,
-.form-box.product.update::-webkit-scrollbar {
+.form-box.product.update::-webkit-scrollbar,
+.left-sidebar.search::-webkit-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
@@ -2860,9 +2870,21 @@ h1.score.super {
   display: none;
 }
 
+.product-cards .infinite-scroll-component {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
 .left-sidebar.search {
-  flex-basis: 20%;
+  min-width: 380px !important;
+  height: fit-content;
   padding-right: 10px;
+  overflow-y: scroll;
+  position: relative;
+  top: 0;
 }
 
 .left-sidebar.search .search-box {
@@ -2911,13 +2933,12 @@ p.csv {
   height: 235px;
 }
 
-.form-box.search .button-box {
-  width: 100%;
-}
-
 .submit-btn.reset {
   background-color: #5388b4;
   color: #fff;
+}
+
+.submit-btn.user-search-btn {
 }
 
 .search-container .product-cards .product-card {

@@ -171,8 +171,8 @@ export const getUserPointsSpentData = async (authtoken) =>
     },
   });
 
-export const getUsersByCount = async (count, authtoken) =>
-  await axios.get(`${process.env.REACT_APP_API}/fetch-users/${count}`, {
+export const getRandomUsers = async (authtoken) =>
+  await axios.get(`${process.env.REACT_APP_API}/fetch-users`, {
     headers: {
       authtoken,
     },

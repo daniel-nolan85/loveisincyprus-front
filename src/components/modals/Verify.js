@@ -119,7 +119,7 @@ const Verify = ({
         <h2>You will also receive 80 points for successful verification.</h2>
         <h2>
           To become verified, please upload a live photo of yourself holding a
-          sign that displays your name.
+          sign that displays your username and email.
         </h2>
         <div>
           <div>
