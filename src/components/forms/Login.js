@@ -309,6 +309,7 @@ const Login = ({ showRegister }) => {
     <form id='login' className='input-group'>
       <div className='info-questions phone'>
         <PhoneInput
+          country={'cy'}
           className='input-field'
           placeholder='Enter your mobile number'
           value={mobile}

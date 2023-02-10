@@ -197,6 +197,10 @@ const Profile = ({ history }) => {
   }, [(updatedEmail || updatedAnswer) && profileUpdated]);
 
   useEffect(() => {
+    fetchProgressCompletion();
+  }, [profileUpdated]);
+
+  useEffect(() => {
     if (user && user.token) {
       setUsername(user.username);
       setAbout(user.about);
@@ -385,6 +389,7 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
+        console.log('profile update => ', res);
         setLoading(false);
         if (res.data.error) {
           toast.error(res.data.error, {
@@ -458,6 +463,9 @@ const Profile = ({ history }) => {
               sexFrequency: res.data.sexFrequency,
             },
           });
+          updatedMobile && setMobile(updatedMobile);
+          updatedEmail && setEmail(updatedEmail);
+          updatedAnswer && setAnswer(updatedAnswer);
         }
         Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri('/models')])
           .then(detectfaces)

@@ -137,6 +137,7 @@ const Reauthenticate = ({
         <form className='input-group'>
           <div className='info-questions phone'>
             <PhoneInput
+              country={'cy'}
               className='input-field'
               placeholder='Enter your mobile number'
               value={reauthMobile}

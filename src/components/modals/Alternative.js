@@ -634,6 +634,7 @@ const Alternative = ({
             />
             <div className='secondary-login-form'>
               <PhoneInput
+              country={'cy'}
                 className='input-field secondary'
                 placeholder='Enter your secondary mobile number'
                 value={mobile}

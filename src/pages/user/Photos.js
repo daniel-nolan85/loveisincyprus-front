@@ -136,7 +136,11 @@ const Photos = () => {
                     setImageModalIsOpen(true);
                   }}
                   className={
-                    visitorPhotos < 2 || !clearPhoto || !membership.paid
+                    visitorPhotos < 2 ||
+                    !clearPhoto ||
+                    !membership.paid ||
+                    !user.clearPhoto ||
+                    !user.membership.paid
                       ? 'blur'
                       : ''
                   }
@@ -154,7 +158,15 @@ const Photos = () => {
                     getThisImage(photo);
                     setImageModalIsOpen(true);
                   }}
-                  className={visitorPhotos < 2 ? 'blur' : ''}
+                  className={
+                    visitorPhotos < 2 ||
+                    !clearPhoto ||
+                    !membership.paid ||
+                    !user.clearPhoto ||
+                    !user.membership.paid
+                      ? 'blur'
+                      : ''
+                  }
                 />
               </div>
             ))}
@@ -169,7 +181,15 @@ const Photos = () => {
                     getThisImage(photo);
                     setImageModalIsOpen(true);
                   }}
-                  className={visitorPhotos < 2 ? 'blur' : ''}
+                  className={
+                    visitorPhotos < 2 ||
+                    !clearPhoto ||
+                    !membership.paid ||
+                    !user.clearPhoto ||
+                    !user.membership.paid
+                      ? 'blur'
+                      : ''
+                  }
                 />
               </div>
             ))}

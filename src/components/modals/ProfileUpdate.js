@@ -302,6 +302,7 @@ const ProfileUpdate = ({
         </label>
 
         <PhoneInput
+          country={'cy'}
           className='input-field'
           placeholder='Enter your mobile number'
           value={updatedMobile || mobile}
@@ -316,6 +317,7 @@ const ProfileUpdate = ({
         </label> */}
 
         <PhoneInput
+          country={'cy'}
           className='input-field'
           placeholder='Enter your secondary mobile number*'
           value={secondMobile}
@@ -632,7 +634,8 @@ const ProfileUpdate = ({
           <option value='6-7'>6'7" / 200 cm</option>
         </select>
 
-        <select
+        <selec
+          t
           name='build'
           onChange={(e) => setBuild(e.target.value)}
           value={build}
@@ -644,7 +647,7 @@ const ProfileUpdate = ({
           <option value='large'>Large</option>
           <option value='skinny'>Skinny</option>
           <option value='slim'>Slim</option>
-        </select>
+        </selec>
 
         <select
           name='hair color'

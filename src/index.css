@@ -1471,6 +1471,8 @@ nav {
   box-sizing: border-box;
   padding: 1rem;
   padding-top: 0;
+  word-break: break-all;
+  text-align: center;
 }
 
 .ms-more {
@@ -2607,6 +2609,7 @@ label.verif-upload .fa {
   text-align: center;
   margin: 10px 0;
   font-size: 15px;
+  word-break: break-all;
 }
 
 .profile-intro hr {
@@ -3130,7 +3133,7 @@ span.link {
 }
 
 .form-box.authorisation {
-  height: 620px;
+  height: 650px;
 }
 
 .prof-update-form-box {

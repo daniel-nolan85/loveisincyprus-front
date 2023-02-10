@@ -496,6 +496,7 @@ const Register = ({ showLogin }) => {
       </div>
       <div className='info-questions phone'>
         <PhoneInput
+          country={'cy'}
           className='input-field'
           placeholder='Enter your mobile number *'
           value={mobile}
@@ -514,6 +515,7 @@ const Register = ({ showLogin }) => {
       </div>
       <div className='info-questions phone'>
         <PhoneInput
+          country={'cy'}
           className='input-field'
           placeholder='Enter your secondary mobile number'
           value={secondMobile}

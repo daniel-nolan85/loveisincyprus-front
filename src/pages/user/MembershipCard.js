@@ -10,6 +10,8 @@ import Mobile from '../../components/user/Mobile';
 
 const MembershipCard = () => {
   const [points, setPoints] = useState(0);
+  const [deviceSize, changeDeviceSize] = useState(window.innerWidth);
+
   const {
     _id,
     name,
@@ -99,8 +101,14 @@ const MembershipCard = () => {
               <Link to={`/user/profile/${_id}`}>
                 <h1>{username || name}</h1>
               </Link>
-              {about && about.length > 250 ? (
-                <p>{about.substring(0, 251) + '...'}</p>
+              {deviceSize > 1200 ? (
+                about && about.length > 190 ? (
+                  <p>{about.substring(0, 191) + '...'}</p>
+                ) : (
+                  <p>{about}</p>
+                )
+              ) : about && about.length > 140 ? (
+                <p>{about.substring(0, 141) + '...'}</p>
               ) : (
                 <p>{about}</p>
               )}

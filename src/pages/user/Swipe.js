@@ -27,6 +27,8 @@ const Swipe = ({ history }) => {
 
   const dispatch = useDispatch();
 
+  console.log('users => ', users);
+
   useEffect(() => {
     if (user && user.token) {
       usersToSwipe();
