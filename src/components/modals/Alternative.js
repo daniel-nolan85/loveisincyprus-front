@@ -42,7 +42,6 @@ const Alternative = ({
   const [showOTP, setShowOTP] = useState(false);
   const [OTP, setOTP] = useState('');
   const [loading, setLoading] = useState(false);
-  const [verifyEmailModalIsOpen, setVerifyEmailModalIsOpen] = useState(false);
 
   const isFirstRun = useRef(true);
 
@@ -634,7 +633,7 @@ const Alternative = ({
             />
             <div className='secondary-login-form'>
               <PhoneInput
-              country={'cy'}
+                country={'cy'}
                 className='input-field secondary'
                 placeholder='Enter your secondary mobile number'
                 value={mobile}
