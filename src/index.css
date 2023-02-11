@@ -4458,6 +4458,38 @@ table.product-info tbody {
   font-size: 10px;
 }
 
+/* --------------- maintenance page --------------- */
+.maintenance-page {
+  text-align: center;
+}
+
+.maintenance-page img {
+  margin-top: 5%;
+  width: 90%;
+  max-width: 1000px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.maintenance-text {
+  padding: 0 5%;
+}
+
+.maintenance-page h1 {
+  margin-top: 80px;
+  text-transform: uppercase;
+  color: var(--nav-color);
+  font-size: 60px;
+  font-weight: bold;
+}
+
+.maintenance-page p {
+  font-size: 20px;
+}
+
+.maintenance-page span {
+  color: var(--nav-color);
+}
+
 /* --------------- modals --------------- */
 .address-list {
   display: flex;
@@ -5421,5 +5453,23 @@ table.product-info tbody {
       .ms-image.ms-center
     ) {
     margin-top: 350px;
+  }
+}
+
+/* --------------- media query for maintenance-page --------------- */
+@media (max-width: 1200px) {
+  .maintenance-page h1 {
+    margin-top: 50px;
+    font-size: 50px;
+  }
+}
+
+@media (max-width: 900px) {
+  .maintenance-page h1 {
+    font-size: 40px;
+  }
+
+  .maintenance-page p {
+    font-size: 16px;
   }
 }

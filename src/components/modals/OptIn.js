@@ -102,7 +102,7 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
           className='submit-btn trash'
           onClick={() => setOptinModalIsOpen(false)}
         >
-          Cancel
+          Close
         </button>
       </div>
     </Modal>

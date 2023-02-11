@@ -22,7 +22,7 @@ const SettingsMenu = ({
 }) => {
   const [darkMode, setDarkMode] = useState(false);
 
-  let { _id, name, username, profileImage, membership } = useSelector(
+  let { _id, name, username, profileImage, membership, role } = useSelector(
     (state) => state.user
   );
 

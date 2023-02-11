@@ -16,6 +16,7 @@ import CancelSubscription from './components/modals/CancelSubscription';
 import OptIn from './components/modals/OptIn';
 import DeleteAccount from './components/modals/DeleteAccount';
 
+import Maintenance from './pages/Maintenance';
 import Header from './components/nav/Header';
 import SideDrawer from './components/drawer/SideDrawer';
 import Home from './pages/Home';
@@ -81,6 +82,8 @@ import CallingCodeBlock from './pages/admin/CallingCodeBlock';
 let socket, selectedChatCompare;
 
 const App = () => {
+  const maintenance = true;
+
   const [popupModalIsOpen, setPopupModalIsOpen] = useState(false);
   const [expiringModalIsOpen, setExpiringModalIsOpen] = useState(false);
   const [expiredModalIsOpen, setExpiredModalIsOpen] = useState(false);
@@ -105,6 +108,7 @@ const App = () => {
     setIsTyping,
     setSocketConnected,
     setTypersId,
+    inMaintenanceMode,
   } = ChatState();
 
   useEffect(() => {
@@ -410,127 +414,157 @@ const App = () => {
 
   return (
     <>
-      <Header
-        setCancelSubscriptionModalIsOpen={setCancelSubscriptionModalIsOpen}
-        setOptinModalIsOpen={setOptinModalIsOpen}
-        setDeleteAccountModalIsOpen={setDeleteAccountModalIsOpen}
-      />
-      <SideDrawer />
-      <ToastContainer />
-      <Popup
-        popupModalIsOpen={popupModalIsOpen}
-        setPopupModalIsOpen={setPopupModalIsOpen}
-      />
-      <Expiring
-        expiringModalIsOpen={expiringModalIsOpen}
-        setExpiringModalIsOpen={setExpiringModalIsOpen}
-      />
-      <Expired
-        expiredModalIsOpen={expiredModalIsOpen}
-        setExpiredModalIsOpen={setExpiredModalIsOpen}
-      />
-      <CancelSubscription
-        cancelSubscriptionModalIsOpen={cancelSubscriptionModalIsOpen}
-        setCancelSubscriptionModalIsOpen={setCancelSubscriptionModalIsOpen}
-      />
-      <OptIn
-        optinModalIsOpen={optinModalIsOpen}
-        setOptinModalIsOpen={setOptinModalIsOpen}
-      />
-      <DeleteAccount
-        deleteAccountModalIsOpen={deleteAccountModalIsOpen}
-        setDeleteAccountModalIsOpen={setDeleteAccountModalIsOpen}
-      />
-      <Switch>
-        <Route exact path='/' component={Home} />
-        <Route exact path='/authentication' component={LoginAndRegister} />
-        <Route exact path='/about-us' component={About} />
-        <Route exact path='/contact-us' component={Contact} />
-        <Route exact path='/relationship-coaching' component={RelCoach} />
-        <Route exact path='/privacy-policy' component={PrivacyPolicy} />
-        <Route exact path='/terms-and-conditions' component={TsAndCs} />
-        <Route exact path='/shop' component={Shop} />
-        <Route exact path='/product/:slug' component={Product} />
-        <Route exact path='/category/:slug' component={CategoryHome} />
-        <Route exact path='/sub/:slug' component={SubHome} />
-        <Route exact path='/shop/search' component={ShopSearch} />
-        <Route exact path='/cart' component={Cart} />
-        <Route exact path='/ad-submission' component={AdSubmission} />
-        <UserRoute exact path='/user/dashboard' component={UserDashboard} />
-        <UserRoute exact path='/user/profile/:userId' component={Profile} />
-        <UserRoute exact path='/liked-users' component={Following} />
-        <UserRoute exact path='/users-who-like-me' component={Followers} />
-        <UserRoute exact path='/my-matches' component={Matches} />
-        <UserRoute exact path='/users-who-visited-me' component={Visitors} />
-        <UserRoute exact path='/user/:userId' component={UserProfile} />
-        <UserRoute exact path='/photos/:userId' component={Photos} />
-        <UserRoute exact path='/checkout' component={Checkout} />
-        <UserRoute exact path='/payment' component={Payment} />
-        <UserRoute exact path='/purchase/history' component={PurchaseHistory} />
-        <UserRoute exact path='/wishlist' component={Wishlist} />
-        <UserRoute exact path='/points' component={Points} />
-        <UserRoute exact path='/notifications' component={Notifications} />
-        <UserRoute exact path='/search-users' component={UserSearch} />
-        <UserRoute exact path='/events' component={Events} />
-        <UserRoute exact path='/event/:eventId' component={EventInfo} />
-        <UserRoute exact path='/become-paid-member' component={BecomePaid} />
-        <UserRoute exact path='/membership-card' component={MembershipCard} />
-        <UserRoute
-          exact
-          path='/subscription-successful'
-          component={SubscriptionSuccess}
-        />
-        <UserRoute exact path='/order-successful' component={OrderSuccess} />
-        <UserRoute
-          exact
-          path='/chats'
-          component={Chats}
-          onLeave={() => setSelectedChat(undefined)}
-        />
-        <SubscriberRoute exact path='/swipe-to-match' component={Swipe} />
-        <SubscriberRoute
-          exact
-          path='/high-compatibility'
-          component={HighCompat}
-        />
-        <AdminRoute exact path='/admin/dashboard' component={AdminDashboard} />
-        <AdminRoute exact path='/admin/posts' component={Posts} />
-        <AdminRoute exact path='/admin/users' component={Users} />
-        <AdminRoute exact path='/admin/geo-block' component={GeoBlock} />
-        <AdminRoute exact path='/admin/ip-block' component={IPBlock} />
-        <AdminRoute
-          exact
-          path='/admin/calling-code-block'
-          component={CallingCodeBlock}
-        />
-        <AdminRoute exact path='/admin/category' component={Category} />
-        <AdminRoute exact path='/admin/sub' component={Sub} />
-        <AdminRoute exact path='/admin/product' component={Products} />
-        <AdminRoute exact path='/admin/coupon' component={Coupon} />
-        <AdminRoute exact path='/admin/orders' component={Orders} />
-        <AdminRoute exact path='/admin/event' component={Event} />
-        <AdminRoute exact path='/admin/mass-mail' component={MassMail} />
-        <AdminRoute
-          exact
-          path='/admin/ad-submissions'
-          component={AdSubmissions}
-        />
-        <AdminRoute
-          exact
-          path='/admin/verif-submissions'
-          component={VerifSubmissions}
-        />
-        <AdminRoute
-          exact
-          path='/admin/reported-content'
-          component={ReportedContent}
-        />
-        <AdminRoute
-          exact
-          path='/admin/product-review'
-          component={ProductReview}
-        />
-      </Switch>
+      {maintenance ? (
+        <Maintenance />
+      ) : (
+        <>
+          <Header
+            setCancelSubscriptionModalIsOpen={setCancelSubscriptionModalIsOpen}
+            setOptinModalIsOpen={setOptinModalIsOpen}
+            setDeleteAccountModalIsOpen={setDeleteAccountModalIsOpen}
+          />
+          <SideDrawer />
+          <ToastContainer />
+          <Popup
+            popupModalIsOpen={popupModalIsOpen}
+            setPopupModalIsOpen={setPopupModalIsOpen}
+          />
+          <Expiring
+            expiringModalIsOpen={expiringModalIsOpen}
+            setExpiringModalIsOpen={setExpiringModalIsOpen}
+          />
+          <Expired
+            expiredModalIsOpen={expiredModalIsOpen}
+            setExpiredModalIsOpen={setExpiredModalIsOpen}
+          />
+          <CancelSubscription
+            cancelSubscriptionModalIsOpen={cancelSubscriptionModalIsOpen}
+            setCancelSubscriptionModalIsOpen={setCancelSubscriptionModalIsOpen}
+          />
+          <OptIn
+            optinModalIsOpen={optinModalIsOpen}
+            setOptinModalIsOpen={setOptinModalIsOpen}
+          />
+          <DeleteAccount
+            deleteAccountModalIsOpen={deleteAccountModalIsOpen}
+            setDeleteAccountModalIsOpen={setDeleteAccountModalIsOpen}
+          />
+          <Switch>
+            <Route exact path='/' component={Home} />
+            <Route exact path='/authentication' component={LoginAndRegister} />
+            <Route exact path='/about-us' component={About} />
+            <Route exact path='/contact-us' component={Contact} />
+            <Route exact path='/relationship-coaching' component={RelCoach} />
+            <Route exact path='/privacy-policy' component={PrivacyPolicy} />
+            <Route exact path='/terms-and-conditions' component={TsAndCs} />
+            <Route exact path='/shop' component={Shop} />
+            <Route exact path='/product/:slug' component={Product} />
+            <Route exact path='/category/:slug' component={CategoryHome} />
+            <Route exact path='/sub/:slug' component={SubHome} />
+            <Route exact path='/shop/search' component={ShopSearch} />
+            <Route exact path='/cart' component={Cart} />
+            <Route exact path='/ad-submission' component={AdSubmission} />
+            <UserRoute exact path='/user/dashboard' component={UserDashboard} />
+            <UserRoute exact path='/user/profile/:userId' component={Profile} />
+            <UserRoute exact path='/liked-users' component={Following} />
+            <UserRoute exact path='/users-who-like-me' component={Followers} />
+            <UserRoute exact path='/my-matches' component={Matches} />
+            <UserRoute
+              exact
+              path='/users-who-visited-me'
+              component={Visitors}
+            />
+            <UserRoute exact path='/user/:userId' component={UserProfile} />
+            <UserRoute exact path='/photos/:userId' component={Photos} />
+            <UserRoute exact path='/checkout' component={Checkout} />
+            <UserRoute exact path='/payment' component={Payment} />
+            <UserRoute
+              exact
+              path='/purchase/history'
+              component={PurchaseHistory}
+            />
+            <UserRoute exact path='/wishlist' component={Wishlist} />
+            <UserRoute exact path='/points' component={Points} />
+            <UserRoute exact path='/notifications' component={Notifications} />
+            <UserRoute exact path='/search-users' component={UserSearch} />
+            <UserRoute exact path='/events' component={Events} />
+            <UserRoute exact path='/event/:eventId' component={EventInfo} />
+            <UserRoute
+              exact
+              path='/become-paid-member'
+              component={BecomePaid}
+            />
+            <UserRoute
+              exact
+              path='/membership-card'
+              component={MembershipCard}
+            />
+            <UserRoute
+              exact
+              path='/subscription-successful'
+              component={SubscriptionSuccess}
+            />
+            <UserRoute
+              exact
+              path='/order-successful'
+              component={OrderSuccess}
+            />
+            <UserRoute
+              exact
+              path='/chats'
+              component={Chats}
+              onLeave={() => setSelectedChat(undefined)}
+            />
+            <SubscriberRoute exact path='/swipe-to-match' component={Swipe} />
+            <SubscriberRoute
+              exact
+              path='/high-compatibility'
+              component={HighCompat}
+            />
+            <AdminRoute
+              exact
+              path='/admin/dashboard'
+              component={AdminDashboard}
+            />
+            <AdminRoute exact path='/admin/posts' component={Posts} />
+            <AdminRoute exact path='/admin/users' component={Users} />
+            <AdminRoute exact path='/admin/geo-block' component={GeoBlock} />
+            <AdminRoute exact path='/admin/ip-block' component={IPBlock} />
+            <AdminRoute
+              exact
+              path='/admin/calling-code-block'
+              component={CallingCodeBlock}
+            />
+            <AdminRoute exact path='/admin/category' component={Category} />
+            <AdminRoute exact path='/admin/sub' component={Sub} />
+            <AdminRoute exact path='/admin/product' component={Products} />
+            <AdminRoute exact path='/admin/coupon' component={Coupon} />
+            <AdminRoute exact path='/admin/orders' component={Orders} />
+            <AdminRoute exact path='/admin/event' component={Event} />
+            <AdminRoute exact path='/admin/mass-mail' component={MassMail} />
+            <AdminRoute
+              exact
+              path='/admin/ad-submissions'
+              component={AdSubmissions}
+            />
+            <AdminRoute
+              exact
+              path='/admin/verif-submissions'
+              component={VerifSubmissions}
+            />
+            <AdminRoute
+              exact
+              path='/admin/reported-content'
+              component={ReportedContent}
+            />
+            <AdminRoute
+              exact
+              path='/admin/product-review'
+              component={ProductReview}
+            />
+          </Switch>
+        </>
+      )}
     </>
   );
 };
