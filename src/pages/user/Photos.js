@@ -23,12 +23,15 @@ const Photos = () => {
   useEffect(() => {
     fetchUser();
     fetchUsersPhotos();
-    visitorPhotosCount();
+    if (user.role !== 'main-admin' || user.role !== 'secondary-admin')
+      visitorPhotosCount();
   }, [userId]);
 
   useEffect(() => {
     if (user && user.token) {
-      if (!user.clearPhoto || !user.membership.paid) {
+      if (user.role === 'main-admin' || user.role === 'secondary-admin') {
+        return;
+      } else if (!user.clearPhoto || !user.membership.paid) {
         setDeniedModalIsOpen(true);
       }
     }
@@ -47,7 +50,9 @@ const Photos = () => {
       )
       .then((res) => {
         setThisUser(res.data);
-        if (!res.data.clearPhoto || !res.data.membership.paid) {
+        if (user.role === 'main-admin' || user.role === 'secondary-admin') {
+          return;
+        } else if (!res.data.clearPhoto || !res.data.membership.paid) {
           setDeniedModalIsOpen(true);
         }
       })
@@ -136,11 +141,14 @@ const Photos = () => {
                     setImageModalIsOpen(true);
                   }}
                   className={
-                    visitorPhotos < 2 ||
-                    !clearPhoto ||
-                    !membership.paid ||
-                    !user.clearPhoto ||
-                    !user.membership.paid
+                    user.role === 'main-admin' ||
+                    user.role === 'secondary-admin'
+                      ? ''
+                      : visitorPhotos < 2 ||
+                        !clearPhoto ||
+                        !membership.paid ||
+                        !user.clearPhoto ||
+                        !user.membership.paid
                       ? 'blur'
                       : ''
                   }
@@ -159,11 +167,14 @@ const Photos = () => {
                     setImageModalIsOpen(true);
                   }}
                   className={
-                    visitorPhotos < 2 ||
-                    !clearPhoto ||
-                    !membership.paid ||
-                    !user.clearPhoto ||
-                    !user.membership.paid
+                    user.role === 'main-admin' ||
+                    user.role === 'secondary-admin'
+                      ? ''
+                      : visitorPhotos < 2 ||
+                        !clearPhoto ||
+                        !membership.paid ||
+                        !user.clearPhoto ||
+                        !user.membership.paid
                       ? 'blur'
                       : ''
                   }
@@ -182,11 +193,14 @@ const Photos = () => {
                     setImageModalIsOpen(true);
                   }}
                   className={
-                    visitorPhotos < 2 ||
-                    !clearPhoto ||
-                    !membership.paid ||
-                    !user.clearPhoto ||
-                    !user.membership.paid
+                    user.role === 'main-admin' ||
+                    user.role === 'secondary-admin'
+                      ? ''
+                      : visitorPhotos < 2 ||
+                        !clearPhoto ||
+                        !membership.paid ||
+                        !user.clearPhoto ||
+                        !user.membership.paid
                       ? 'blur'
                       : ''
                   }
@@ -198,6 +212,9 @@ const Photos = () => {
           imageModalIsOpen={imageModalIsOpen}
           setImageModalIsOpen={setImageModalIsOpen}
           imageUrl={image}
+          visitorPhotos={visitorPhotos}
+          clearPhoto={clearPhoto}
+          membership={membership}
         />
         <ImagesDenied
           deniedModalIsOpen={deniedModalIsOpen}

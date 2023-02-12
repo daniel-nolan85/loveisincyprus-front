@@ -82,7 +82,7 @@ import CallingCodeBlock from './pages/admin/CallingCodeBlock';
 let socket, selectedChatCompare;
 
 const App = () => {
-  const maintenance = true;
+  const maintenance = false;
 
   const [popupModalIsOpen, setPopupModalIsOpen] = useState(false);
   const [expiringModalIsOpen, setExpiringModalIsOpen] = useState(false);
@@ -221,6 +221,15 @@ const App = () => {
     });
     return () => unsubscribe();
   }, [dispatch]);
+
+  useEffect(() => {
+    if (user && user.profileComplete === false) {
+      const timer = setTimeout(() => {
+        setPopupModalIsOpen(true);
+      }, 30000);
+      return () => clearTimeout(timer);
+    }
+  }, [user && user.token]);
 
   useEffect(() => {
     if (user) {

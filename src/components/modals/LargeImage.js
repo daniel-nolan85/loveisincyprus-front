@@ -1,9 +1,19 @@
 import React from 'react';
 import Modal from 'react-modal';
+import { useSelector } from 'react-redux';
 
 Modal.setAppElement('#root');
 
-const LargeImage = ({ imageModalIsOpen, setImageModalIsOpen, imageUrl }) => {
+const LargeImage = ({
+  imageModalIsOpen,
+  setImageModalIsOpen,
+  imageUrl,
+  visitorPhotos,
+  clearPhoto,
+  membership,
+}) => {
+  let { user } = useSelector((state) => ({ ...state }));
+
   const modalStyles = {
     content: {
       top: '50%',
@@ -28,6 +38,10 @@ const LargeImage = ({ imageModalIsOpen, setImageModalIsOpen, imageUrl }) => {
     },
   };
 
+  console.log('visitorPhotos => ', visitorPhotos);
+  console.log('clearPhoto => ', clearPhoto);
+  console.log('membership => ', membership);
+
   return (
     <Modal
       isOpen={imageModalIsOpen}
@@ -35,7 +49,21 @@ const LargeImage = ({ imageModalIsOpen, setImageModalIsOpen, imageUrl }) => {
       style={modalStyles}
       contentLabel='Example Modal'
     >
-      <img src={imageUrl} alt='Profile photo' className='pd-image-large' />
+      <img
+        src={imageUrl}
+        alt='Profile photo'
+        className={
+          user.role === 'main-admin' || user.role === 'secondary-admin'
+            ? 'pd-image-large'
+            : visitorPhotos < 2 ||
+              !clearPhoto ||
+              !membership.paid ||
+              !user.clearPhoto ||
+              !user.membership.paid
+            ? 'blur pd-image-large'
+            : 'pd-image-large'
+        }
+      />
     </Modal>
   );
 };
