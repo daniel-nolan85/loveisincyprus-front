@@ -38,10 +38,6 @@ const LargeImage = ({
     },
   };
 
-  console.log('visitorPhotos => ', visitorPhotos);
-  console.log('clearPhoto => ', clearPhoto);
-  console.log('membership => ', membership);
-
   return (
     <Modal
       isOpen={imageModalIsOpen}

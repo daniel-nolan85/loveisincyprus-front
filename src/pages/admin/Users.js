@@ -122,7 +122,6 @@ const Users = ({ history }) => {
     await axios
       .get(`${process.env.REACT_APP_API}/total-users`)
       .then((res) => {
-        console.log(res);
         if (res.data === 0) {
           setMoreUsers(false);
         }
