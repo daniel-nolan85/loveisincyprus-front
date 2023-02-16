@@ -66,7 +66,7 @@ const UserSuspended = ({
           <p>{userStatus.reason}</p>
           <p>
             If you would like to appeal this decision you can email us at
-            lovecustomer@loveisincyprus.com or through our{' '}
+            customercare@loveisincyprus.com or through our{' '}
             <Link to='/contact-us' className='link'>
               contact form
             </Link>

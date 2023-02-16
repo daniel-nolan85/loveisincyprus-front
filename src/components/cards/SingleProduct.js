@@ -5,7 +5,7 @@ import {
   faCartArrowDown,
   faHeart,
 } from '@fortawesome/free-solid-svg-icons';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import defaultItem from '../../assets/defaultItem.png';
@@ -30,6 +30,7 @@ const SingleProduct = ({ product, onStarClick, star }) => {
   const { user, cart } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
+  let history = useHistory();
 
   useEffect(() => {
     if (user && user.token) loadWishlist();
@@ -122,6 +123,18 @@ const SingleProduct = ({ product, onStarClick, star }) => {
 
   return (
     <div className='small-container single-product'>
+      <button
+        type='button'
+        className='submit-btn'
+        onClick={() => history.push('/shop/search')}
+        style={{
+          width: 'fit-content',
+          marginTop: '-20px',
+          marginBottom: '20px',
+        }}
+      >
+        Search all products
+      </button>
       <div className='row'>
         <div className='col-2 s-p'>
           {images && images.length ? (

@@ -70,7 +70,7 @@ const OrderSuccess = (props) => {
                 {discount
                   ? (parseFloat(amount) + discount).toFixed(2) -
                     deliveryFee.toFixed(2)
-                  : parseFloat(amount) - deliveryFee.toFixed(2)}
+                  : parseFloat(amount - deliveryFee).toFixed(2)}
               </h3>
             </div>
             {discount && (

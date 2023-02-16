@@ -15,7 +15,7 @@ const Maintenance = () => {
         <br />
         <p>
           In the meanwhile, you can contact us at{' '}
-          <span>lovecustomer@loveisincyprus.com</span>.
+          <span>customercare@loveisincyprus.com</span>.
         </p>
       </div>
     </div>

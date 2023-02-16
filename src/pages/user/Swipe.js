@@ -37,7 +37,8 @@ const Swipe = ({ history }) => {
     socket = io(
       process.env.REACT_APP_SOCKET_IO,
       { path: '/socket.io' },
-      { reconnection: true }
+      { reconnection: true },
+      { secure: true }
     );
   }, []);
 

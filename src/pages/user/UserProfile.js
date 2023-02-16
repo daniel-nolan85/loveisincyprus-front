@@ -11,6 +11,7 @@ import {
   faSpinner,
   faBrain,
   faUserShield,
+  faGift,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
@@ -69,11 +70,14 @@ const UserProfile = ({ history }) => {
 
   let dispatch = useDispatch();
 
+  console.log('thisUser => ', thisUser);
+
   useEffect(() => {
     socket = io(
       process.env.REACT_APP_SOCKET_IO,
       { path: '/socket.io' },
-      { reconnection: true }
+      { reconnection: true },
+      { secure: true }
     );
   }, []);
 
@@ -472,14 +476,24 @@ const UserProfile = ({ history }) => {
             </button>
           )}
           {user.matches.includes(_id) && (
-            <button
-              type='button'
-              className='tooltip'
-              onClick={() => history.push('/chats')}
-            >
-              <FontAwesomeIcon icon={faMessage} className='fa' />
-              <span className='tooltip-text'>Message this user</span>
-            </button>
+            <>
+              <button
+                type='button'
+                className='tooltip'
+                onClick={() => history.push('/chats')}
+              >
+                <FontAwesomeIcon icon={faMessage} className='fa' />
+                <span className='tooltip-text'>Message this user</span>
+              </button>
+              <button
+                type='button'
+                className='tooltip'
+                onClick={() => history.push(`/create-gift-card/${_id}`)}
+              >
+                <FontAwesomeIcon icon={faGift} className='fa' />
+                <span className='tooltip-text'>Buy this user a gift</span>
+              </button>
+            </>
           )}
           <button
             type='button'

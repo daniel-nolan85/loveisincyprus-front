@@ -189,7 +189,7 @@ const TsAndCs = () => {
             Subscription to exercise his/her right to cancel, without incurring
             any liability and without giving a reason from within the user
             settings menu, or by sending a clear statement requesting this to
-            the e-mail address: lovecustomer@loveisincyprus.com. Only requests
+            the e-mail address: customercare@loveisincyprus.com. Only requests
             relating to the exercise of this right to cancel will be processed
             from these contact addresses. In order for the cancellation to be
             effectively exercised, the Subscriber must send his/her request
@@ -913,7 +913,7 @@ const TsAndCs = () => {
           <p>The Member or Subscriber may also contact the Customer Care</p>
           <div className='bullets'>
             <ul>
-              <li>by email: lovecustomer@loveisincyprus.com</li>
+              <li>by email: customercare@loveisincyprus.com</li>
               <li>by phone: 00357 96723118</li>
             </ul>
           </div>

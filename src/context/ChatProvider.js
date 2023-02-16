@@ -21,6 +21,7 @@ const ChatProvider = ({ children }) => {
   const [reportedContent, setReportedContent] = useState(0);
   const [productsForReview, setProductsForReview] = useState(0);
   const [newOrders, setNewOrders] = useState(0);
+  const [timerFired, setTimerFired] = useState(false);
 
   return (
     <ChatContext.Provider
@@ -59,6 +60,8 @@ const ChatProvider = ({ children }) => {
         setProductsForReview,
         newOrders,
         setNewOrders,
+        timerFired,
+        setTimerFired,
       }}
     >
       {children}

@@ -96,18 +96,18 @@ body {
   width: 50px;
   height: 50px;
   text-align: center;
-  position: fixed;
   background: var(--nav-color);
   right: 2%;
   top: 3.3%;
   border-radius: 3px;
   z-index: 3;
   cursor: pointer;
+  position: absolute;
+  top: 40%;
 }
 
 #menu-btn img {
   width: 25px;
-  margin-top: 15px;
 }
 
 .link {
@@ -1211,6 +1211,36 @@ nav {
 .popup-links:hover {
   font-weight: bold;
   color: var(--nav-color);
+}
+
+/* --------------- free-membership-card --------------- */
+.free-membership-banner {
+  position: relative;
+  width: 100%;
+  margin: 10px 0;
+  text-align: center;
+  border-radius: 6px;
+}
+
+.small-text-1 {
+  font-size: 20px;
+  color: var(--nav-color);
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.big-text {
+  font-size: 50px;
+  color: var(--nav-color);
+  font-weight: bold;
+  margin: 30px 0;
+}
+
+.small-text-2 {
+  font-size: 20px;
+  color: var(--nav-color);
+  font-weight: bold;
+  margin-bottom: 10px;
 }
 
 /* --------------- become-paid-card --------------- */
@@ -4042,6 +4072,11 @@ input[name='Photos'] {
 .product-card .fa.view,
 .col-2 .fa.view {
   color: var(--nav-color);
+  transition: 0.3s;
+}
+
+.col-2 .fa.view:hover {
+  color: var(--nav-color) !important;
 }
 
 .product-card .fa.add,
@@ -4336,6 +4371,10 @@ table.product-info tbody {
 .order-status {
   margin-bottom: 20px;
 }
+
+/* .add-wish:hover {
+  color: var(--nav-color);
+} */
 
 /* --------------- information pages --------------- */
 .info-img-bg {
@@ -5471,6 +5510,77 @@ table.product-info tbody {
   }
 
   .maintenance-page p {
+    font-size: 16px;
+  }
+}
+
+/* --------------- media query for free-membership-card --------------- */
+@media (max-width: 1250px) {
+  .small-text-1 {
+    font-size: 18px;
+  }
+
+  .big-text {
+    font-size: 35px;
+  }
+
+  .small-text-2 {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .small-text-1 {
+    font-size: 16px;
+  }
+
+  .big-text {
+    font-size: 30px;
+  }
+
+  .small-text-2 {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 900px) {
+  .small-text-1 {
+    font-size: 20px;
+  }
+
+  .big-text {
+    font-size: 50px;
+  }
+
+  .small-text-2 {
+    font-size: 20px;
+  }
+}
+
+@media (max-width: 650px) {
+  .small-text-1 {
+    font-size: 18px;
+  }
+
+  .big-text {
+    font-size: 35px;
+  }
+
+  .small-text-2 {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 450px) {
+  .small-text-1 {
+    font-size: 16px;
+  }
+
+  .big-text {
+    font-size: 30px;
+  }
+
+  .small-text-2 {
     font-size: 16px;
   }
 }

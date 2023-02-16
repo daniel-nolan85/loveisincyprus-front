@@ -16,6 +16,7 @@ import { addPoints } from '../../functions/user';
 import io from 'socket.io-client';
 import BecomePaid from '../../components/cards/BecomePaid';
 import Mobile from '../../components/user/Mobile';
+import FreeMembership from '../../components/cards/FreeMembership';
 
 let socket;
 
@@ -61,7 +62,8 @@ const UserDashboard = () => {
     socket = io(
       process.env.REACT_APP_SOCKET_IO,
       { path: '/socket.io' },
-      { reconnection: true }
+      { reconnection: true },
+      { secure: true }
     );
   }, []);
 
@@ -361,6 +363,7 @@ const UserDashboard = () => {
       <LeftSidebar />
       <div className='main-content'>
         <Mobile />
+        <FreeMembership />
         {user.membership.paid ? (
           <Users users={users} handleFollow={handleFollow} />
         ) : (

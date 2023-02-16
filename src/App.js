@@ -78,6 +78,7 @@ import ReportedContent from './pages/admin/ReportedContent';
 import ProductReview from './pages/admin/ProductReview';
 import HighCompat from './pages/user/HighCompat';
 import CallingCodeBlock from './pages/admin/CallingCodeBlock';
+import GiftCardCreate from './pages/user/GiftCardCreate';
 
 let socket, selectedChatCompare;
 
@@ -108,7 +109,8 @@ const App = () => {
     setIsTyping,
     setSocketConnected,
     setTypersId,
-    inMaintenanceMode,
+    timerFired,
+    setTimerFired,
   } = ChatState();
 
   useEffect(() => {
@@ -222,21 +224,23 @@ const App = () => {
     return () => unsubscribe();
   }, [dispatch]);
 
-  useEffect(() => {
-    if (user && user.profileComplete === false) {
-      const timer = setTimeout(() => {
-        setPopupModalIsOpen(true);
-      }, 30000);
-      return () => clearTimeout(timer);
-    }
-  }, [user && user.token]);
+  // useEffect(() => {
+  //   if (user && user.profileComplete === false && timerFired === false) {
+  //     const timer = setTimeout(() => {
+  //       setPopupModalIsOpen(true);
+  //     }, 30000);
+  //     setTimerFired(true);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [user]);
 
   useEffect(() => {
     if (user) {
       socket = io(
         process.env.REACT_APP_SOCKET_IO,
         { path: '/socket.io' },
-        { reconnection: true }
+        { reconnection: true },
+        { secure: true }
       );
       socket.emit('setup', user);
       socket.on('connected', () => setSocketConnected(true));
@@ -529,6 +533,11 @@ const App = () => {
               exact
               path='/high-compatibility'
               component={HighCompat}
+            />
+            <SubscriberRoute
+              exact
+              path='/create-gift-card/:userId'
+              component={GiftCardCreate}
             />
             <AdminRoute
               exact
