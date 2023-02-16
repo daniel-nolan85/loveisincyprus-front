@@ -95,10 +95,7 @@ const Unfollow = ({
       contentLabel='Example Modal'
     >
       <div className='match'>
-        <h1>
-          Are you sure you want to unlike
-          {username || name}?
-        </h1>
+        <h1>Are you sure you want to unlike {username || name}?</h1>
         <div className='match-images'>
           <img
             src={profileImage ? profileImage.url : defaultProfile}
