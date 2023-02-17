@@ -96,15 +96,19 @@ const ProductInfo = ({ product, wishlist, handleRemove }) => {
                   ) : (
                     <button
                       onClick={handleAddToCart}
-                      disabled={quantity < 1}
-                      className={quantity < 1 ? 'out-of-stock' : 'add-to-cart'}
+                      // disabled={quantity < 1}
+                      // className={quantity < 1 ? 'out-of-stock' : 'add-to-cart'}
+                      className='disabled'
+                      disabled
                     >
                       <FontAwesomeIcon
                         icon={faCartShopping}
-                        className={quantity < 1 ? 'fa out' : 'fa add'}
+                        // className={quantity < 1 ? 'fa out' : 'fa add'}
+                        className='fa disabled'
                       />
                       <span className='tooltip-text'>
-                        {quantity < 1 ? 'Out of Stock' : 'Add to Cart'}
+                        {/* {quantity < 1 ? 'Out of Stock' : 'Add to Cart'} */}
+                        Shop currently offline
                       </span>
                     </button>
                   )}
@@ -135,15 +139,19 @@ const ProductInfo = ({ product, wishlist, handleRemove }) => {
                   ) : (
                     <button
                       onClick={handleAddToCart}
-                      disabled={quantity < 1}
-                      className={quantity < 1 ? 'out-of-stock' : 'add-to-cart'}
+                      // disabled={quantity < 1}
+                      // className={quantity < 1 ? 'out-of-stock' : 'add-to-cart'}
+                      className='disabled'
+                      disabled
                     >
                       <FontAwesomeIcon
                         icon={faCartShopping}
-                        className={quantity < 1 ? 'fa out' : 'fa add'}
+                        // className={quantity < 1 ? 'fa out' : 'fa add'}
+                        className='fa disabled'
                       />
                       <span className='tooltip-text'>
-                        {quantity < 1 ? 'Out of Stock' : 'Add to Cart'}
+                        {/* {quantity < 1 ? 'Out of Stock' : 'Add to Cart'} */}
+                        Shop currently offline
                       </span>
                     </button>
                   )}

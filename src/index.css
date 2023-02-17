@@ -3263,6 +3263,15 @@ span.link {
   color: #626262;
 }
 
+button.disabled {
+  border: none;
+}
+
+.fa.disabled {
+  cursor: not-allowed !important;
+  color: #626262;
+}
+
 .submit-btn .fa {
   margin-right: 10px;
 }
