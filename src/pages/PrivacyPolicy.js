@@ -10,7 +10,7 @@ const PrivacyPolicy = () => {
       <div className='info-white-bg shadow'>
         <div className='info-content'>
           <h2>Who we are</h2>
-          <p>Our website address is: https://loveisincyprus.com/newlove</p>
+          <p>Our website address is: www.loveisincyprus.com</p>
           <br />
           <h2>What personal data we collect and why we collect it</h2>
           <h4>Comments</h4>

@@ -64,7 +64,7 @@ const ContactForm = () => {
 
   const handleRecaptcha = async (token) => {
     setToken(token);
-    const secret = process.env.REACT_APP_SECRET_KEY;
+    const secret = process.env.REACT_APP_RECAPTCHA_SECRET_KEY;
 
     await axios
       .post(`${process.env.REACT_APP_API}/recaptcha`, {
@@ -131,7 +131,7 @@ const ContactForm = () => {
               placeholder='Your message...'
             />
             <ReCaptchaV2
-              sitekey={process.env.REACT_APP_SITE_KEY}
+              sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
               onChange={handleRecaptcha}
               onExpired={handleExpire}
             />
