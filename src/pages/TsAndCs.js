@@ -10,7 +10,7 @@ const TsAndCs = () => {
       <div className='info-white-bg shadow'>
         <div className='info-content'>
           <h2>Dating Services Terms of Use</h2>
-          <p>(Terms of Use revised on January 5th, 2023)</p>
+          <p>(Terms of Use revised on February 17, 2023)</p>
           <h3>Preamble</h3>
           <p>
             These Terms of Use are entered into between Loveisincyprus.com
@@ -251,8 +251,11 @@ const TsAndCs = () => {
             Purchase of a Subscription allows access to the features described
             on the Website.
           </p>
-          <h3>Article 5. Services</h3>
-          <h4>5.1 Love is in Cyprus obligations in relation to the Services</h4>
+          <h3>Article 5 Services and Products</h3>
+          <h4>5.A Services</h4>
+          <h4>
+            5.A1 Love is in Cyprus obligations in relation to the Services
+          </h4>
           <p>
             The purpose of the Services, including the Paid Services, is not
             organising 'real life', in person dates between the Members and/or
@@ -285,10 +288,10 @@ const TsAndCs = () => {
             any Member or Subscriber, without prejudice to any monies already
             paid or then due to Love is in Cyprus if the concerned Member or
             Subscriber don't comply with their obligations described in article
-            5.2.1 and 5.2.2.
+            5.A2.1 and 5.A2.2.
           </p>
           <br />
-          <h4>5.2 Obligations of Members and Subscribers</h4>
+          <h4>5.A2 Obligations of Members and Subscribers</h4>
           <p>
             The provisions of this article apply from the registration or
             Subscription and shall remain applicable for the entire duration of
@@ -299,7 +302,7 @@ const TsAndCs = () => {
             below.
           </p>
           <br />
-          <h4>5.2.1. General obligations:</h4>
+          <h4>5.A2.1. General obligations:</h4>
           <p>The Member or Subscriber has the following general obligations:</p>
           <br />
           <div className='bullets'>
@@ -342,7 +345,7 @@ const TsAndCs = () => {
             Use.
           </p>
           <br />
-          <h4>5.2.2. Essential obligations:</h4>
+          <h4>5.A2.2. Essential obligations:</h4>
           <p>
             The Member or Subscriber generally has the essential obligations
             (hereinafter, the “Essential Obligations”) to:
@@ -436,17 +439,184 @@ const TsAndCs = () => {
             subscription of the relevant Member or Subscriber to any or all
             parts of the Website.
           </p>
-          <h3>Article 6. Fees, terms of payment and renewal</h3>
+          <br />
+          <h4>5.B Products</h4>
+          <h4>5.B.1. Website</h4>
+          <p>
+            The viewing of the website and browsing of the website automatically
+            requires you to accept our Cookies policy. When you enter into a
+            transaction with us, you automatically accept the trading terms and
+            conditions as enclosed.
+          </p>
+          <br />
+          <h4>5.B.2. Authority to purchase</h4>
+          <p>
+            The User is required to have the authority to purchase and remain
+            liable for the cost incurred. If the purchase is made on behalf of a
+            third party they must have the authority to make the purchase and
+            ensure payment or become liable for the cost of the purchase. The
+            User should ensure the information provided is accurate and true to
+            your knowledge. You agree not to impersonate any other person or
+            entity or to use a false name or a name that you are not authorised
+            to use. All cases of Fraud are reported to the Police.
+          </p>
+          <br />
+          <h4>5.B.3. Indemnity</h4>
+          <p>
+            You agree to fully indemnify, Aquilion Ltd and our directors,
+            employees and suppliers, harmless immediately on demand, from and
+            against all claims, liability, damages, losses, costs and expenses,
+            including legal fees, arising out of any breach of the Conditions by
+            you or any other liabilities arising out of your use of the Website,
+            or the use by any other person accessing the Website using your User
+            Information.
+          </p>
+          <br />
+          <h4>5.B.4. Products</h4>
+          <p>
+            We retain the right to: Control all items and products sold on the
+            Website without notice to Users and we shall not be made liable to
+            you or any third party for any modification to or withdrawal of a
+            product from the Website.
+          </p>
+          <br />
+          <h4>5.B.5. Orders</h4>
+          <p>
+            All orders are subject to acceptance in accordance with product
+            availability and payment terms. Should the item purchased not be in
+            stock you will be contacted by e-mail and offered the option to
+            cancel your order and receive a refund, or to wait for the item to
+            return to stock, or to accept an alternative product.
+          </p>
+          <br />
+          <h4>5.B.6. Product specification</h4>
+          <p>
+            Each Product purchased is sold subject to its Product specification.
+            Every effort is made to ensure that each specific measurement is as
+            accurate as possible and based on recognised industry standards of
+            conformity and tolerances. Aquilion Ltd accepts no liability for any
+            loss or damages occurred from product supplied out-of tolerance in
+            excess of the cost of replacing the faulty product.
+          </p>
+          <br />
+          <h4>5.B.7. Product guarantee</h4>
+          <p>
+            To the fullest extent permissible under applicable law, we disclaim
+            any and all warranties of any kind, whether express or implied, in
+            relation to the Products. Should the product prove to have been
+            manufactured faulty then our liability extends on to the cost of the
+            replacement of the faulty product.
+          </p>
+          <br />
+          <h4>5.B.8. Refusal of transaction</h4>
+          <p>
+            We reserve the right to refuse to process any order for any reason
+            or refuse service to anyone at any time at our sole discretion. We
+            retain the right to credit a transaction and cancel the order at any
+            stage of the process prior to delivery.
+          </p>
+          <br />
+          <h4>5.B.9. Account transactions</h4>
+          <p>
+            We reserve the right to cancel or suspend an account should the
+            payment Terms and Conditions of the Users account not be met. By
+            applying for a credit account, you automatically authorise us to
+            transmit information or to obtain information about you and your
+            organisation from third parties including but not limited to your
+            debit card or credit-card number or credit reports to authenticate
+            your identity, to validate your debit card or credit card, to obtain
+            an initial debit card or credit card authorisation and to authorise
+            individual or organisation purchase transactions.
+          </p>
+          <br />
+          <h4>5.B.10. Price confirmation</h4>
+          <p>
+            All prices quoted on the web-site are inclusive of VAT at the
+            current rates. The total cost of your order is the price of the
+            Products ordered plus Shipping Charges. You will receive an emailed
+            confirmation of our receipt of your order. Credit/Debit Card
+            Payments will be debited and cleared from your account before the
+            dispatch of your Product(s). Account holders must ensure their
+            account is 'in terms' prior to any order being dispatched.
+          </p>
+          <br />
+          <h4>5.B.11. Payment details</h4>
+          <p>
+            We retain/store no information on any credit/debit card details in
+            the company. The company receives confirmation of your payment
+            direct from our payment processor.
+          </p>
+          <br />
+          <h4>5.B.12. Shipping and handling</h4>
+          <p>
+            Our Intention is to supply all orders in line with current
+            legislation within 30 days, However we do try to fulfil all orders
+            within 3 - 7 working days from stock. As described within our Terms
+            and Conditions every reasonable effort will be made to contact you
+            should the delivery date be in excess of 7 days. Aquilion Ltd
+            accepts No liability for any loss or damages caused from late
+            delivery of any order. Customers can call and discuss specific
+            delivery requirements and short notice orders and every effort will
+            be made to accommodate individual and unique circumstances. However
+            we cannot be held liable for any costs or damages which result from
+            any failure in meeting any agreed delivery circumstances.
+          </p>
+          <br />
+          <h4>5.B.13. Redelivery of goods</h4>
+          <p>
+            It is important that there is someone to accept your delivery as
+            each consignment will require a signature. Your order can be
+            delivered between 8am-7pm Monday to Friday and Saturday from
+            8am-1pm. If we are unable to deliver your order to you, the goods
+            will be returned to our warehouse at a cost of 10% of your original
+            order value or EUR 10 whichever is greater. You will be charged the
+            standard rate of shipping again to redeliver your goods. If you have
+            missed a delivery please contact our carrier who will have left a
+            calling card in the first instance. If you are unable to contact our
+            carrier, please contact our customer service:
+            customercare@loveisincyprus.com.
+          </p>
+          <br />
+          <h4>5.B.14. Important</h4>
+          <p>
+            Always check your purchases on receipt for shortages or damage. You
+            must report any problems within 48 hours of delivery. Claims for
+            damage within transit require you to keep all packaging for
+            inspection. We MUST insist you follow these instructions for claims
+            and any problems reported after 48 hours from delivery are at the
+            discretion of Ex Florum Ltd. Please quote your order number in all
+            correspondence. Proof of Delivery: You agree that proof of delivery
+            supplied by our delivery company is sufficient evidence to establish
+            that goods have been received.
+          </p>
+          <br />
+          <h4>5.B.15. Returns and refund policy</h4>
+          <p>
+            You are entitled to cancel your order and return your goods within
+            14 working days of placing your order for a refund, excluding the
+            cost of delivery and a 10% handling charge (this is to cover the
+            cost of inspection to ensure goods are in a saleable condition and
+            returned to our stock). To return your goods to us you need to
+            contact us by email: customercare@loveisincyprus.com and quote the
+            invoice number supplied to you. Your refund will be paid within 30
+            days from receipt of the goods by us. In the event that goods need
+            to be returned, it is the responsibility of the customer to cover
+            the cost of adequate insurance and the cost of the return. This
+            cancellation policy does not affect your rights when we are at fault
+            - for example, if goods are faulty or damaged. Any goods returned
+            must be unused and in a saleable condition.
+          </p>
+          <h3>Article 6. Services, fees, terms of payment and renewal</h3>
           <h4>6.1. Fees and terms of payment of Paid Services</h4>
           <p>
             The fees and the terms of payment are described on the Website.
             Members may pay either by bank card (on the internet or through a
             mobile service) or by using an online payment service (Direct Debit
             etc.) according to the options given on the relevant Website. The
-            fees are indicated in Euros EUR (inclusive of all taxes)
+            fees are indicated in Euros EUR (inclusive of all taxes).
           </p>
           <br />
-          <h4>6.1.1. Free Membership for the First 1,000 Users</h4>
+          <h4>6.1.1. Free Membership until 31 August 2023</h4>
           <p>
             This membership with free of charge access to all features of the
             Services is an incentive granted to the first 1,000 Members but in
@@ -914,7 +1084,6 @@ const TsAndCs = () => {
           <div className='bullets'>
             <ul>
               <li>by email: customercare@loveisincyprus.com</li>
-              <li>by phone: 00357 96723118</li>
             </ul>
           </div>
           <h3>Article 15. Applicable law - Disputes</h3>
@@ -938,12 +1107,12 @@ const TsAndCs = () => {
           </p>
           <h3>Article 16. About us</h3>
           <p>
-            The Services provided by Love is in Cyprus to Members and
-            Subscribers pursuant to these Terms of Use are offered by Aquilion
-            Limited, a private limited company incorporated in England and Wales
-            with registered company number 4230150 (VAT number 797 4066 80)
-            whose address is Apex House, Grand Arcade, Tally Ho Corner, London
-            N12 0EH, United Kingdom. The Website is hosted on Love is in
+            The Services and Products provided by Love is in Cyprus to Members
+            and Subscribers pursuant to these Terms of Use are offered by
+            Aquilion Limited, a private limited company incorporated in England
+            and Wales with registered company number 4230150 (VAT number 797
+            4066 80) whose address is Apex House, Grand Arcade, Tally Ho Corner,
+            London N12 0EH, United Kingdom. The Website is hosted on Love is in
             Cyprus's server(s).
           </p>
           <br />
