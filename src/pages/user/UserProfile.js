@@ -70,8 +70,6 @@ const UserProfile = ({ history }) => {
 
   let dispatch = useDispatch();
 
-  console.log('thisUser => ', thisUser);
-
   useEffect(() => {
     socket = io(
       process.env.REACT_APP_SOCKET_IO,

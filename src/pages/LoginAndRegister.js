@@ -45,10 +45,7 @@ const LoginAndRegister = ({ history }) => {
   };
 
   useEffect(() => {
-    axios
-      .put(`${process.env.REACT_APP_API}/allow-usa`)
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    axios.put(`${process.env.REACT_APP_API}/allow-usa`);
   });
 
   useEffect(() => {

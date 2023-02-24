@@ -101,7 +101,6 @@ const Chats = ({ history }) => {
       { reconnection: true },
       { secure: true }
     );
-    console.log('socket => ', socket);
   }, []);
 
   useEffect(() => {
@@ -229,7 +228,6 @@ const Chats = ({ history }) => {
         .then((res) => {
           setMessages(res.data);
           socket.emit('join chat', selectedChat._id);
-          console.log('socket join => ', socket);
         })
         .catch((err) => {
           console.log(err);
@@ -291,7 +289,6 @@ const Chats = ({ history }) => {
           )
           .then((res) => {
             socket.emit('new message', res.data);
-            console.log('socket send => ', socket);
             setMessages([...messages, res.data]);
             socket.emit('stop typing', selectedChat._id);
             fetchChats();
