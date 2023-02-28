@@ -35,7 +35,7 @@ const Header = () => {
   return (
     <div className='header-container'>
       <div className='video-container'>
-        <video src={headerVid} autoPlay loop muted></video>
+        <video src={headerVid} autoPlay loop muted playsOnline></video>
       </div>
       <div className='header-content'>
         <h1>Love is in Cyprus</h1>

@@ -279,7 +279,7 @@ nav {
 .header-container video {
   position: fixed;
   right: 0;
-  bottom: -260px;
+  bottom: -75px;
   min-width: 100vw;
   min-height: 100%;
   transform: translateX(calc((100% - 100vw) / 2));
@@ -292,6 +292,7 @@ nav {
   flex-direction: column;
   color: var(--body-color);
   padding: 100px;
+  overflow-x: hidden;
 }
 
 .header-content h1 {
@@ -4563,6 +4564,12 @@ table.product-info tbody {
 }
 
 /* --------------- media query for home page --------------- */
+@media (max-width: 1600px) {
+  .header-container video {
+    bottom: -335px;
+  }
+}
+
 @media (max-width: 1250px) {
   .main-content {
     flex-basis: 40%;
