@@ -60,7 +60,7 @@ const UsersToSelect = ({
 
   const modalStyles = {
     content: {
-      top: '50%',
+      top: '2000%',
       left: '50%',
       right: 'auto',
       bottom: 'auto',

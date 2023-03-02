@@ -483,14 +483,14 @@ const UserProfile = ({ history }) => {
                 <FontAwesomeIcon icon={faMessage} className='fa' />
                 <span className='tooltip-text'>Message this user</span>
               </button>
-              {/* <button
+              <button
                 type='button'
                 className='tooltip'
                 onClick={() => history.push(`/create-gift-card/${_id}`)}
               >
                 <FontAwesomeIcon icon={faGift} className='fa' />
                 <span className='tooltip-text'>Buy this user a gift</span>
-              </button> */}
+              </button>
             </>
           )}
           <button

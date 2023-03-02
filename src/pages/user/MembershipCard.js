@@ -112,7 +112,9 @@ const MembershipCard = () => {
               ) : (
                 <p>{about}</p>
               )}
-              <span className='ms-more'>Hover the card for more info</span>
+              <span className='ms-more'>
+                {deviceSize > 1280 ? 'Hover' : 'Touch'} the card for more info
+              </span>
             </div>
           </div>
         </div>

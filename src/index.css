@@ -1740,6 +1740,181 @@ nav {
   font-size: 20px;
 }
 
+/* --------------- gift-card-pages --------------- */
+.target-user-info {
+  text-align: center;
+}
+
+.target-user-info img {
+  height: 100px;
+  border-radius: 50%;
+  margin: 0 auto;
+}
+
+.gift-card-amount {
+  text-align: center;
+  font-size: 30px;
+  color: var(--nav-color);
+}
+
+.gift-card-amount input {
+  border: none;
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+  text-align: center;
+}
+
+.gift-card-amount input[type='number']::-webkit-inner-spin-button,
+.gift-card-amount input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.gift-card-amount input:focus {
+  outline: none;
+}
+
+.gc-preview {
+  height: 400px;
+  background-color: var(--nav-color);
+}
+
+.gc-preview h1.center {
+  color: #fff;
+  padding-top: 10px;
+}
+
+.gc-preview .card {
+  width: 320px;
+  height: 220px;
+  position: absolute;
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  -webkit-perspective: 1200px;
+  perspective: 1200px;
+  transition: 1s;
+}
+
+.gc-preview .card:hover {
+  transform: rotate(-5deg);
+}
+
+.gc-preview .card:hover .outside {
+  transform: rotateY(-130deg);
+}
+
+.gc-preview .outside,
+.gc-preview .inside {
+  height: 100%;
+  width: 50%;
+  position: absolute;
+  left: 50.1%;
+}
+
+.gc-preview .inside {
+  background: linear-gradient(to right, #e0e0e0, #fff 30%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  left: 50%;
+}
+
+.gc-preview .outside {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  z-index: 1;
+  transform-origin: left;
+  transition: 2s;
+}
+
+.gc-preview .front,
+.gc-preview .back {
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+  position: absolute;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: rotateX(0deg);
+}
+
+.gc-preview .front {
+  background-color: #fff;
+  text-align: center;
+}
+
+.gc-preview .front img {
+  max-width: 120px;
+  max-height: 120px;
+}
+
+.gc-preview .back {
+  transform: rotateY(180deg);
+  background: linear-gradient(to left, #e0e0e0, #fff 30%);
+}
+
+.gc-preview .outside p {
+  font-size: 10px;
+  text-transform: uppercase;
+  margin-top: 20px;
+  text-align: center;
+  letter-spacing: 6px;
+  color: var(--nav-color);
+}
+
+.gc-preview .inside p {
+  font-size: 8px;
+  text-align: center;
+  color: var(--nav-color);
+  padding: 0 5px;
+}
+
+.gc-preview .inside .coupon-card {
+  background: linear-gradient(135deg, #7158fe, #9d4de6);
+  color: #fff;
+  text-align: center;
+  border-radius: 15px;
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.15);
+  position: relative;
+  font-size: 6px;
+  width: 90%;
+  padding: 0 5px;
+}
+
+.gc-preview .inside .logo {
+  width: 20px;
+  border-radius: 8px;
+  margin: 5px 0 0 0;
+}
+
+.gc-preview .inside .coupon-card h3 {
+  font-weight: 400;
+}
+
+.gc-preview .inside .coupon-row {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  width: fit-content;
+}
+
+.gc-preview .inside #cpnCode {
+  border: 1px dashed #fff;
+  border-right: 0;
+}
+
+.gc-preview .inside #cpnBtn {
+  border: 1px solid #fff;
+  background: #fff;
+  color: #7158fe;
+  cursor: pointer;
+}
+
 /* --------------- advertisement-pages --------------- */
 .submit-btn.preview {
   background: #5388b4;

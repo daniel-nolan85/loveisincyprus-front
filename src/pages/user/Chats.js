@@ -115,7 +115,8 @@ const Chats = ({ history }) => {
     const result = matches.concat(
       users.filter((bo) => matches.every((ao) => ao._id !== bo._id))
     );
-    setChatUsers(result);
+    const filteredResult = result.filter((u) => u._id !== user._id);
+    setChatUsers(filteredResult);
     const otherUser = matches.find((m) => m._id !== user._id);
     if (!selectedChat || !otherUser) return;
     else if (selectedChat.users.some((e) => e._id === otherUser._id))
@@ -342,6 +343,8 @@ const Chats = ({ history }) => {
 
   const otherUser =
     selectedChat && selectedChat.users.filter((u) => u._id !== user._id);
+
+  console.log('chatUsers => ', chatUsers);
 
   return (
     <div className='container'>
