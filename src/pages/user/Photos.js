@@ -25,13 +25,14 @@ const Photos = () => {
     fetchUsersPhotos();
     if (user.role !== 'main-admin' || user.role !== 'secondary-admin')
       visitorPhotosCount();
-  }, [userId]);
+  }, [user && userId]);
 
   useEffect(() => {
     if (user && user.token) {
       if (user.role === 'main-admin' || user.role === 'secondary-admin') {
         return;
       } else if (!user.clearPhoto || !user.membership.paid) {
+        console.log('one');
         setDeniedModalIsOpen(true);
       }
     }
@@ -53,6 +54,7 @@ const Photos = () => {
         if (user.role === 'main-admin' || user.role === 'secondary-admin') {
           return;
         } else if (!res.data.clearPhoto || !res.data.membership.paid) {
+          console.log('two');
           setDeniedModalIsOpen(true);
         }
       })
@@ -97,7 +99,10 @@ const Photos = () => {
           }
         )
         .then((res) => {
-          if (res.data < 2) {
+          if (user.role === 'main-admin' || user.role === 'secondary-admin') {
+            return;
+          } else if (res.data < 2) {
+            console.log('three');
             setDeniedModalIsOpen(true);
           }
           setVisitorPhotos(res.data);

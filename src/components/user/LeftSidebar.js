@@ -57,7 +57,7 @@ const LeftSidebar = () => {
           <Link to='/my-matches'>
             <FontAwesomeIcon icon={faPeopleArrows} className='fa' />
             My Matches
-            <span>{token && matches.length > 0 && matches.length}</span>
+            <span>{token && matches.length - 1 > 0 && matches.length - 1}</span>
           </Link>
           {membership.paid && (
             <Link to='/high-compatibility'>

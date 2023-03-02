@@ -32,6 +32,7 @@ const Matches = ({ history }) => {
         }
       )
       .then((res) => {
+        console.log(res.data);
         setUsers(res.data);
       })
       .catch((err) => {

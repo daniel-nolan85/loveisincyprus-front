@@ -177,7 +177,7 @@ const Mobile = () => {
           </Link>
           <Link to='/my-matches'>
             <Badge
-              count={matches.length}
+              count={matches.length - 1}
               offset={[0, 10]}
               style={{ backgroundColor: '#ef5b85' }}
             >

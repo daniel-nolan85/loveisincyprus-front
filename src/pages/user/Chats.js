@@ -344,8 +344,6 @@ const Chats = ({ history }) => {
   const otherUser =
     selectedChat && selectedChat.users.filter((u) => u._id !== user._id);
 
-  console.log('chatUsers => ', chatUsers);
-
   return (
     <div className='container'>
       <LeftSidebar />
