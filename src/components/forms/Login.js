@@ -309,7 +309,6 @@ const Login = ({ showRegister }) => {
     <form id='login' className='input-group'>
       <div className='info-questions phone'>
         <PhoneInput
-          country={'cy'}
           className='input-field'
           placeholder='Enter your mobile number'
           value={mobile}
@@ -318,6 +317,7 @@ const Login = ({ showRegister }) => {
           }}
         />
       </div>
+      <p className='tel csv'>Don't forget your country code (e.g. +357)</p>
       <input
         type='number'
         className={

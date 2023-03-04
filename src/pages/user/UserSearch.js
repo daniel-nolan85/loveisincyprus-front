@@ -7,6 +7,9 @@ import {
   faMagnifyingGlass,
   faFloppyDisk,
   faFilter,
+  faClock,
+  faTimeline,
+  faStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { useHistory } from 'react-router-dom';
 import { Menu, Slider, Radio, Dropdown, Input } from 'antd';
@@ -50,6 +53,11 @@ const UserSearch = () => {
   const [loadingSave, setLoadingSave] = useState(false);
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [userSearchModalIsOpen, setUserSearchModalIsOpen] = useState(false);
+  // const [lastLoggedCheck, setLastLoggedCheck] = useState(false);
+  // const [lastSignedCheck, setLastSignedCheck] = useState(false);
+  // const [popularityCheck, setPopularityCheck] = useState(false);
+
+  console.log('users => ', users);
 
   const map = {
     ageOfPartner: setAgeOfPartner,
@@ -105,6 +113,18 @@ const UserSearch = () => {
       return () => clearTimeout(delayed);
     }
   }, [text]);
+
+  // useEffect(() => {
+  //   if (lastLoggedCheck) {
+  //     console.log('sortLastLoggedIn');
+  //     const lastLogged = users.sort(
+  //       (a, b) => new Date(b.lastLogin) - new Date(a.lastLogin)
+  //     );
+  //     setUsers(lastLogged);
+  //   }
+  // }, [lastLoggedCheck]);
+  // useEffect(() => {}, [lastSignedCheck]);
+  // useEffect(() => {}, [popularityCheck]);
 
   const loadAllUsers = () => {
     setLoading(true);
@@ -220,6 +240,30 @@ const UserSearch = () => {
 
     map[item.props.title](string);
   };
+
+  // const sortLastLoggedIn = () => {
+  //   console.log('sortLastLoggedIn');
+  //   const lastLogged = users.sort(
+  //     (a, b) => new Date(b.lastLogin) - new Date(a.lastLogin)
+  //   );
+  //   setUsers([...lastLogged]);
+  // };
+
+  // const sortLastSignedUp = () => {
+  //   console.log('sortLastSignedUp');
+  //   const lastSigned = users.sort(
+  //     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+  //   );
+  //   setUsers([...lastSigned]);
+  // };
+
+  // const sortPopularity = () => {
+  //   console.log('sortPopularity');
+  //   const popular = users.sort(
+  //     (a, b) => b.followers.length - a.followers.length
+  //   );
+  //   setUsers([...popular]);
+  // };
 
   const ageTheyWant = (
     <Menu
@@ -1634,6 +1678,32 @@ const UserSearch = () => {
     <div className='container search-container'>
       <div className='left-sidebar search'>
         <div className='shortcut-links'>
+          {/* <div className='advanced-filter-btns'>
+            <div className='tooltip'>
+              <FontAwesomeIcon
+                icon={faClock}
+                className='fa'
+                onClick={sortLastLoggedIn}
+              />
+              <span className='tooltip-text'>Last logged in</span>
+            </div>
+            <div className='tooltip'>
+              <FontAwesomeIcon
+                icon={faTimeline}
+                className='fa'
+                onClick={sortLastSignedUp}
+              />
+              <span className='tooltip-text'>Last signed up</span>
+            </div>
+            <div className='tooltip'>
+              <FontAwesomeIcon
+                icon={faStar}
+                className='fa'
+                onClick={sortPopularity}
+              />
+              <span className='tooltip-text'>Most popular</span>
+            </div>
+          </div> */}
           <form onSubmit={handleSearch}>
             <div className='search-box'>
               <FontAwesomeIcon
@@ -2016,6 +2086,32 @@ const UserSearch = () => {
             Filter
           </button>
         </div>
+        {/* <div className='advanced-filter-btns-mobile'>
+          <div className='tooltip'>
+            <FontAwesomeIcon
+              icon={faClock}
+              className='fa'
+              onClick={sortLastLoggedIn}
+            />
+            <span className='tooltip-text'>Last logged in</span>
+          </div>
+          <div className='tooltip'>
+            <FontAwesomeIcon
+              icon={faTimeline}
+              className='fa'
+              onClick={sortLastSignedUp}
+            />
+            <span className='tooltip-text'>Last signed up</span>
+          </div>
+          <div className='tooltip'>
+            <FontAwesomeIcon
+              icon={faStar}
+              className='fa'
+              onClick={sortPopularity}
+            />
+            <span className='tooltip-text'>Most popular</span>
+          </div>
+        </div> */}
         <div className='product-cards'>
           {loading ? (
             <FontAwesomeIcon icon={faSpinner} className='fa' spin />

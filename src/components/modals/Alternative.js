@@ -565,6 +565,7 @@ const Alternative = ({
       marginRight: '-50%',
       transform: 'translate(-50%, -50%)',
       width: '400px',
+      maxHeight: '850px',
     },
     overlay: {
       position: 'fixed',
@@ -633,7 +634,6 @@ const Alternative = ({
             />
             <div className='secondary-login-form'>
               <PhoneInput
-                country={'cy'}
                 className='input-field secondary'
                 placeholder='Enter your secondary mobile number'
                 value={mobile}
@@ -642,6 +642,9 @@ const Alternative = ({
                 }}
               />
             </div>
+            <p className='alt csv'>
+              Don't forget your country code (e.g. +357)
+            </p>
             <input
               type='number'
               className={
@@ -652,6 +655,7 @@ const Alternative = ({
               placeholder='Enter your verification code'
               value={OTP}
               onChange={verifyOTP}
+              style={{ margin: 'auto' }}
             />
             <button
               onClick={checkBlocked}

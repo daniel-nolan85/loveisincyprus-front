@@ -322,9 +322,13 @@ nav {
 
 .stats-title {
   font-size: 70px;
-  color: var(--nav-color);
   opacity: 0;
   animation: moveHeaders 1s 0.9s forwards;
+  color: var(--nav-color);
+}
+
+.stats-title a {
+  color: var(--nav-color);
 }
 
 .stats-text {
@@ -3154,6 +3158,22 @@ p.csv {
   margin: 5px auto;
 }
 
+.advanced-filter-btns {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.advanced-filter-btns .fa {
+  font-size: 25px;
+  color: var(--nav-color);
+  cursor: pointer;
+}
+
+.advanced-filter-btns-mobile {
+  display: none;
+}
+
 /* --------------- shop-search-page --------------- */
 .search-group {
   margin: 5px 0 5px 20px;
@@ -3668,6 +3688,16 @@ select {
 
 .react-tel-input.input-field.secondary {
   border-bottom: none !important;
+}
+
+.tel.csv {
+  padding: 0 !important;
+  bottom: 20px;
+}
+
+.alt.csv {
+  left: -26px;
+  bottom: 35px;
 }
 
 .secondary-login-form input.form-control {
@@ -5541,6 +5571,22 @@ table.product-info tbody {
     font-size: 14px;
     text-align: center;
     width: 300px;
+  }
+
+  .advanced-filter-btns {
+    display: none;
+  }
+
+  .advanced-filter-btns-mobile {
+    display: flex;
+    justify-content: space-around;
+    margin: 10px 0;
+  }
+
+  .advanced-filter-btns-mobile .fa {
+    font-size: 25px;
+    color: var(--nav-color);
+    cursor: pointer;
   }
 }
 

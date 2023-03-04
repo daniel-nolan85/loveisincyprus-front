@@ -302,7 +302,6 @@ const ProfileUpdate = ({
         </label>
 
         <PhoneInput
-          country={'cy'}
           className='input-field'
           placeholder='Enter your mobile number'
           value={updatedMobile || mobile}
@@ -310,6 +309,9 @@ const ProfileUpdate = ({
             setUpdatedMobile(`+${phone}`);
           }}
         />
+        <label className='csv'>
+          Don't forget your country code (e.g. +357)
+        </label>
         {/* <label className='csv'>
           Updating your primary mobile number will result in you being logged
           out. To return to the site, please re-authenticate using the new
@@ -317,7 +319,6 @@ const ProfileUpdate = ({
         </label> */}
 
         <PhoneInput
-          country={'cy'}
           className='input-field'
           placeholder='Enter your secondary mobile number*'
           value={secondMobile}
@@ -325,6 +326,9 @@ const ProfileUpdate = ({
             setSecondMobile(`+${phone}`);
           }}
         />
+        <label className='csv'>
+          Don't forget your country code (e.g. +357)
+        </label>
 
         <input
           type='email'

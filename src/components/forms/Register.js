@@ -496,7 +496,6 @@ const Register = ({ showLogin }) => {
       </div>
       <div className='info-questions phone'>
         <PhoneInput
-          country={'cy'}
           className='input-field'
           placeholder='Enter your mobile number *'
           value={mobile}
@@ -513,9 +512,9 @@ const Register = ({ showLogin }) => {
           <span className='tooltip-text'>Why do we need this?</span>
         </div>
       </div>
+      <p className='tel csv'>Don't forget your country code (e.g. +357)</p>
       <div className='info-questions phone'>
         <PhoneInput
-          country={'cy'}
           className='input-field'
           placeholder='Enter your secondary mobile number'
           value={secondMobile}
@@ -532,6 +531,7 @@ const Register = ({ showLogin }) => {
           <span className='tooltip-text'>What is this for?</span>
         </div>
       </div>
+      <p className='tel csv'>Don't forget your country code (e.g. +357)</p>
       <div className='info-questions secret'>
         <select
           name='statement'

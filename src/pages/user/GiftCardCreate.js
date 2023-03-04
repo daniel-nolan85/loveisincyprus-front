@@ -9,7 +9,7 @@ import {
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import GCPreview from '../../components/modals/GCPreview';
-import AdPayment from '../../components/forms/AdPayment';
+import GCPaymentForm from '../../components/forms/GCPaymentForm';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import Mobile from '../../components/user/Mobile';
@@ -24,24 +24,25 @@ const GiftCardCreate = () => {
   const [message, setMessage] = useState('');
   const [amount, setAmount] = useState('0.00');
   const [validAmount, setValidAmount] = useState(false);
+  const [paid, setPaid] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [previewGCModalIsOpen, setPreviewGCModalIsOpen] = useState(false);
-  const [accountInfo, setAccountInfo] = useState({});
 
   const { userId } = useParams();
 
   const { user } = useSelector((state) => ({ ...state }));
-
-  console.log('validAmount => ', validAmount);
-  console.log('amount => ', amount);
 
   useEffect(() => {
     fetchUser();
   }, [userId]);
 
   useEffect(() => {
-    setValidAmount(validateAmount(amount));
+    if (amount === '0.00' || amount === '.00') {
+      return;
+    } else {
+      setValidAmount(validateAmount(amount));
+    }
   }, [amount]);
 
   const fetchUser = async () => {
@@ -69,44 +70,40 @@ const GiftCardCreate = () => {
     setPreviewGCModalIsOpen(true);
   };
 
-  // const adSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setLoading(true);
-  //   await axios
-  //     .post(`${process.env.REACT_APP_API}/submit-ad`, {
-  //       content,
-  //       image,
-  //       duration,
-  //       demographic,
-  //       contactInfo,
-  //       accountInfo,
-  //     })
-  //     .then((res) => {
-  //       setLoading(false);
-  //       if (res.data.error) {
-  //         toast.error(res.data.error, {
-  //           position: toast.POSITION.TOP_CENTER,
-  //         });
-  //       } else {
-  //         toast.success(`Your ad has been submitted for approval.`, {
-  //           position: toast.POSITION.TOP_CENTER,
-  //         });
-  //         setContent('');
-  //         setImage({});
-  //         setDuration('one day');
-  //         setContactInfo({});
-  //         setAccountInfo({});
-  //         setDemographic([]);
-  //         setSelectedGender([]);
-  //         setSelectedAge([]);
-  //         setSelectedLocation([]);
-  //       }
-  //     })
-  //     .catch((err) => {
-  //       setLoading(false);
-  //       console.log(err);
-  //     });
-  // };
+  const cardSubmit = async (e) => {
+    e.preventDefault();
+    console.log(greeting, image, message, amount, paid);
+    setLoading(true);
+    await axios
+      .post(`${process.env.REACT_APP_API}/send-card`, {
+        greeting,
+        image,
+        message,
+        amount,
+        paid,
+      })
+      .then((res) => {
+        setLoading(false);
+        if (res.data.error) {
+          toast.error(res.data.error, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+        } else {
+          toast.success(`Your card has been sent to ${username || name}.`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setGreeting('');
+          setImage({});
+          setMessage('');
+          setAmount('0.00');
+          setPaid(false);
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
+  };
 
   const handleImage = async (e) => {
     const file = e.target.files[0];
@@ -206,7 +203,10 @@ const GiftCardCreate = () => {
         <div className='ad-section'>
           <div className='ad-header'>
             <span className='number'>3</span>
-            <h2>How much would you like your gift voucher to be worth?</h2>
+            <h2>
+              How much would you like {username || name}'s gift voucher to be
+              worth?
+            </h2>
           </div>
           <div className='write-post-container'>
             <div className='gift-card-amount'>
@@ -224,7 +224,6 @@ const GiftCardCreate = () => {
           onClick={handlePreview}
           type='button'
           className='submit-btn preview'
-          // disabled={(!content && !image.url) || uploading}
         >
           <FontAwesomeIcon icon={faBinoculars} className='fa' />
           See how your card will look
@@ -234,12 +233,7 @@ const GiftCardCreate = () => {
             <span className='number'>5</span>
             <h2>Finally, please enter your payment details.</h2>
           </div>
-          {/* <AdPayment
-            accountInfoSaved={accountInfoSaved}
-            setAccountInfoSaved={setAccountInfoSaved}
-            setAccountInfo={setAccountInfo}
-            loading={loading}
-          /> */}
+          <GCPaymentForm />
           <GCPreview
             greeting={greeting}
             image={image}
@@ -250,10 +244,18 @@ const GiftCardCreate = () => {
           />
         </div>
         <button
-          // onClick={adSubmit}
+          onClick={cardSubmit}
           type='submit'
           className='submit-btn'
-          disabled={!greeting || uploading || loading}
+          style={{ marginTop: '0' }}
+          disabled={
+            !greeting ||
+            !message ||
+            !amount ||
+            !validAmount ||
+            uploading ||
+            loading
+          }
         >
           {loading ? (
             <FontAwesomeIcon icon={faSpinner} className='fa' spin />

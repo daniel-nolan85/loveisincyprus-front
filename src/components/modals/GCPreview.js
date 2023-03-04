@@ -57,25 +57,25 @@ const GCPreview = ({
         <h1 className='center'>
           {deviceSize > 1280 ? 'Hover' : 'Touch'} card to open
         </h1>
-        <div class='card'>
-          <div class='outside'>
-            <div class='front'>
+        <div className='card'>
+          <div className='outside'>
+            <div className='front'>
               <p>{greeting}</p>
               {image.url && <img src={image.url} alt='Your gift card image' />}
             </div>
-            <div class='back'></div>
+            <div className='back'></div>
           </div>
-          <div class='inside'>
+          <div className='inside'>
             <p>{message}</p>
-            <div class='coupon-card'>
-              <img src={logo} class='logo' />
+            <div className='coupon-card'>
+              <img src={logo} className='logo' />
               <h3>
                 Please enjoy €{amount} to spend in our online store, courtesy of{' '}
                 <Link to={`/user/profile/${_id}`} className='link'>
                   {username || name}
                 </Link>
               </h3>
-              <div class='coupon-row'>
+              <div className='coupon-row'>
                 <span id='cpnCode'>GIFTCODE</span>
                 <span id='cpnBtn'>COPY CODE</span>
               </div>
