@@ -512,7 +512,7 @@ const Register = ({ showLogin }) => {
           <span className='tooltip-text'>Why do we need this?</span>
         </div>
       </div>
-      {/* <p className='tel csv'>Don't forget your country code (e.g. +357)</p> */}
+      <p className='tel csv'>Don't forget your country code (e.g. +357)</p>
       <div className='info-questions phone'>
         <PhoneInput
           className='input-field'
