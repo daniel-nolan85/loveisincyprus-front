@@ -104,7 +104,7 @@ const Register = ({ showLogin }) => {
     if (secondMobile) {
       await axios
         .get(
-          `${process.env.REACT_APP_API}/second-mobile-exists/${secondMobile}`
+          `${process.env.REACT_APP_API}/second-mobile-exists/+${secondMobile}`
         )
         .then((res) => {
           if (res.data.length === 0) {
@@ -162,7 +162,7 @@ const Register = ({ showLogin }) => {
     if (secondMobile) {
       await axios
         .get(
-          `${process.env.REACT_APP_API}/second-mobile-blocked/${secondMobile}`
+          `${process.env.REACT_APP_API}/second-mobile-blocked/+${secondMobile}`
         )
         .then((res) => {
           if (res.data.length === 0) {
@@ -199,7 +199,7 @@ const Register = ({ showLogin }) => {
     if (secondMobile) {
       await axios
         .get(
-          `${process.env.REACT_APP_API}/second-mobile-calling-code/${secondMobile}`
+          `${process.env.REACT_APP_API}/second-mobile-calling-code/+${secondMobile}`
         )
         .then((res) => {
           if (res.data.permitted === 'true') {
