@@ -101,7 +101,7 @@ const Register = ({ showLogin }) => {
   };
 
   const secondMobileExists = async () => {
-    if (secondMobile) {
+    if (secondMobile.length > 1) {
       await axios
         .get(
           `${process.env.REACT_APP_API}/second-mobile-exists/${secondMobile}`
@@ -159,7 +159,7 @@ const Register = ({ showLogin }) => {
   };
 
   const checkAllowedAccessSecondMobile = async (req, res) => {
-    if (secondMobile) {
+    if (secondMobile.length > 1) {
       await axios
         .get(
           `${process.env.REACT_APP_API}/second-mobile-blocked/${secondMobile}`
@@ -196,7 +196,7 @@ const Register = ({ showLogin }) => {
   };
 
   const checkCallingCodeSecondMobile = async (req, res) => {
-    if (secondMobile) {
+    if (secondMobile.length > 1) {
       await axios
         .get(
           `${process.env.REACT_APP_API}/second-mobile-calling-code/${secondMobile}`
@@ -512,7 +512,7 @@ const Register = ({ showLogin }) => {
           <span className='tooltip-text'>Why do we need this?</span>
         </div>
       </div>
-      <p className='tel csv'>Don't forget your country code (e.g. +357)</p>
+      {/* <p className='tel csv'>Don't forget your country code (e.g. +357)</p> */}
       <div className='info-questions phone'>
         <PhoneInput
           className='input-field'
