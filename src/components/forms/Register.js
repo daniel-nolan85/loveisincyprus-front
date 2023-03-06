@@ -101,7 +101,7 @@ const Register = ({ showLogin }) => {
   };
 
   const secondMobileExists = async () => {
-    if (secondMobile.length > 1) {
+    if (secondMobile) {
       await axios
         .get(
           `${process.env.REACT_APP_API}/second-mobile-exists/${secondMobile}`
@@ -159,7 +159,7 @@ const Register = ({ showLogin }) => {
   };
 
   const checkAllowedAccessSecondMobile = async (req, res) => {
-    if (secondMobile.length > 1) {
+    if (secondMobile) {
       await axios
         .get(
           `${process.env.REACT_APP_API}/second-mobile-blocked/${secondMobile}`
@@ -196,7 +196,7 @@ const Register = ({ showLogin }) => {
   };
 
   const checkCallingCodeSecondMobile = async (req, res) => {
-    if (secondMobile.length > 1) {
+    if (secondMobile) {
       await axios
         .get(
           `${process.env.REACT_APP_API}/second-mobile-calling-code/${secondMobile}`
@@ -519,7 +519,7 @@ const Register = ({ showLogin }) => {
           placeholder='Enter your secondary mobile number'
           value={secondMobile}
           onChange={(phone) => {
-            setSecondMobile(`+${phone}`);
+            setSecondMobile(`${phone}`);
           }}
         />
         <div className='tooltip'>

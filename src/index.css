@@ -3706,10 +3706,6 @@ select {
   border-bottom: 1px solid #626262 !important;
 }
 
-input:-internal-autofill-selected {
-  background-color: #efefef;
-}
-
 /* --------------- ad pages --------------- */
 .ad-section {
   margin-bottom: 35px;
