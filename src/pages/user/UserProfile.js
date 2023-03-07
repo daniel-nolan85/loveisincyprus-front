@@ -420,8 +420,6 @@ const UserProfile = ({ history }) => {
     username,
   } = thisUser ?? {};
 
-  console.log('thisUser => ', thisUser);
-
   return (
     <>
       {!thisUser ? (

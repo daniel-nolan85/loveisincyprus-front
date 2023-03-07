@@ -57,8 +57,6 @@ const UserSearch = () => {
   // const [lastSignedCheck, setLastSignedCheck] = useState(false);
   // const [popularityCheck, setPopularityCheck] = useState(false);
 
-  console.log('users => ', users);
-
   const map = {
     ageOfPartner: setAgeOfPartner,
     relWanted: setRelWanted,
@@ -2114,7 +2112,9 @@ const UserSearch = () => {
         </div> */}
         <div className='product-cards'>
           {loading ? (
-            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+            <div className='spinner'>
+              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+            </div>
           ) : (
             <>
               {users.length < 1 && (

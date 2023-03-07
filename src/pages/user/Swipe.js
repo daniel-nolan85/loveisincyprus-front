@@ -20,6 +20,7 @@ const Swipe = ({ history }) => {
   const [users, setUsers] = useState([]);
   const [match, setMatch] = useState({});
   const [matchModalIsOpen, setMatchModalIsOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -55,9 +56,11 @@ const Swipe = ({ history }) => {
       )
       .then((res) => {
         setUsers(res.data);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       });
   };
 
@@ -143,71 +146,81 @@ const Swipe = ({ history }) => {
       <LeftSidebar />
       <div className='main-content'>
         <Mobile />
-        <div className='tinder-card-container'>
-          {users.length < 1 && (
-            <h1 className='center'>There is no one to swipe on right now...</h1>
-          )}
-          {users.length > 0 && (
-            <>
-              {users.map((u) => (
-                <TinderCard
-                  className='swipe'
-                  key={u._id}
-                  onSwipe={(dir) => handleSwipe(dir, u)}
-                  preventSwipe={['up', 'down']}
-                >
-                  <div
-                    className='tinder-card'
-                    style={{
-                      backgroundImage: u.profileImage
-                        ? `url(${u.profileImage.url})`
-                        : `url(${defaultProfile})`,
-                    }}
-                    onClick={(e) => {
-                      if (triggerTime > 300) return;
-                      else history.push(`/user/${u._id}`);
-                    }}
-                    onMouseDown={() => {
-                      triggerTime = new Date().getTime();
-                    }}
-                    onMouseUp={() => {
-                      let thisMoment = new Date().getTime();
-                      triggerTime = thisMoment - triggerTime;
-                    }}
-                  >
-                    <div className='tinder-card-info'>
-                      <h3>{u.username || u.name}</h3>
-                      <h3>{u.age}</h3>
-                    </div>
+        {loading ? (
+          <div className='spinner'>
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+          </div>
+        ) : (
+          <>
+            <div className='tinder-card-container'>
+              {users.length < 1 && (
+                <h1 className='center'>
+                  There is no one to swipe on right now...
+                </h1>
+              )}
+              {users.length > 0 && (
+                <>
+                  {users.map((u) => (
+                    <TinderCard
+                      className='swipe'
+                      key={u._id}
+                      onSwipe={(dir) => handleSwipe(dir, u)}
+                      preventSwipe={['up', 'down']}
+                    >
+                      <div
+                        className='tinder-card'
+                        style={{
+                          backgroundImage: u.profileImage
+                            ? `url(${u.profileImage.url})`
+                            : `url(${defaultProfile})`,
+                        }}
+                        onClick={(e) => {
+                          if (triggerTime > 300) return;
+                          else history.push(`/user/${u._id}`);
+                        }}
+                        onMouseDown={() => {
+                          triggerTime = new Date().getTime();
+                        }}
+                        onMouseUp={() => {
+                          let thisMoment = new Date().getTime();
+                          triggerTime = thisMoment - triggerTime;
+                        }}
+                      >
+                        <div className='tinder-card-info'>
+                          <h3>{u.username || u.name}</h3>
+                          <h3>{u.age}</h3>
+                        </div>
+                      </div>
+                    </TinderCard>
+                  ))}
+
+                  <div className='swipe-buttons'>
+                    <FontAwesomeIcon
+                      icon={faXmark}
+                      className='fa nope'
+                      onClick={() => {
+                        handleSwipe('left', users.slice(-1)[0]);
+                      }}
+                    />
+                    <FontAwesomeIcon
+                      icon={faHeart}
+                      className='fa like'
+                      onClick={() => {
+                        handleSwipe('right', users.slice(-1)[0]);
+                      }}
+                    />
                   </div>
-                </TinderCard>
-              ))}
+                </>
+              )}
+            </div>
 
-              <div className='swipe-buttons'>
-                <FontAwesomeIcon
-                  icon={faXmark}
-                  className='fa nope'
-                  onClick={() => {
-                    handleSwipe('left', users.slice(-1)[0]);
-                  }}
-                />
-                <FontAwesomeIcon
-                  icon={faHeart}
-                  className='fa like'
-                  onClick={() => {
-                    handleSwipe('right', users.slice(-1)[0]);
-                  }}
-                />
-              </div>
-            </>
-          )}
-        </div>
-
-        <Match
-          matchModalIsOpen={matchModalIsOpen}
-          setMatchModalIsOpen={setMatchModalIsOpen}
-          match={match}
-        />
+            <Match
+              matchModalIsOpen={matchModalIsOpen}
+              setMatchModalIsOpen={setMatchModalIsOpen}
+              match={match}
+            />
+          </>
+        )}
       </div>
       <RightSidebar />
     </div>

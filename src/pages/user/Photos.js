@@ -40,7 +40,6 @@ const Photos = () => {
       ) {
         return;
       } else if (!user.clearPhoto || !user.membership.paid) {
-        console.log('one');
         setDeniedModalIsOpen(true);
       }
     }
@@ -66,7 +65,6 @@ const Photos = () => {
         ) {
           return;
         } else if (!res.data.clearPhoto || !res.data.membership.paid) {
-          console.log('two');
           setDeniedModalIsOpen(true);
         }
       })
@@ -118,7 +116,6 @@ const Photos = () => {
           ) {
             return;
           } else if (res.data < 2) {
-            console.log('three');
             setDeniedModalIsOpen(true);
           }
           setVisitorPhotos(res.data);

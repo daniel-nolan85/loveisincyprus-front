@@ -425,8 +425,6 @@ const Notifications = () => {
       });
   };
 
-  console.log('notifsDisplay => ', notifsDisplay);
-
   return (
     <div className='container'>
       <LeftSidebar />

@@ -29,10 +29,6 @@ const HighCompat = ({ history }) => {
 
   const dispatch = useDispatch();
 
-  console.log('highCompats => ', highCompats);
-  console.log('veryHighCompats => ', veryHighCompats);
-  console.log('superCompats => ', superCompats);
-
   useEffect(() => {
     if (user && user.token) fetchHighCompats();
   }, [user && user.token]);
