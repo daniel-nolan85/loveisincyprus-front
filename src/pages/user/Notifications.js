@@ -11,6 +11,8 @@ import { toast } from 'react-toastify';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Mobile from '../../components/user/Mobile';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 let socket;
 
@@ -44,6 +46,7 @@ const Notifications = () => {
     useState(false);
   const [commentToReport, setCommentToReport] = useState({});
   const [postOfCommentToReport, setPostOfCommentToReport] = useState([]);
+  const [loadingNotifs, setLoadingNotifs] = useState(true);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -90,9 +93,11 @@ const Notifications = () => {
       )
       .then((res) => {
         setNotifications(res.data.notifications);
+        setLoadingNotifs(false);
       })
       .catch((err) => {
         console.log(err);
+        setLoadingNotifs(false);
       });
   };
 
@@ -420,180 +425,203 @@ const Notifications = () => {
       });
   };
 
+  console.log('notifsDisplay => ', notifsDisplay);
+
   return (
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
         <Mobile />
-        <h1 className='center'>
-          You have{' '}
-          {numOfNewNotifs === 0 ? (
-            `${numOfNewNotifs} new notifications`
-          ) : numOfNewNotifs === 1 ? (
-            <span className='link' onClick={newNotifs}>
-              {numOfNewNotifs} new notification
-            </span>
-          ) : (
-            numOfNewNotifs > 1 && (
-              <span className='link' onClick={newNotifs}>
-                {numOfNewNotifs} new notifications
-              </span>
-            )
-          )}
-        </h1>
-        <div className='points-filter-btns'>
-          <button className='submit-btn' onClick={today}>
-            Today
-          </button>
-          <button className='submit-btn' onClick={thisWeek}>
-            This Week
-          </button>
-          <button className='submit-btn' onClick={thisMonth}>
-            This Month
-          </button>
-          <button className='submit-btn' onClick={select}>
-            Select
-          </button>
-        </div>
-        <div className='filter-datepicker'>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => {
-              setStartDate(date);
-              setDatePickerIsOpen(false);
-            }}
-            dateFormat='MM/yyyy'
-            showMonthYearPicker
-            open={datePickerIsOpen}
-            onClickOutside={() => setDatePickerIsOpen(false)}
-          />
-        </div>
-        <div
-          className='small-container cart-page'
-          style={{ marginTop: '40px' }}
-        >
-          {notifsDisplay.length === 0 ? (
+        {loadingNotifs ? (
+          <div className='spinner'>
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+          </div>
+        ) : (
+          <>
             <h1 className='center'>
-              No notifications were received at the selected time
+              You have{' '}
+              {numOfNewNotifs === 0 ? (
+                `${numOfNewNotifs} new notifications`
+              ) : numOfNewNotifs === 1 ? (
+                <span className='link' onClick={newNotifs}>
+                  {numOfNewNotifs} new notification
+                </span>
+              ) : (
+                numOfNewNotifs > 1 && (
+                  <span className='link' onClick={newNotifs}>
+                    {numOfNewNotifs} new notifications
+                  </span>
+                )
+              )}
             </h1>
-          ) : (
-            <table>
-              <tbody>
-                <tr>
-                  <th>Date</th>
-                  <th>Action</th>
-                </tr>
-                {notifsDisplay.map((n) => (
-                  <tr key={n._id}>
-                    <td>
-                      <p className={n.new === true ? 'new ' : ''}>
-                        {moment(n.occurred).format('MMMM Do YYYY')}
-                      </p>
-                    </td>
-                    <td>
-                      {n.action === 'liked post' && (
-                        <p
-                          className={
-                            n.new === true ? 'new notification' : 'notification'
-                          }
-                        >
-                          Someone liked your{' '}
-                          <span className='link' onClick={() => viewNotif(n)}>
-                            post
-                          </span>
-                        </p>
-                      )}
-                      {n.action === 'commented post' && (
-                        <p
-                          className={
-                            n.new === true ? 'new notification' : 'notification'
-                          }
-                          onClick={() => viewNotif(n)}
-                        >
-                          Someone commented on your post
-                        </p>
-                      )}
-                      {n.action === 'new event' && (
-                        <p
-                          className={
-                            n.new === true ? 'new notification' : 'notification'
-                          }
-                          onClick={() => viewNotif(n)}
-                        >
-                          You have been invited to an event
-                        </p>
-                      )}
-                      {n.action === 'user liked you' && (
-                        <p
-                          className={
-                            n.new === true ? 'new notification' : 'notification'
-                          }
-                          onClick={() => viewNotif(n)}
-                        >
-                          You have a new follower
-                        </p>
-                      )}
-                      {n.action === 'user visited you' && (
-                        <p
-                          className={
-                            n.new === true ? 'new notification' : 'notification'
-                          }
-                          onClick={() => viewNotif(n)}
-                        >
-                          You received a new visitor
-                        </p>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-        <AddComment
-          commentModalIsOpen={commentModalIsOpen}
-          setCommentModalIsOpen={setCommentModalIsOpen}
-          comment={comment}
-          setComment={setComment}
-          uploading={uploading}
-          addComment={addComment}
-          image={image}
-          handleImage={handleImage}
-          loadingImg={loadingImg}
-        />
-        <NotifPost
-          notifModalIsOpen={notifModalIsOpen}
-          setNotifModalIsOpen={setNotifModalIsOpen}
-          post={post}
-          handleLike={handleLike}
-          handleUnlike={handleUnlike}
-          handleComment={handleComment}
-          removeComment={removeComment}
-          handleDelete={handleDelete}
-          postDeleteModalIsOpen={postDeleteModalIsOpen}
-          setPostDeleteModalIsOpen={setPostDeleteModalIsOpen}
-          postToDelete={postToDelete}
-          commentDeleteModalIsOpen={commentDeleteModalIsOpen}
-          setCommentDeleteModalIsOpen={setCommentDeleteModalIsOpen}
-          commentToDelete={commentToDelete}
-          postOfCommentToDelete={postOfCommentToDelete}
-          editComment={editComment}
-          commentEditModalIsOpen={commentEditModalIsOpen}
-          setCommentEditModalIsOpen={setCommentEditModalIsOpen}
-          commentToEdit={commentToEdit}
-          postOfCommentToEdit={postOfCommentToEdit}
-          fetchNotifications={fetchNotifications}
-          populateNotifications={populateNotifications}
-          acceptInvite={acceptInvite}
-          maybe={maybe}
-          declineInvite={declineInvite}
-          loading={loading}
-          reportComment={reportComment}
-          commentReportModalIsOpen={commentReportModalIsOpen}
-          setCommentReportModalIsOpen={setCommentReportModalIsOpen}
-          commentToReport={commentToReport}
-          postOfCommentToReport={postOfCommentToReport}
-        />
+            <div className='points-filter-btns'>
+              <button className='submit-btn' onClick={today}>
+                Today
+              </button>
+              <button className='submit-btn' onClick={thisWeek}>
+                This Week
+              </button>
+              <button className='submit-btn' onClick={thisMonth}>
+                This Month
+              </button>
+              <button className='submit-btn' onClick={select}>
+                Select
+              </button>
+            </div>
+            <div className='filter-datepicker'>
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => {
+                  setStartDate(date);
+                  setDatePickerIsOpen(false);
+                }}
+                dateFormat='MM/yyyy'
+                showMonthYearPicker
+                open={datePickerIsOpen}
+                onClickOutside={() => setDatePickerIsOpen(false)}
+              />
+            </div>
+            <div
+              className='small-container cart-page'
+              style={{ marginTop: '40px' }}
+            >
+              {notifsDisplay.length === 0 ? (
+                <h1 className='center'>
+                  No notifications were received at the selected time
+                </h1>
+              ) : (
+                <table>
+                  <tbody>
+                    <tr>
+                      <th>Date</th>
+                      <th>Action</th>
+                    </tr>
+                    {notifsDisplay.map((n) => (
+                      <tr key={n._id}>
+                        <td>
+                          <p className={n.new === true ? 'new ' : ''}>
+                            {moment(n.occurred).format('MMMM Do YYYY')}
+                          </p>
+                        </td>
+                        <td>
+                          {n.action === 'liked post' && (
+                            <p
+                              className={
+                                n.new === true
+                                  ? 'new notification'
+                                  : 'notification'
+                              }
+                            >
+                              Someone liked your{' '}
+                              <span
+                                className='link'
+                                onClick={() => viewNotif(n)}
+                              >
+                                post
+                              </span>
+                            </p>
+                          )}
+                          {n.action === 'commented post' && (
+                            <p
+                              className={
+                                n.new === true
+                                  ? 'new notification'
+                                  : 'notification'
+                              }
+                              onClick={() => viewNotif(n)}
+                            >
+                              Someone commented on your post
+                            </p>
+                          )}
+                          {n.action === 'new event' && (
+                            <p
+                              className={
+                                n.new === true
+                                  ? 'new notification'
+                                  : 'notification'
+                              }
+                              onClick={() => viewNotif(n)}
+                            >
+                              You have been invited to an event
+                            </p>
+                          )}
+                          {n.action === 'user liked you' && (
+                            <p
+                              className={
+                                n.new === true
+                                  ? 'new notification'
+                                  : 'notification'
+                              }
+                              onClick={() => viewNotif(n)}
+                            >
+                              You have a new follower
+                            </p>
+                          )}
+                          {n.action === 'user visited you' && (
+                            <p
+                              className={
+                                n.new === true
+                                  ? 'new notification'
+                                  : 'notification'
+                              }
+                              onClick={() => viewNotif(n)}
+                            >
+                              You received a new visitor
+                            </p>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+            <AddComment
+              commentModalIsOpen={commentModalIsOpen}
+              setCommentModalIsOpen={setCommentModalIsOpen}
+              comment={comment}
+              setComment={setComment}
+              uploading={uploading}
+              addComment={addComment}
+              image={image}
+              handleImage={handleImage}
+              loadingImg={loadingImg}
+            />
+            <NotifPost
+              notifModalIsOpen={notifModalIsOpen}
+              setNotifModalIsOpen={setNotifModalIsOpen}
+              post={post}
+              handleLike={handleLike}
+              handleUnlike={handleUnlike}
+              handleComment={handleComment}
+              removeComment={removeComment}
+              handleDelete={handleDelete}
+              postDeleteModalIsOpen={postDeleteModalIsOpen}
+              setPostDeleteModalIsOpen={setPostDeleteModalIsOpen}
+              postToDelete={postToDelete}
+              commentDeleteModalIsOpen={commentDeleteModalIsOpen}
+              setCommentDeleteModalIsOpen={setCommentDeleteModalIsOpen}
+              commentToDelete={commentToDelete}
+              postOfCommentToDelete={postOfCommentToDelete}
+              editComment={editComment}
+              commentEditModalIsOpen={commentEditModalIsOpen}
+              setCommentEditModalIsOpen={setCommentEditModalIsOpen}
+              commentToEdit={commentToEdit}
+              postOfCommentToEdit={postOfCommentToEdit}
+              fetchNotifications={fetchNotifications}
+              populateNotifications={populateNotifications}
+              acceptInvite={acceptInvite}
+              maybe={maybe}
+              declineInvite={declineInvite}
+              loading={loading}
+              reportComment={reportComment}
+              commentReportModalIsOpen={commentReportModalIsOpen}
+              setCommentReportModalIsOpen={setCommentReportModalIsOpen}
+              commentToReport={commentToReport}
+              postOfCommentToReport={postOfCommentToReport}
+            />
+          </>
+        )}
       </div>
       <RightSidebar />
     </div>

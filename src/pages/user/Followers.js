@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import defaultProfile from '../../assets/defaultProfile.png';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -21,6 +21,7 @@ const Followers = ({ history }) => {
   const [matchModalIsOpen, setMatchModalIsOpen] = useState(false);
   const [userToUnfollow, setUserToUnfollow] = useState({});
   const [unfollowModalIsOpen, setUnfollowModalIsOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -52,9 +53,11 @@ const Followers = ({ history }) => {
       )
       .then((res) => {
         setUsers(res.data);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       });
   };
 
@@ -115,62 +118,70 @@ const Followers = ({ history }) => {
       <LeftSidebar />
       <div className='main-content'>
         <Mobile />
-        <h1 className='center'>
-          {users.length > 0
-            ? 'People Who Like Me'
-            : 'No users have liked you yet'}
-        </h1>
-        <div className='story-gallery'>
-          {users.map((u) => (
-            <div
-              className='story follow'
-              key={u._id}
-              style={{
-                backgroundImage: `url(${
-                  (u.profileImage && u.profileImage.url) || defaultProfile
-                })`,
-              }}
-              onClick={() => history.push(`/user/${u._id}`)}
-            >
-              {user.following.some((e) => e._id === u._id) ||
-              user.following.includes(u._id) ? (
-                <>
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    className='fa liked'
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleUnfollow(u);
-                    }}
-                  />
-                  <p>{u.username || u.name}</p>
-                </>
-              ) : (
-                <>
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    className='fa'
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleFollow(u);
-                    }}
-                  />
-                  <p>{u.username || u.name}</p>
-                </>
-              )}
+        {loading ? (
+          <div className='spinner'>
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+          </div>
+        ) : (
+          <>
+            <h1 className='center'>
+              {users.length > 0
+                ? 'People Who Like Me'
+                : 'No users have liked you yet'}
+            </h1>
+            <div className='story-gallery'>
+              {users.map((u) => (
+                <div
+                  className='story follow'
+                  key={u._id}
+                  style={{
+                    backgroundImage: `url(${
+                      (u.profileImage && u.profileImage.url) || defaultProfile
+                    })`,
+                  }}
+                  onClick={() => history.push(`/user/${u._id}`)}
+                >
+                  {user.following.some((e) => e._id === u._id) ||
+                  user.following.includes(u._id) ? (
+                    <>
+                      <FontAwesomeIcon
+                        icon={faHeart}
+                        className='fa liked'
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleUnfollow(u);
+                        }}
+                      />
+                      <p>{u.username || u.name}</p>
+                    </>
+                  ) : (
+                    <>
+                      <FontAwesomeIcon
+                        icon={faHeart}
+                        className='fa'
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleFollow(u);
+                        }}
+                      />
+                      <p>{u.username || u.name}</p>
+                    </>
+                  )}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <Match
-          matchModalIsOpen={matchModalIsOpen}
-          setMatchModalIsOpen={setMatchModalIsOpen}
-          match={match}
-        />
-        <Unfollow
-          unfollowModalIsOpen={unfollowModalIsOpen}
-          setUnfollowModalIsOpen={setUnfollowModalIsOpen}
-          userToUnfollow={userToUnfollow}
-        />
+            <Match
+              matchModalIsOpen={matchModalIsOpen}
+              setMatchModalIsOpen={setMatchModalIsOpen}
+              match={match}
+            />
+            <Unfollow
+              unfollowModalIsOpen={unfollowModalIsOpen}
+              setUnfollowModalIsOpen={setUnfollowModalIsOpen}
+              userToUnfollow={userToUnfollow}
+            />
+          </>
+        )}
       </div>
       <RightSidebar />
     </div>

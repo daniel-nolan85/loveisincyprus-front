@@ -17,6 +17,7 @@ import {
   faChartLine,
   faCircleInfo,
   faCircleQuestion,
+  faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 import PointsInfo from '../../components/modals/PointsInfo';
 import PointsQuestions from '../../components/modals/PointsQuestions';
@@ -77,6 +78,7 @@ const Points = () => {
   const [showSpentChart, setShowSpentChart] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [datePickerIsOpen, setDatePickerIsOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const { pointsQuestionsModalIsOpen, setPointsQuestionsModalIsOpen } =
     ChatState();
@@ -125,6 +127,7 @@ const Points = () => {
   const fetchUserPointsTotal = () =>
     getUserPointsTotal(user.token).then((res) => {
       setPoints(res.data);
+      setLoading(false);
     });
 
   const fetchUserPointsGainedData = () => {
@@ -342,267 +345,282 @@ const Points = () => {
       <LeftSidebar />
       <div className='main-content'>
         <Mobile />
-        <h1 className='center'>
-          You currently have a total of{' '}
-          {points === 1 ? `${points} point` : `${points} points`}
-        </h1>
-        <div className='points-icons'>
-          <div className='tooltip'>
-            <FontAwesomeIcon
-              icon={faCircleInfo}
-              className='fa'
-              onClick={handleInfo}
-            />
-            <span className='tooltip-text'>Info about points</span>
+        {loading ? (
+          <div className='spinner'>
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
           </div>
-          <div className='tooltip'>
-            <FontAwesomeIcon
-              icon={faCircleQuestion}
-              className='fa'
-              onClick={handleQuestions}
-            />
-            <span className='tooltip-text'>Questions about points</span>
-          </div>
-          {user.membership.paid && (
-            <div className='tooltip'>
-              <FontAwesomeIcon
-                icon={faCashRegister}
-                className='fa'
-                onClick={handleSpendPoints}
-              />
-              <span className='tooltip-text'>Spend your points</span>
+        ) : (
+          <>
+            <h1 className='center'>
+              You currently have a total of{' '}
+              {points === 1 ? `${points} point` : `${points} points`}
+            </h1>
+            <div className='points-icons'>
+              <div className='tooltip'>
+                <FontAwesomeIcon
+                  icon={faCircleInfo}
+                  className='fa'
+                  onClick={handleInfo}
+                />
+                <span className='tooltip-text'>Info about points</span>
+              </div>
+              <div className='tooltip'>
+                <FontAwesomeIcon
+                  icon={faCircleQuestion}
+                  className='fa'
+                  onClick={handleQuestions}
+                />
+                <span className='tooltip-text'>Questions about points</span>
+              </div>
+              {user.membership.paid && (
+                <div className='tooltip'>
+                  <FontAwesomeIcon
+                    icon={faCashRegister}
+                    className='fa'
+                    onClick={handleSpendPoints}
+                  />
+                  <span className='tooltip-text'>Spend your points</span>
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <div className='points-filter-btns'>
-          <button className='submit-btn' onClick={today}>
-            Today
-          </button>
-          <button className='submit-btn' onClick={thisWeek}>
-            This Week
-          </button>
-          <button className='submit-btn' onClick={thisMonth}>
-            This Month
-          </button>
-          <button className='submit-btn' onClick={select}>
-            Select
-          </button>
-        </div>
-        <div className='filter-datepicker'>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => {
-              setStartDate(date);
-              setDatePickerIsOpen(false);
-            }}
-            dateFormat='MM/yyyy'
-            showMonthYearPicker
-            open={datePickerIsOpen}
-            onClickOutside={() => setDatePickerIsOpen(false)}
-          />
-        </div>
-        <div
-          className='small-container cart-page'
-          style={{ marginTop: '40px' }}
-        >
-          {pointsGainedDisplay.length === 0 ? (
-            <h1 className='center'>
-              No points were accumulated at the selected time
-            </h1>
-          ) : (
-            <>
-              <div className='chart-header'>
-                <h2>Points Accumulated</h2>
-                <FontAwesomeIcon
-                  icon={faChartLine}
-                  className='fa'
-                  onClick={() => setShowGainedChart(!showGainedChart)}
-                />
-              </div>
-              <Line
-                data={pointsGainedGraph}
-                style={{
-                  marginBottom: '30px',
-                  display: showGainedChart ? 'flex' : 'none',
+            <div className='points-filter-btns'>
+              <button className='submit-btn' onClick={today}>
+                Today
+              </button>
+              <button className='submit-btn' onClick={thisWeek}>
+                This Week
+              </button>
+              <button className='submit-btn' onClick={thisMonth}>
+                This Month
+              </button>
+              <button className='submit-btn' onClick={select}>
+                Select
+              </button>
+            </div>
+            <div className='filter-datepicker'>
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => {
+                  setStartDate(date);
+                  setDatePickerIsOpen(false);
                 }}
+                dateFormat='MM/yyyy'
+                showMonthYearPicker
+                open={datePickerIsOpen}
+                onClickOutside={() => setDatePickerIsOpen(false)}
               />
-              <table>
-                <tbody>
-                  <tr>
-                    <th>Date</th>
-                    <th>Points</th>
-                    <th>Action</th>
-                  </tr>
-                  {pointsGainedDisplay.map((pg) => (
-                    <tr key={pg._id}>
-                      <td>
-                        <p>{moment(pg.awarded).format('MMMM Do YYYY')}</p>
-                      </td>
-                      <td>
-                        <p>{pg.amount}</p>
-                      </td>
-                      <td>
-                        <p>
-                          {pg.reason === 'post' && 'You created a new post'}
-                          {pg.reason === 'login' && 'You logged in to the site'}
-                          {pg.reason === 'new visitor' &&
-                            'A new user visited your profile'}
-                          {pg.reason === 'new visit' &&
-                            "You visited a new member's  profile"}
-                          {pg.reason === 'profile complete' &&
-                            'You completed 100% of your profile'}
-                          {pg.reason === 'match' &&
-                            'You matched with another user'}
-                          {pg.reason === 'event post' &&
-                            'You posted on an event'}
-                          {pg.reason === 'store purchase' &&
-                            'You made a store purchase'}
-                          {pg.reason === 'verified' &&
-                            'You became a verified member'}
-                        </p>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </>
-          )}
-        </div>
-        <div
-          className='small-container cart-page'
-          style={{ marginTop: '40px' }}
-        >
-          {pointsLostDisplay.length === 0 ? (
-            <h1 className='center'>No points were lost at the selected time</h1>
-          ) : (
-            <>
-              <div className='chart-header'>
-                <h2>Points Lost</h2>
-                <FontAwesomeIcon
-                  icon={faChartLine}
-                  className='fa'
-                  onClick={() => setShowLostChart(!showLostChart)}
-                />
-              </div>
-              <Line
-                data={pointsLostGraph}
-                style={{
-                  marginBottom: '30px',
-                  display: showLostChart ? 'flex' : 'none',
-                }}
-              />
-              <table>
-                <tbody>
-                  <tr>
-                    <th>Time & Date</th>
-                    <th>Points</th>
-                    <th>Action</th>
-                  </tr>
-                  {pointsLostDisplay.map((pl) => (
-                    <tr key={pl._id}>
-                      <td>
-                        <p>{moment(pl.removed).format('MMMM Do YYYY')}</p>
-                      </td>
-                      <td>
-                        <p>-{pl.amount}</p>
-                      </td>
-                      <td>
-                        <p>{pl.reason === 'post' && 'You deleted a post'}</p>
-                        <p>
-                          {pl.reason === 'unmatch' &&
-                            'You unmatched with another user'}
-                        </p>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </>
-          )}
-        </div>
-        <div
-          className='small-container cart-page'
-          style={{ marginTop: '40px' }}
-        >
-          {pointsSpentDisplay.length === 0 ? (
-            <h1 className='center'>
-              No points were spent at the selected time
-            </h1>
-          ) : (
-            <>
-              <div className='chart-header'>
-                <h2>Points Spent</h2>
-                <FontAwesomeIcon
-                  icon={faChartLine}
-                  className='fa'
-                  onClick={() => setShowSpentChart(!showSpentChart)}
-                />
-              </div>
-              <Line
-                data={pointsSpentGraph}
-                style={{
-                  marginBottom: '30px',
-                  display: showSpentChart ? 'flex' : 'none',
-                }}
-              />
-              <table>
-                <tbody>
-                  <tr>
-                    <th>Time & Date</th>
-                    <th>Points</th>
-                    <th>Action</th>
-                  </tr>
-                  {pointsSpentDisplay.map((ps) => (
-                    <tr key={ps._id}>
-                      <td>
-                        <p>{moment(ps.removed).format('MMMM Do YYYY')}</p>
-                      </td>
-                      <td>
-                        <p>-{ps.amount}</p>
-                      </td>
-                      <td>
-                        <p>
-                          {ps.reason === 'featured' &&
-                            'You became a Featured Member'}
-                          {ps.reason === 'expired' &&
-                            'You became a Featured Member'}
-                          {ps.reason === 'events' &&
-                            'You became eligible for event invites'}
-                          {ps.reason === 'five' && 'You purchased a 5% coupon'}
-                          {ps.reason === 'ten' && 'You purchased a 10% coupon'}
-                        </p>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </>
-          )}
-        </div>
-        <PointsInfo
-          pointsInfoModalIsOpen={pointsInfoModalIsOpen}
-          setPointsInfoModalIsOpen={setPointsInfoModalIsOpen}
-        />
-        <PointsQuestions
-          pointsQuestionsModalIsOpen={pointsQuestionsModalIsOpen}
-          setPointsQuestionsModalIsOpen={setPointsQuestionsModalIsOpen}
-        />
-        <SpendPoints
-          spendPointsModalIsOpen={spendPointsModalIsOpen}
-          setSpendPointsModalIsOpen={setSpendPointsModalIsOpen}
-          points={points}
-          setPoints={setPoints}
-          fetchUserPointsTotal={fetchUserPointsTotal}
-          pointsFeaturedModalIsOpen={pointsFeaturedModalIsOpen}
-          setPointsFeaturedModalIsOpen={setPointsFeaturedModalIsOpen}
-          pointsFiveModalIsOpen={pointsFiveModalIsOpen}
-          setPointsFiveModalIsOpen={setPointsFiveModalIsOpen}
-          pointsTenModalIsOpen={pointsTenModalIsOpen}
-          setPointsTenModalIsOpen={setPointsTenModalIsOpen}
-          pointsEventsModalIsOpen={pointsEventsModalIsOpen}
-          setPointsEventsModalIsOpen={setPointsEventsModalIsOpen}
-          fetchUserPointsSpentData={fetchUserPointsSpentData}
-        />
+            </div>
+            <div
+              className='small-container cart-page'
+              style={{ marginTop: '40px' }}
+            >
+              {pointsGainedDisplay.length === 0 ? (
+                <h1 className='center'>
+                  No points were accumulated at the selected time
+                </h1>
+              ) : (
+                <>
+                  <div className='chart-header'>
+                    <h2>Points Accumulated</h2>
+                    <FontAwesomeIcon
+                      icon={faChartLine}
+                      className='fa'
+                      onClick={() => setShowGainedChart(!showGainedChart)}
+                    />
+                  </div>
+                  <Line
+                    data={pointsGainedGraph}
+                    style={{
+                      marginBottom: '30px',
+                      display: showGainedChart ? 'flex' : 'none',
+                    }}
+                  />
+                  <table>
+                    <tbody>
+                      <tr>
+                        <th>Date</th>
+                        <th>Points</th>
+                        <th>Action</th>
+                      </tr>
+                      {pointsGainedDisplay.map((pg) => (
+                        <tr key={pg._id}>
+                          <td>
+                            <p>{moment(pg.awarded).format('MMMM Do YYYY')}</p>
+                          </td>
+                          <td>
+                            <p>{pg.amount}</p>
+                          </td>
+                          <td>
+                            <p>
+                              {pg.reason === 'post' && 'You created a new post'}
+                              {pg.reason === 'login' &&
+                                'You logged in to the site'}
+                              {pg.reason === 'new visitor' &&
+                                'A new user visited your profile'}
+                              {pg.reason === 'new visit' &&
+                                "You visited a new member's  profile"}
+                              {pg.reason === 'profile complete' &&
+                                'You completed 100% of your profile'}
+                              {pg.reason === 'match' &&
+                                'You matched with another user'}
+                              {pg.reason === 'event post' &&
+                                'You posted on an event'}
+                              {pg.reason === 'store purchase' &&
+                                'You made a store purchase'}
+                              {pg.reason === 'verified' &&
+                                'You became a verified member'}
+                            </p>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </>
+              )}
+            </div>
+            <div
+              className='small-container cart-page'
+              style={{ marginTop: '40px' }}
+            >
+              {pointsLostDisplay.length === 0 ? (
+                <h1 className='center'>
+                  No points were lost at the selected time
+                </h1>
+              ) : (
+                <>
+                  <div className='chart-header'>
+                    <h2>Points Lost</h2>
+                    <FontAwesomeIcon
+                      icon={faChartLine}
+                      className='fa'
+                      onClick={() => setShowLostChart(!showLostChart)}
+                    />
+                  </div>
+                  <Line
+                    data={pointsLostGraph}
+                    style={{
+                      marginBottom: '30px',
+                      display: showLostChart ? 'flex' : 'none',
+                    }}
+                  />
+                  <table>
+                    <tbody>
+                      <tr>
+                        <th>Time & Date</th>
+                        <th>Points</th>
+                        <th>Action</th>
+                      </tr>
+                      {pointsLostDisplay.map((pl) => (
+                        <tr key={pl._id}>
+                          <td>
+                            <p>{moment(pl.removed).format('MMMM Do YYYY')}</p>
+                          </td>
+                          <td>
+                            <p>-{pl.amount}</p>
+                          </td>
+                          <td>
+                            <p>
+                              {pl.reason === 'post' && 'You deleted a post'}
+                            </p>
+                            <p>
+                              {pl.reason === 'unmatch' &&
+                                'You unmatched with another user'}
+                            </p>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </>
+              )}
+            </div>
+            <div
+              className='small-container cart-page'
+              style={{ marginTop: '40px' }}
+            >
+              {pointsSpentDisplay.length === 0 ? (
+                <h1 className='center'>
+                  No points were spent at the selected time
+                </h1>
+              ) : (
+                <>
+                  <div className='chart-header'>
+                    <h2>Points Spent</h2>
+                    <FontAwesomeIcon
+                      icon={faChartLine}
+                      className='fa'
+                      onClick={() => setShowSpentChart(!showSpentChart)}
+                    />
+                  </div>
+                  <Line
+                    data={pointsSpentGraph}
+                    style={{
+                      marginBottom: '30px',
+                      display: showSpentChart ? 'flex' : 'none',
+                    }}
+                  />
+                  <table>
+                    <tbody>
+                      <tr>
+                        <th>Time & Date</th>
+                        <th>Points</th>
+                        <th>Action</th>
+                      </tr>
+                      {pointsSpentDisplay.map((ps) => (
+                        <tr key={ps._id}>
+                          <td>
+                            <p>{moment(ps.removed).format('MMMM Do YYYY')}</p>
+                          </td>
+                          <td>
+                            <p>-{ps.amount}</p>
+                          </td>
+                          <td>
+                            <p>
+                              {ps.reason === 'featured' &&
+                                'You became a Featured Member'}
+                              {ps.reason === 'expired' &&
+                                'You became a Featured Member'}
+                              {ps.reason === 'events' &&
+                                'You became eligible for event invites'}
+                              {ps.reason === 'five' &&
+                                'You purchased a 5% coupon'}
+                              {ps.reason === 'ten' &&
+                                'You purchased a 10% coupon'}
+                            </p>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </>
+              )}
+            </div>
+            <PointsInfo
+              pointsInfoModalIsOpen={pointsInfoModalIsOpen}
+              setPointsInfoModalIsOpen={setPointsInfoModalIsOpen}
+            />
+            <PointsQuestions
+              pointsQuestionsModalIsOpen={pointsQuestionsModalIsOpen}
+              setPointsQuestionsModalIsOpen={setPointsQuestionsModalIsOpen}
+            />
+            <SpendPoints
+              spendPointsModalIsOpen={spendPointsModalIsOpen}
+              setSpendPointsModalIsOpen={setSpendPointsModalIsOpen}
+              points={points}
+              setPoints={setPoints}
+              fetchUserPointsTotal={fetchUserPointsTotal}
+              pointsFeaturedModalIsOpen={pointsFeaturedModalIsOpen}
+              setPointsFeaturedModalIsOpen={setPointsFeaturedModalIsOpen}
+              pointsFiveModalIsOpen={pointsFiveModalIsOpen}
+              setPointsFiveModalIsOpen={setPointsFiveModalIsOpen}
+              pointsTenModalIsOpen={pointsTenModalIsOpen}
+              setPointsTenModalIsOpen={setPointsTenModalIsOpen}
+              pointsEventsModalIsOpen={pointsEventsModalIsOpen}
+              setPointsEventsModalIsOpen={setPointsEventsModalIsOpen}
+              fetchUserPointsSpentData={fetchUserPointsSpentData}
+            />
+          </>
+        )}
       </div>
       <RightSidebar />
     </div>

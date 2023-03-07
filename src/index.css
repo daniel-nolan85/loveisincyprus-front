@@ -515,6 +515,15 @@ nav {
   position: relative;
 }
 
+.spinner {
+  text-align: center;
+}
+
+.spinner .fa {
+  font-size: 30px;
+  color: var(--nav-color);
+}
+
 .imp-links a,
 .shortcut-links a {
   text-decoration: none;

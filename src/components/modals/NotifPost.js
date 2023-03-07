@@ -127,6 +127,8 @@ const NotifPost = ({
     },
   };
 
+  console.log('post => ', post);
+
   return (
     <Modal
       isOpen={notifModalIsOpen}

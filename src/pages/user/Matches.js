@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import defaultProfile from '../../assets/defaultProfile.png';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -13,6 +13,7 @@ const Matches = ({ history }) => {
   const [users, setUsers] = useState([]);
   const [userToUnfollow, setUserToUnfollow] = useState({});
   const [unfollowModalIsOpen, setUnfollowModalIsOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const { token, _id, following } = useSelector((state) => state.user);
 
@@ -32,11 +33,12 @@ const Matches = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setUsers(res.data);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
+        setLoading(false);
       });
   };
 
@@ -50,51 +52,59 @@ const Matches = ({ history }) => {
       <LeftSidebar />
       <div className='main-content'>
         <Mobile />
-        <h1 className='center'>
-          {users.length > 0
-            ? "People I've matched with"
-            : 'You have not matched with any users yet'}
-        </h1>
-        <div className='story-gallery'>
-          {users.map((u) => (
-            <div
-              className='story follow'
-              key={u._id}
-              style={{
-                backgroundImage: `url(${
-                  (u.profileImage && u.profileImage.url) || defaultProfile
-                })`,
-              }}
-              onClick={() => history.push(`/user/${u._id}`)}
-            >
-              {following.some((e) => e._id === u._id) ||
-              following.includes(u._id) ? (
-                <>
-                  <FontAwesomeIcon
-                    icon={faHeart}
-                    className='fa liked'
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleUnfollow(u);
-                    }}
-                  />
-                  <p>{u.username || u.name}</p>
-                </>
-              ) : (
-                <>
-                  <FontAwesomeIcon icon={faHeart} className='fa' />
-                  <p>{u.username || u.name}</p>
-                </>
-              )}
+        {loading ? (
+          <div className='spinner'>
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+          </div>
+        ) : (
+          <>
+            <h1 className='center'>
+              {users.length > 0
+                ? "People I've matched with"
+                : 'You have not matched with any users yet'}
+            </h1>
+            <div className='story-gallery'>
+              {users.map((u) => (
+                <div
+                  className='story follow'
+                  key={u._id}
+                  style={{
+                    backgroundImage: `url(${
+                      (u.profileImage && u.profileImage.url) || defaultProfile
+                    })`,
+                  }}
+                  onClick={() => history.push(`/user/${u._id}`)}
+                >
+                  {following.some((e) => e._id === u._id) ||
+                  following.includes(u._id) ? (
+                    <>
+                      <FontAwesomeIcon
+                        icon={faHeart}
+                        className='fa liked'
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleUnfollow(u);
+                        }}
+                      />
+                      <p>{u.username || u.name}</p>
+                    </>
+                  ) : (
+                    <>
+                      <FontAwesomeIcon icon={faHeart} className='fa' />
+                      <p>{u.username || u.name}</p>
+                    </>
+                  )}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
-        <Unfollow
-          unfollowModalIsOpen={unfollowModalIsOpen}
-          setUnfollowModalIsOpen={setUnfollowModalIsOpen}
-          userToUnfollow={userToUnfollow}
-          fetchMatches={fetchMatches}
-        />
+            <Unfollow
+              unfollowModalIsOpen={unfollowModalIsOpen}
+              setUnfollowModalIsOpen={setUnfollowModalIsOpen}
+              userToUnfollow={userToUnfollow}
+              fetchMatches={fetchMatches}
+            />
+          </>
+        )}
       </div>
       <RightSidebar />
     </div>

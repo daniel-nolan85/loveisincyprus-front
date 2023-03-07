@@ -17,7 +17,7 @@ import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import defaultProfile from '../../assets/defaultProfile.png';
 
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import LargeImage from '../../components/modals/LargeImage';
 import moment from 'moment';
 import Comments from '../../components/cards/Comments';
@@ -30,6 +30,7 @@ import Unfollow from '../../components/modals/Unfollow';
 import { addPoints } from '../../functions/user';
 import io from 'socket.io-client';
 import Analyse from '../../components/modals/Analyse';
+import { HashLink as Link } from 'react-router-hash-link';
 
 let socket;
 
@@ -417,73 +418,87 @@ const UserProfile = ({ history }) => {
     membership,
     lastLogin,
     username,
-  } = thisUser;
+  } = thisUser ?? {};
+
+  console.log('thisUser => ', thisUser);
 
   return (
-    <div className='profile-container'>
-      <img
-        src={coverImage ? coverImage.url : defaultCover}
-        alt={`${username || name}'s profile photo`}
-        className='cover-img'
-      />
-      <div className='profile-details'>
-        <div className='pd-left'>
-          <div className='pd-row'>
-            {profileImage && profileImage.url ? (
-              <img
-                src={profileImage.url}
-                alt={`${username || name}'s profile photo`}
-                className='pd-image'
-                style={{ cursor: 'zoom-in' }}
-                onClick={() => setImageModalIsOpen(true)}
-              />
-            ) : (
-              <img
-                src={defaultProfile}
-                alt='Default profile picture'
-                className='pd-image'
-              />
-            )}
+    <>
+      {!thisUser ? (
+        <h1 className='center'>
+          This user does not exist and may have been deleted...
+        </h1>
+      ) : (
+        <>
+          <div className='profile-container'>
+            <img
+              src={coverImage ? coverImage.url : defaultCover}
+              alt={`${username || name}'s profile photo`}
+              className='cover-img'
+            />
+            <div className='profile-details'>
+              <div className='pd-left'>
+                <div className='pd-row'>
+                  {profileImage && profileImage.url ? (
+                    <img
+                      src={profileImage.url}
+                      alt={`${username || name}'s profile photo`}
+                      className='pd-image'
+                      style={{ cursor: 'zoom-in' }}
+                      onClick={() => setImageModalIsOpen(true)}
+                    />
+                  ) : (
+                    <img
+                      src={defaultProfile}
+                      alt='Default profile picture'
+                      className='pd-image'
+                    />
+                  )}
 
-            <div>
-              <h3>{username || name}</h3>
-              <p>Member since {moment(createdAt).format('MMMM Do YYYY')}</p>
-              <p>Last logged in {moment(lastLogin).fromNow()}</p>
-            </div>
-          </div>
-        </div>
-        <div className='pd-right'>
-          {user.following.some((e) => e._id === _id) ||
-          user.following.includes(_id) ? (
-            <button
-              type='button'
-              onClick={() => handleUnfollow(thisUser)}
-              className='tooltip'
-            >
-              <FontAwesomeIcon icon={faHeart} className='fa heart liked' />
-              <span className='tooltip-text'>Unlike this user</span>
-            </button>
-          ) : (
-            <button
-              type='button'
-              onClick={() => handleFollow(thisUser)}
-              className='tooltip'
-            >
-              <FontAwesomeIcon icon={faHeart} className='fa heart' />
-              <span className='tooltip-text'>Like this user</span>
-            </button>
-          )}
-          {user.matches.includes(_id) && (
-            <>
-              <button
-                type='button'
-                className='tooltip'
-                onClick={() => history.push('/chats')}
-              >
-                <FontAwesomeIcon icon={faMessage} className='fa' />
-                <span className='tooltip-text'>Message this user</span>
-              </button>
-              {/* <button
+                  <div>
+                    <h3>{username || name}</h3>
+                    <p>
+                      Member since {moment(createdAt).format('MMMM Do YYYY')}
+                    </p>
+                    <p>Last logged in {moment(lastLogin).fromNow()}</p>
+                  </div>
+                </div>
+              </div>
+              <div className='pd-right'>
+                {user.following.some((e) => e._id === _id) ||
+                user.following.includes(_id) ? (
+                  <button
+                    type='button'
+                    onClick={() => handleUnfollow(thisUser)}
+                    className='tooltip'
+                  >
+                    <FontAwesomeIcon
+                      icon={faHeart}
+                      className='fa heart liked'
+                    />
+                    <span className='tooltip-text'>Unlike this user</span>
+                  </button>
+                ) : (
+                  <button
+                    type='button'
+                    onClick={() => handleFollow(thisUser)}
+                    className='tooltip'
+                  >
+                    <FontAwesomeIcon icon={faHeart} className='fa heart' />
+                    <span className='tooltip-text'>Like this user</span>
+                  </button>
+                )}
+                {user.matches.includes(_id) && (
+                  <>
+                    <button
+                      type='button'
+                      className='tooltip'
+                      onClick={() => history.push('/chats')}
+                    >
+                      <FontAwesomeIcon icon={faMessage} className='fa' />
+                      <span className='tooltip-text'>Message this user</span>
+                    </button>
+                    {/* <button
                 type='button'
                 className='tooltip'
                 onClick={() => history.push(`/create-gift-card/${_id}`)}
@@ -491,225 +506,244 @@ const UserProfile = ({ history }) => {
                 <FontAwesomeIcon icon={faGift} className='fa' />
                 <span className='tooltip-text'>Buy this user a gift</span>
               </button> */}
-            </>
-          )}
-          <button
-            type='button'
-            onClick={() => handleAnalyse(thisUser)}
-            className='analyse tooltip'
-          >
-            <FontAwesomeIcon icon={faBrain} className='fa analyse' />
-            <span className='tooltip-text'>Analyse compatibility</span>
-          </button>
-          {verified === 'true' && (
-            <button className='tooltip'>
-              <FontAwesomeIcon icon={faUserShield} className='fa verified' />
-              <span className='tooltip-text'>Verified member</span>
-            </button>
-          )}
-          <br />
-        </div>
-      </div>
-      <div className='profile-info'>
-        <div className='info-col'>
-          <div className='profile-intro'>
-            {about && (
-              <>
-                <h3>Intro</h3>
-                <p className='intro-text'>{about}</p>
-                <hr />
-              </>
-            )}
-            <ul>
-              <li>
-                <FontAwesomeIcon icon={faSignsPost} className='fa' />
-                {totalPosts} {totalPosts.length === 1 ? 'Post' : 'Posts'}
-              </li>
-            </ul>
-          </div>
-          {photos.length > 0 && (
-            <div className='profile-intro'>
-              <div className='title-box'>
-                <h3>Photos</h3>
-                <Link to={`/photos/${userId}`}>All Photos</Link>
-              </div>
-              <div className='photo-box'>
-                {photos.map((p, i) => (
-                  <div key={i}>
-                    <img
-                      src={p}
-                      alt=''
-                      className={
-                        visitorPhotos < 2 || !clearPhoto || !membership.paid
-                          ? 'blur'
-                          : ''
-                      }
+                  </>
+                )}
+                <button
+                  type='button'
+                  onClick={() => handleAnalyse(thisUser)}
+                  className='analyse tooltip'
+                >
+                  <FontAwesomeIcon icon={faBrain} className='fa analyse' />
+                  <span className='tooltip-text'>Analyse compatibility</span>
+                </button>
+                {verified === 'true' && (
+                  <button className='tooltip'>
+                    <FontAwesomeIcon
+                      icon={faUserShield}
+                      className='fa verified'
                     />
-                  </div>
-                ))}
+                    <span className='tooltip-text'>Verified member</span>
+                  </button>
+                )}
+                <br />
               </div>
             </div>
-          )}
-        </div>
-        <div className='post-col'>
-          <InfiniteScroll
-            dataLength={posts.length}
-            next={infinity}
-            hasMore={morePosts}
-            loader={
-              <div className='loader'>
-                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-              </div>
-            }
-            endMessage={
-              <p style={{ textAlign: 'center' }}>
-                <b>You're up to date</b>
-              </p>
-            }
-          >
-            {posts &&
-              posts.map((post, i) => (
-                <div className='post-container' key={post._id}>
-                  <div className='post-row'>
-                    <div className='user-profile'>
-                      <img
-                        src={profileImage ? profileImage.url : defaultProfile}
-                        alt={`${username || name}'s profile picture`}
-                      />
-                      <div>
-                        <p>{username || name}</p>
-                        <span>{moment(post.createdAt).fromNow()}</span>
-                      </div>
+            <div className='profile-info'>
+              <div className='info-col'>
+                <div className='profile-intro'>
+                  {about && (
+                    <>
+                      <h3>Intro</h3>
+                      <p className='intro-text'>{about}</p>
+                      <hr />
+                    </>
+                  )}
+                  <ul>
+                    <li>
+                      <Link to='#their-posts'>
+                        <FontAwesomeIcon icon={faSignsPost} className='fa' />
+                        {totalPosts} {totalPosts === 1 ? 'Post' : 'Posts'}
+                      </Link>
+                    </li>
+                  </ul>
+                </div>
+                {photos.length > 0 && (
+                  <div className='profile-intro'>
+                    <div className='title-box'>
+                      <h3>Photos</h3>
+                      <Link to={`/photos/${userId}`}>All Photos</Link>
+                    </div>
+                    <div className='photo-box'>
+                      {photos.map((p, i) => (
+                        <div key={i}>
+                          <img
+                            src={p}
+                            alt=''
+                            className={
+                              visitorPhotos < 2 ||
+                              !clearPhoto ||
+                              !membership.paid
+                                ? 'blur'
+                                : ''
+                            }
+                          />
+                        </div>
+                      ))}
                     </div>
                   </div>
-                  <p className='post-text'>{post.content}</p>
-                  {post.image && (
-                    <img
-                      src={post.image.url}
-                      alt={`${username || name}'s post`}
-                      className='post-img'
-                    />
-                  )}
-                  <div className='post-row'>
-                    <div className='activity-icons'>
-                      <div>
-                        {post.likes.some((e) => e._id === user._id) ? (
-                          <FontAwesomeIcon
-                            icon={faHeart}
-                            className='fa liked'
-                            onClick={() => handleUnlike(post._id)}
-                          />
-                        ) : (
-                          <FontAwesomeIcon
-                            icon={faHeart}
-                            className='fa'
-                            onClick={() => handleLike(post._id)}
+                )}
+              </div>
+              <span id='their-posts'></span>
+              <div className='post-col'>
+                <InfiniteScroll
+                  dataLength={posts.length}
+                  next={infinity}
+                  hasMore={morePosts}
+                  loader={
+                    <div className='loader'>
+                      <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                    </div>
+                  }
+                  endMessage={
+                    <p style={{ textAlign: 'center' }}>
+                      <b>You're up to date</b>
+                    </p>
+                  }
+                >
+                  {posts &&
+                    posts.map((post, i) => (
+                      <div className='post-container' key={post._id}>
+                        <div className='post-row'>
+                          <div className='user-profile'>
+                            <img
+                              src={
+                                profileImage ? profileImage.url : defaultProfile
+                              }
+                              alt={`${username || name}'s profile picture`}
+                            />
+                            <div>
+                              <p>{username || name}</p>
+                              <span>{moment(post.createdAt).fromNow()}</span>
+                            </div>
+                          </div>
+                        </div>
+                        <p className='post-text'>{post.content}</p>
+                        {post.image && (
+                          <img
+                            src={post.image.url}
+                            alt={`${username || name}'s post`}
+                            className='post-img'
                           />
                         )}
-                        <span
-                          className='show-likes'
-                          onClick={() => showLikes(post)}
-                        >
-                          {post.likes.length === 1 &&
-                            `${post.likes.length} like`}
-                          {post.likes.length > 1 &&
-                            `${post.likes.length} likes`}
-                        </span>
+                        <div className='post-row'>
+                          <div className='activity-icons'>
+                            <div>
+                              {post.likes.some((e) => e._id === user._id) ? (
+                                <FontAwesomeIcon
+                                  icon={faHeart}
+                                  className='fa liked'
+                                  onClick={() => handleUnlike(post._id)}
+                                />
+                              ) : (
+                                <FontAwesomeIcon
+                                  icon={faHeart}
+                                  className='fa'
+                                  onClick={() => handleLike(post._id)}
+                                />
+                              )}
+                              <span
+                                className='show-likes'
+                                onClick={() => showLikes(post)}
+                              >
+                                {post.likes.length === 1 &&
+                                  `${post.likes.length} like`}
+                                {post.likes.length > 1 &&
+                                  `${post.likes.length} likes`}
+                              </span>
+                            </div>
+                            <div>
+                              <FontAwesomeIcon
+                                icon={faComments}
+                                className='fa'
+                                onClick={() => handleComment(post)}
+                              />
+                              {post.comments.length === 1 &&
+                                `${post.comments.length} comment`}
+                              {post.comments.length > 1 &&
+                                `${post.comments.length} comments`}
+                            </div>
+                          </div>
+                        </div>
+                        {post.comments.length > 0 && (
+                          <div>
+                            <FontAwesomeIcon
+                              icon={
+                                showComments !== i ? faCaretDown : faCaretUp
+                              }
+                              className='fa center caret'
+                              onClick={() => {
+                                showComments === i
+                                  ? setShowComments(-1)
+                                  : setShowComments(i);
+                              }}
+                            />
+                            <div
+                              className={
+                                i === showComments
+                                  ? 'comments-container comments-container-show'
+                                  : 'comments-container'
+                              }
+                            >
+                              <Comments
+                                post={post}
+                                removeComment={removeComment}
+                                fetchThisUsersPosts={fetchThisUsersPosts}
+                                commentDeleteModalIsOpen={
+                                  commentDeleteModalIsOpen
+                                }
+                                setCommentDeleteModalIsOpen={
+                                  setCommentDeleteModalIsOpen
+                                }
+                                commentToDelete={commentToDelete}
+                                postOfCommentToDelete={postOfCommentToDelete}
+                                editComment={editComment}
+                                commentEditModalIsOpen={commentEditModalIsOpen}
+                                setCommentEditModalIsOpen={
+                                  setCommentEditModalIsOpen
+                                }
+                                commentToEdit={commentToEdit}
+                                postOfCommentToEdit={postOfCommentToEdit}
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <div>
-                        <FontAwesomeIcon
-                          icon={faComments}
-                          className='fa'
-                          onClick={() => handleComment(post)}
-                        />
-                        {post.comments.length === 1 &&
-                          `${post.comments.length} comment`}
-                        {post.comments.length > 1 &&
-                          `${post.comments.length} comments`}
-                      </div>
-                    </div>
-                  </div>
-                  {post.comments.length > 0 && (
-                    <div>
-                      <FontAwesomeIcon
-                        icon={showComments !== i ? faCaretDown : faCaretUp}
-                        className='fa center caret'
-                        onClick={() => {
-                          showComments === i
-                            ? setShowComments(-1)
-                            : setShowComments(i);
-                        }}
-                      />
-                      <div
-                        className={
-                          i === showComments
-                            ? 'comments-container comments-container-show'
-                            : 'comments-container'
-                        }
-                      >
-                        <Comments
-                          post={post}
-                          removeComment={removeComment}
-                          fetchThisUsersPosts={fetchThisUsersPosts}
-                          commentDeleteModalIsOpen={commentDeleteModalIsOpen}
-                          setCommentDeleteModalIsOpen={
-                            setCommentDeleteModalIsOpen
-                          }
-                          commentToDelete={commentToDelete}
-                          postOfCommentToDelete={postOfCommentToDelete}
-                          editComment={editComment}
-                          commentEditModalIsOpen={commentEditModalIsOpen}
-                          setCommentEditModalIsOpen={setCommentEditModalIsOpen}
-                          commentToEdit={commentToEdit}
-                          postOfCommentToEdit={postOfCommentToEdit}
-                        />
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ))}
-          </InfiniteScroll>
-        </div>
-      </div>
-      {profileImage && profileImage.url && (
-        <LargeImage
-          imageModalIsOpen={imageModalIsOpen}
-          setImageModalIsOpen={setImageModalIsOpen}
-          imageUrl={profileImage.url}
-        />
+                    ))}
+                </InfiniteScroll>
+              </div>
+            </div>
+            {profileImage && profileImage.url && (
+              <LargeImage
+                imageModalIsOpen={imageModalIsOpen}
+                setImageModalIsOpen={setImageModalIsOpen}
+                imageUrl={profileImage.url}
+              />
+            )}
+            <AddComment
+              commentModalIsOpen={commentModalIsOpen}
+              setCommentModalIsOpen={setCommentModalIsOpen}
+              comment={comment}
+              setComment={setComment}
+              uploading={uploading}
+              addComment={addComment}
+              image={image}
+              handleImage={handleImage}
+              loadingImg={loadingImg}
+            />
+            <Match
+              matchModalIsOpen={matchModalIsOpen}
+              setMatchModalIsOpen={setMatchModalIsOpen}
+              match={match}
+            />
+            <Unfollow
+              unfollowModalIsOpen={unfollowModalIsOpen}
+              setUnfollowModalIsOpen={setUnfollowModalIsOpen}
+              userToUnfollow={userToUnfollow}
+            />
+            <Analyse
+              analyseModalIsOpen={analyseModalIsOpen}
+              setAnalyseModalIsOpen={setAnalyseModalIsOpen}
+              userToAnalyse={userToAnalyse}
+            />
+            <ShowLikes
+              likesModalIsOpen={likesModalIsOpen}
+              setLikesModalIsOpen={setLikesModalIsOpen}
+              post={currentPost}
+            />
+          </div>
+        </>
       )}
-      <AddComment
-        commentModalIsOpen={commentModalIsOpen}
-        setCommentModalIsOpen={setCommentModalIsOpen}
-        comment={comment}
-        setComment={setComment}
-        uploading={uploading}
-        addComment={addComment}
-        image={image}
-        handleImage={handleImage}
-        loadingImg={loadingImg}
-      />
-      <Match
-        matchModalIsOpen={matchModalIsOpen}
-        setMatchModalIsOpen={setMatchModalIsOpen}
-        match={match}
-      />
-      <Unfollow
-        unfollowModalIsOpen={unfollowModalIsOpen}
-        setUnfollowModalIsOpen={setUnfollowModalIsOpen}
-        userToUnfollow={userToUnfollow}
-      />
-      <Analyse
-        analyseModalIsOpen={analyseModalIsOpen}
-        setAnalyseModalIsOpen={setAnalyseModalIsOpen}
-        userToAnalyse={userToAnalyse}
-      />
-      <ShowLikes
-        likesModalIsOpen={likesModalIsOpen}
-        setLikesModalIsOpen={setLikesModalIsOpen}
-        post={currentPost}
-      />
-    </div>
+    </>
   );
 };
 

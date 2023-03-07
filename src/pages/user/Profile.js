@@ -27,7 +27,6 @@ import defaultProfile from '../../assets/defaultProfile.png';
 import CropCover from '../../components/modals/CropCover';
 import CropProfilePic from '../../components/modals/CropProfilePic';
 import LargeImage from '../../components/modals/LargeImage';
-// import { Link, useLocation } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import moment from 'moment';
 import Comments from '../../components/cards/Comments';
@@ -1021,7 +1020,7 @@ const Profile = ({ history }) => {
               <li>
                 <Link to='#my-posts'>
                   <FontAwesomeIcon icon={faSignsPost} className='fa' />
-                  {totalPosts} {totalPosts.length === 1 ? 'Post' : 'Posts'}
+                  {totalPosts} {totalPosts === 1 ? 'Post' : 'Posts'}
                 </Link>
               </li>
               <li>
