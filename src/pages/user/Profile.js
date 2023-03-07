@@ -391,10 +391,17 @@ const Profile = ({ history }) => {
       )
       .then((res) => {
         setLoading(false);
+        console.log(res);
         if (res.data.error) {
           toast.error(res.data.error, {
             position: toast.POSITION.TOP_CENTER,
           });
+          return;
+        } else if (res.data.message) {
+          toast.error(res.data.message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          return;
         } else if (res.data.timeout === true) {
           setReauthenticateModalIsOpen(true);
         } else {

@@ -47,7 +47,7 @@ const Header = () => {
         <div className='stats-container'>
           <div className='stats'>
             <h2 className='stats-title'>
-              {/* {!token ? (
+              {!token ? (
                 <Link to='/authentication' className='link'>
                   <CountUp end={numDailyMatches} duration={5} />
                 </Link>
@@ -55,15 +55,14 @@ const Header = () => {
                 <Link to='/search-users'>
                   <CountUp end={numDailyMatches} duration={5} />
                 </Link>
-              )} */}
-              <CountUp end={numDailyMatches} duration={5} />
+              )}
             </h2>
             <p className='stats-text'>Daily matches</p>
           </div>
 
           <div className='stats'>
             <h2 className='stats-title'>
-              {/* {!token ? (
+              {!token ? (
                 <Link to='/authentication'>
                   <CountUp end={numDailySignups} duration={5} />
                 </Link>
@@ -71,15 +70,14 @@ const Header = () => {
                 <Link to='/search-users'>
                   <CountUp end={numDailySignups} duration={5} />
                 </Link>
-              )} */}
-              <CountUp end={numDailySignups} duration={5} />
+              )}
             </h2>
             <p className='stats-text'>Daily signups</p>
           </div>
 
           <div className='stats'>
             <h2 className='stats-title'>
-              {/* {!token ? (
+              {!token ? (
                 <Link to='/authentication'>
                   <CountUp end={numMembers} duration={5} />
                 </Link>
@@ -87,8 +85,7 @@ const Header = () => {
                 <Link to='/search-users'>
                   <CountUp end={numMembers} duration={5} />
                 </Link>
-              )} */}
-              <CountUp end={numMembers} duration={5} />
+              )}
             </h2>
             <p className='stats-text'>Current members</p>
           </div>

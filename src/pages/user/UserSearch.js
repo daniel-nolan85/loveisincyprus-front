@@ -53,9 +53,6 @@ const UserSearch = () => {
   const [loadingSave, setLoadingSave] = useState(false);
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [userSearchModalIsOpen, setUserSearchModalIsOpen] = useState(false);
-  // const [lastLoggedCheck, setLastLoggedCheck] = useState(false);
-  // const [lastSignedCheck, setLastSignedCheck] = useState(false);
-  // const [popularityCheck, setPopularityCheck] = useState(false);
 
   const map = {
     ageOfPartner: setAgeOfPartner,
@@ -111,18 +108,6 @@ const UserSearch = () => {
       return () => clearTimeout(delayed);
     }
   }, [text]);
-
-  // useEffect(() => {
-  //   if (lastLoggedCheck) {
-  //     console.log('sortLastLoggedIn');
-  //     const lastLogged = users.sort(
-  //       (a, b) => new Date(b.lastLogin) - new Date(a.lastLogin)
-  //     );
-  //     setUsers(lastLogged);
-  //   }
-  // }, [lastLoggedCheck]);
-  // useEffect(() => {}, [lastSignedCheck]);
-  // useEffect(() => {}, [popularityCheck]);
 
   const loadAllUsers = () => {
     setLoading(true);
@@ -239,29 +224,26 @@ const UserSearch = () => {
     map[item.props.title](string);
   };
 
-  // const sortLastLoggedIn = () => {
-  //   console.log('sortLastLoggedIn');
-  //   const lastLogged = users.sort(
-  //     (a, b) => new Date(b.lastLogin) - new Date(a.lastLogin)
-  //   );
-  //   setUsers([...lastLogged]);
-  // };
+  const sortLastLoggedIn = () => {
+    const lastLogged = users.sort(
+      (a, b) => new Date(b.lastLogin) - new Date(a.lastLogin)
+    );
+    setUsers([...lastLogged]);
+  };
 
-  // const sortLastSignedUp = () => {
-  //   console.log('sortLastSignedUp');
-  //   const lastSigned = users.sort(
-  //     (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-  //   );
-  //   setUsers([...lastSigned]);
-  // };
+  const sortLastSignedUp = () => {
+    const lastSigned = users.sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+    setUsers([...lastSigned]);
+  };
 
-  // const sortPopularity = () => {
-  //   console.log('sortPopularity');
-  //   const popular = users.sort(
-  //     (a, b) => b.followers.length - a.followers.length
-  //   );
-  //   setUsers([...popular]);
-  // };
+  const sortPopularity = () => {
+    const popular = users.sort(
+      (a, b) => b.followers.length - a.followers.length
+    );
+    setUsers([...popular]);
+  };
 
   const ageTheyWant = (
     <Menu
@@ -1676,7 +1658,7 @@ const UserSearch = () => {
     <div className='container search-container'>
       <div className='left-sidebar search'>
         <div className='shortcut-links'>
-          {/* <div className='advanced-filter-btns'>
+          <div className='advanced-filter-btns'>
             <div className='tooltip'>
               <FontAwesomeIcon
                 icon={faClock}
@@ -1701,7 +1683,7 @@ const UserSearch = () => {
               />
               <span className='tooltip-text'>Most popular</span>
             </div>
-          </div> */}
+          </div>
           <form onSubmit={handleSearch}>
             <div className='search-box'>
               <FontAwesomeIcon
@@ -2084,7 +2066,7 @@ const UserSearch = () => {
             Filter
           </button>
         </div>
-        {/* <div className='advanced-filter-btns-mobile'>
+        <div className='advanced-filter-btns-mobile'>
           <div className='tooltip'>
             <FontAwesomeIcon
               icon={faClock}
@@ -2109,7 +2091,7 @@ const UserSearch = () => {
             />
             <span className='tooltip-text'>Most popular</span>
           </div>
-        </div> */}
+        </div>
         <div className='product-cards'>
           {loading ? (
             <div className='spinner'>
