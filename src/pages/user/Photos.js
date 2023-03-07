@@ -23,13 +23,21 @@ const Photos = () => {
   useEffect(() => {
     fetchUser();
     fetchUsersPhotos();
-    if (user.role !== 'main-admin' || user.role !== 'secondary-admin')
+    if (
+      user.role !== 'main-admin' ||
+      user.role !== 'secondary-admin' ||
+      user._id === userId
+    )
       visitorPhotosCount();
   }, [user && userId]);
 
   useEffect(() => {
     if (user && user.token) {
-      if (user.role === 'main-admin' || user.role === 'secondary-admin') {
+      if (
+        user.role === 'main-admin' ||
+        user.role === 'secondary-admin' ||
+        user._id === userId
+      ) {
         return;
       } else if (!user.clearPhoto || !user.membership.paid) {
         console.log('one');
@@ -51,7 +59,11 @@ const Photos = () => {
       )
       .then((res) => {
         setThisUser(res.data);
-        if (user.role === 'main-admin' || user.role === 'secondary-admin') {
+        if (
+          user.role === 'main-admin' ||
+          user.role === 'secondary-admin' ||
+          user._id === userId
+        ) {
           return;
         } else if (!res.data.clearPhoto || !res.data.membership.paid) {
           console.log('two');
@@ -99,7 +111,11 @@ const Photos = () => {
           }
         )
         .then((res) => {
-          if (user.role === 'main-admin' || user.role === 'secondary-admin') {
+          if (
+            user.role === 'main-admin' ||
+            user.role === 'secondary-admin' ||
+            user._id === userId
+          ) {
             return;
           } else if (res.data < 2) {
             console.log('three');
@@ -147,7 +163,8 @@ const Photos = () => {
                   }}
                   className={
                     user.role === 'main-admin' ||
-                    user.role === 'secondary-admin'
+                    user.role === 'secondary-admin' ||
+                    user._id === userId
                       ? ''
                       : visitorPhotos < 2 ||
                         !clearPhoto ||
@@ -173,7 +190,8 @@ const Photos = () => {
                   }}
                   className={
                     user.role === 'main-admin' ||
-                    user.role === 'secondary-admin'
+                    user.role === 'secondary-admin' ||
+                    user._id === userId
                       ? ''
                       : visitorPhotos < 2 ||
                         !clearPhoto ||
@@ -199,7 +217,8 @@ const Photos = () => {
                   }}
                   className={
                     user.role === 'main-admin' ||
-                    user.role === 'secondary-admin'
+                    user.role === 'secondary-admin' ||
+                    user._id === userId
                       ? ''
                       : visitorPhotos < 2 ||
                         !clearPhoto ||

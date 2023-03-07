@@ -638,8 +638,7 @@ const ProfileUpdate = ({
           <option value='6-7'>6'7" / 200 cm</option>
         </select>
 
-        <selec
-          t
+        <select
           name='build'
           onChange={(e) => setBuild(e.target.value)}
           value={build}
@@ -651,7 +650,7 @@ const ProfileUpdate = ({
           <option value='large'>Large</option>
           <option value='skinny'>Skinny</option>
           <option value='slim'>Slim</option>
-        </selec>
+        </select>
 
         <select
           name='hair color'

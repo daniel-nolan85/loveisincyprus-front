@@ -27,7 +27,8 @@ import defaultProfile from '../../assets/defaultProfile.png';
 import CropCover from '../../components/modals/CropCover';
 import CropProfilePic from '../../components/modals/CropProfilePic';
 import LargeImage from '../../components/modals/LargeImage';
-import { Link, useLocation } from 'react-router-dom';
+// import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import moment from 'moment';
 import Comments from '../../components/cards/Comments';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -44,6 +45,7 @@ import firebase from 'firebase/compat/app';
 import { updateEmail, updatePassword, updatePhoneNumber } from 'firebase/auth';
 import { auth } from '../../firebase';
 import Reauthenticate from '../../components/modals/Reauthenticate';
+import { HashLink as Link } from 'react-router-hash-link';
 
 const Profile = ({ history }) => {
   const [username, setUsername] = useState('');
@@ -1017,32 +1019,42 @@ const Profile = ({ history }) => {
             )}
             <ul>
               <li>
-                <FontAwesomeIcon icon={faSignsPost} className='fa' />
-                {totalPosts} {totalPosts.length === 1 ? 'Post' : 'Posts'}
+                <Link to='#my-posts'>
+                  <FontAwesomeIcon icon={faSignsPost} className='fa' />
+                  {totalPosts} {totalPosts.length === 1 ? 'Post' : 'Posts'}
+                </Link>
               </li>
               <li>
-                <FontAwesomeIcon icon={faFaceGrinHearts} className='fa' />
-                {user.followers.length}
-                {user.followers.length === 1
-                  ? ' Person I like'
-                  : ' People I like'}
+                <Link to='/liked-users'>
+                  <FontAwesomeIcon icon={faFaceGrinHearts} className='fa' />
+                  {user.following.length}
+                  {user.following.length === 1
+                    ? ' Person I like'
+                    : ' People I like'}
+                </Link>
               </li>
               <li>
-                <FontAwesomeIcon icon={faFaceGrinStars} className='fa' />
-                {user.following.length}
-                {user.following.length === 1
-                  ? ' Person likes me'
-                  : ' People like me'}
+                <Link to='/users-who-like-me'>
+                  <FontAwesomeIcon icon={faFaceGrinStars} className='fa' />
+                  {user.followers.length}
+                  {user.followers.length === 1
+                    ? ' Person likes me'
+                    : ' People like me'}
+                </Link>
               </li>
               <li>
-                <FontAwesomeIcon icon={faPeopleArrows} className='fa' />
-                {user.matches.length}
-                {user.matches.length === 1 ? ' Match' : ' Matches'}
+                <Link to='/my-matches'>
+                  <FontAwesomeIcon icon={faPeopleArrows} className='fa' />
+                  {user.matches.length - 1}
+                  {user.matches.length - 1 === 1 ? ' Match' : ' Matches'}
+                </Link>
               </li>
               <li>
-                <FontAwesomeIcon icon={faCoins} className='fa' />
-                {points}
-                {points === 1 ? ' Point' : ' Points'}
+                <Link to='/points'>
+                  <FontAwesomeIcon icon={faCoins} className='fa' />
+                  {points}
+                  {points === 1 ? ' Point' : ' Points'}
+                </Link>
               </li>
             </ul>
           </div>
@@ -1164,8 +1176,8 @@ const Profile = ({ history }) => {
                 </button>
               </div>
             </div>
+            <span id='my-posts'></span>
           </div>
-
           <InfiniteScroll
             dataLength={posts.length}
             next={infinity}

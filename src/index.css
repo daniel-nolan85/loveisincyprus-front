@@ -2843,6 +2843,10 @@ label.verif-upload .fa {
   color: var(--nav-color);
 }
 
+.profile-intro a {
+  color: #626262;
+}
+
 .title-box {
   display: flex;
   align-items: center;

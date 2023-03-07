@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import { useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 Modal.setAppElement('#root');
 
@@ -13,6 +14,8 @@ const LargeImage = ({
   membership,
 }) => {
   let { user } = useSelector((state) => ({ ...state }));
+
+  const { userId } = useParams();
 
   const modalStyles = {
     content: {
@@ -49,7 +52,9 @@ const LargeImage = ({
         src={imageUrl}
         alt='Profile photo'
         className={
-          user.role === 'main-admin' || user.role === 'secondary-admin'
+          user.role === 'main-admin' ||
+          user.role === 'secondary-admin' ||
+          user._id === userId
             ? 'pd-image-large'
             : visitorPhotos < 2 ||
               !clearPhoto ||
