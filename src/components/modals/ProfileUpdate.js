@@ -13,14 +13,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 import ProfileImageUpdate from '../modals/ProfileImageUpdate';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
+import CoverUpload from '../forms/CoverUpload';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 Modal.setAppElement('#root');
 
 const ProfileUpdate = ({
-  profileImage,
-  handleProfileImage,
-  coverImage,
-  handleCoverImage,
   username,
   setUsername,
   about,
@@ -135,17 +134,23 @@ const ProfileUpdate = ({
   sexFrequency,
   setSexFrequency,
   loadingProfileImg,
+  setLoadingProfileImg,
   loadingCoverImg,
   profileImageUpdateModalIsOpen,
   setProfileImageUpdateModalIsOpen,
-  handleLiveImage,
   checkInfoExists,
+  newCoverImages,
+  setNewCoverImages,
+  newProfileImages,
+  setNewProfileImages,
 }) => {
   const [showAboutMe, setShowAboutMe] = useState(true);
   const [showBackground, setShowBackground] = useState(false);
   const [showAppearance, setShowAppearance] = useState(false);
   const [showPlus, setShowPlus] = useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
+
+  const { token } = useSelector((state) => state.user);
 
   const modalStyles = {
     content: {
@@ -225,54 +230,71 @@ const ProfileUpdate = ({
     setShowAppearance(false);
   };
 
+  const handleImageRemove = (public_id) => {
+    setLoadingProfileImg(true);
+    axios
+      .post(
+        `${process.env.REACT_APP_API}/remove-image`,
+        { public_id },
+        {
+          headers: { authtoken: token ? token : '' },
+        }
+      )
+      .then((res) => {
+        setLoadingProfileImg(false);
+        let filteredImages = newProfileImages.filter((image) => {
+          return image.public_id !== public_id;
+        });
+        setNewProfileImages([...filteredImages]);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoadingProfileImg(false);
+      });
+  };
+
   const imagesSection = () =>
     showAboutMe && (
       <>
         <div className='add-post-links update-form'>
-          {loadingCoverImg ? (
-            <label>
-              <small>Cover Image: </small>
-              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-            </label>
-          ) : (
-            <label>
-              <small>Cover Image: </small>
-              {coverImage && coverImage.url ? (
-                <img src={coverImage.url} />
-              ) : (
-                <FontAwesomeIcon
-                  icon={faCamera}
-                  className='fa'
-                ></FontAwesomeIcon>
-              )}
-              <input
-                onChange={handleCoverImage}
-                type='file'
-                accept='images/*'
-                hidden
-              />
-            </label>
-          )}
+          <CoverUpload
+            newCoverImages={newCoverImages}
+            setNewCoverImages={setNewCoverImages}
+          />
         </div>
         <div className='add-post-links update-form'>
-          {loadingProfileImg ? (
-            <label>
-              <small>Profile Image: </small>
-              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-            </label>
-          ) : (
-            <label onClick={() => setProfileImageUpdateModalIsOpen(true)}>
-              <small>Profile Image: </small>
-              {profileImage && profileImage.url ? (
-                <img src={profileImage.url} />
-              ) : (
+          <label onClick={() => setProfileImageUpdateModalIsOpen(true)}>
+            {loadingProfileImg ? (
+              <>
+                <small>Profile Image(s): </small>
+                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+              </>
+            ) : (
+              <>
+                <small>Profile Image(s): </small>
                 <FontAwesomeIcon
                   icon={faCamera}
                   className='fa'
                 ></FontAwesomeIcon>
-              )}
-            </label>
-          )}
+              </>
+            )}
+          </label>
+          {newProfileImages &&
+            newProfileImages.map((image) => (
+              <div className='uploaded-imgs' key={image.public_id}>
+                <span
+                  className='delete'
+                  onClick={() => handleImageRemove(image.public_id)}
+                >
+                  X
+                </span>
+                <img
+                  src={image.url}
+                  style={{ marginTop: '5px', marginLeft: '10px' }}
+                  alt='uploaded'
+                />
+              </div>
+            ))}
         </div>
       </>
     );
@@ -1113,8 +1135,9 @@ const ProfileUpdate = ({
         <ProfileImageUpdate
           profileImageUpdateModalIsOpen={profileImageUpdateModalIsOpen}
           setProfileImageUpdateModalIsOpen={setProfileImageUpdateModalIsOpen}
-          handleProfileImage={handleProfileImage}
-          handleLiveImage={handleLiveImage}
+          newProfileImages={newProfileImages}
+          setNewProfileImages={setNewProfileImages}
+          setLoadingProfileImg={setLoadingProfileImg}
         />
       </div>
     </Modal>

@@ -215,6 +215,9 @@ const App = () => {
                 canCategories: res.data.canCategories,
                 canSubs: res.data.canSubs,
                 canCoupon: res.data.canCoupon,
+                profilePhotos: res.data.profilePhotos,
+                coverPhotos: res.data.coverPhotos,
+                uploadedPhotos: res.data.uploadedPhotos,
               },
             });
           })

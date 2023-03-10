@@ -120,6 +120,7 @@ const CropProfilePic = ({
             payload: {
               ...user,
               profileImage: res.data.profileImage,
+              profilePhotos: res.data.profilePhotos,
             },
           });
         }

@@ -2653,6 +2653,52 @@ select.gray {
   cursor: pointer;
 }
 
+.outer-circle {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px 0 #aaa;
+  position: absolute;
+}
+
+.green-scanner {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: conic-gradient(rgb(239, 91, 133, 0.8), rgb(239, 91, 133, 0.4));
+  position: absolute;
+  top: 0;
+  left: 0;
+  animation: scan 4s infinite linear;
+}
+
+.outer-circle::before,
+.outer-circle::after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 1px solid #eee;
+  position: absolute;
+  animation: ripple 2s infinite linear;
+}
+
+.outer-circle::after {
+  animation-delay: 1s;
+}
+
+@keyframes scan {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(2.5);
+  }
+}
+
 .pd-image {
   width: 100px;
   height: 100px;
@@ -2663,6 +2709,92 @@ select.gray {
 .pd-image-large {
   width: 100%;
   height: auto;
+}
+
+.slideshow-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+}
+
+.slideshow-container .delete-pic {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.slideshow-container .delete-pic .fa {
+  font-size: 25px;
+}
+
+.my-slides {
+  display: none;
+}
+
+.my-slides img,
+#first-slide img {
+  width: 100%;
+}
+
+.slideshow-prev,
+.slideshow-next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  margin-top: -22px;
+  padding: 16px;
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+.slideshow-next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+.slideshow-prev:hover,
+.slideshow-next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.slideshow-container .spinner {
+  position: absolute !important;
+  bottom: 8px !important;
+  left: 47% !important;
+}
+
+.slideshow-text {
+  color: var(--nav-color);
+  font-size: 15px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.slideshow-dot-container {
+  text-align: center;
+}
+
+.fade {
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0.4;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .pd-row div h3 {

@@ -151,7 +151,7 @@ const Photos = () => {
             photos[0].map((photo, i) => (
               <div className='pic profile' key={i}>
                 <img
-                  src={photo}
+                  src={photo.url || photo}
                   alt=''
                   style={{ cursor: 'zoom-in' }}
                   onClick={() => {
@@ -178,7 +178,7 @@ const Photos = () => {
             photos[1].map((photo, i) => (
               <div className='pic cover' key={i}>
                 <img
-                  src={photo}
+                  src={photo.url || photo}
                   alt=''
                   style={{ cursor: 'zoom-in' }}
                   onClick={() => {
@@ -205,7 +205,7 @@ const Photos = () => {
             photos[2].map((photo, i) => (
               <div className='pic upload' key={i}>
                 <img
-                  src={photo}
+                  src={photo.url || photo}
                   alt=''
                   style={{ cursor: 'zoom-in' }}
                   onClick={() => {

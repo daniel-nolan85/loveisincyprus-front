@@ -8,18 +8,24 @@ import {
   faThumbsUp,
 } from '@fortawesome/free-solid-svg-icons';
 import Webcam from 'react-webcam';
+import ProfileUpload from '../forms/ProfileUpload';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 Modal.setAppElement('#root');
 
 const ProfileImageUpdate = ({
   profileImageUpdateModalIsOpen,
   setProfileImageUpdateModalIsOpen,
-  handleProfileImage,
-  handleLiveImage,
+  newProfileImages,
+  setNewProfileImages,
+  setLoadingProfileImg,
 }) => {
   const [webcamEnabled, setWebcamEnabled] = useState(false);
   const [url, setUrl] = useState(null);
   const [uploading, setUploading] = useState(false);
+
+  const { token } = useSelector((state) => state.user);
 
   const webcamRef = useRef(null);
 
@@ -27,6 +33,31 @@ const ProfileImageUpdate = ({
     const imageSrc = webcamRef.current.getScreenshot();
     setUrl(imageSrc);
   }, [webcamRef]);
+
+  const fileUploadAndResize = (e) => {
+    let allUploadedFiles = newProfileImages;
+
+    if (url) {
+      setLoadingProfileImg(true);
+      setProfileImageUpdateModalIsOpen(false);
+      axios
+        .post(
+          `${process.env.REACT_APP_API}/upload-images`,
+          { image: url },
+          {
+            headers: { authtoken: token ? token : '' },
+          }
+        )
+        .then((res) => {
+          setLoadingProfileImg(false);
+          allUploadedFiles.push(res.data);
+          setNewProfileImages([...allUploadedFiles]);
+        })
+        .catch((err) => {
+          setLoadingProfileImg(false);
+        });
+    }
+  };
 
   const modalStyles = {
     content: {
@@ -67,12 +98,14 @@ const ProfileImageUpdate = ({
             </h1>
             <div className='contact-form-btns'>
               <label className='submit-btn'>
-                Select image
-                <input
-                  onChange={handleProfileImage}
-                  type='file'
-                  accept='images/*'
-                  hidden
+                Select image(s)
+                <ProfileUpload
+                  newProfileImages={newProfileImages}
+                  setNewProfileImages={setNewProfileImages}
+                  setProfileImageUpdateModalIsOpen={
+                    setProfileImageUpdateModalIsOpen
+                  }
+                  setLoadingProfileImg={setLoadingProfileImg}
                 />
               </label>
               <button
@@ -113,7 +146,7 @@ const ProfileImageUpdate = ({
                 <button
                   type='button'
                   className='submit-btn'
-                  onClick={() => handleLiveImage(url)}
+                  onClick={() => fileUploadAndResize(url)}
                 >
                   {uploading ? (
                     <FontAwesomeIcon icon={faSpinner} className='fa' spin />

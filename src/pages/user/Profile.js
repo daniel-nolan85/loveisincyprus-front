@@ -26,7 +26,8 @@ import axios from 'axios';
 import defaultProfile from '../../assets/defaultProfile.png';
 import CropCover from '../../components/modals/CropCover';
 import CropProfilePic from '../../components/modals/CropProfilePic';
-import LargeImage from '../../components/modals/LargeImage';
+import LargeCoverImage from '../../components/modals/LargeCoverImage';
+import LargeProfileImage from '../../components/modals/LargeProfileImage';
 import { useLocation } from 'react-router-dom';
 import moment from 'moment';
 import Comments from '../../components/cards/Comments';
@@ -65,7 +66,8 @@ const Profile = ({ history }) => {
   const [verifyModalIsOpen, setVerifyModalIsOpen] = useState(false);
   const [cropCoverModalIsOpen, setCropCoverModalIsOpen] = useState(false);
   const [cropModalIsOpen, setCropModalIsOpen] = useState(false);
-  const [imageModalIsOpen, setImageModalIsOpen] = useState(false);
+  const [profileImageModalIsOpen, setProfileImageModalIsOpen] = useState(false);
+  const [coverImageModalIsOpen, setCoverImageModalIsOpen] = useState(false);
   const [crop, setCrop] = useState(null);
   const [croppedCover, setCroppedCover] = useState(null);
   const [croppedProfile, setCroppedProfile] = useState(null);
@@ -157,6 +159,11 @@ const Profile = ({ history }) => {
   const [OTP, setOTP] = useState('');
   const [reauthMobile, setReauthMobile] = useState('');
   const [loadingReauth, setLoadingReauth] = useState(false);
+  const [profilePhotos, setProfilePhotos] = useState([]);
+  const [coverPhotos, setCoverPhotos] = useState([]);
+  const [newCoverImages, setNewCoverImages] = useState([]);
+  const [newProfileImages, setNewProfileImages] = useState([]);
+  const [detecting, setDetecting] = useState(false);
 
   const { modalIsOpen, setModalIsOpen } = ChatState();
 
@@ -190,6 +197,28 @@ const Profile = ({ history }) => {
       hasClearProfileImage();
     }
   }, [faces]);
+
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      if (newCoverImages.length > 0) {
+        setCoverImage(newCoverImages[0]);
+      }
+    }
+  }, [newCoverImages]);
+
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      if (newProfileImages.length > 0) {
+        setProfileImage(newProfileImages[0]);
+      }
+    }
+  }, [newProfileImages]);
 
   useEffect(() => {
     if ((updatedEmail || updatedAnswer) && profileUpdated) {
@@ -257,6 +286,8 @@ const Profile = ({ history }) => {
       setTreatSelf(user.treatSelf);
       setSexLikes(user.sexLikes);
       setSexFrequency(user.sexFrequency);
+      setProfilePhotos(user.profilePhotos);
+      setCoverPhotos(user.coverPhotos);
       fetchPhotos();
       fetchMatches();
       fetchVisitors();
@@ -319,6 +350,7 @@ const Profile = ({ history }) => {
 
   const handleSubmit = async () => {
     setLoading(true);
+    if (newProfileImages.length > 0) setDetecting(true);
     await axios
       .put(
         `${process.env.REACT_APP_API}/profile-update`,
@@ -382,6 +414,10 @@ const Profile = ({ history }) => {
           treatSelf,
           sexLikes,
           sexFrequency,
+          profilePhotos,
+          coverPhotos,
+          newProfileImages,
+          newCoverImages,
         },
         {
           headers: {
@@ -468,11 +504,16 @@ const Profile = ({ history }) => {
               treatSelf: res.data.treatSelf,
               sexLikes: res.data.sexLikes,
               sexFrequency: res.data.sexFrequency,
+              profilePhotos: res.data.profilePhotos,
+              coverPhotos: res.data.coverPhotos,
             },
           });
           updatedMobile && setMobile(updatedMobile);
           updatedEmail && setEmail(updatedEmail);
           updatedAnswer && setAnswer(updatedAnswer);
+          newCoverImages && setNewCoverImages([]);
+          newProfileImages && setNewProfileImages([]);
+          fetchPhotos();
         }
         Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri('/models')])
           .then(detectfaces)
@@ -490,6 +531,7 @@ const Profile = ({ history }) => {
   };
 
   const detectfaces = async () => {
+    console.log('detecting faces');
     const detections = await faceapi.detectAllFaces(
       profileImgRef.current,
       new faceapi.TinyFaceDetectorOptions()
@@ -498,6 +540,7 @@ const Profile = ({ history }) => {
   };
 
   const hasClearProfileImage = async () => {
+    console.log('checking faces');
     await axios
       .put(
         `${process.env.REACT_APP_API}/clear-profile-image`,
@@ -509,6 +552,7 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
+        console.log('hasClearProfileImage => ', res);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
@@ -516,87 +560,34 @@ const Profile = ({ history }) => {
             clearPhoto: res.data.clearPhoto,
           },
         });
-      });
-  };
-
-  const handleLiveImage = async (url) => {
-    setProfileImageUpdateModalIsOpen(false);
-    setLoadingProfileImg(true);
-    await axios
-      .post(
-        `${process.env.REACT_APP_API}/live-profile-pic`,
-        { user, url },
-        {
-          headers: {
-            authtoken: user.token,
-          },
+        setDetecting(false);
+        if (res.data.clearPhoto && res.data.profilePhotos.length > 1) {
+          toast.success(
+            'Face detected. You may view other members pictures clearly.',
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+        } else if (res.data.clearPhoto && res.data.profilePhotos.length < 2) {
+          toast.warning(
+            'Face detected. Upload one more profile picture to be able to view other members pictures clearly.',
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+        } else {
+          toast.warning(
+            'No face detected. You will not be able to see other members pictures clearly.',
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
         }
-      )
-      .then((res) => {
-        setProfileImage({
-          url: res.data.url,
-          public_id: res.data.public_id,
-        });
-        setLoadingProfileImg(false);
-      })
-      .catch((err) => {
-        setLoadingProfileImg(false);
-        console.log(err);
-      });
-  };
-
-  const handleProfileImage = async (e) => {
-    setProfileImageUpdateModalIsOpen(false);
-    const file = e.target.files[0];
-    let formData = new FormData();
-    formData.append('image', file);
-    setLoadingProfileImg(true);
-
-    await axios
-      .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
-        headers: {
-          authtoken: user.token,
-        },
-      })
-      .then((res) => {
-        setProfileImage({
-          url: res.data.url,
-          public_id: res.data.public_id,
-        });
-        setLoadingProfileImg(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoadingProfileImg(false);
-      });
-  };
-
-  const handleCoverImage = async (e) => {
-    const file = e.target.files[0];
-    let formData = new FormData();
-    formData.append('image', file);
-    setLoadingCoverImg(true);
-
-    await axios
-      .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
-        headers: {
-          authtoken: user.token,
-        },
-      })
-      .then((res) => {
-        setCoverImage({
-          url: res.data.url,
-          public_id: res.data.public_id,
-        });
-        setLoadingCoverImg(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoadingCoverImg(false);
       });
   };
 
   const fetchPhotos = async () => {
+    console.log('fetchPhotos');
     await axios
       .post(
         `${process.env.REACT_APP_API}/nine-photos`,
@@ -920,6 +911,8 @@ const Profile = ({ history }) => {
             src={user.coverImage.url}
             alt={`${user.username || user.name}'s cover photo`}
             className='cover-img'
+            style={{ cursor: 'zoom-in' }}
+            onClick={() => setCoverImageModalIsOpen(true)}
           />
           <FontAwesomeIcon
             icon={faCropSimple}
@@ -939,6 +932,11 @@ const Profile = ({ history }) => {
           <div className='pd-row'>
             {user.profileImage && user.profileImage.url ? (
               <>
+                {detecting && (
+                  <div className='outer-circle'>
+                    <div className='green-scanner'></div>
+                  </div>
+                )}
                 <img
                   ref={profileImgRef}
                   crossOrigin='anonymous'
@@ -946,7 +944,7 @@ const Profile = ({ history }) => {
                   alt={`${user.username || user.name}'s profile photo`}
                   className='pd-image'
                   style={{ cursor: 'zoom-in' }}
-                  onClick={() => setImageModalIsOpen(true)}
+                  onClick={() => setProfileImageModalIsOpen(true)}
                 />
                 <FontAwesomeIcon
                   icon={faCropSimple}
@@ -1073,7 +1071,7 @@ const Profile = ({ history }) => {
               <div className='photo-box'>
                 {photos.map((p, i) => (
                   <div key={i}>
-                    <img src={p} alt='' />
+                    <img src={p.url || p} alt='' />
                   </div>
                 ))}
               </div>
@@ -1347,9 +1345,9 @@ const Profile = ({ history }) => {
       </div>
       <ProfileUpdate
         profileImage={profileImage}
-        handleProfileImage={handleProfileImage}
+        setProfileImage={setProfileImage}
         coverImage={coverImage}
-        handleCoverImage={handleCoverImage}
+        setCoverImage={setCoverImage}
         username={username}
         setUsername={setUsername}
         about={about}
@@ -1465,25 +1463,37 @@ const Profile = ({ history }) => {
         setSexFrequency={setSexFrequency}
         loadingCoverImg={loadingCoverImg}
         loadingProfileImg={loadingProfileImg}
+        setLoadingProfileImg={setLoadingProfileImg}
         profileImageUpdateModalIsOpen={profileImageUpdateModalIsOpen}
         setProfileImageUpdateModalIsOpen={setProfileImageUpdateModalIsOpen}
-        handleLiveImage={handleLiveImage}
         checkInfoExists={checkInfoExists}
+        newCoverImages={newCoverImages}
+        setNewCoverImages={setNewCoverImages}
+        newProfileImages={newProfileImages}
+        setNewProfileImages={setNewProfileImages}
       />
       {user.coverImage && user.coverImage.url && (
-        <CropCover
-          cropCoverModalIsOpen={cropCoverModalIsOpen}
-          setCropCoverModalIsOpen={setCropCoverModalIsOpen}
-          coverImage={coverImage}
-          setCoverImage={setCoverImage}
-          imageUrl={user.coverImage.url}
-          crop={crop}
-          setCrop={setCrop}
-          croppedCover={croppedCover}
-          setCroppedCover={setCroppedCover}
-          coverImageCropped={coverImageCropped}
-          setCoverImageCropped={setCoverImageCropped}
-        />
+        <>
+          <CropCover
+            cropCoverModalIsOpen={cropCoverModalIsOpen}
+            setCropCoverModalIsOpen={setCropCoverModalIsOpen}
+            coverImage={coverImage}
+            setCoverImage={setCoverImage}
+            imageUrl={user.coverImage.url}
+            crop={crop}
+            setCrop={setCrop}
+            croppedCover={croppedCover}
+            setCroppedCover={setCroppedCover}
+            coverImageCropped={coverImageCropped}
+            setCoverImageCropped={setCoverImageCropped}
+          />
+          <LargeCoverImage
+            coverImageModalIsOpen={coverImageModalIsOpen}
+            setCoverImageModalIsOpen={setCoverImageModalIsOpen}
+            imageUrl={user.coverImage.url}
+            images={user.coverPhotos}
+          />
+        </>
       )}
       {user.profileImage && user.profileImage.url && (
         <>
@@ -1500,10 +1510,13 @@ const Profile = ({ history }) => {
             profileImageCropped={profileImageCropped}
             setProfileImageCropped={setProfileImageCropped}
           />
-          <LargeImage
-            imageModalIsOpen={imageModalIsOpen}
-            setImageModalIsOpen={setImageModalIsOpen}
-            imageUrl={user.profileImage.url}
+
+          <LargeProfileImage
+            profileImageModalIsOpen={profileImageModalIsOpen}
+            setProfileImageModalIsOpen={setProfileImageModalIsOpen}
+            images={user.profilePhotos}
+            setDetecting={setDetecting}
+            detectfaces={detectfaces}
           />
         </>
       )}

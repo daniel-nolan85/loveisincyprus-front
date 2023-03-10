@@ -120,6 +120,7 @@ const CropCover = ({
             payload: {
               ...user,
               coverImage: res.data.coverImage,
+              coverPhotos: res.data.coverPhotos,
             },
           });
         }
