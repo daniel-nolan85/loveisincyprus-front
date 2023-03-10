@@ -16,9 +16,9 @@ import {
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import defaultProfile from '../../assets/defaultProfile.png';
-
 import { useParams } from 'react-router-dom';
-import LargeImage from '../../components/modals/LargeImage';
+import LargeCoverImage from '../../components/modals/LargeCoverImage';
+import LargeProfileImage from '../../components/modals/LargeProfileImage';
 import moment from 'moment';
 import Comments from '../../components/cards/Comments';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -36,7 +36,8 @@ let socket;
 
 const UserProfile = ({ history }) => {
   const [thisUser, setThisUser] = useState({});
-  const [imageModalIsOpen, setImageModalIsOpen] = useState(false);
+  const [coverImageModalIsOpen, setCoverImageModalIsOpen] = useState(false);
+  const [profileImageModalIsOpen, setProfileImageModalIsOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [image, setImage] = useState({});
   const [comment, setComment] = useState('');
@@ -418,7 +419,11 @@ const UserProfile = ({ history }) => {
     membership,
     lastLogin,
     username,
+    coverPhotos,
+    profilePhotos,
   } = thisUser ?? {};
+
+  console.log('thisUser => ', thisUser);
 
   return (
     <>
@@ -433,6 +438,8 @@ const UserProfile = ({ history }) => {
               src={coverImage ? coverImage.url : defaultCover}
               alt={`${username || name}'s profile photo`}
               className='cover-img'
+              style={{ cursor: 'zoom-in' }}
+              onClick={() => setCoverImageModalIsOpen(true)}
             />
             <div className='profile-details'>
               <div className='pd-left'>
@@ -443,7 +450,7 @@ const UserProfile = ({ history }) => {
                       alt={`${username || name}'s profile photo`}
                       className='pd-image'
                       style={{ cursor: 'zoom-in' }}
-                      onClick={() => setImageModalIsOpen(true)}
+                      onClick={() => setProfileImageModalIsOpen(true)}
                     />
                   ) : (
                     <img
@@ -700,11 +707,20 @@ const UserProfile = ({ history }) => {
                 </InfiniteScroll>
               </div>
             </div>
+            {coverImage && coverImage.url && (
+              <LargeCoverImage
+                coverImageModalIsOpen={coverImageModalIsOpen}
+                setCoverImageModalIsOpen={setCoverImageModalIsOpen}
+                images={coverPhotos}
+                clearPhoto={clearPhoto}
+              />
+            )}
             {profileImage && profileImage.url && (
-              <LargeImage
-                imageModalIsOpen={imageModalIsOpen}
-                setImageModalIsOpen={setImageModalIsOpen}
-                imageUrl={profileImage.url}
+              <LargeProfileImage
+                profileImageModalIsOpen={profileImageModalIsOpen}
+                setProfileImageModalIsOpen={setProfileImageModalIsOpen}
+                images={profilePhotos}
+                clearPhoto={clearPhoto}
               />
             )}
             <AddComment

@@ -14,8 +14,6 @@ Modal.setAppElement('#root');
 const LargeProfileImage = ({
   profileImageModalIsOpen,
   setProfileImageModalIsOpen,
-  imageUrl,
-  visitorPhotos,
   clearPhoto,
   membership,
   images,
@@ -192,7 +190,24 @@ const LargeProfileImage = ({
               onClick={() => deleteImage(images[0])}
             />
           </span>
-          <img src={images[0].url || images[0]} alt='1' />
+          <img
+            src={images[0].url || images[0]}
+            alt='1'
+            className={
+              user.role === 'main-admin' ||
+              user.role === 'secondary-admin' ||
+              user._id === userId
+                ? 'pd-image-large'
+                : user.profilePhotos.length < 2 ||
+                  images.length < 2 ||
+                  !user.clearPhoto ||
+                  !clearPhoto ||
+                  !membership.paid ||
+                  !user.membership.paid
+                ? 'blur pd-image-large'
+                : 'pd-image-large'
+            }
+          />
           {loading ? (
             <div className='spinner'>
               <FontAwesomeIcon icon={faSpinner} className='fa' spin />
@@ -215,7 +230,24 @@ const LargeProfileImage = ({
                 onClick={() => deleteImage(img)}
               />
             </span>
-            <img src={img.url || img} alt={img.length} />
+            <img
+              src={img.url || img}
+              alt={img.length}
+              className={
+                user.role === 'main-admin' ||
+                user.role === 'secondary-admin' ||
+                user._id === userId
+                  ? 'pd-image-large'
+                  : user.profilePhotos.length < 2 ||
+                    images.length < 2 ||
+                    !user.clearPhoto ||
+                    !clearPhoto ||
+                    !membership.paid ||
+                    !user.membership.paid
+                  ? 'blur pd-image-large'
+                  : 'pd-image-large'
+              }
+            />
             {loading ? (
               <div className='spinner'>
                 <FontAwesomeIcon icon={faSpinner} className='fa' spin />

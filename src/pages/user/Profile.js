@@ -1509,6 +1509,8 @@ const Profile = ({ history }) => {
             setCroppedProfile={setCroppedProfile}
             profileImageCropped={profileImageCropped}
             setProfileImageCropped={setProfileImageCropped}
+            setDetecting={setDetecting}
+            detectfaces={detectfaces}
           />
 
           <LargeProfileImage

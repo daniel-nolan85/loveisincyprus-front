@@ -7,6 +7,7 @@ import axios from 'axios';
 import ReactCrop from 'react-image-crop';
 import 'react-image-crop/dist/ReactCrop.css';
 import { toast } from 'react-toastify';
+import * as faceapi from 'face-api.js';
 
 Modal.setAppElement('#root');
 
@@ -22,6 +23,8 @@ const CropProfilePic = ({
   setCroppedProfile,
   profileImageCropped,
   setProfileImageCropped,
+  setDetecting,
+  detectfaces,
 }) => {
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -95,9 +98,9 @@ const CropProfilePic = ({
   const submitCropProfile = async (e) => {
     await axios
       .put(
-        `${process.env.REACT_APP_API}/profile-update`,
+        `${process.env.REACT_APP_API}/update-crop-profile`,
         {
-          user,
+          _id: user._id,
           profileImage,
         },
         {
@@ -112,6 +115,7 @@ const CropProfilePic = ({
             position: toast.POSITION.TOP_CENTER,
           });
         } else {
+          setDetecting(true);
           toast.success(`Profile picture updated.`, {
             position: toast.POSITION.TOP_CENTER,
           });
@@ -123,6 +127,9 @@ const CropProfilePic = ({
               profilePhotos: res.data.profilePhotos,
             },
           });
+          Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri('/models')])
+            .then(detectfaces)
+            .catch((err) => console.log(err));
         }
         setCropModalIsOpen(false);
       })

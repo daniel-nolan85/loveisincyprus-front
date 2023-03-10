@@ -95,9 +95,9 @@ const CropCover = ({
   const submitCropCover = async (e) => {
     await axios
       .put(
-        `${process.env.REACT_APP_API}/profile-update`,
+        `${process.env.REACT_APP_API}/update-crop-cover`,
         {
-          user,
+          _id: user._id,
           coverImage,
         },
         {
