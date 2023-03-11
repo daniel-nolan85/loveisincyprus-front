@@ -425,6 +425,7 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
+        console.log(res.data);
         setLoading(false);
         if (res.data.error) {
           toast.error(res.data.error, {
@@ -549,6 +550,7 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
+        console.log('hasClearProfileImage', res.data);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
@@ -559,21 +561,21 @@ const Profile = ({ history }) => {
         setDetecting(false);
         if (res.data.clearPhoto && res.data.profilePhotos.length > 1) {
           toast.success(
-            'Face detected. You may view other members pictures clearly.',
+            'Face detected on profile picture. You may view other members pictures clearly.',
             {
               position: toast.POSITION.TOP_CENTER,
             }
           );
         } else if (res.data.clearPhoto && res.data.profilePhotos.length < 2) {
           toast.warning(
-            'Face detected. Upload one more profile picture to be able to view other members pictures clearly.',
+            'Face detected on profile picture. Upload one more profile picture to be able to view other members pictures clearly.',
             {
               position: toast.POSITION.TOP_CENTER,
             }
           );
-        } else if (!res.data.clearPhoto && res.data.profilePhotos) {
+        } else if (!res.data.clearPhoto) {
           toast.warning(
-            'No face detected. You will not be able to see other members pictures clearly.',
+            'No face detected on profile picture. You will not be able to see other members pictures clearly.',
             {
               position: toast.POSITION.TOP_CENTER,
             }
