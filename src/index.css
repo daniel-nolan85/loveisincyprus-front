@@ -2721,6 +2721,7 @@ select.gray {
   position: absolute;
   top: 5px;
   right: 5px;
+  cursor: pointer;
 }
 
 .slideshow-container .delete-pic .fa {
@@ -3204,6 +3205,11 @@ h1.score.very-high {
 
 h1.score.super {
   color: gold;
+}
+
+.webcam-loader {
+  color: var(--nav-color);
+  font-size: 25px;
 }
 
 /* --------------- cropper --------------- */

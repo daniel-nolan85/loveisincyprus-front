@@ -91,7 +91,6 @@ const LargeCoverImage = ({
       )
       .then((res) => {
         setLoading(false);
-        console.log(res);
         if (res.data.error) {
           toast.error(res.data.error, {
             position: toast.POSITION.TOP_CENTER,

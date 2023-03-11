@@ -24,6 +24,7 @@ const ProfileImageUpdate = ({
   const [webcamEnabled, setWebcamEnabled] = useState(false);
   const [url, setUrl] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const { token } = useSelector((state) => state.user);
 
@@ -86,7 +87,10 @@ const ProfileImageUpdate = ({
   return (
     <Modal
       isOpen={profileImageUpdateModalIsOpen}
-      onRequestClose={() => setProfileImageUpdateModalIsOpen(false)}
+      onRequestClose={() => {
+        setProfileImageUpdateModalIsOpen(false);
+        setWebcamEnabled(false);
+      }}
       style={modalStyles}
       contentLabel='Example Modal'
     >
@@ -111,34 +115,49 @@ const ProfileImageUpdate = ({
               <button
                 type='button'
                 className='submit-btn reset'
-                onClick={() => setWebcamEnabled(true)}
+                onClick={() => {
+                  setWebcamEnabled(true);
+                  setLoading(true);
+                }}
               >
                 Take photo
               </button>
             </div>
           </>
         )}
+
         {webcamEnabled && (
           <>
-            {!url && <h1 className='center'>Say cheese!</h1>}
-            <div className='verif-icons'>
+            {loading ? (
               <FontAwesomeIcon
-                icon={faCamera}
-                className='fa camera'
-                onClick={capturePhoto}
+                icon={faSpinner}
+                className='fa webcam-loader'
+                spin
               />
-              <FontAwesomeIcon
-                icon={faUndo}
-                className='fa reset'
-                onClick={() => setUrl(null)}
-              />
-            </div>
+            ) : (
+              <>
+                {!url && <h1 className='center'>Say cheese!</h1>}
+                <div className='verif-icons'>
+                  <FontAwesomeIcon
+                    icon={faCamera}
+                    className='fa camera'
+                    onClick={capturePhoto}
+                  />
+                  <FontAwesomeIcon
+                    icon={faUndo}
+                    className='fa reset'
+                    onClick={() => setUrl(null)}
+                  />
+                </div>
+              </>
+            )}
             {!url ? (
               <Webcam
                 ref={webcamRef}
                 screenshotFormat='image/jpeg'
                 screenshotQuality={1}
                 width={360}
+                onUserMedia={() => setLoading(false)}
               />
             ) : (
               <>

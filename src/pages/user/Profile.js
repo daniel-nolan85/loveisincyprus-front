@@ -350,7 +350,6 @@ const Profile = ({ history }) => {
 
   const handleSubmit = async () => {
     setLoading(true);
-    if (newProfileImages.length > 0) setDetecting(true);
     await axios
       .put(
         `${process.env.REACT_APP_API}/profile-update`,
@@ -427,7 +426,6 @@ const Profile = ({ history }) => {
       )
       .then((res) => {
         setLoading(false);
-        console.log(res);
         if (res.data.error) {
           toast.error(res.data.error, {
             position: toast.POSITION.TOP_CENTER,
@@ -511,14 +509,15 @@ const Profile = ({ history }) => {
           updatedMobile && setMobile(updatedMobile);
           updatedEmail && setEmail(updatedEmail);
           updatedAnswer && setAnswer(updatedAnswer);
-          newCoverImages && setNewCoverImages([]);
-          newProfileImages && setNewProfileImages([]);
           fetchPhotos();
         }
         Promise.all([faceapi.nets.tinyFaceDetector.loadFromUri('/models')])
           .then(detectfaces)
           .catch((err) => console.log(err));
         setModalIsOpen(false);
+        if (newProfileImages.length > 0) setDetecting(true);
+        newCoverImages && setNewCoverImages([]);
+        newProfileImages && setNewProfileImages([]);
         setProfileUpdated(true);
       })
       .catch((err) => {
@@ -531,7 +530,6 @@ const Profile = ({ history }) => {
   };
 
   const detectfaces = async () => {
-    console.log('detecting faces');
     const detections = await faceapi.detectAllFaces(
       profileImgRef.current,
       new faceapi.TinyFaceDetectorOptions()
@@ -540,7 +538,6 @@ const Profile = ({ history }) => {
   };
 
   const hasClearProfileImage = async () => {
-    console.log('checking faces');
     await axios
       .put(
         `${process.env.REACT_APP_API}/clear-profile-image`,
@@ -552,7 +549,6 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log('hasClearProfileImage => ', res);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
@@ -575,7 +571,7 @@ const Profile = ({ history }) => {
               position: toast.POSITION.TOP_CENTER,
             }
           );
-        } else {
+        } else if (!res.data.clearPhoto && res.data.profilePhotos) {
           toast.warning(
             'No face detected. You will not be able to see other members pictures clearly.',
             {
@@ -587,7 +583,6 @@ const Profile = ({ history }) => {
   };
 
   const fetchPhotos = async () => {
-    console.log('fetchPhotos');
     await axios
       .post(
         `${process.env.REACT_APP_API}/nine-photos`,

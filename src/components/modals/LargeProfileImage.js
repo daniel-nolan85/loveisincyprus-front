@@ -94,7 +94,6 @@ const LargeProfileImage = ({
       .then((res) => {
         setLoading(false);
         setDetecting(true);
-        console.log(res);
         if (res.data.error) {
           toast.error(res.data.error, {
             position: toast.POSITION.TOP_CENTER,

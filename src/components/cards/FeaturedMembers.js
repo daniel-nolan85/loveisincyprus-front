@@ -22,7 +22,6 @@ const FeaturedMembers = () => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-featured-members`)
       .then((res) => {
-        console.log(res.data);
         setFeaturedMembers(res.data);
       })
       .catch((err) => {

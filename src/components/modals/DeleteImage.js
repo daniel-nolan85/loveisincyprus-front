@@ -36,8 +36,6 @@ const DeleteImage = ({
     },
   };
 
-  console.log('currentImg => ', currentImg);
-
   return (
     <Modal
       isOpen={deleteImageModalIsOpen}
