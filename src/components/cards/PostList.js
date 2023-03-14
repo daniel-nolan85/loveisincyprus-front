@@ -18,6 +18,7 @@ import ShowLikes from '../../components/modals/ShowLikes';
 import SinglePost from '../../components/modals/SinglePost';
 import PostDelete from '../../components/modals/PostDelete';
 import ReportPost from '../modals/ReportPost';
+import LargePostImage from '../modals/LargePostImage';
 
 const PostList = ({
   posts,
@@ -51,8 +52,9 @@ const PostList = ({
   const [likesModalIsOpen, setLikesModalIsOpen] = useState(false);
   const [postModalIsOpen, setPostModalIsOpen] = useState(false);
   const [reportPostModalIsOpen, setReportPostModalIsOpen] = useState(false);
+  const [postImageModalIsOpen, setPostImageModalIsOpen] = useState(false);
 
-  const { token, _id } = useSelector((state) => state.user);
+  let { user } = useSelector((state) => ({ ...state }));
 
   const showLikes = (post) => {
     setCurrentPost(post);
@@ -69,6 +71,11 @@ const PostList = ({
     setPostModalIsOpen(true);
   };
 
+  const viewImages = (post) => {
+    setCurrentPost(post);
+    setPostImageModalIsOpen(true);
+  };
+
   return (
     <>
       {posts &&
@@ -78,8 +85,8 @@ const PostList = ({
               <div className='user-profile'>
                 <Link
                   to={
-                    _id === post.postedBy._id
-                      ? `/user/profile/${_id}`
+                    user._id === post.postedBy._id
+                      ? `/user/profile/${user._id}`
                       : `/user/${post.postedBy._id}`
                   }
                 >
@@ -97,8 +104,8 @@ const PostList = ({
                 <div>
                   <Link
                     to={
-                      _id === post.postedBy._id
-                        ? `/user/profile/${_id}`
+                      user._id === post.postedBy._id
+                        ? `/user/profile/${user._id}`
                         : `/user/${post.postedBy._id}`
                     }
                   >
@@ -108,14 +115,14 @@ const PostList = ({
                 </div>
               </div>
               <div className='post-icons'>
-                {token && _id !== post.postedBy._id && (
+                {user.token && user._id !== post.postedBy._id && (
                   <FontAwesomeIcon
                     icon={faFlag}
                     className='fa report'
                     onClick={() => reportPost(post)}
                   />
                 )}
-                {token && _id === post.postedBy._id && (
+                {user.token && user._id === post.postedBy._id && (
                   <>
                     <FontAwesomeIcon
                       icon={faTrashCan}
@@ -132,17 +139,19 @@ const PostList = ({
               </div>
             </div>
             <p className='post-text'>{post.content}</p>
-            {post.image && (
+            {post.postImages && post.postImages.length > 0 && (
               <img
-                src={post.image.url}
+                src={post.postImages[0].url}
                 alt={`${post.postedBy.username || post.postedBy.name}'s post`}
                 className='post-img'
+                style={{ cursor: 'zoom-in' }}
+                onClick={() => viewImages(post)}
               />
             )}
             <div className='post-row'>
               <div className='activity-icons'>
                 <div>
-                  {post.likes.some((e) => e._id === _id) ? (
+                  {post.likes.some((e) => e._id === user._id) ? (
                     <FontAwesomeIcon
                       icon={faHeart}
                       className='fa liked'
@@ -236,6 +245,12 @@ const PostList = ({
         reportPostModalIsOpen={reportPostModalIsOpen}
         setReportPostModalIsOpen={setReportPostModalIsOpen}
         post={currentPost}
+      />
+      <LargePostImage
+        postImageModalIsOpen={postImageModalIsOpen}
+        setPostImageModalIsOpen={setPostImageModalIsOpen}
+        post={currentPost}
+        newsFeed={newsFeed}
       />
     </>
   );

@@ -49,6 +49,7 @@ const UserDashboard = () => {
     useState(false);
   const [commentToReport, setCommentToReport] = useState({});
   const [postOfCommentToReport, setPostOfCommentToReport] = useState([]);
+  const [postImages, setPostImages] = useState([]);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -203,7 +204,7 @@ const UserDashboard = () => {
         `${process.env.REACT_APP_API}/create-post`,
         {
           content,
-          image,
+          postImages,
           user,
         },
         {
@@ -224,7 +225,7 @@ const UserDashboard = () => {
             position: toast.POSITION.TOP_CENTER,
           });
           setContent('');
-          setImage({});
+          setPostImages([]);
           newsFeed();
         }
       })
@@ -377,6 +378,8 @@ const UserDashboard = () => {
           handleImage={handleImage}
           image={image}
           loadingImg={loadingImg}
+          postImages={postImages}
+          setPostImages={setPostImages}
         />
         <InfiniteScroll
           dataLength={posts.length}

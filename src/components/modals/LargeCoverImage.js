@@ -125,7 +125,7 @@ const LargeCoverImage = ({
     setCurrentImg(img);
   };
 
-  const handleDelete = async (img) => {
+  const handleDeleteImage = async (img) => {
     setDeleteImageModalIsOpen(false);
     setLoadingDelete(true);
     await axios
@@ -277,7 +277,7 @@ const LargeCoverImage = ({
       <DeleteImage
         deleteImageModalIsOpen={deleteImageModalIsOpen}
         setDeleteImageModalIsOpen={setDeleteImageModalIsOpen}
-        handleDelete={handleDelete}
+        handleDeleteImage={handleDeleteImage}
         currentImg={currentImg}
         loadingDelete={loadingDelete}
       />

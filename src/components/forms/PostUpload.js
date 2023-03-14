@@ -5,14 +5,19 @@ import Resizer from 'react-image-file-resizer';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
 
-const CoverUpload = ({ newCoverImages, setNewCoverImages }) => {
+const PostUpload = ({
+  postImages,
+  setPostImages,
+  updatedImages,
+  setUpdatedImages,
+}) => {
   const [loading, setLoading] = useState(false);
 
   const { token } = useSelector((state) => state.user);
 
   const fileUploadAndResize = (e) => {
     let files = e.target.files;
-    let allUploadedFiles = newCoverImages;
+    let allUploadedFiles = postImages;
 
     if (files) {
       setLoading(true);
@@ -36,7 +41,7 @@ const CoverUpload = ({ newCoverImages, setNewCoverImages }) => {
               .then((res) => {
                 setLoading(false);
                 allUploadedFiles.push(res.data);
-                setNewCoverImages([...allUploadedFiles]);
+                setPostImages([...allUploadedFiles]);
               })
               .catch((err) => {
                 setLoading(false);
@@ -60,10 +65,10 @@ const CoverUpload = ({ newCoverImages, setNewCoverImages }) => {
       )
       .then((res) => {
         setLoading(false);
-        let filteredImages = newCoverImages.filter((image) => {
+        let filteredImages = postImages.filter((image) => {
           return image.public_id !== public_id;
         });
-        setNewCoverImages([...filteredImages]);
+        setPostImages([...filteredImages]);
       })
       .catch((err) => {
         console.log(err);
@@ -75,15 +80,9 @@ const CoverUpload = ({ newCoverImages, setNewCoverImages }) => {
     <div className='add-post-links'>
       <label>
         {loading ? (
-          <>
-            <small>Cover Image(s): </small>
-            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-          </>
+          <FontAwesomeIcon icon={faSpinner} className='fa' spin />
         ) : (
-          <>
-            <small>Cover Image(s): </small>
-            <FontAwesomeIcon icon={faCamera} className='fa' />
-          </>
+          <FontAwesomeIcon icon={faCamera} className='fa' />
         )}
         <input
           onChange={fileUploadAndResize}
@@ -93,8 +92,9 @@ const CoverUpload = ({ newCoverImages, setNewCoverImages }) => {
           hidden
         />
       </label>
-      {newCoverImages &&
-        newCoverImages.map((image) => (
+      {postImages &&
+        postImages.length > 0 &&
+        postImages.map((image) => (
           <div className='uploaded-imgs' key={image.public_id}>
             <span
               className='delete'
@@ -113,4 +113,4 @@ const CoverUpload = ({ newCoverImages, setNewCoverImages }) => {
   );
 };
 
-export default CoverUpload;
+export default PostUpload;

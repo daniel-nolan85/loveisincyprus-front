@@ -46,6 +46,8 @@ import { updateEmail, updatePassword, updatePhoneNumber } from 'firebase/auth';
 import { auth } from '../../firebase';
 import Reauthenticate from '../../components/modals/Reauthenticate';
 import { HashLink as Link } from 'react-router-hash-link';
+import PostUpload from '../../components/forms/PostUpload';
+import LargePostImage from '../../components/modals/LargePostImage';
 
 const Profile = ({ history }) => {
   const [username, setUsername] = useState('');
@@ -164,6 +166,8 @@ const Profile = ({ history }) => {
   const [newCoverImages, setNewCoverImages] = useState([]);
   const [newProfileImages, setNewProfileImages] = useState([]);
   const [detecting, setDetecting] = useState(false);
+  const [postImages, setPostImages] = useState([]);
+  const [postImageModalIsOpen, setPostImageModalIsOpen] = useState(false);
 
   const { modalIsOpen, setModalIsOpen } = ChatState();
 
@@ -741,7 +745,7 @@ const Profile = ({ history }) => {
         `${process.env.REACT_APP_API}/create-post`,
         {
           content,
-          image,
+          postImages,
           user,
         },
         {
@@ -762,7 +766,7 @@ const Profile = ({ history }) => {
             position: toast.POSITION.TOP_CENTER,
           });
           setContent('');
-          setImage({});
+          setPostImages([]);
           fetchUserPosts();
           fetchUserTotalPosts();
           fetchUserPoints();
@@ -898,6 +902,11 @@ const Profile = ({ history }) => {
 
   const showProgress = () => {
     setProgressModalIsOpen(true);
+  };
+
+  const viewImages = (post) => {
+    setCurrentPost(post);
+    setPostImageModalIsOpen(true);
   };
 
   return (
@@ -1143,25 +1152,10 @@ const Profile = ({ history }) => {
                 />
               </form>
               <div className='write-post-footer'>
-                <div className='add-post-links'>
-                  {loadingImg ? (
-                    <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-                  ) : (
-                    <label>
-                      {image && image.url ? (
-                        <img src={image.url} />
-                      ) : (
-                        <FontAwesomeIcon icon={faCamera} className='fa' />
-                      )}
-                      <input
-                        onChange={handleImage}
-                        type='file'
-                        accept='images/*'
-                        hidden
-                      />
-                    </label>
-                  )}
-                </div>
+                <PostUpload
+                  postImages={postImages}
+                  setPostImages={setPostImages}
+                />
                 <button
                   onClick={postSubmit}
                   type='submit'
@@ -1250,13 +1244,16 @@ const Profile = ({ history }) => {
                     )}
                   </div>
                   <p className='post-text'>{post.content}</p>
-                  {post.image && (
+
+                  {post.postImages && post.postImages.length > 0 && (
                     <img
-                      src={post.image.url}
+                      src={post.postImages[0].url}
                       alt={`${
                         post.postedBy.username || post.postedBy.name
                       }'s post`}
                       className='post-img'
+                      style={{ cursor: 'zoom-in' }}
+                      onClick={() => viewImages(post)}
                     />
                   )}
                   <div className='post-row'>
@@ -1548,6 +1545,7 @@ const Profile = ({ history }) => {
         fetchUserPosts={fetchUserPosts}
         fetchUserTotalPosts={fetchUserTotalPosts}
         fetchUserPoints={fetchUserPoints}
+        fetchPhotos={fetchPhotos}
       />
       <ProfileProgress
         progress={progress}
@@ -1578,6 +1576,13 @@ const Profile = ({ history }) => {
         setOTP={setOTP}
         loadingReauth={loadingReauth}
         setLoadingReauth={setLoadingReauth}
+      />
+      <LargePostImage
+        postImageModalIsOpen={postImageModalIsOpen}
+        setPostImageModalIsOpen={setPostImageModalIsOpen}
+        post={currentPost}
+        fetchUserPosts={fetchUserPosts}
+        fetchPhotos={fetchPhotos}
       />
     </div>
   );

@@ -12,6 +12,7 @@ import {
   faBrain,
   faUserShield,
   faGift,
+  faFlag,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
@@ -31,6 +32,8 @@ import { addPoints } from '../../functions/user';
 import io from 'socket.io-client';
 import Analyse from '../../components/modals/Analyse';
 import { HashLink as Link } from 'react-router-hash-link';
+import LargePostImage from '../../components/modals/LargePostImage';
+import ReportPost from '../../components/modals/ReportPost';
 
 let socket;
 
@@ -65,6 +68,8 @@ const UserProfile = ({ history }) => {
   const [analyseModalIsOpen, setAnalyseModalIsOpen] = useState(false);
   const [userToAnalyse, setUserToAnalyse] = useState({});
   const [loadingImg, setLoadingImg] = useState(false);
+  const [postImageModalIsOpen, setPostImageModalIsOpen] = useState(false);
+  const [reportPostModalIsOpen, setReportPostModalIsOpen] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -406,6 +411,16 @@ const UserProfile = ({ history }) => {
     setLikesModalIsOpen(true);
   };
 
+  const viewImages = (post) => {
+    setCurrentPost(post);
+    setPostImageModalIsOpen(true);
+  };
+
+  const reportPost = (post) => {
+    setCurrentPost(post);
+    setReportPostModalIsOpen(true);
+  };
+
   const {
     name,
     profileImage,
@@ -609,13 +624,22 @@ const UserProfile = ({ history }) => {
                               <span>{moment(post.createdAt).fromNow()}</span>
                             </div>
                           </div>
+                          <div className='post-icons'>
+                            <FontAwesomeIcon
+                              icon={faFlag}
+                              className='fa report'
+                              onClick={() => reportPost(post)}
+                            />
+                          </div>
                         </div>
                         <p className='post-text'>{post.content}</p>
-                        {post.image && (
+                        {post.postImages && post.postImages.length > 0 && (
                           <img
-                            src={post.image.url}
+                            src={post.postImages[0].url}
                             alt={`${username || name}'s post`}
                             className='post-img'
+                            style={{ cursor: 'zoom-in' }}
+                            onClick={() => viewImages(post)}
                           />
                         )}
                         <div className='post-row'>
@@ -750,6 +774,16 @@ const UserProfile = ({ history }) => {
             <ShowLikes
               likesModalIsOpen={likesModalIsOpen}
               setLikesModalIsOpen={setLikesModalIsOpen}
+              post={currentPost}
+            />
+            <LargePostImage
+              postImageModalIsOpen={postImageModalIsOpen}
+              setPostImageModalIsOpen={setPostImageModalIsOpen}
+              post={currentPost}
+            />
+            <ReportPost
+              reportPostModalIsOpen={reportPostModalIsOpen}
+              setReportPostModalIsOpen={setReportPostModalIsOpen}
               post={currentPost}
             />
           </div>

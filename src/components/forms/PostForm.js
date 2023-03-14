@@ -1,22 +1,18 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCamera,
-  faSpinner,
-  faPaperPlane,
-} from '@fortawesome/free-solid-svg-icons';
+import { faSpinner, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 import defaultProfile from '../../assets/defaultProfile.png';
 import { Link } from 'react-router-dom';
+import PostUpload from './PostUpload';
 
 const PostForm = ({
   content,
   setContent,
   postSubmit,
   uploading,
-  handleImage,
-  image,
-  loadingImg,
+  postImages,
+  setPostImages,
 }) => {
   let { _id, profileImage, name, username } = useSelector(
     (state) => state.user
@@ -46,25 +42,7 @@ const PostForm = ({
           />
         </form>
         <div className='write-post-footer'>
-          <div className='add-post-links'>
-            {loadingImg ? (
-              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-            ) : (
-              <label>
-                {image && image.url ? (
-                  <img src={image.url} />
-                ) : (
-                  <FontAwesomeIcon icon={faCamera} className='fa' />
-                )}
-                <input
-                  onChange={handleImage}
-                  type='file'
-                  accept='images/*'
-                  hidden
-                />
-              </label>
-            )}
-          </div>
+          <PostUpload postImages={postImages} setPostImages={setPostImages} />
           <button
             onClick={postSubmit}
             type='submit'

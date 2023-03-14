@@ -21,9 +21,11 @@ import CommentDelete from '../../components/modals/CommentDelete';
 import PassMessage from '../../components/modals/PassMessage';
 import MessageDelete from '../../components/modals/MessageDelete';
 import renderHtml from 'react-render-html';
+import LargePostImage from '../../components/modals/LargePostImage';
 
 const ReportedContent = ({ history }) => {
   const [posts, setPosts] = useState([]);
+  const [currentPost, setCurrentPost] = useState({});
   const [comments, setComments] = useState([]);
   const [messages, setMessages] = useState([]);
   const [userSuspendModalIsOpen, setUserSuspendModalIsOpen] = useState(false);
@@ -46,6 +48,7 @@ const ReportedContent = ({ history }) => {
     useState(false);
   const [passMessageModalIsOpen, setPassMessageModalIsOpen] = useState(false);
   const [messageToPass, setMessageToPass] = useState([]);
+  const [postImageModalIsOpen, setPostImageModalIsOpen] = useState(false);
 
   const { setReportedContent } = ChatState();
 
@@ -149,6 +152,11 @@ const ReportedContent = ({ history }) => {
     setMessageToDelete(message);
   };
 
+  const viewImages = (post) => {
+    setCurrentPost(post);
+    setPostImageModalIsOpen(true);
+  };
+
   return (
     <div className='container search-container'>
       <LeftSidebar />
@@ -206,11 +214,13 @@ const ReportedContent = ({ history }) => {
                   </div>
                 </div>
                 <p className='post-text'>{p.content}</p>
-                {p.image && (
+                {p.postImages && p.postImages.length > 0 && (
                   <img
-                    src={p.image.url}
+                    src={p.postImages[0].url}
                     alt={`${p.postedBy.username || p.postedBy.name}'s post`}
                     className='post-img'
+                    style={{ cursor: 'zoom-in' }}
+                    onClick={() => viewImages(p)}
                   />
                 )}
               </div>
@@ -405,6 +415,11 @@ const ReportedContent = ({ history }) => {
         messageToDelete={messageToDelete}
         fetchMessages={fetchMessages}
         fetchReportedContent={fetchReportedContent}
+      />
+      <LargePostImage
+        postImageModalIsOpen={postImageModalIsOpen}
+        setPostImageModalIsOpen={setPostImageModalIsOpen}
+        post={currentPost}
       />
     </div>
   );

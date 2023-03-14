@@ -867,7 +867,12 @@ nav {
   justify-content: space-between;
 }
 
-.write-post-footer .submit-btn {
+.edit-post-footer {
+  display: block;
+}
+
+.write-post-footer .submit-btn,
+.edit-post-footer .submit-btn {
   width: 140px;
   margin: 10px 0 0 0;
   color: #fff;

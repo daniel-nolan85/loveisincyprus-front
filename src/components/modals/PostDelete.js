@@ -19,6 +19,7 @@ const PostDelete = ({
   fetchUserPoints,
   fetchNotifications,
   setNotifModalIsOpen,
+  fetchPhotos,
 }) => {
   const [deleting, setDeleting] = useState(false);
 
@@ -48,6 +49,7 @@ const PostDelete = ({
         fetchUserTotalPosts && fetchUserTotalPosts();
         fetchUserPoints && fetchUserPoints();
         fetchNotifications && fetchNotifications();
+        fetchPhotos && fetchPhotos();
         setNotifModalIsOpen(false);
       })
       .catch((err) => {

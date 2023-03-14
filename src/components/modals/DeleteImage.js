@@ -9,7 +9,7 @@ const DeleteImage = ({
   deleteImageModalIsOpen,
   setDeleteImageModalIsOpen,
   currentImg,
-  handleDelete,
+  handleDeleteImage,
   loadingDelete,
 }) => {
   const modalStyles = {
@@ -53,7 +53,7 @@ const DeleteImage = ({
         <button
           className='submit-btn'
           onClick={() => {
-            handleDelete(currentImg);
+            handleDeleteImage(currentImg);
           }}
         >
           {loadingDelete ? (

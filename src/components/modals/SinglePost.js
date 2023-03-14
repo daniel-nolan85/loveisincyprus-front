@@ -4,13 +4,10 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import defaultProfile from '../../assets/defaultProfile.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faCamera,
-  faSpinner,
-  faPaperPlane,
-} from '@fortawesome/free-solid-svg-icons';
+import { faSpinner, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import PostUpload from '../forms/PostUpload';
 
 Modal.setAppElement('#root');
 
@@ -24,8 +21,7 @@ const SinglePost = ({
 }) => {
   const [content, setContent] = useState(post.content);
   const [uploading, setUploading] = useState(false);
-  const [image, setImage] = useState({});
-  const [loadingImg, setLoadingImg] = useState(false);
+  const [postImages, setPostImages] = useState([]);
 
   const { token, _id, name, profileImage, username } = useSelector(
     (state) => state.user
@@ -38,7 +34,7 @@ const SinglePost = ({
     await axios
       .put(
         `${process.env.REACT_APP_API}/update-post/${post._id}`,
-        { post, content, image, _id },
+        { _id, post, content, postImages, _id },
         {
           headers: {
             authtoken: token,
@@ -60,35 +56,10 @@ const SinglePost = ({
         newsFeed && newsFeed();
         fetchUserPosts && fetchUserPosts();
         setPostModalIsOpen(false);
-        setImage({});
+        setPostImages({});
         setNotifModalIsOpen(false);
       })
       .catch((err) => console.log(err));
-  };
-
-  const handleImage = async (e) => {
-    const file = e.target.files[0];
-    let formData = new FormData();
-    formData.append('image', file);
-    setLoadingImg(true);
-
-    await axios
-      .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
-        headers: {
-          authtoken: token,
-        },
-      })
-      .then((res) => {
-        setImage({
-          url: res.data.url,
-          public_id: res.data.public_id,
-        });
-        setLoadingImg(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoadingImg(false);
-      });
   };
 
   const modalStyles = {
@@ -142,33 +113,13 @@ const SinglePost = ({
               placeholder={`What's on your mind, ${username || name}?`}
             />
           </form>
-          <div className='write-post-footer'>
-            <div className='add-post-links'>
-              {loadingImg ? (
-                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-              ) : (
-                <label>
-                  {image && image.url ? (
-                    <img src={image.url} alt='uploaded' />
-                  ) : post.image && post.image.url ? (
-                    <img src={post.image.url} alt='uploaded' />
-                  ) : (
-                    <FontAwesomeIcon icon={faCamera} className='fa' />
-                  )}
-                  <input
-                    onChange={handleImage}
-                    type='file'
-                    accept='images/*'
-                    hidden
-                  />
-                </label>
-              )}
-            </div>
+          <div className='edit-post-footer'>
+            <PostUpload postImages={postImages} setPostImages={setPostImages} />
             <button
               onClick={postSubmit}
               type='submit'
               className='submit-btn'
-              disabled={uploading || !content}
+              disabled={uploading}
             >
               {uploading ? (
                 <FontAwesomeIcon icon={faSpinner} className='fa' spin />
