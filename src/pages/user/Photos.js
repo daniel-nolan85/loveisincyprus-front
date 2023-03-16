@@ -1,24 +1,40 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import LargeImage from '../../components/modals/LargeImage';
 import ImagesDenied from '../../components/modals/ImagesDenied';
 import Mobile from '../../components/user/Mobile';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUpload } from '@fortawesome/free-solid-svg-icons';
+import PhotoUpload from '../../components/modals/PhotoUpload';
+import * as faceapi from 'face-api.js';
+import { toast } from 'react-toastify';
 
 const Photos = () => {
   const [photos, setPhotos] = useState([]);
   const [thisUser, setThisUser] = useState({});
   const [imageModalIsOpen, setImageModalIsOpen] = useState(false);
-  const [image, setImage] = useState('');
+  const [imageIndex, setImageIndex] = useState(0);
   const [visitorPhotos, setVisitorPhotos] = useState(0);
   const [deniedModalIsOpen, setDeniedModalIsOpen] = useState(false);
+  const [photoUploadModalIsOpen, setPhotoUploadModalIsOpen] = useState(false);
+  const [imageType, setImageType] = useState('profile');
+  const [loading, setLoading] = useState(false);
+  const [newUploads, setNewUploads] = useState([]);
+  const [faces, setFaces] = useState([]);
+  const [detecting, setDetecting] = useState(false);
 
   let { user } = useSelector((state) => ({ ...state }));
 
+  let dispatch = useDispatch();
+
   const { userId } = useParams();
+
+  const isFirstRun = useRef(true);
+  const profileImgRef = useRef();
 
   useEffect(() => {
     fetchUser();
@@ -45,6 +61,15 @@ const Photos = () => {
     }
   }, [user && user.token]);
 
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      hasClearProfileImage();
+    }
+  }, [faces]);
+
   const fetchUser = async () => {
     await axios
       .post(
@@ -57,6 +82,7 @@ const Photos = () => {
         }
       )
       .then((res) => {
+        console.log(res);
         setThisUser(res.data);
         if (
           user.role === 'main-admin' ||
@@ -89,11 +115,10 @@ const Photos = () => {
       )
       .then((res) => {
         setPhotos(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
-  };
-
-  const getThisImage = (photo) => {
-    setImage(photo);
   };
 
   const visitorPhotosCount = async () => {
@@ -109,6 +134,7 @@ const Photos = () => {
           }
         )
         .then((res) => {
+          console.log(res);
           if (
             user.role === 'main-admin' ||
             user.role === 'secondary-admin' ||
@@ -119,59 +145,225 @@ const Photos = () => {
             setDeniedModalIsOpen(true);
           }
           setVisitorPhotos(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
         });
     } catch (err) {
       console.log(err);
     }
   };
 
-  const { clearPhoto, membership } = thisUser;
+  const uploadNew = () => {
+    setPhotoUploadModalIsOpen(true);
+  };
+
+  const uploadNewImages = async () => {
+    setLoading(true);
+    setPhotoUploadModalIsOpen(false);
+    await axios
+      .put(
+        `${process.env.REACT_APP_API}/upload-new-images`,
+        { _id: user._id, imageType, newUploads },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+            profilePhotos: res.data.profilePhotos,
+            coverPhotos: res.data.coverPhotos,
+            uploadedPhotos: res.data.uploadedPhotos,
+            profileImage: res.data.profileImage,
+            coverImage: res.data.coverImage,
+          },
+        });
+        fetchUsersPhotos();
+        setLoading(false);
+        setNewUploads([]);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+        setNewUploads([]);
+      });
+  };
+
+  const detectfaces = async () => {
+    const detections = await faceapi.detectAllFaces(
+      profileImgRef.current,
+      new faceapi.TinyFaceDetectorOptions()
+    );
+    setFaces(detections);
+  };
+
+  const hasClearProfileImage = async () => {
+    await axios
+      .put(
+        `${process.env.REACT_APP_API}/clear-profile-image`,
+        { user, faces },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+            clearPhoto: res.data.clearPhoto,
+          },
+        });
+        setDetecting(false);
+        if (res.data.clearPhoto && res.data.profilePhotos.length > 1) {
+          toast.success(
+            'Face detected on profile picture. You may view other members pictures clearly.',
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+        } else if (res.data.clearPhoto && res.data.profilePhotos.length < 2) {
+          toast.warning(
+            'Face detected on profile picture. Upload one more profile picture to be able to view other members pictures clearly.',
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+        } else if (!res.data.clearPhoto) {
+          toast.warning(
+            'No face detected on profile picture. You will not be able to see other members pictures clearly.',
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+        }
+      });
+  };
+
+  const { clearPhoto, membership, name, username } = thisUser;
 
   return (
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
         <Mobile />
+        <h1 className='center'>
+          {user._id === userId ? 'My' : `${username || name}'s`} Photos
+        </h1>
         <input type='radio' name='Photos' id='check1' defaultChecked />
         <input type='radio' name='Photos' id='check2' />
         <input type='radio' name='Photos' id='check3' />
         <div className='photos-top-content'>
-          <label htmlFor='check1' className='submit-btn'>
+          <label
+            htmlFor='check1'
+            className='submit-btn'
+            onClick={() => {
+              setImageType('profile');
+              setImageIndex(0);
+            }}
+          >
             Profile Images
           </label>
-          <label htmlFor='check2' className='submit-btn'>
+          <label
+            htmlFor='check2'
+            className='submit-btn'
+            onClick={() => {
+              setImageType('cover');
+              setImageIndex(0);
+            }}
+          >
             Cover Images
           </label>
-          <label htmlFor='check3' className='submit-btn'>
+          <label
+            htmlFor='check3'
+            className='submit-btn'
+            onClick={() => {
+              setImageType('general upload');
+              setImageIndex(0);
+            }}
+          >
             Uploads
           </label>
         </div>
+        {user._id === userId && (
+          <div className='tooltip upload-images'>
+            <FontAwesomeIcon
+              icon={faUpload}
+              className='fa'
+              onClick={uploadNew}
+            />
+            <span className='tooltip-text'>Upload new images</span>
+          </div>
+        )}
         <div className='photo-gallery'>
           {photos[0] &&
             photos[0].map((photo, i) => (
               <div className='pic profile' key={i}>
-                <img
-                  src={photo.url || photo}
-                  alt=''
-                  style={{ cursor: 'zoom-in' }}
-                  onClick={() => {
-                    getThisImage(photo);
-                    setImageModalIsOpen(true);
-                  }}
-                  className={
-                    user.role === 'main-admin' ||
-                    user.role === 'secondary-admin' ||
-                    user._id === userId
-                      ? ''
-                      : visitorPhotos < 2 ||
-                        !clearPhoto ||
-                        !membership.paid ||
-                        !user.clearPhoto ||
-                        !user.membership.paid
-                      ? 'blur'
-                      : ''
-                  }
-                />
+                {i === 0 ? (
+                  <>
+                    {detecting && (
+                      <div className='outer-circle-rect'>
+                        <div className='img-scanner-rect'></div>
+                      </div>
+                    )}
+                    <img
+                      ref={profileImgRef}
+                      crossOrigin='anonymous'
+                      src={photo.url || photo}
+                      alt=''
+                      style={{ cursor: 'zoom-in' }}
+                      onClick={() => {
+                        setImageIndex(i);
+                        setImageModalIsOpen(true);
+                      }}
+                      className={
+                        user.role === 'main-admin' ||
+                        user.role === 'secondary-admin' ||
+                        user._id === userId
+                          ? ''
+                          : visitorPhotos < 2 ||
+                            !clearPhoto ||
+                            !membership.paid ||
+                            !user.clearPhoto ||
+                            !user.membership.paid ||
+                            user.profilePhotos.length < 2
+                          ? 'blur'
+                          : ''
+                      }
+                    />
+                  </>
+                ) : (
+                  <img
+                    src={photo.url || photo}
+                    alt=''
+                    style={{ cursor: 'zoom-in' }}
+                    onClick={() => {
+                      setImageIndex(i);
+                      setImageModalIsOpen(true);
+                    }}
+                    className={
+                      user.role === 'main-admin' ||
+                      user.role === 'secondary-admin' ||
+                      user._id === userId
+                        ? ''
+                        : visitorPhotos < 2 ||
+                          !clearPhoto ||
+                          !membership.paid ||
+                          !user.clearPhoto ||
+                          !user.membership.paid ||
+                          user.profilePhotos.length < 2
+                        ? 'blur'
+                        : ''
+                    }
+                  />
+                )}
               </div>
             ))}
           {photos[1] &&
@@ -182,7 +374,7 @@ const Photos = () => {
                   alt=''
                   style={{ cursor: 'zoom-in' }}
                   onClick={() => {
-                    getThisImage(photo);
+                    setImageIndex(i);
                     setImageModalIsOpen(true);
                   }}
                   className={
@@ -194,7 +386,8 @@ const Photos = () => {
                         !clearPhoto ||
                         !membership.paid ||
                         !user.clearPhoto ||
-                        !user.membership.paid
+                        !user.membership.paid ||
+                        user.profilePhotos.length < 2
                       ? 'blur'
                       : ''
                   }
@@ -209,7 +402,7 @@ const Photos = () => {
                   alt=''
                   style={{ cursor: 'zoom-in' }}
                   onClick={() => {
-                    getThisImage(photo);
+                    setImageIndex(i);
                     setImageModalIsOpen(true);
                   }}
                   className={
@@ -221,7 +414,8 @@ const Photos = () => {
                         !clearPhoto ||
                         !membership.paid ||
                         !user.clearPhoto ||
-                        !user.membership.paid
+                        !user.membership.paid ||
+                        user.profilePhotos.length < 2
                       ? 'blur'
                       : ''
                   }
@@ -232,10 +426,16 @@ const Photos = () => {
         <LargeImage
           imageModalIsOpen={imageModalIsOpen}
           setImageModalIsOpen={setImageModalIsOpen}
-          imageUrl={image}
+          imageIndex={imageIndex}
+          setImageIndex={setImageIndex}
           visitorPhotos={visitorPhotos}
           clearPhoto={clearPhoto}
           membership={membership}
+          images={photos}
+          imageType={imageType}
+          fetchUsersPhotos={fetchUsersPhotos}
+          setDetecting={setDetecting}
+          detectfaces={detectfaces}
         />
         <ImagesDenied
           deniedModalIsOpen={deniedModalIsOpen}
@@ -243,6 +443,15 @@ const Photos = () => {
           visitorPhotos={visitorPhotos}
           thisUser={thisUser}
           user={user}
+        />
+        <PhotoUpload
+          photoUploadModalIsOpen={photoUploadModalIsOpen}
+          setPhotoUploadModalIsOpen={setPhotoUploadModalIsOpen}
+          imageType={imageType}
+          uploadNewImages={uploadNewImages}
+          loading={loading}
+          newUploads={newUploads}
+          setNewUploads={setNewUploads}
         />
       </div>
       <RightSidebar />

@@ -66,7 +66,7 @@ const ReportPost = ({
     },
   };
 
-  const { content, image, postedBy } = post;
+  const { content, postImages, postedBy } = post;
 
   return (
     <Modal
@@ -80,10 +80,10 @@ const ReportPost = ({
         <br />
         <p>{content}</p>
         <br />
-        {image && (
+        {postImages && postImages.length > 0 && (
           <div className='match-images'>
             <img
-              src={image.url}
+              src={postImages[0].url}
               alt={`${postedBy.username || postedBy.name}'s post`}
             />
           </div>

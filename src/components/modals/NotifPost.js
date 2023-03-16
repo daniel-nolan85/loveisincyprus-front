@@ -30,6 +30,7 @@ import Maybe from '../../components/modals/Maybe';
 import Declined from '../../components/modals/Declined';
 import Comments from '../cards/Comments';
 import { Link } from 'react-router-dom';
+import LargePostImage from './LargePostImage';
 
 Modal.setAppElement('#root');
 
@@ -73,6 +74,7 @@ const NotifPost = ({
   const [acceptedModalIsOpen, setAcceptedModalIsOpen] = useState(false);
   const [maybeModalIsOpen, setMaybeModalIsOpen] = useState(false);
   const [declinedModalIsOpen, setDeclinedModalIsOpen] = useState(false);
+  const [postImageModalIsOpen, setPostImageModalIsOpen] = useState(false);
 
   const { token, _id, name, profileImage, username } = useSelector(
     (state) => state.user
@@ -101,6 +103,11 @@ const NotifPost = ({
   const showDeclined = (post) => {
     setCurrentPost(post);
     setDeclinedModalIsOpen(true);
+  };
+
+  const viewImages = (post) => {
+    setCurrentPost(post);
+    setPostImageModalIsOpen(true);
   };
 
   const modalStyles = {
@@ -165,11 +172,13 @@ const NotifPost = ({
             </div>
           </div>
           <p className='post-text'>{post.notif.content}</p>
-          {post.notif.image && (
+          {post.notif.postImages && post.notif.postImages.length > 0 && (
             <img
-              src={post.notif.image.url}
+              src={post.notif.postImages[0].url}
               alt={`${username || name}'s post`}
               className='post-img'
+              style={{ cursor: 'zoom-in' }}
+              onClick={() => viewImages(post.notif)}
             />
           )}
           <div className='post-row'>
@@ -424,12 +433,15 @@ const NotifPost = ({
         postToDelete={postToDelete}
         fetchNotifications={fetchNotifications}
         setNotifModalIsOpen={setNotifModalIsOpen}
+        populateNotifications={populateNotifications}
       />
       <SinglePost
         postModalIsOpen={postModalIsOpen}
         setPostModalIsOpen={setPostModalIsOpen}
         post={currentPost}
         setNotifModalIsOpen={setNotifModalIsOpen}
+        fetchNotifications={fetchNotifications}
+        populateNotifications={populateNotifications}
       />
       <ShowLikes
         likesModalIsOpen={likesModalIsOpen}
@@ -450,6 +462,14 @@ const NotifPost = ({
         declinedModalIsOpen={declinedModalIsOpen}
         setDeclinedModalIsOpen={setDeclinedModalIsOpen}
         post={currentPost}
+      />
+      <LargePostImage
+        postImageModalIsOpen={postImageModalIsOpen}
+        setPostImageModalIsOpen={setPostImageModalIsOpen}
+        post={currentPost}
+        fetchNotifications={fetchNotifications}
+        setNotifModalIsOpen={setNotifModalIsOpen}
+        populateNotifications={populateNotifications}
       />
     </Modal>
   );

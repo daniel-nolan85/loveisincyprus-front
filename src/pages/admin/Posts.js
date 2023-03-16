@@ -113,9 +113,9 @@ const Posts = ({ history }) => {
                       : post.content}
                   </p>
                 </div>
-                {post.image && (
+                {post.postImages && post.postImages.length > 0 && (
                   <img
-                    src={post.image.url}
+                    src={post.postImages[0].url}
                     alt={`${
                       post.postedBy.username || post.postedBy.name
                     }'s post`}

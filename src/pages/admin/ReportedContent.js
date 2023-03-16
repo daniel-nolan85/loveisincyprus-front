@@ -420,6 +420,8 @@ const ReportedContent = ({ history }) => {
         postImageModalIsOpen={postImageModalIsOpen}
         setPostImageModalIsOpen={setPostImageModalIsOpen}
         post={currentPost}
+        fetchReportedContent={fetchReportedContent}
+        fetchPosts={fetchPosts}
       />
     </div>
   );

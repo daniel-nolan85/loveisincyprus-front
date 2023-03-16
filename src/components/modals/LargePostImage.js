@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashCan, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import DeleteImage from './DeleteImage';
 
 Modal.setAppElement('#root');
@@ -16,13 +16,15 @@ const LargePostImage = ({
   newsFeed,
   fetchUserPosts,
   fetchPhotos,
+  fetchReportedContent,
+  fetchPosts,
+  fetchNotifications,
+  setNotifModalIsOpen,
+  populateNotifications,
 }) => {
-  const [loading, setLoading] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [deleteImageModalIsOpen, setDeleteImageModalIsOpen] = useState(false);
   const [currentImg, setCurrentImg] = useState({});
-
-  console.log('post => ', post);
 
   let { user } = useSelector((state) => ({ ...state }));
 
@@ -83,7 +85,6 @@ const LargePostImage = ({
   const handleDeleteImage = async (img) => {
     setDeleteImageModalIsOpen(false);
     setLoadingDelete(true);
-    console.log('img => ', img);
     await axios
       .put(
         `${process.env.REACT_APP_API}/post-picture-delete`,
@@ -110,6 +111,11 @@ const LargePostImage = ({
           },
         });
         setPostImageModalIsOpen(false);
+        fetchReportedContent && fetchReportedContent();
+        fetchPosts && fetchPosts();
+        fetchNotifications && fetchNotifications();
+        setNotifModalIsOpen && setNotifModalIsOpen(false);
+        populateNotifications && populateNotifications();
       })
       .catch((err) => {
         setLoadingDelete(false);
@@ -140,6 +146,15 @@ const LargePostImage = ({
                   />
                 </span>
               )}
+              {user._id === post.postedBy && (
+                <span className='delete-pic'>
+                  <FontAwesomeIcon
+                    icon={faTrashCan}
+                    className='fa trash'
+                    onClick={() => deleteImage(post.postImages[0])}
+                  />
+                </span>
+              )}
               <img
                 src={post.postImages[0].url || post.postImages[0]}
                 alt='1'
@@ -150,6 +165,15 @@ const LargePostImage = ({
               {post.postImages.map((img, index) => (
                 <div className='my-slides fade' key={index}>
                   {user._id === post.postedBy._id && (
+                    <span className='delete-pic'>
+                      <FontAwesomeIcon
+                        icon={faTrashCan}
+                        className='fa trash'
+                        onClick={() => deleteImage(img)}
+                      />
+                    </span>
+                  )}
+                  {user._id === post.postedBy && (
                     <span className='delete-pic'>
                       <FontAwesomeIcon
                         icon={faTrashCan}
@@ -178,6 +202,15 @@ const LargePostImage = ({
           post.postImages.length === 1 && (
             <div className='fade' id='first-slide'>
               {user._id === post.postedBy._id && (
+                <span className='delete-pic'>
+                  <FontAwesomeIcon
+                    icon={faTrashCan}
+                    className='fa trash'
+                    onClick={() => deleteImage(post.postImages[0])}
+                  />
+                </span>
+              )}
+              {user._id === post.postedBy && (
                 <span className='delete-pic'>
                   <FontAwesomeIcon
                     icon={faTrashCan}

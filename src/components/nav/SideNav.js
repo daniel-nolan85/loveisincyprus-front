@@ -491,6 +491,9 @@ const SideNav = () => {
                 <Link to='/chats'>CHATS</Link>
               </li>
               <li onClick={() => setOpenNav(false)}>
+                <Link to={`/photos/${user._id}`}>PHOTOS</Link>
+              </li>
+              <li onClick={() => setOpenNav(false)}>
                 <Link to='/notifications'>NOTIFICATIONS</Link>
               </li>
               <li onClick={() => setOpenNav(false)}>

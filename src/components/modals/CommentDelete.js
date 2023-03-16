@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 Modal.setAppElement('#root');
 
@@ -21,9 +23,12 @@ const CommentDelete = ({
   populateNotifications,
   setNotifModalIsOpen,
 }) => {
+  const [deleting, setDeleting] = useState(false);
+
   let { token, _id } = useSelector((state) => state.user);
 
   const deleteComment = async (postId, comment) => {
+    setDeleting(true);
     await axios
       .put(
         `${process.env.REACT_APP_API}/remove-comment`,
@@ -35,9 +40,11 @@ const CommentDelete = ({
         }
       )
       .then((res) => {
+        console.log(res.data);
         toast.error('Comment deleted', {
           position: toast.POSITION.TOP_CENTER,
         });
+        setDeleting(false);
         newsFeed && newsFeed();
         fetchUserPosts && fetchUserPosts();
         fetchThisUsersPosts && fetchThisUsersPosts();
@@ -50,6 +57,7 @@ const CommentDelete = ({
         setNotifModalIsOpen(false);
       })
       .catch((err) => {
+        setDeleting(false);
         console.log(err);
       });
   };
@@ -105,7 +113,11 @@ const CommentDelete = ({
           className='submit-btn'
           onClick={() => deleteComment(postOfCommentToDelete, commentToDelete)}
         >
-          Yes, delete
+          {deleting ? (
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+          ) : (
+            'Yes, delete'
+          )}
         </button>
         <button
           className='submit-btn trash'

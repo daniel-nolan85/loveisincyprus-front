@@ -82,7 +82,7 @@ const PostDelete = ({
     },
   };
 
-  const { content, image, postedBy } = postToDelete;
+  const { content, postImages, postedBy } = postToDelete;
 
   return (
     <Modal
@@ -96,10 +96,10 @@ const PostDelete = ({
         <br />
         <p>{content}</p>
         <br />
-        {image && (
+        {postImages && postImages.length > 0 && (
           <div className='match-images'>
             <img
-              src={image.url}
+              src={postImages[0].url}
               alt={`${postedBy.username || postedBy.name}'s post`}
             />
           </div>

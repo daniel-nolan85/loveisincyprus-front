@@ -575,12 +575,19 @@ const UserProfile = ({ history }) => {
                       {photos.map((p, i) => (
                         <div key={i}>
                           <img
-                            src={p}
+                            src={p.url || p}
                             alt=''
                             className={
-                              visitorPhotos < 2 ||
-                              !clearPhoto ||
-                              !membership.paid
+                              user.role === 'main-admin' ||
+                              user.role === 'secondary-admin' ||
+                              user._id === userId
+                                ? ''
+                                : visitorPhotos < 2 ||
+                                  !clearPhoto ||
+                                  !membership.paid ||
+                                  user.profilePhotos.length < 2 ||
+                                  !user.clearPhoto ||
+                                  !user.membership.paid
                                 ? 'blur'
                                 : ''
                             }
@@ -734,7 +741,8 @@ const UserProfile = ({ history }) => {
                 coverImageModalIsOpen={coverImageModalIsOpen}
                 setCoverImageModalIsOpen={setCoverImageModalIsOpen}
                 images={coverPhotos}
-                clearPhoto={clearPhoto}
+                clearPhoto={user.clearPhoto}
+                membership={user.membership}
               />
             )}
             {profileImage && profileImage.url && (
@@ -742,7 +750,8 @@ const UserProfile = ({ history }) => {
                 profileImageModalIsOpen={profileImageModalIsOpen}
                 setProfileImageModalIsOpen={setProfileImageModalIsOpen}
                 images={profilePhotos}
-                clearPhoto={clearPhoto}
+                clearPhoto={user.clearPhoto}
+                membership={user.membership}
               />
             )}
             <AddComment

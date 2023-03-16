@@ -182,13 +182,15 @@ const LargeProfileImage = ({
       {/* {images && images.length > 0 ? ( */}
       <div className='slideshow-container'>
         <div className='fade' id='first-slide'>
-          <span className='delete-pic'>
-            <FontAwesomeIcon
-              icon={faTrashCan}
-              className='fa trash'
-              onClick={() => deleteImage(images[0])}
-            />
-          </span>
+          {user._id === userId && (
+            <span className='delete-pic'>
+              <FontAwesomeIcon
+                icon={faTrashCan}
+                className='fa trash'
+                onClick={() => deleteImage(images[0])}
+              />
+            </span>
+          )}
           <img
             src={images[0].url || images[0]}
             alt='1'
@@ -207,28 +209,31 @@ const LargeProfileImage = ({
                 : 'pd-image-large'
             }
           />
-          {loading ? (
-            <div className='spinner'>
-              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-            </div>
-          ) : (
-            <div
-              className='slideshow-text'
-              onClick={() => makeProfilePic(images[0])}
-            >
-              Make profile picture
-            </div>
-          )}
+          {user._id === userId &&
+            (loading ? (
+              <div className='spinner'>
+                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+              </div>
+            ) : (
+              <div
+                className='slideshow-text'
+                onClick={() => makeProfilePic(images[0])}
+              >
+                Make profile picture
+              </div>
+            ))}
         </div>
         {images.map((img, index) => (
           <div className='my-slides fade' key={index}>
-            <span className='delete-pic'>
-              <FontAwesomeIcon
-                icon={faTrashCan}
-                className='fa trash'
-                onClick={() => deleteImage(img)}
-              />
-            </span>
+            {user._id === userId && (
+              <span className='delete-pic'>
+                <FontAwesomeIcon
+                  icon={faTrashCan}
+                  className='fa trash'
+                  onClick={() => deleteImage(img)}
+                />
+              </span>
+            )}
             <img
               src={img.url || img}
               alt={img.length}
@@ -247,18 +252,19 @@ const LargeProfileImage = ({
                   : 'pd-image-large'
               }
             />
-            {loading ? (
-              <div className='spinner'>
-                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-              </div>
-            ) : (
-              <div
-                className='slideshow-text'
-                onClick={() => makeProfilePic(img)}
-              >
-                Make profile picture
-              </div>
-            )}
+            {user._id === userId &&
+              (loading ? (
+                <div className='spinner'>
+                  <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                </div>
+              ) : (
+                <div
+                  className='slideshow-text'
+                  onClick={() => makeProfilePic(img)}
+                >
+                  Make profile picture
+                </div>
+              ))}
           </div>
         ))}
         <span className='slideshow-prev' onClick={() => plusSlides(-1)}>
@@ -268,25 +274,6 @@ const LargeProfileImage = ({
           &#10095;
         </span>
       </div>
-      {/* ) : (
-        <img
-          src={imageUrl.url || imageUrl}
-          alt='Profile photo'
-          className={
-            user.role === 'main-admin' ||
-            user.role === 'secondary-admin' ||
-            user._id === userId
-              ? 'pd-image-large'
-              : visitorPhotos < 2 ||
-                !clearPhoto ||
-                !membership.paid ||
-                !user.clearPhoto ||
-                !user.membership.paid
-              ? 'blur pd-image-large'
-              : 'pd-image-large'
-          }
-        />
-      )} */}
       <DeleteImage
         deleteImageModalIsOpen={deleteImageModalIsOpen}
         setDeleteImageModalIsOpen={setDeleteImageModalIsOpen}

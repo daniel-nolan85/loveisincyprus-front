@@ -46,10 +46,10 @@ const ImagesDenied = ({
       <div className='images-denied'>
         {visitorPhotos < 2 ? (
           <>
-            <h1>
-              To view other member's photos you first need to upload some of
-              your own
-            </h1>
+            <h2>
+              To view other member's photos you first need to upload at least 2
+              profile pictures of your own
+            </h2>
             <div>
               <h3>
                 You have currently uploaded <span>{visitorPhotos}</span>
@@ -64,30 +64,30 @@ const ImagesDenied = ({
           </>
         ) : !clearPhoto ? (
           <>
-            <h1>
+            <h2>
               {username || name} is not using a clear image of their face as
               their profile picture.
-            </h1>
+            </h2>
             <div>
               <h3>As a result their uploaded images cannot be viewed.</h3>
             </div>
           </>
         ) : !membership.paid ? (
           <>
-            <h1>
+            <h2>
               {username || name} is not currently a paid subsciber to Love Is In
               Cyprus.
-            </h1>
+            </h2>
             <div>
               <h3>As a result their uploaded images cannot be viewed.</h3>
             </div>
           </>
         ) : !user.clearPhoto ? (
           <>
-            <h1>
+            <h2>
               You are not currently using a clear image of your face as your
               profile picture.
-            </h1>
+            </h2>
             <div>
               <h3>As a result you cannot view other member's photos.</h3>
             </div>
@@ -95,9 +95,9 @@ const ImagesDenied = ({
         ) : (
           !user.membership.paid && (
             <>
-              <h1>
+              <h2>
                 You are not currently a paid subscriber to Love Is In Cyprus.
-              </h1>
+              </h2>
               <div>
                 <h3>As a result you cannot view other member's photos.</h3>
               </div>

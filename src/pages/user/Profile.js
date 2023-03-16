@@ -554,7 +554,6 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log('hasClearProfileImage', res.data);
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
@@ -940,7 +939,7 @@ const Profile = ({ history }) => {
               <>
                 {detecting && (
                   <div className='outer-circle'>
-                    <div className='green-scanner'></div>
+                    <div className='img-scanner'></div>
                   </div>
                 )}
                 <img

@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCamera, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import React from 'react';
 import Resizer from 'react-image-file-resizer';
 import axios from 'axios';
 import { useSelector } from 'react-redux';

@@ -130,11 +130,13 @@ const Comments = ({
                 </div>
               )) ||
               (token && _id !== c.postedBy._id && (
-                <FontAwesomeIcon
-                  icon={faFlag}
-                  className='fa report'
-                  onClick={() => reportComment(post._id, c)}
-                />
+                <div className='post-icons'>
+                  <FontAwesomeIcon
+                    icon={faFlag}
+                    className='fa report'
+                    onClick={() => reportComment(post._id, c)}
+                  />
+                </div>
               ))}
           </div>
           {c.text}

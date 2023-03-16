@@ -509,14 +509,9 @@ const Notifications = () => {
                                   ? 'new notification'
                                   : 'notification'
                               }
+                              onClick={() => viewNotif(n)}
                             >
-                              Someone liked your{' '}
-                              <span
-                                className='link'
-                                onClick={() => viewNotif(n)}
-                              >
-                                post
-                              </span>
+                              Someone liked your post
                             </p>
                           )}
                           {n.action === 'commented post' && (

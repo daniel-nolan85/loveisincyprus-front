@@ -18,6 +18,8 @@ const SinglePost = ({
   newsFeed,
   fetchUserPosts,
   setNotifModalIsOpen,
+  fetchNotifications,
+  populateNotifications,
 }) => {
   const [content, setContent] = useState(post.content);
   const [uploading, setUploading] = useState(false);
@@ -58,6 +60,8 @@ const SinglePost = ({
         setPostModalIsOpen(false);
         setPostImages({});
         setNotifModalIsOpen(false);
+        fetchNotifications && fetchNotifications();
+        populateNotifications && populateNotifications();
       })
       .catch((err) => console.log(err));
   };
