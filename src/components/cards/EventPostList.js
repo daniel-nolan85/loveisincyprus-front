@@ -8,6 +8,7 @@ import {
   faTrashCan,
   faCaretDown,
   faCaretUp,
+  faFlag,
 } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -16,6 +17,8 @@ import Comments from '../cards/Comments';
 import ShowLikes from '../../components/modals/ShowLikes';
 import EventPostEdit from '../../components/modals/EventPostEdit';
 import EventPostDelete from '../../components/modals/EventPostDelete';
+import ReportPost from '../../components/modals/ReportPost';
+import LargeEventPostImage from '../../components/modals/LargeEventPostImage';
 
 const EventPostList = ({
   posts,
@@ -43,6 +46,9 @@ const EventPostList = ({
   const [currentPost, setCurrentPost] = useState({});
   const [likesModalIsOpen, setLikesModalIsOpen] = useState(false);
   const [postModalIsOpen, setPostModalIsOpen] = useState(false);
+  const [reportPostModalIsOpen, setReportPostModalIsOpen] = useState(false);
+  const [eventPostImageModalIsOpen, setEventPostImageModalIsOpen] =
+    useState(false);
 
   const { token, _id } = useSelector((state) => state.user);
 
@@ -54,6 +60,16 @@ const EventPostList = ({
   const editPost = (post) => {
     setCurrentPost(post);
     setPostModalIsOpen(true);
+  };
+
+  const reportPost = (post) => {
+    setCurrentPost(post);
+    setReportPostModalIsOpen(true);
+  };
+
+  const viewImages = (post) => {
+    setCurrentPost(post);
+    setEventPostImageModalIsOpen(true);
   };
 
   return (
@@ -94,27 +110,38 @@ const EventPostList = ({
                   <span>{moment(post.created).fromNow()}</span>
                 </div>
               </div>
-              {token && _id === post.postedBy._id && (
-                <div className='post-icons'>
+              <div className='post-icons'>
+                {token && _id !== post.postedBy._id && (
                   <FontAwesomeIcon
-                    icon={faTrashCan}
-                    className='fa trash'
-                    onClick={() => handleDelete(post)}
+                    icon={faFlag}
+                    className='fa report'
+                    onClick={() => reportPost(post)}
                   />
-                  <FontAwesomeIcon
-                    icon={faPenToSquare}
-                    className='fa edit ml'
-                    onClick={() => editPost(post)}
-                  />
-                </div>
-              )}
+                )}
+                {token && _id === post.postedBy._id && (
+                  <>
+                    <FontAwesomeIcon
+                      icon={faTrashCan}
+                      className='fa trash'
+                      onClick={() => handleDelete(post)}
+                    />
+                    <FontAwesomeIcon
+                      icon={faPenToSquare}
+                      className='fa edit ml'
+                      onClick={() => editPost(post)}
+                    />
+                  </>
+                )}
+              </div>
             </div>
             <p className='post-text'>{post.content}</p>
-            {post.image && (
+            {post.postImages && post.postImages.length > 0 && (
               <img
-                src={post.image.url}
+                src={post.postImages[0].url}
                 alt={`${post.postedBy.username || post.postedBy.name}'s post`}
                 className='post-img'
+                style={{ cursor: 'zoom-in' }}
+                onClick={() => viewImages(post)}
               />
             )}
             <div className='post-row'>
@@ -209,6 +236,17 @@ const EventPostList = ({
         postDeleteModalIsOpen={postDeleteModalIsOpen}
         setPostDeleteModalIsOpen={setPostDeleteModalIsOpen}
         postToDelete={postToDelete}
+        fetchEvent={fetchEvent}
+      />
+      <ReportPost
+        reportPostModalIsOpen={reportPostModalIsOpen}
+        setReportPostModalIsOpen={setReportPostModalIsOpen}
+        post={currentPost}
+      />
+      <LargeEventPostImage
+        eventPostImageModalIsOpen={eventPostImageModalIsOpen}
+        setEventPostImageModalIsOpen={setEventPostImageModalIsOpen}
+        post={currentPost}
         fetchEvent={fetchEvent}
       />
     </>

@@ -227,15 +227,15 @@ const App = () => {
     return () => unsubscribe();
   }, [dispatch]);
 
-  useEffect(() => {
-    if (user && user.profileComplete === false && timerFired === false) {
-      const timer = setTimeout(() => {
-        setPopupModalIsOpen(true);
-      }, 30000);
-      setTimerFired(true);
-      return () => clearTimeout(timer);
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user && user.profileComplete === false && timerFired === false) {
+  //     const timer = setTimeout(() => {
+  //       setPopupModalIsOpen(true);
+  //     }, 30000);
+  //     setTimerFired(true);
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [user]);
 
   useEffect(() => {
     if (user) {

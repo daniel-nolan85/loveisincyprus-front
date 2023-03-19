@@ -35,6 +35,7 @@ const EventInfo = () => {
   const [commentToEdit, setCommentToEdit] = useState({});
   const [postOfCommentToEdit, setPostOfCommentToEdit] = useState([]);
   const [loadingImg, setLoadingImg] = useState(false);
+  const [postImages, setPostImages] = useState([]);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -80,7 +81,7 @@ const EventInfo = () => {
         `${process.env.REACT_APP_API}/create-event-post`,
         {
           content,
-          image,
+          postImages,
           user,
           event,
         },
@@ -102,7 +103,7 @@ const EventInfo = () => {
             position: toast.POSITION.TOP_CENTER,
           });
           setContent('');
-          setImage({});
+          setPostImages([]);
           fetchEvent();
         }
       })
@@ -244,6 +245,8 @@ const EventInfo = () => {
           handleImage={handleImage}
           image={image}
           loadingImg={loadingImg}
+          postImages={postImages}
+          setPostImages={setPostImages}
         />
         <EventPostList
           posts={event.post}

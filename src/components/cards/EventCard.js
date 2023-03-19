@@ -22,14 +22,20 @@ const EventCard = ({
     setCurrentEvent(event);
   };
 
-  const { name, when, notes, mainImage } = event;
+  const { name, when, notes, uploadedPhotos } = event;
+
+  console.log('event', event);
 
   return (
     <Card
       cover={
         <img
           className='product-image'
-          src={mainImage ? mainImage.url : defaultEvent}
+          src={
+            uploadedPhotos && uploadedPhotos.length > 0
+              ? uploadedPhotos[0].url
+              : defaultEvent
+          }
         />
       }
     >

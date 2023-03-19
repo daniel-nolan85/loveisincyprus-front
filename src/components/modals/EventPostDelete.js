@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { removePoints } from '../../functions/user';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 
 Modal.setAppElement('#root');
 
@@ -13,9 +15,12 @@ const EventPostDelete = ({
   postToDelete,
   fetchEvent,
 }) => {
+  const [deleting, setDeleting] = useState(false);
+
   let { _id, token } = useSelector((state) => state.user);
 
   const deletePost = async (post) => {
+    setDeleting(true);
     await axios
       .put(
         `${process.env.REACT_APP_API}/delete-event-post/${post._id}`,
@@ -31,10 +36,14 @@ const EventPostDelete = ({
         toast.error('Post deleted. 3 points were removed', {
           position: toast.POSITION.TOP_CENTER,
         });
+        setDeleting(false);
         setPostDeleteModalIsOpen(false);
         fetchEvent();
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        setDeleting(false);
+        console.log(err);
+      });
   };
 
   const modalStyles = {
@@ -61,7 +70,7 @@ const EventPostDelete = ({
     },
   };
 
-  const { content, image, postedBy } = postToDelete;
+  const { content, postImages, postedBy } = postToDelete;
 
   return (
     <Modal
@@ -75,17 +84,21 @@ const EventPostDelete = ({
         <br />
         <p>{content}</p>
         <br />
-        {image && (
+        {postImages && postImages.length > 0 && (
           <div className='match-images'>
             <img
-              src={image.url}
+              src={postImages[0].url}
               alt={`${postedBy.username || postedBy.name}'s post`}
             />
           </div>
         )}
         <br />
         <button className='submit-btn' onClick={() => deletePost(postToDelete)}>
-          Yes, delete
+          {deleting ? (
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+          ) : (
+            'Yes, delete'
+          )}
         </button>
         <button
           className='submit-btn trash'

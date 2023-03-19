@@ -59,9 +59,10 @@ const SingleEvent = ({ event, fetchEvent }) => {
     link,
     when,
     notes,
-    mainImage,
     uploadedPhotos,
   } = event;
+
+  console.log('event', event);
 
   return (
     <div className='small-container single-product single-event'>
@@ -92,12 +93,7 @@ const SingleEvent = ({ event, fetchEvent }) => {
             </Carousel>
           ) : (
             <Card
-              cover={
-                <img
-                  src={mainImage ? mainImage.url : defaultEvent}
-                  className='card-image'
-                />
-              }
+              cover={<img src={defaultEvent} className='card-image' />}
             ></Card>
           )}
         </div>

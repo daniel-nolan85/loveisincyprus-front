@@ -45,7 +45,7 @@ const MembershipCard = () => {
             <div className='ms-additional'>
               <div className='ms-user-card'>
                 <div className='ms-level ms-center'>
-                  {membership.paid ? 'Paid' : 'Unpaid'} Member
+                  {membership.paid ? 'Full access' : 'Limited access'}
                 </div>
                 <div className='ms-points ms-center'>{points} Points</div>
                 <Link to={`/user/profile/${_id}`}>
@@ -69,7 +69,7 @@ const MembershipCard = () => {
                 {membership.paid ? (
                   <div className='ms-coords small'>
                     <span>
-                      Paid member until{' '}
+                      Full access member until{' '}
                       {moment(membership.expiry).format('MMMM Do YYYY')}
                     </span>
                   </div>
@@ -77,7 +77,7 @@ const MembershipCard = () => {
                   <div className='ms-coords small'>
                     <span>
                       <Link to='/become-paid-member'>
-                        Become a paid member?
+                        Become a full access member?
                       </Link>
                     </span>
                   </div>

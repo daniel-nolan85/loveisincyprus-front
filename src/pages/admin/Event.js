@@ -28,11 +28,12 @@ import EventCancel from '../../components/modals/EventCancel';
 import EventEdit from '../../components/modals/EventEdit';
 import moment from 'moment';
 import io from 'socket.io-client';
+import EventUpload from '../../components/forms/EventUpload';
 
 let socket;
 
 const initialState = {
-  mainImage: {},
+  uploadedPhotos: [],
   name: '',
   location: '',
   link: '',
@@ -106,38 +107,21 @@ const Events = ({ history }) => {
       });
   };
 
-  const handleMainImage = async (e) => {
-    const file = e.target.files[0];
-    let formData = new FormData();
-    formData.append('image', file);
-    setUploading(true);
-
-    await axios
-      .post(`${process.env.REACT_APP_API}/upload-image`, formData, {
-        headers: {
-          authtoken: token,
-        },
-      })
-      .then((res) => {
-        setValues({
-          ...values,
-          mainImage: { url: res.data.url, public_id: res.data.public_id },
-        });
-        setUploading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setUploading(false);
-      });
-  };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
     createEvent(values, token)
       .then((res) => {
         setLoading(false);
-        setValues(initialState);
+        setValues({
+          uploadedPhotos: [],
+          name: '',
+          location: '',
+          link: '',
+          when: '',
+          notes: '',
+          invitees: [],
+        });
         toast.success(`${res.data.name} has been created`, {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -184,7 +168,7 @@ const Events = ({ history }) => {
   const searched = (query) => (e) =>
     e.location.toLowerCase().includes(query) || e.when.includes(query);
 
-  const { mainImage, name, location, link, when, notes, invitees } = values;
+  const { name, location, link, when, notes, invitees } = values;
 
   const eventForm = () => (
     <div className='form-box event'>
@@ -192,23 +176,7 @@ const Events = ({ history }) => {
         <p className='form-header'>Create Event</p>
       </div>
       <form>
-        <div className='add-post-links'>
-          <label>
-            {uploading ? (
-              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-            ) : mainImage && mainImage.url ? (
-              <img src={mainImage.url} />
-            ) : (
-              <FontAwesomeIcon icon={faCamera} className='fa' />
-            )}
-            <input
-              onChange={handleMainImage}
-              type='file'
-              accept='images/*'
-              hidden
-            />
-          </label>
-        </div>
+        <EventUpload values={values} setValues={setValues} />
         <input
           type='text'
           name='name'
@@ -338,26 +306,40 @@ const Events = ({ history }) => {
         <div className='admin-cards'>
           {events.filter(searched(query)).map((e) =>
             !e.cancelled ? (
-              <div className='admin-card event' key={e._id}>
+              <div
+                className='admin-card event'
+                key={e._id}
+                onClick={() => history.push(`/event/${e._id}`)}
+              >
                 <h3 className='name'>{e.name}</h3>
                 <h3>{e.location}</h3>
-                <h3>{e.when}</h3>
+                <h3>{moment(e.when).format('MMMM Do YYYY, h:mm:ss a')}</h3>
                 <FontAwesomeIcon
                   icon={faBan}
                   className='fa trash'
-                  onClick={() => handleCancel(e)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleCancel(e);
+                  }}
                 />
                 <FontAwesomeIcon
                   icon={faEdit}
                   className='fa update'
-                  onClick={() => handleEdit(e)}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleEdit(e);
+                  }}
                 />
               </div>
             ) : (
-              <div className='admin-card event cancelled' key={e._id}>
+              <div
+                className='admin-card event cancelled'
+                key={e._id}
+                onClick={() => history.push(`/event/${e._id}`)}
+              >
                 <h3 className='name'>{e.name}</h3>
                 <h3>{e.location}</h3>
-                <h3>{moment(e.when).format('MMMM Do YYYY')}</h3>
+                <h3>{moment(e.when).format('MMMM Do YYYY, h:mm:ss a')}</h3>
                 <div className='cancelled'></div>
               </div>
             )

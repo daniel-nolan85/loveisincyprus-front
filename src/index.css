@@ -2290,6 +2290,7 @@ nav {
 
 .admin-card.event {
   display: block;
+  cursor: pointer;
 }
 
 .admin-card.event h3.name {
