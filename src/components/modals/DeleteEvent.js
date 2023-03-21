@@ -50,7 +50,9 @@ const DeleteEvent = ({
       .catch((err) => console.log(err));
   };
 
-  const { name, mainImage } = currentEvent;
+  const { name, uploadedPhotos } = currentEvent;
+
+  console.log('currentEvent => ', currentEvent);
 
   const modalStyles = {
     content: {
@@ -89,8 +91,8 @@ const DeleteEvent = ({
         <h2>{name}</h2>
         <br />
         <div className='match-images'>
-          {mainImage ? (
-            <img src={mainImage.url} alt='Event image' />
+          {uploadedPhotos && uploadedPhotos.length > 0 ? (
+            <img src={uploadedPhotos[0].url} alt='Event image' />
           ) : (
             <img src={defaultEvent} alt='Event image' />
           )}

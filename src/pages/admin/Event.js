@@ -317,16 +317,16 @@ const Events = ({ history }) => {
                 <FontAwesomeIcon
                   icon={faBan}
                   className='fa trash'
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={(evt) => {
+                    evt.stopPropagation();
                     handleCancel(e);
                   }}
                 />
                 <FontAwesomeIcon
                   icon={faEdit}
                   className='fa update'
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={(evt) => {
+                    evt.stopPropagation();
                     handleEdit(e);
                   }}
                 />

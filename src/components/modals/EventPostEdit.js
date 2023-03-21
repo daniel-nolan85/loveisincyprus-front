@@ -114,7 +114,7 @@ const EventPostEdit = ({
               placeholder={`What's on your mind, ${username || name}?`}
             />
           </form>
-          <div className='write-post-footer'>
+          <div className='edit-post-footer'>
             <PostUpload postImages={postImages} setPostImages={setPostImages} />
             <button
               onClick={postSubmit}
