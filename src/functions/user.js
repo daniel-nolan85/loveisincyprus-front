@@ -171,16 +171,24 @@ export const getUserPointsSpentData = async (authtoken) =>
     },
   });
 
-export const getRandomUsers = async (authtoken) =>
-  await axios.get(`${process.env.REACT_APP_API}/fetch-users`, {
-    headers: {
-      authtoken,
-    },
-  });
+export const getUsersByPage = async (page, authtoken) =>
+  await axios.post(
+    `${process.env.REACT_APP_API}/fetch-users`,
+    { page },
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );
 
 export const fetchUsersByFilter = async (arg, authtoken) =>
-  await axios.post(`${process.env.REACT_APP_API}/fetch-users/filters`, arg, {
-    headers: {
-      authtoken,
-    },
-  });
+  await axios.post(
+    `${process.env.REACT_APP_API}/fetch-users/filters`,
+    { arg },
+    {
+      headers: {
+        authtoken,
+      },
+    }
+  );

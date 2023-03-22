@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getRandomUsers, fetchUsersByFilter } from '../../functions/user';
+import { getUsersByPage, fetchUsersByFilter } from '../../functions/user';
 import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -17,13 +17,31 @@ import UserInfo from '../../components/cards/UserInfo';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import UserSearchMobile from '../../components/modals/UserSearchMobile';
+import { Pagination } from 'antd';
 
 const { SubMenu } = Menu;
+
+const initialInputValues = {
+  numOfChildren: '',
+  occupation: '',
+  pets: '',
+  loves: '',
+  hates: '',
+  interests: '',
+  music: '',
+  books: '',
+  films: '',
+  hobbies: '',
+  sports: '',
+  traits: '',
+  treatself: '',
+};
 
 const UserSearch = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [range, setRange] = useState([0, 0]);
+  const [ageRange, setAgeRange] = useState([0, 0]);
+  const [incomeRange, setIncomeRange] = useState([0, 0]);
   const [ageOfPartner, setAgeOfPartner] = useState('');
   const [relWanted, setRelWanted] = useState('');
   const [location, setLocation] = useState('');
@@ -53,6 +71,10 @@ const UserSearch = () => {
   const [loadingSave, setLoadingSave] = useState(false);
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [userSearchModalIsOpen, setUserSearchModalIsOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const [inputValues, setInputValues] = useState(initialInputValues);
+
+  // console.log('users => ', users);
 
   const map = {
     ageOfPartner: setAgeOfPartner,
@@ -92,7 +114,7 @@ const UserSearch = () => {
 
   useEffect(() => {
     loadAllUsers();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     if (isFirstRun.current) {
@@ -111,7 +133,7 @@ const UserSearch = () => {
 
   const loadAllUsers = () => {
     setLoading(true);
-    getRandomUsers(user.token).then((res) => {
+    getUsersByPage(page, user.token).then((res) => {
       setUsers(res.data);
       setLoading(false);
     });
@@ -151,9 +173,9 @@ const UserSearch = () => {
       type: 'SEARCH_QUERY',
       payload: { text: '' },
     });
-    setRange(value);
+    setAgeRange(value);
     setTimeout(() => {
-      setParams((prevParams) => [...prevParams, { field: 'age', range }]);
+      setParams((prevParams) => [...prevParams, { field: 'age', ageRange }]);
     }, 300);
   };
 
@@ -162,48 +184,42 @@ const UserSearch = () => {
       type: 'SEARCH_QUERY',
       payload: { text: '' },
     });
-    setRange(value);
-    setTimeout(() => {
-      setParams((prevParams) => [...prevParams, { field: 'income', range }]);
-    }, 300);
-  };
-
-  const handleNumberInput = (e) => {
-    dispatch({
-      type: 'SEARCH_QUERY',
-      payload: { text: '' },
-    });
-    setParams((prevParams) => [
-      ...prevParams,
-      { type: 'number', field: e.target.name, entry: e.target.value },
-    ]);
-  };
-
-  const handleTextInput = (e) => {
-    dispatch({
-      type: 'SEARCH_QUERY',
-      payload: { text: '' },
-    });
+    setIncomeRange(value);
     setTimeout(() => {
       setParams((prevParams) => [
         ...prevParams,
-        { type: 'string', field: e.target.name, entry: e.target.value },
+        { field: 'income', incomeRange },
       ]);
     }, 300);
   };
 
-  const handleInputArray = (e) => {
+  const handleInputChange = (e) => {
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
     });
-    const arr = e.target.value.split(',');
-    setTimeout(() => {
+    setInputValues({ ...inputValues, [e.target.name]: e.target.value });
+    if (e.target.name === 'numOfChildren') {
       setParams((prevParams) => [
         ...prevParams,
-        { type: 'array', field: e.target.name, entry: arr },
+        { type: 'number', field: e.target.name, entry: e.target.value },
       ]);
-    }, 300);
+    } else if (e.target.name === 'occupation') {
+      setTimeout(() => {
+        setParams((prevParams) => [
+          ...prevParams,
+          { type: 'string', field: e.target.name, entry: e.target.value },
+        ]);
+      }, 300);
+    } else {
+      const arr = e.target.value.split(',');
+      setTimeout(() => {
+        setParams((prevParams) => [
+          ...prevParams,
+          { type: 'array', field: e.target.name, entry: arr },
+        ]);
+      }, 300);
+    }
   };
 
   const handleDropdown = ({ key, item }) => {
@@ -1612,6 +1628,64 @@ const UserSearch = () => {
     />
   );
 
+  const resetSearch = () => {
+    dispatch({
+      type: 'SEARCH_QUERY',
+      payload: { text: '' },
+    });
+    setParams([]);
+    setAgeRange([0, 0]);
+    setIncomeRange([0, 0]);
+    setAgeOfPartner('');
+    setRelWanted('');
+    setLocation('');
+    setLanguage('');
+    setNationality('');
+    setEthnicity('');
+    setMaritalStatus('');
+    setHeight('');
+    setBuild('');
+    setEyeColor('');
+    setHairColor('');
+    setHairLength('');
+    setHairStyle('');
+    setFeetType('');
+    setDrinks('');
+    setSmokes('');
+    setEducation('');
+    setPolitics('');
+    setReligion('');
+    setFoods('');
+    setLivesWith('');
+    setRelocate('');
+    setSexLikes('');
+    setSexFrequency('');
+    setInputValues({
+      numOfChildren: '',
+      occupation: '',
+      pets: '',
+      loves: '',
+      hates: '',
+      interests: '',
+      music: '',
+      books: '',
+      films: '',
+      hobbies: '',
+      sports: '',
+      traits: '',
+      treatself: '',
+    });
+    document
+      .querySelectorAll('label.ant-radio-wrapper-checked')
+      .forEach((label) => {
+        label.classList.remove('ant-radio-wrapper-checked');
+      });
+    document.querySelectorAll('span.ant-radio-checked').forEach((span) => {
+      span.classList.remove('ant-radio-checked');
+    });
+    loadAllUsers();
+  };
+
   const searchMembers = () => {
     setLoadingSearch(true);
     const unique = Object.values(
@@ -1653,6 +1727,22 @@ const UserSearch = () => {
         console.log(err);
       });
   };
+
+  const {
+    numOfChildren,
+    occupation,
+    pets,
+    loves,
+    hates,
+    interests,
+    music,
+    books,
+    films,
+    hobbies,
+    sports,
+    traits,
+    treatself,
+  } = inputValues;
 
   return (
     <div className='container search-container'>
@@ -1709,7 +1799,7 @@ const UserSearch = () => {
               <Slider
                 tipFormatter={(v) => v}
                 range
-                value={range}
+                value={ageRange}
                 onChange={handleAgeSlider}
                 min={18}
                 max={100}
@@ -1846,99 +1936,112 @@ const UserSearch = () => {
                 </a>
               </Dropdown>
               <Input
-                onChange={handleNumberInput}
+                onChange={handleInputChange}
                 placeholder='Number of children'
                 maxLength={25}
                 name='numOfChildren'
+                value={numOfChildren}
               />
               <Input
-                onChange={handleTextInput}
+                onChange={handleInputChange}
                 placeholder='Their occupation'
                 maxLength={25}
                 name='occupation'
+                value={occupation}
               />
               <Input
-                onChange={handleInputArray}
+                onChange={handleInputChange}
                 placeholder='Their pets'
                 maxLength={50}
                 name='pets'
+                value={pets}
               />
               <p className='csv'>Please separate each pet with a comma</p>
               <Input
-                onChange={handleInputArray}
+                onChange={handleInputChange}
                 placeholder='Things they love'
                 maxLength={50}
                 name='loves'
+                value={loves}
               />
               <p className='csv'>Please separate each item with a comma</p>
               <Input
-                onChange={handleInputArray}
+                onChange={handleInputChange}
                 placeholder='Things they hate'
                 maxLength={50}
                 name='hates'
+                value={hates}
               />
               <p className='csv'>Please separate each item with a comma</p>
               <Input
-                onChange={handleInputArray}
+                onChange={handleInputChange}
                 placeholder='Their interests'
                 maxLength={50}
                 name='interests'
+                value={interests}
               />
               <p className='csv'>Please separate each interest with a comma</p>
               <Input
-                onChange={handleInputArray}
+                onChange={handleInputChange}
                 placeholder='Their favourite musical genres'
                 maxLength={50}
                 name='music'
+                value={music}
               />
               <p className='csv'>Please separate each genre with a comma</p>
               <Input
-                onChange={handleInputArray}
+                onChange={handleInputChange}
                 placeholder='Their favourite books'
                 maxLength={50}
                 name='books'
+                value={books}
               />
               <p className='csv'>Please separate each book with a comma</p>
               <Input
-                onChange={handleInputArray}
+                onChange={handleInputChange}
                 placeholder='Their favourite films'
                 maxLength={50}
                 name='films'
+                value={films}
               />
               <p className='csv'>Please separate each film with a comma</p>
               <Input
-                onChange={handleInputArray}
+                onChange={handleInputChange}
                 placeholder='Their hobbies'
                 maxLength={50}
                 name='hobbies'
+                value={hobbies}
               />
               <p className='csv'>Please separate each hobby with a comma</p>
               <Input
-                onChange={handleInputArray}
+                onChange={handleInputChange}
                 placeholder='Their favourite sports'
                 maxLength={50}
                 name='sports'
+                value={sports}
               />
               <p className='csv'>Please separate each sport with a comma</p>
               <Input
-                onChange={handleInputArray}
+                onChange={handleInputChange}
                 placeholder='Their best character traits'
                 maxLength={50}
                 name='traits'
+                value={traits}
               />
               <p className='csv'>Please separate each trait with a comma</p>
               <Input
-                onChange={handleInputArray}
+                onChange={handleInputChange}
                 placeholder='Ways they treat themself'
                 maxLength={50}
                 name='treatself'
+                value={treatself}
               />
               <p className='csv'>Please separate each way with a comma</p>
               <p className='slider-p'>Their annual income</p>
               <Slider
                 tipFormatter={(v) => v}
                 range
-                value={range}
+                value={incomeRange}
                 onChange={handleIncomeSlider}
                 min={500}
                 max={1000000}
@@ -2021,6 +2124,14 @@ const UserSearch = () => {
             )
           )}
           <button
+            onClick={resetSearch}
+            type='submit'
+            className='submit-btn reset'
+            disabled={loadingSearch}
+          >
+            Reset
+          </button>
+          <button
             onClick={searchMembers}
             type='submit'
             className='submit-btn'
@@ -2092,6 +2203,16 @@ const UserSearch = () => {
             <span className='tooltip-text'>Most popular</span>
           </div>
         </div>
+        {users && users.length > 0 && (
+          <Pagination
+            current={page}
+            total={Math.round((users.length / 48) * 10)}
+            onChange={(value) => setPage(value)}
+            className='antd-pagination'
+            showSizeChanger={false}
+            style={{ marginBottom: '20px' }}
+          />
+        )}
         <div className='product-cards'>
           {loading ? (
             <div className='spinner'>
@@ -2111,6 +2232,17 @@ const UserSearch = () => {
             </>
           )}
         </div>
+        {!loading && (
+          <Pagination
+            current={page}
+            total={Math.round((users.length / 48) * 10)}
+            onChange={(value) => setPage(value)}
+            className='antd-pagination'
+            showSizeChanger={false}
+            style={{ marginTop: '20px' }}
+          />
+        )}
+
         <UserSearchMobile
           userSearchModalIsOpen={userSearchModalIsOpen}
           setUserSearchModalIsOpen={setUserSearchModalIsOpen}

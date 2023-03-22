@@ -4650,13 +4650,17 @@ input[name='Photos'] {
   border-color: var(--nav-color) !important;
 }
 
+.ant-pagination-item-ellipsis,
+.ant-pagination-item-link-icon {
+  color: var(--nav-color) !important;
+}
+
 .ant-card-actions li span:hover {
   color: var(--nav-color) !important;
 }
 
 .antd-pagination {
   text-align: center;
-  margin-bottom: 60px;
 }
 
 .related-products {
