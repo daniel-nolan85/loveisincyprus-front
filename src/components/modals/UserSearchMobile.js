@@ -71,7 +71,10 @@ const UserSearchMobile = ({
   const [loadingSave, setLoadingSave] = useState(false);
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [page, setPage] = useState(1);
+  const [filteredPage, setFilteredPage] = useState(1);
+  const [filtered, setFiltered] = useState(false);
   const [inputValues, setInputValues] = useState(initialInputValues);
+  const [totalUsersCount, setTotalUsersCount] = useState(0);
 
   const modalStyles = {
     content: {
@@ -138,6 +141,12 @@ const UserSearchMobile = ({
   }, [page]);
 
   useEffect(() => {
+    if (filtered === true) {
+      searchMembers();
+    }
+  }, [filteredPage]);
+
+  useEffect(() => {
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
@@ -146,11 +155,22 @@ const UserSearchMobile = ({
         fetchUsers({ query: text });
         if (!text) {
           loadAllUsers();
+          history.push(`/search-users`);
         }
       }, 300);
       return () => clearTimeout(delayed);
     }
   }, [text]);
+
+  useEffect(() => {
+    getTotalUsersCount();
+  }, []);
+
+  const getTotalUsersCount = async () => {
+    await axios.get(`${process.env.REACT_APP_API}/total-users`).then((res) => {
+      setTotalUsersCount(res.data);
+    });
+  };
 
   const loadAllUsers = () => {
     setLoading(true);
@@ -158,11 +178,14 @@ const UserSearchMobile = ({
       setUsers(res.data);
       setLoading(false);
     });
+    getTotalUsersCount();
   };
 
   const fetchUsers = (arg) => {
-    fetchUsersByFilter(arg, user.token).then((res) => {
-      setUsers(res.data);
+    setFiltered(true);
+    fetchUsersByFilter(filteredPage, arg, user.token).then((res) => {
+      setUsers(res.data.filteredUsers);
+      setTotalUsersCount(res.data.searchedUsersNum);
     });
   };
 
@@ -1683,6 +1706,8 @@ const UserSearchMobile = ({
     document.querySelectorAll('span.ant-radio-checked').forEach((span) => {
       span.classList.remove('ant-radio-checked');
     });
+    setFiltered(false);
+    getTotalUsersCount();
     loadAllUsers();
   };
 

@@ -182,10 +182,10 @@ export const getUsersByPage = async (page, authtoken) =>
     }
   );
 
-export const fetchUsersByFilter = async (arg, authtoken) =>
+export const fetchUsersByFilter = async (page, arg, authtoken) =>
   await axios.post(
     `${process.env.REACT_APP_API}/fetch-users/filters`,
-    { arg },
+    { page, arg },
     {
       headers: {
         authtoken,
