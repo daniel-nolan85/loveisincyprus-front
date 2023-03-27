@@ -4526,6 +4526,11 @@ input[name='Photos'] {
   flex-wrap: wrap;
 }
 
+.product-cards .fa {
+  font-size: 25px;
+  color: var(--nav-color);
+}
+
 .product-card {
   width: 300px;
   margin-top: 20px;
