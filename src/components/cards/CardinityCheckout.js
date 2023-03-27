@@ -85,6 +85,7 @@ const CardinityCheckout = ({
     setProcessing(true);
     createPayment(values, payable, userAgent, token, deliveryFee).then(
       (res) => {
+        console.log(res.data);
         if (res.data.errors) {
           toast.error(res.data.errors[0].message, {
             position: toast.POSITION.TOP_CENTER,
@@ -137,6 +138,12 @@ const CardinityCheckout = ({
         }
         if (res.data.status === 'declined') {
           toast.error(`Payment declined.`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+        }
+        if (res.data.status === 401) {
+          toast.error(res.data.detail, {
             position: toast.POSITION.TOP_CENTER,
           });
           setProcessing(false);

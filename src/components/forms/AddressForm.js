@@ -22,7 +22,13 @@ const AddressForm = ({
     city: yup.string().required('Please tell us which city you live in'),
     state: yup.string().required('Please tell us which state you live in'),
     zip: yup.string().required('Please enter your zip code'),
-    country: yup.string().required('Please tell us which country you live in'),
+    country: yup
+      .string()
+      .oneOf(
+        ['Cyprus', 'cyprus', 'CYPRUS'],
+        'You must reside in Cyprus in order to make a purchase'
+      )
+      .required('Please tell us which country you live in'),
   });
 
   const saveAddress = async (values) => {
