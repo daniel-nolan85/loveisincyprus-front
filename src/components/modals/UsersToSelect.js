@@ -12,7 +12,7 @@ import {
   faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
-import { fetchUsersByFilter } from '../../functions/user';
+import { getUsersByPage, fetchUsersByFilter } from '../../functions/user';
 
 Modal.setAppElement('#root');
 
@@ -25,9 +25,21 @@ const UsersToSelect = ({
   removeSelected,
 }) => {
   const [searches, setSearches] = useState([]);
+  const [loadingAll, setLoadingAll] = useState(false);
+  const [loadingSearch, setLoadingSearch] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [modalContentRendered, setModalContentRendered] = useState(false);
+  const [modalContentHeight, setModalContentHeight] = useState(0);
 
   const { token } = useSelector((state) => state.user);
+
+  const handleModalContentRef = (ref) => {
+    if (ref && !modalContentRendered) {
+      setModalContentRendered(true);
+      const height = ref.clientHeight;
+      setModalContentHeight(height);
+    }
+  };
 
   useEffect(() => {
     fetchSearches();
@@ -41,9 +53,28 @@ const UsersToSelect = ({
       });
   };
 
-  const userSearch = async (arg) => {
-    fetchUsersByFilter(arg, token).then((res) => {
+  const searchAll = () => {
+    setLoadingAll(true);
+    getUsersByPage(1, token).then((res) => {
+      console.log(res.data);
       const filtered = res.data.filter((u) => u.optIn);
+      console.log('filtered => ', filtered);
+      filtered.map((u) => {
+        setValues((prevValues) => ({
+          ...prevValues,
+          selected: [...prevValues.selected, u],
+        }));
+      });
+      setLoadingAll(false);
+      setSelectedUsersModalIsOpen(false);
+    });
+  };
+
+  const userSearch = async (arg) => {
+    fetchUsersByFilter(1, arg, token).then((res) => {
+      console.log(res.data);
+      const filtered = res.data.filteredUsers.filter((u) => u.optIn);
+      console.log('filtered => ', filtered);
       filtered.map((u) => {
         setValues((prevValues) => ({
           ...prevValues,
@@ -60,12 +91,16 @@ const UsersToSelect = ({
 
   const modalStyles = {
     content: {
-      top: '2000%',
+      top: `${modalContentRendered && modalContentHeight > 0 ? '0' : '50%'}`,
       left: '50%',
       right: 'auto',
       bottom: 'auto',
       marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
+      transform: `${
+        modalContentRendered && modalContentHeight > 0
+          ? 'none'
+          : 'translate(-50%, -50%)'
+      }`,
       width: '400px',
     },
     overlay: {
@@ -89,72 +124,85 @@ const UsersToSelect = ({
       style={modalStyles}
       contentLabel='Example Modal'
     >
-      {values.selected.length === 0 &&
-        searches &&
-        searches.map((s) => (
-          <button
-            onClick={() => userSearch(s.params)}
-            type='button'
-            className='submit-btn'
-            key={s._id}
-          >
-            {loading ? (
-              <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-            ) : (
-              <FontAwesomeIcon icon={faCalendarPlus} className='fa' />
-            )}
-            {s.name}
-          </button>
-        ))}
-      {optIns.length > 0
-        ? optIns.map((o) => (
-            <div className='invitees-container' key={o._id}>
-              <div className='user-profile'>
-                <div className='user-info'>
-                  <Link to={`/user/${o._id}`}>
-                    <img
-                      src={o.profileImage ? o.profileImage.url : defaultProfile}
-                      alt={`${o.username || o.name}'s profile picture`}
-                    />
-                  </Link>
-                  <Link to={`/user/${o._id}`}>
-                    <p>{o.username || o.name}</p>
-                  </Link>
-                </div>
-                <div className='icons'>
-                  {o.featuredMember === true && (
-                    <FontAwesomeIcon icon={faStar} className='fa star' />
-                  )}
-                  <div className='user-points'>
-                    <FontAwesomeIcon icon={faCoins} className='fa points' />
-                    <p>
-                      {o.pointsGained.reduce((accumulator, object) => {
-                        return accumulator + object.amount;
-                      }, 0) -
-                        o.pointsLost.reduce((accumulator, object) => {
-                          return accumulator + object.amount;
-                        }, 0)}
-                    </p>
+      <div ref={handleModalContentRef}>
+        <button onClick={searchAll} type='button' className='submit-btn'>
+          {loadingAll ? (
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+          ) : (
+            <FontAwesomeIcon icon={faCalendarPlus} className='fa' />
+          )}
+          Everyone
+        </button>
+        {loadingAll && <p className='center'>This may take a few minutes</p>}
+        {values.selected.length === 0 &&
+          searches &&
+          searches.map((s) => (
+            <button
+              onClick={() => userSearch(s.params)}
+              type='button'
+              className='submit-btn'
+              key={s._id}
+            >
+              {loading ? (
+                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+              ) : (
+                <FontAwesomeIcon icon={faCalendarPlus} className='fa' />
+              )}
+              {s.name}
+            </button>
+          ))}
+        {optIns.length > 0
+          ? optIns.map((o) => (
+              <div className='invitees-container' key={o._id}>
+                <div className='user-profile'>
+                  <div className='user-info'>
+                    <Link to={`/user/${o._id}`}>
+                      <img
+                        src={
+                          o.profileImage ? o.profileImage.url : defaultProfile
+                        }
+                        alt={`${o.username || o.name}'s profile picture`}
+                      />
+                    </Link>
+                    <Link to={`/user/${o._id}`}>
+                      <p>{o.username || o.name}</p>
+                    </Link>
                   </div>
-                  {!values.selected.some((ele) => ele._id === o._id) ? (
-                    <FontAwesomeIcon
-                      icon={faCalendarPlus}
-                      className='fa add'
-                      onClick={() => addSelected(o)}
-                    />
-                  ) : (
-                    <FontAwesomeIcon
-                      icon={faCalendarMinus}
-                      className='fa minus'
-                      onClick={() => removeSelected(o)}
-                    />
-                  )}
+                  <div className='icons'>
+                    {o.featuredMember === true && (
+                      <FontAwesomeIcon icon={faStar} className='fa star' />
+                    )}
+                    <div className='user-points'>
+                      <FontAwesomeIcon icon={faCoins} className='fa points' />
+                      <p>
+                        {o.pointsGained.reduce((accumulator, object) => {
+                          return accumulator + object.amount;
+                        }, 0) -
+                          o.pointsLost.reduce((accumulator, object) => {
+                            return accumulator + object.amount;
+                          }, 0)}
+                      </p>
+                    </div>
+                    {!values.selected.some((ele) => ele._id === o._id) ? (
+                      <FontAwesomeIcon
+                        icon={faCalendarPlus}
+                        className='fa add'
+                        onClick={() => addSelected(o)}
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={faCalendarMinus}
+                        className='fa minus'
+                        onClick={() => removeSelected(o)}
+                      />
+                    )}
+                  </div>
                 </div>
+                <br />
               </div>
-              <br />
-            </div>
-          ))
-        : 'No users are currently opted in to receive messages'}
+            ))
+          : 'No users are currently opted in to receive messages'}
+      </div>
     </Modal>
   );
 };

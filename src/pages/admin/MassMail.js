@@ -36,6 +36,8 @@ const MassMail = ({ history }) => {
   const [selectedUsersModalIsOpen, setSelectedUsersModalIsOpen] =
     useState(false);
 
+  console.log('values => ', values);
+
   const { token, _id, canMassMail } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -110,7 +112,11 @@ const MassMail = ({ history }) => {
       sendMassMail(values, token)
         .then((res) => {
           setLoading(false);
-          setValues(initialState);
+          setValues({
+            image: {},
+            content: '',
+            selected: [],
+          });
           socket.emit('new mass mail', res.data);
           toast.success('Your message has been sent', {
             position: toast.POSITION.TOP_CENTER,
