@@ -5,7 +5,9 @@ import {
   faArrowRightFromBracket,
   faEject,
   faEnvelope,
+  faMoon,
   faPlay,
+  faSun,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
@@ -80,7 +82,13 @@ const SettingsMenu = ({
         className={darkMode ? 'dark-btn-on' : ''}
         onClick={handleDarkMode}
       >
-        <span />
+        <span>
+          {darkMode ? (
+            <FontAwesomeIcon icon={faSun} className='fa sun' />
+          ) : (
+            <FontAwesomeIcon icon={faMoon} className='fa moon' />
+          )}
+        </span>
       </div>
       <div className='settings-menu-inner' ref={box}>
         <Link to={`/user/profile/${_id}`}>

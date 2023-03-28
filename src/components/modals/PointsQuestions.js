@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
+import { useSelector } from 'react-redux';
 
 Modal.setAppElement('#root');
 
@@ -7,6 +8,8 @@ const PointsQuestions = ({
   pointsQuestionsModalIsOpen,
   setPointsQuestionsModalIsOpen,
 }) => {
+  const { membership } = useSelector((state) => state.user);
+
   const modalStyles = {
     content: {
       top: '50%',
@@ -40,8 +43,10 @@ const PointsQuestions = ({
     >
       <div className='points-info'>
         <h2>
-          Paid subscribers can spend their accumulated points in the following
-          ways.
+          {membership.paid
+            ? 'You can spend your '
+            : 'Paid subscribers can spend their '}
+          accumulated points in the following ways.
         </h2>
         <table>
           <tbody>
@@ -54,11 +59,17 @@ const PointsQuestions = ({
               <td>100 points</td>
             </tr>
             <tr>
-              <td>Receive a 5% discount on items in the online store</td>
+              <td>
+                Receive a 5% discount on items in the online store{' '}
+                <span>(expires in 3 days)</span>
+              </td>
               <td>150 points</td>
             </tr>
             <tr>
-              <td>Receive a 10% discount on items in the online store</td>
+              <td>
+                Receive a 10% discount on items in the online store{' '}
+                <span>(expires in 3 days)</span>
+              </td>
               <td>250 points</td>
             </tr>
             <tr>

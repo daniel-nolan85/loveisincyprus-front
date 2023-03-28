@@ -1184,12 +1184,30 @@ nav {
   height: 18px;
   background: #fff;
   border-radius: 50%;
-  display: inline-block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #dark-btn.dark-btn-on {
   padding-left: 23px;
   background: #0a0a0a;
+}
+
+#dark-btn span .moon {
+  background-color: #00a0ae;
+  color: #f6f1d5;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+}
+
+#dark-btn span .sun {
+  background-color: #fc9601;
+  color: #ffcc33;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
 }
 
 #opt-btn {
