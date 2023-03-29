@@ -366,7 +366,11 @@ const UserDashboard = () => {
         <Mobile />
         <FreeMembership />
         {user.membership.paid ? (
-          <Users users={users} handleFollow={handleFollow} />
+          <>
+            <br />
+            <h1 className='center'>Members you may be interested in...</h1>
+            <Users users={users} handleFollow={handleFollow} />
+          </>
         ) : (
           <BecomePaid />
         )}

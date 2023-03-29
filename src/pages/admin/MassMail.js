@@ -31,6 +31,7 @@ const initialState = {
 const MassMail = ({ history }) => {
   const [optIns, setOptIns] = useState([]);
   const [values, setValues] = useState(initialState);
+  const [loadingOpen, setLoadingOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [selectedUsersModalIsOpen, setSelectedUsersModalIsOpen] =
@@ -62,6 +63,7 @@ const MassMail = ({ history }) => {
   }, [token]);
 
   const fetchOptIns = async () => {
+    setLoadingOpen(true);
     await axios
       .post(
         `${process.env.REACT_APP_API}/fetch-optins`,
@@ -74,9 +76,11 @@ const MassMail = ({ history }) => {
       )
       .then((res) => {
         setOptIns(res.data);
+        setLoadingOpen(false);
       })
       .catch((err) => {
         console.log(err);
+        setLoadingOpen(false);
       });
   };
 
@@ -148,7 +152,7 @@ const MassMail = ({ history }) => {
   const { image, content, selected } = values;
 
   const messageForm = () => (
-    <div className='form-box event'>
+    <div className='form-box mass-mail'>
       <div className='button-box'>
         <p className='form-header'>Create Message</p>
       </div>
@@ -170,13 +174,15 @@ const MassMail = ({ history }) => {
             />
           </label>
         </div>
-        <ReactQuill
-          placeholder='Write a message...'
-          value={content}
-          name='content'
-          onChange={(e) => setValues({ ...values, content: e })}
-          modules={{ toolbar: ['bold', 'italic', 'underline'] }}
-        />
+        <div style={{ maxHeight: '150px', overflowY: 'auto' }}>
+          <ReactQuill
+            placeholder='Write a message...'
+            value={content}
+            name='content'
+            onChange={(e) => setValues({ ...values, content: e })}
+            modules={{ toolbar: ['bold', 'italic', 'underline'] }}
+          />
+        </div>
         <button
           onClick={() => setSelectedUsersModalIsOpen(true)}
           type='button'
@@ -250,6 +256,7 @@ const MassMail = ({ history }) => {
           values={values}
           setValues={setValues}
           removeSelected={removeSelected}
+          loadingOpen={loadingOpen}
         />
       </div>
     </div>

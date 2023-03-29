@@ -2361,7 +2361,8 @@ nav {
   height: 100px;
 }
 
-.form-box.event .submit-btn.add {
+.form-box.event .submit-btn.add,
+.form-box.mass-mail .submit-btn.add {
   background-color: #5388b4;
   color: #fff;
 }
@@ -2484,7 +2485,8 @@ nav {
 }
 
 .form-box.category .button-box,
-.form-box.event .button-box {
+.form-box.event .button-box,
+.form-box.mass-mail .button-box {
   margin: 0 auto;
 }
 
@@ -2536,6 +2538,11 @@ nav {
 
 .form-box.event {
   height: 500px;
+  margin: 0 auto;
+}
+
+.form-box.mass-mail {
+  height: 385px;
   margin: 0 auto;
 }
 
@@ -2872,7 +2879,7 @@ select.gray {
   display: flex;
 }
 
-.pd-right button {
+.pd-right button:not(.verif-cta) {
   background: var(--nav-color);
   border: 0;
   outline: 0;
@@ -2887,6 +2894,7 @@ select.gray {
 
 .pd-right button.ribbon {
   font-size: 25px;
+  cursor: default;
 }
 
 .pd-right .verifying,
@@ -2953,6 +2961,70 @@ label.verif-upload img {
 
 label.verif-upload .fa {
   color: var(--nav-color);
+}
+
+.pd-right button.verif-cta {
+  border: none;
+  background-color: var(--bg-color);
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.verif-cta {
+  position: relative;
+  margin: auto;
+  padding: 19px 22px;
+  transition: all 0.2s ease;
+}
+
+.verif-cta:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  border-radius: 28px;
+  background: rgba(239, 91, 133, 0.5);
+  width: 56px;
+  height: 56px;
+  transition: all 0.3s ease;
+}
+
+.verif-cta span {
+  position: relative;
+  font-size: 16px;
+  line-height: 18px;
+  font-weight: 900;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  color: #000;
+}
+
+.verif-cta svg {
+  position: relative;
+  top: 0;
+  margin-left: 10px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: #000;
+  stroke-width: 2;
+  transform: translateX(-5px);
+  transition: all 0.3s ease;
+}
+
+.verif-cta:hover:before {
+  width: 100%;
+  background: rgba(239, 91, 133, 1);
+}
+
+.verif-cta:hover svg {
+  transform: translateX(0);
+}
+
+.verif-cta:active {
+  transform: scale(0.96);
 }
 
 .fa.verify {
@@ -3723,7 +3795,7 @@ button.disabled {
 
 .fa.disabled {
   cursor: not-allowed !important;
-  color: #626262;
+  color: #626262 !important;
 }
 
 .submit-btn .fa {

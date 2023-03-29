@@ -23,13 +23,14 @@ const UsersToSelect = ({
   values,
   setValues,
   removeSelected,
+  loadingOpen,
 }) => {
   const [searches, setSearches] = useState([]);
   const [loadingAll, setLoadingAll] = useState(false);
-  const [loadingSearch, setLoadingSearch] = useState(false);
   const [loading, setLoading] = useState(false);
   const [modalContentRendered, setModalContentRendered] = useState(false);
   const [modalContentHeight, setModalContentHeight] = useState(0);
+  const [clickedSearch, setClickedSearch] = useState(null);
 
   const { token } = useSelector((state) => state.user);
 
@@ -55,10 +56,8 @@ const UsersToSelect = ({
 
   const searchAll = () => {
     setLoadingAll(true);
-    getUsersByPage(1, token).then((res) => {
-      console.log(res.data);
+    getUsersByPage('mail', 1, token).then((res) => {
       const filtered = res.data.filter((u) => u.optIn);
-      console.log('filtered => ', filtered);
       filtered.map((u) => {
         setValues((prevValues) => ({
           ...prevValues,
@@ -71,18 +70,18 @@ const UsersToSelect = ({
   };
 
   const userSearch = async (arg) => {
-    fetchUsersByFilter(1, arg, token).then((res) => {
-      console.log(res.data);
+    setLoading(true);
+    fetchUsersByFilter('mail', 1, arg, token).then((res) => {
       const filtered = res.data.filteredUsers.filter((u) => u.optIn);
-      console.log('filtered => ', filtered);
       filtered.map((u) => {
         setValues((prevValues) => ({
           ...prevValues,
           selected: [...prevValues.selected, u],
         }));
       });
+      setLoading(false);
+      setSelectedUsersModalIsOpen(false);
     });
-    setSelectedUsersModalIsOpen(false);
   };
 
   const addSelected = (o) => {
@@ -137,71 +136,88 @@ const UsersToSelect = ({
         {values.selected.length === 0 &&
           searches &&
           searches.map((s) => (
-            <button
-              onClick={() => userSearch(s.params)}
-              type='button'
-              className='submit-btn'
-              key={s._id}
-            >
-              {loading ? (
-                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-              ) : (
-                <FontAwesomeIcon icon={faCalendarPlus} className='fa' />
+            <>
+              <button
+                onClick={() => {
+                  userSearch(s.params);
+                  setClickedSearch(s._id);
+                }}
+                type='button'
+                className='submit-btn'
+                key={s._id}
+              >
+                {loading && clickedSearch === s._id ? (
+                  <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                ) : (
+                  <FontAwesomeIcon icon={faCalendarPlus} className='fa' />
+                )}
+                {s.name}
+              </button>
+              {loading && clickedSearch === s._id && (
+                <p className='center'>This may take a few minutes</p>
               )}
-              {s.name}
-            </button>
+            </>
           ))}
-        {optIns.length > 0
-          ? optIns.map((o) => (
-              <div className='invitees-container' key={o._id}>
-                <div className='user-profile'>
-                  <div className='user-info'>
-                    <Link to={`/user/${o._id}`}>
-                      <img
-                        src={
-                          o.profileImage ? o.profileImage.url : defaultProfile
-                        }
-                        alt={`${o.username || o.name}'s profile picture`}
-                      />
-                    </Link>
-                    <Link to={`/user/${o._id}`}>
-                      <p>{o.username || o.name}</p>
-                    </Link>
-                  </div>
-                  <div className='icons'>
-                    {o.featuredMember === true && (
-                      <FontAwesomeIcon icon={faStar} className='fa star' />
-                    )}
-                    <div className='user-points'>
-                      <FontAwesomeIcon icon={faCoins} className='fa points' />
-                      <p>
-                        {o.pointsGained.reduce((accumulator, object) => {
-                          return accumulator + object.amount;
-                        }, 0) -
-                          o.pointsLost.reduce((accumulator, object) => {
-                            return accumulator + object.amount;
-                          }, 0)}
-                      </p>
-                    </div>
-                    {!values.selected.some((ele) => ele._id === o._id) ? (
-                      <FontAwesomeIcon
-                        icon={faCalendarPlus}
-                        className='fa add'
-                        onClick={() => addSelected(o)}
-                      />
-                    ) : (
-                      <FontAwesomeIcon
-                        icon={faCalendarMinus}
-                        className='fa minus'
-                        onClick={() => removeSelected(o)}
-                      />
-                    )}
-                  </div>
+        {loadingOpen ? (
+          <div style={{ textAlign: 'center' }}>
+            <FontAwesomeIcon
+              icon={faSpinner}
+              className='fa'
+              spin
+              style={{ fontSize: '25px', color: '#ef5b85' }}
+            />
+          </div>
+        ) : optIns.length > 0 ? (
+          optIns.map((o) => (
+            <div className='invitees-container' key={o._id}>
+              <div className='user-profile'>
+                <div className='user-info'>
+                  <Link to={`/user/${o._id}`}>
+                    <img
+                      src={o.profileImage ? o.profileImage.url : defaultProfile}
+                      alt={`${o.username || o.name}'s profile picture`}
+                    />
+                  </Link>
+                  <Link to={`/user/${o._id}`}>
+                    <p>{o.username || o.name}</p>
+                  </Link>
                 </div>
-                <br />
+                <div className='icons'>
+                  {o.featuredMember === true && (
+                    <FontAwesomeIcon icon={faStar} className='fa star' />
+                  )}
+                  <div className='user-points'>
+                    <FontAwesomeIcon icon={faCoins} className='fa points' />
+                    <p>
+                      {o.pointsGained.reduce((accumulator, object) => {
+                        return accumulator + object.amount;
+                      }, 0) -
+                        o.pointsLost.reduce((accumulator, object) => {
+                          return accumulator + object.amount;
+                        }, 0)}
+                    </p>
+                  </div>
+                  {!values.selected.some((ele) => ele._id === o._id) ? (
+                    <FontAwesomeIcon
+                      icon={faCalendarPlus}
+                      className='fa add'
+                      onClick={() => addSelected(o)}
+                    />
+                  ) : (
+                    <FontAwesomeIcon
+                      icon={faCalendarMinus}
+                      className='fa minus'
+                      onClick={() => removeSelected(o)}
+                    />
+                  )}
+                </div>
               </div>
-            ))
-          : 'No users are currently opted in to receive messages'}
+              <br />
+            </div>
+          ))
+        ) : (
+          'No users are currently opted in to receive messages'
+        )}
       </div>
     </Modal>
   );

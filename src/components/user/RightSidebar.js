@@ -203,7 +203,34 @@ const RightSidebar = () => {
       {targetedAds.length > 0 ? (
         targetedAds.map((ad) => (
           <div key={ad._id}>
-            {ad.image ? (
+            {ad.hyperlink ? (
+              <Link
+                to={{
+                  pathname: ad.hyperlink,
+                }}
+                target='_blank'
+              >
+                {ad.image ? (
+                  <div className='sidebar-ad'>
+                    <img
+                      src={ad.image.url}
+                      alt={`${ad.contactInfo.name}'s advertisement`}
+                      className='sidebar-ads'
+                    />
+                    <p
+                      className='sidebar-ad-content'
+                      style={{ color: '#626262' }}
+                    >
+                      {ad.content}
+                    </p>
+                  </div>
+                ) : (
+                  <div className='sidebar-ads no-image'>
+                    <p>{ad.content}</p>
+                  </div>
+                )}
+              </Link>
+            ) : ad.image ? (
               <div className='sidebar-ad'>
                 <img
                   src={ad.image.url}

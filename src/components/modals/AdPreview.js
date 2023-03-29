@@ -1,5 +1,6 @@
 import React from 'react';
 import Modal from 'react-modal';
+import { Link } from 'react-router-dom';
 
 Modal.setAppElement('#root');
 
@@ -8,6 +9,7 @@ const AdPreview = ({
   setPreviewModalIsOpen,
   content,
   image,
+  hyperlink,
 }) => {
   const modalStyles = {
     content: {
@@ -41,7 +43,28 @@ const AdPreview = ({
       contentLabel='Example Modal'
     >
       <div className='advert-preview'>
-        {image.url ? (
+        {hyperlink ? (
+          <Link
+            to={{
+              pathname: hyperlink,
+            }}
+            target='_blank'
+          >
+            {image.url ? (
+              <>
+                <img src={image.url} alt='Your advertisement image' />
+                <br />
+                <p className='ad-content' style={{ color: '#626262' }}>
+                  {content}
+                </p>
+              </>
+            ) : (
+              <div className='no-image'>
+                <p>{content}</p>
+              </div>
+            )}
+          </Link>
+        ) : image.url ? (
           <>
             <img src={image.url} alt='Your advertisement image' />
             <br />

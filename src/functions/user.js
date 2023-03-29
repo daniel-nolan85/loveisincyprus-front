@@ -171,10 +171,10 @@ export const getUserPointsSpentData = async (authtoken) =>
     },
   });
 
-export const getUsersByPage = async (page, authtoken) =>
+export const getUsersByPage = async (doc, page, authtoken) =>
   await axios.post(
     `${process.env.REACT_APP_API}/fetch-users`,
-    { page },
+    { doc, page },
     {
       headers: {
         authtoken,
@@ -182,10 +182,10 @@ export const getUsersByPage = async (page, authtoken) =>
     }
   );
 
-export const fetchUsersByFilter = async (page, arg, authtoken) =>
+export const fetchUsersByFilter = async (doc, page, arg, authtoken) =>
   await axios.post(
     `${process.env.REACT_APP_API}/fetch-users/filters`,
-    { page, arg },
+    { doc, page, arg },
     {
       headers: {
         authtoken,

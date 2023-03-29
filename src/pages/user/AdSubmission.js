@@ -16,6 +16,7 @@ import AdContact from '../../components/forms/AdContact';
 import AdPayment from '../../components/forms/AdPayment';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
+import HyperlinkInfo from '../../components/modals/HyperlinkInfo';
 import DurationInfo from '../../components/modals/DurationInfo';
 import TargetingInfo from '../../components/modals/TargetingInfo';
 import Mobile from '../../components/user/Mobile';
@@ -41,11 +42,18 @@ const AdSubmission = () => {
   const [selectedAge, setSelectedAge] = useState([]);
   const [showLocation, setShowLocation] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState([]);
+  const [hyperlink, setHyperlink] = useState('');
+  const [hyperlinkInfoModalIsOpen, setHyperlinkInfoModalIsOpen] =
+    useState(false);
 
   useEffect(() => {
     let selectedOpts = selectedGender.concat(selectedAge, selectedLocation);
     setDemographic(selectedOpts);
   }, [selectedGender, selectedAge, selectedLocation]);
+
+  const handleHyperlinkInfo = () => {
+    setHyperlinkInfoModalIsOpen(true);
+  };
 
   const handleDurationInfo = () => {
     setDurationInfoModalIsOpen(true);
@@ -64,6 +72,7 @@ const AdSubmission = () => {
     setLoading(true);
     await axios
       .post(`${process.env.REACT_APP_API}/submit-ad`, {
+        hyperlink,
         content,
         image,
         duration,
@@ -90,6 +99,7 @@ const AdSubmission = () => {
           setSelectedGender([]);
           setSelectedAge([]);
           setSelectedLocation([]);
+          setHyperlink('');
         }
       })
       .catch((err) => {
@@ -153,6 +163,27 @@ const AdSubmission = () => {
         <div className='ad-section'>
           <div className='ad-header'>
             <span className='number'>2</span>
+            <h2>Do you want to add an external link?</h2>
+            <div className='tooltip'>
+              <FontAwesomeIcon
+                icon={faCircleInfo}
+                className='fa'
+                onClick={handleHyperlinkInfo}
+              />
+              <span className='tooltip-text'>Info about external links</span>
+            </div>
+          </div>
+          <input
+            className='input-field'
+            type='text'
+            placeholder='Add an external link to your site if you have one'
+            onChange={(e) => setHyperlink(e.target.value)}
+            value={hyperlink}
+          />
+        </div>
+        <div className='ad-section'>
+          <div className='ad-header'>
+            <span className='number'>3</span>
             <h2>How do you want your ad to look?</h2>
           </div>
           <div className='write-post-container'>
@@ -197,7 +228,7 @@ const AdSubmission = () => {
         </div>
         <div className='ad-section'>
           <div className='ad-header'>
-            <span className='number'>3</span>
+            <span className='number'>4</span>
             <h2>Who are you targeting?</h2>
             <div className='tooltip'>
               <FontAwesomeIcon
@@ -326,7 +357,7 @@ const AdSubmission = () => {
         </div>
         <div className='ad-section'>
           <div className='ad-header'>
-            <span className='number'>4</span>
+            <span className='number'>5</span>
             <h2>How can we contact you?</h2>
           </div>
           <AdContact
@@ -338,7 +369,7 @@ const AdSubmission = () => {
         </div>
         <div className='ad-section'>
           <div className='ad-header'>
-            <span className='number'>5</span>
+            <span className='number'>6</span>
             <h2>Finally, please enter your payment details.</h2>
           </div>
           <p>
@@ -355,6 +386,7 @@ const AdSubmission = () => {
             image={image}
             previewModalIsOpen={previewModalIsOpen}
             setPreviewModalIsOpen={setPreviewModalIsOpen}
+            hyperlink={hyperlink}
           />
         </div>
         <button
@@ -376,6 +408,10 @@ const AdSubmission = () => {
           )}
           Submit your ad
         </button>
+        <HyperlinkInfo
+          hyperlinkInfoModalIsOpen={hyperlinkInfoModalIsOpen}
+          setHyperlinkInfoModalIsOpen={setHyperlinkInfoModalIsOpen}
+        />
         <DurationInfo
           durationInfoModalIsOpen={durationInfoModalIsOpen}
           setDurationInfoModalIsOpen={setDurationInfoModalIsOpen}

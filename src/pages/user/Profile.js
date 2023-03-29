@@ -981,28 +981,35 @@ const Profile = ({ history }) => {
         </div>
         <div className='pd-right'>
           <button type='button'>
-            <FontAwesomeIcon
-              icon={faPenToSquare}
-              className='fa'
-              onClick={() => {
-                setProfileUpdated(false);
-                setUpdatedMobile('');
-                setUpdatedEmail('');
-                setUpdatedAnswer('');
-                setReauthMobile('');
-                setShowOTP(false);
-                setOTP('');
-                setLoadingReauth(false);
-                setModalIsOpen(true);
-              }}
-            />
+            <div className='tooltip'>
+              <FontAwesomeIcon
+                icon={faPenToSquare}
+                className='fa'
+                onClick={() => {
+                  setProfileUpdated(false);
+                  setUpdatedMobile('');
+                  setUpdatedEmail('');
+                  setUpdatedAnswer('');
+                  setReauthMobile('');
+                  setShowOTP(false);
+                  setOTP('');
+                  setLoadingReauth(false);
+                  setModalIsOpen(true);
+                }}
+              />
+              <span className='tooltip-text'>Update profile</span>
+            </div>
           </button>
           {user.verified === 'false' ? (
             <button
               onClick={() => setVerifyModalIsOpen(true)}
-              className='ribbon'
+              className='verif-cta'
             >
-              Verify me
+              <span>Verify me</span>
+              <svg width='13px' height='10px' viewBox='0 0 13 10'>
+                <path d='M1,5 L11,5'></path>
+                <polyline points='8 1 12 5 8 9'></polyline>
+              </svg>
             </button>
           ) : user.verified === 'pending' ? (
             <button className='ribbon verifying'>Verifying...</button>

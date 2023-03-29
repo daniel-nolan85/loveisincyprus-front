@@ -100,7 +100,7 @@ const ProfileImageUpdate = ({
             <h1 className='center'>
               How would you like to choose your profile picture?
             </h1>
-            <p>
+            <p style={{ color: 'red' }}>
               Your profile image will be on public display. Please be careful
               not to share any personal data.
             </p>

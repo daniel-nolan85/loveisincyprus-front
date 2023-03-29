@@ -18,6 +18,7 @@ import AdContactInfo from '../../components/modals/AdContactInfo';
 import AdPayment from '../../components/modals/AdPayment';
 import { createAdPayment } from '../../functions/cardinity';
 import AdRemove from '../../components/modals/AdRemove';
+import { Link } from 'react-router-dom';
 
 const AdSubmissions = ({ history }) => {
   const [ads, setAds] = useState([]);
@@ -211,6 +212,20 @@ const AdSubmissions = ({ history }) => {
                   <br />
                   {`${ad.contactInfo.name} would like this ad to be displayed for ${ad.duration}`}
                 </div>
+                {ad.hyperlink && (
+                  <div className='ad-duration'>
+                    <br />
+                    <Link
+                      to={{
+                        pathname: ad.hyperlink,
+                      }}
+                      target='_blank'
+                      className='link'
+                    >
+                      {ad.hyperlink}
+                    </Link>
+                  </div>
+                )}
                 <div
                   className={`${ad.status === 'rejected' && 'rejected'} ${
                     ad.status === 'approved' && 'approved'

@@ -174,7 +174,7 @@ const UserSearchMobile = ({
 
   const loadAllUsers = () => {
     setLoading(true);
-    getUsersByPage(page, user.token).then((res) => {
+    getUsersByPage('search', page, user.token).then((res) => {
       setUsers(res.data);
       setLoading(false);
     });
@@ -183,7 +183,7 @@ const UserSearchMobile = ({
 
   const fetchUsers = (arg) => {
     setFiltered(true);
-    fetchUsersByFilter(filteredPage, arg, user.token).then((res) => {
+    fetchUsersByFilter('search', filteredPage, arg, user.token).then((res) => {
       setUsers(res.data.filteredUsers);
       setTotalUsersCount(res.data.searchedUsersNum);
     });

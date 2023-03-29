@@ -42,7 +42,7 @@ const UsersToInvite = ({
   };
 
   const userSearch = async (arg) => {
-    fetchUsersByFilter(arg, token).then((res) => {
+    fetchUsersByFilter('event', 1, arg, token).then((res) => {
       const filtered = res.data.filter((u) => u.eventsEligible);
       filtered.map((u) => {
         setValues((prevValues) => ({
