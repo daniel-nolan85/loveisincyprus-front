@@ -1,16 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Tabs } from 'antd';
 import moment from 'moment';
 import Invoice from '../../components/cards/Invoice';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import RefundRequest from '../modals/RefundRequest';
+import RefundResponse from '../modals/RefundResponse';
 
 const { TabPane } = Tabs;
 
-const SingleOrder = ({ order }) => {
+const SingleOrder = ({ order, loadUserOrders }) => {
+  const [requestRefundModalIsOpen, setRequestRefundModalIsOpen] =
+    useState(false);
+  const [responseRefundModalIsOpen, setResponseRefundModalIsOpen] =
+    useState(false);
+  const [currentOrder, setCurrentOrder] = useState({});
+
   const { orderStatus, deliverTo, discount, deliveryFee } = order;
   const { id, amount, status, created } = order.paymentIntent;
   const { firstLine, secondLine, city, state, zip, country } =
     order.deliveryAddress;
+
+  const requestRefund = (order) => {
+    setCurrentOrder(order);
+    setRequestRefundModalIsOpen(true);
+  };
 
   return (
     <div className='order-summary'>
@@ -59,6 +72,17 @@ const SingleOrder = ({ order }) => {
               <span className='order-title'>Order status: </span>
               <span className='order-detail'>{orderStatus}</span>
             </div>
+            {moment().subtract(2, 'weeks').isSameOrBefore(created) && (
+              <div className='order-line'>
+                <span
+                  className='order-title'
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => requestRefund(order)}
+                >
+                  Request refund?
+                </span>
+              </div>
+            )}
           </div>
         </TabPane>
         <TabPane tab='Your Info' key='2'>
@@ -113,6 +137,17 @@ const SingleOrder = ({ order }) => {
           </PDFDownloadLink>
         </TabPane>
       </Tabs>
+      <RefundRequest
+        requestRefundModalIsOpen={requestRefundModalIsOpen}
+        setRequestRefundModalIsOpen={setRequestRefundModalIsOpen}
+        setResponseRefundModalIsOpen={setResponseRefundModalIsOpen}
+        currentOrder={currentOrder}
+        loadUserOrders={loadUserOrders}
+      />
+      <RefundResponse
+        responseRefundModalIsOpen={responseRefundModalIsOpen}
+        setResponseRefundModalIsOpen={setResponseRefundModalIsOpen}
+      />
     </div>
   );
 };

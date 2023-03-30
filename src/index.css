@@ -864,12 +864,25 @@ nav {
 }
 
 .edit-post-footer {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.edit-post-footer .fa {
+  padding: 0;
+  margin: 0;
+}
+
+.edit-post-footer p.center {
+  margin-top: 20px;
+  margin-bottom: 0;
 }
 
 .write-post-footer .submit-btn,
 .edit-post-footer .submit-btn {
-  width: 140px;
+  width: fit-content;
   margin: 10px 0 0 0;
   color: #fff;
 }
@@ -995,7 +1008,8 @@ nav {
 }
 
 .loader .fa {
-  font-size: 20px;
+  font-size: 25px;
+  color: var(--nav-color);
 }
 
 .footer {
@@ -2949,6 +2963,22 @@ select.gray {
   color: var(--nav-color);
 }
 
+.post-like-user {
+  text-align: center;
+}
+
+.post-like-user button {
+  border: none;
+  background-color: var(--bg-color);
+}
+
+.post-like-user .fa {
+  font-size: 35px;
+  color: var(--nav-color);
+  background-color: var(--bg-color);
+  cursor: pointer;
+}
+
 label.verif-upload {
   font-size: 35px;
   cursor: pointer;
@@ -3140,7 +3170,8 @@ label.verif-upload .fa {
   text-align: center;
   margin: 10px 0;
   font-size: 15px;
-  word-break: break-all;
+  /* word-break: break-all; */
+  overflow-wrap: break-word;
 }
 
 .profile-intro hr {
@@ -4043,6 +4074,46 @@ input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px #efefef inset !important;
 }
 
+/* --------------- refund pages --------------- */
+.ref-req-section {
+  margin-bottom: 35px;
+}
+
+.ref-req-header {
+  display: flex;
+  position: relative;
+}
+
+.ref-req-header h2 {
+  width: 85%;
+  font-size: 16px;
+}
+
+.ref-req-header .number {
+  font-size: 35px;
+  font-weight: bold;
+  color: var(--nav-color);
+  margin-right: 20px;
+  line-height: 1.1;
+}
+
+.ref-req-section textarea {
+  margin: 0;
+  padding: 0;
+}
+
+.ref-req-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.ref-req-footer .fa {
+  padding: 0;
+  margin: 0;
+}
+
 /* --------------- ad pages --------------- */
 .ad-section {
   margin-bottom: 35px;
@@ -4080,6 +4151,10 @@ input:-webkit-autofill:active {
   margin: 0 auto;
   border-collapse: separate;
   border-spacing: 50px 0;
+}
+
+.return-address {
+  text-align: center;
 }
 
 .ad-demographic {

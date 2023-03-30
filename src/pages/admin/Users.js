@@ -133,11 +133,13 @@ const Users = ({ history }) => {
   };
 
   const infinity = () => {
-    let usersLength = users.length;
-    if (usersLength === totalUsers) {
-      setMoreUsers(false);
+    if (!searched) {
+      let usersLength = users.length;
+      if (usersLength === totalUsers) {
+        setMoreUsers(false);
+      }
+      setPage(page + 1);
     }
-    setPage(page + 1);
   };
 
   const searchUsers = async (e) => {
@@ -260,9 +262,11 @@ const Users = ({ history }) => {
             next={infinity}
             hasMore={moreUsers}
             loader={
-              <div className='loader'>
-                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-              </div>
+              !searched && (
+                <div className='loader'>
+                  <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                </div>
+              )
             }
             endMessage={
               <p style={{ textAlign: 'center' }}>
