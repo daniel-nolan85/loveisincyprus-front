@@ -120,6 +120,22 @@ const SideNav = () => {
                         <br />
                       </>
                     )}
+                    {user.role === 'main-admin' && (
+                      <>
+                        <Link
+                          to='/admin/refunds'
+                          onClick={() => setOpenNav(false)}
+                        >
+                          Refunds
+                          {/* <span className='sidenav-count'>
+                            {refunds &&
+                              refunds.length > 0 &&
+                              refunds.length}
+                          </span> */}
+                        </Link>
+                        <br />
+                      </>
+                    )}
                     <>
                       <Link
                         to={{
@@ -265,7 +281,7 @@ const SideNav = () => {
                         Dashboard
                       </Link>
                       <br />
-                      {user.role === 'main-admin' && (
+                      {/* {user.role === 'main-admin' && (
                         <>
                           <Link
                             to='/admin/ad-submissions'
@@ -278,7 +294,7 @@ const SideNav = () => {
                           </Link>
                           <br />
                         </>
-                      )}
+                      )} */}
                       {user.canVerify && (
                         <>
                           <Link
@@ -311,7 +327,7 @@ const SideNav = () => {
                           <br />
                         </>
                       )}
-                      {user.role === 'main-admin' && (
+                      {/* {user.role === 'main-admin' && (
                         <>
                           <Link
                             to='/admin/product-review'
@@ -326,7 +342,7 @@ const SideNav = () => {
                           </Link>
                           <br />
                         </>
-                      )}
+                      )} */}
                       {user.canOrders && (
                         <>
                           <Link
@@ -400,7 +416,7 @@ const SideNav = () => {
                           <br />
                         </>
                       )}
-                      {user.role === 'main-admin' && (
+                      {/* {user.role === 'main-admin' && (
                         <>
                           <Link
                             to='/admin/geo-block'
@@ -424,7 +440,7 @@ const SideNav = () => {
                           </Link>
                           <br />
                         </>
-                      )}
+                      )} */}
                       {user.canProducts && (
                         <>
                           <Link

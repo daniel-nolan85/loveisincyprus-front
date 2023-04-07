@@ -16,6 +16,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Carousel } from 'react-responsive-carousel';
 import { addPoints } from '../../functions/user';
+import CardinityPending from '../modals/CardinityPending';
 
 const CardinityCheckout = ({
   deliverTo,
@@ -31,6 +32,9 @@ const CardinityCheckout = ({
   const [userAgent, setUserAgent] = useState('');
   const [order, setOrder] = useState({});
   const [discount, setDiscount] = useState(0);
+  const [cardinityPendingModalIsOpen, setCardinityPendingModalIsOpen] =
+    useState(false);
+  const [pendingFormData, setPendingFormData] = useState('');
 
   const { token } = useSelector((state) => state.user);
   const { coupon } = useSelector((state) => ({ ...state }));
@@ -85,7 +89,7 @@ const CardinityCheckout = ({
     setProcessing(true);
     createPayment(values, payable, userAgent, token, deliveryFee).then(
       (res) => {
-        console.log(res.data);
+        console.log(res);
         if (res.data.errors) {
           toast.error(res.data.errors[0].message, {
             position: toast.POSITION.TOP_CENTER,
@@ -129,14 +133,15 @@ const CardinityCheckout = ({
           });
           setProcessing(false);
           setSucceeded(true);
-        }
-        if (res.data.status === 'pending') {
+        } else if (res.data.response.status === 'pending') {
+          console.log(res.data);
+          setCardinityPendingModalIsOpen(true);
+          setPendingFormData(res.data.form);
           toast.warning(`Payment pending.`, {
             position: toast.POSITION.TOP_CENTER,
           });
-          setProcessing(false);
-        }
-        if (res.data.status === 'declined') {
+          // setProcessing(false);
+        } else if (res.data.status === 'declined') {
           toast.error(`Payment declined.`, {
             position: toast.POSITION.TOP_CENTER,
           });
@@ -237,6 +242,11 @@ const CardinityCheckout = ({
         processing={processing}
         succeeded={succeeded}
         cartTotal={cartTotal}
+      />
+      <CardinityPending
+        cardinityPendingModalIsOpen={cardinityPendingModalIsOpen}
+        setCardinityPendingModalIsOpen={setCardinityPendingModalIsOpen}
+        pendingFormData={pendingFormData}
       />
     </div>
   );

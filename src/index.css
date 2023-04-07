@@ -794,6 +794,10 @@ nav {
   margin-left: 15px;
 }
 
+.post-icons .mr {
+  margin-right: 15px;
+}
+
 .post-icons .pass {
   color: var(--nav-color);
   margin-right: 15px;
@@ -1998,7 +2002,9 @@ nav {
 .post-container .rejected,
 .post-container .approved,
 .post-container .expired,
-.post-container .paid {
+.post-container .paid,
+.post-container .returned,
+.post-container .non-returned {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -2007,7 +2013,9 @@ nav {
 .post-container .rejected:after,
 .post-container .approved:after,
 .post-container .expired:after,
-.post-container .paid:after {
+.post-container .paid:after,
+.post-container .returned:after,
+.post-container .non-returned:after {
   position: absolute;
   top: 30%;
   z-index: 1;
@@ -2036,8 +2044,26 @@ nav {
   box-shadow: 0 0 2px #c00;
 }
 
+.post-container .non-returned:after {
+  content: 'NOT RETURNED';
+  color: #c00;
+  border: solid 8px #c00;
+  -webkit-text-shadow: 0 0 2px #c00;
+  text-shadow: 0 0 2px #c00;
+  box-shadow: 0 0 2px #c00;
+}
+
 .post-container .approved:after {
   content: 'APPROVED';
+  color: var(--nav-color);
+  border: solid 8px var(--nav-color);
+  -webkit-text-shadow: 0 0 2px var(--nav-color);
+  text-shadow: 0 0 2px var(--nav-color);
+  box-shadow: 0 0 2px var(--nav-color);
+}
+
+.post-container .returned:after {
+  content: 'RETURNED';
   color: var(--nav-color);
   border: solid 8px var(--nav-color);
   -webkit-text-shadow: 0 0 2px var(--nav-color);
@@ -4075,6 +4101,28 @@ input:-webkit-autofill:active {
 }
 
 /* --------------- refund pages --------------- */
+.refund-filter-btns {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.refund-filter-btns .submit-btn {
+  width: 140px;
+}
+
+.refund-filter-btns .submit-btn-active {
+  background-color: #fff;
+  color: var(--nav-color);
+  width: 140px;
+  padding: 10px 30px;
+  cursor: pointer;
+  display: block;
+  margin: 20px auto;
+  border: 1px solid var(--nav-color);
+  outline: none;
+  border-radius: 30px;
+}
+
 .ref-req-section {
   margin-bottom: 35px;
 }
@@ -4112,6 +4160,40 @@ input:-webkit-autofill:active {
 .ref-req-footer .fa {
   padding: 0;
   margin: 0;
+}
+
+.ref-req-section button.trash {
+  background-color: #c70000;
+}
+
+.refund-info span {
+  font-weight: 600;
+}
+
+.refund-info span.pending {
+  color: var(--nav-color);
+}
+.refund-info span.granted {
+  color: green;
+}
+
+.refund-info span.partial {
+  color: #5388b4;
+}
+
+.refund-info span.denied {
+  color: #c70000;
+}
+
+.refund-info ul {
+  list-style: none;
+  margin-left: 70px;
+  margin-top: -35px;
+}
+
+.refund-info p {
+  margin-left: 70px;
+  margin-top: -15px;
 }
 
 /* --------------- ad pages --------------- */
@@ -5479,7 +5561,9 @@ table.product-info tbody {
   .post-container .rejected:after,
   .post-container .approved:after,
   .post-container .expired:after,
-  .post-container .paid:after {
+  .post-container .paid:after,
+  .post-container .returned:after,
+  .post-container .non-returned:after {
     font-size: 40px;
     border-width: 4px;
     padding: 5px;

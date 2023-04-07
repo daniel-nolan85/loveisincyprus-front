@@ -79,6 +79,7 @@ import ProductReview from './pages/admin/ProductReview';
 import HighCompat from './pages/user/HighCompat';
 import CallingCodeBlock from './pages/admin/CallingCodeBlock';
 import GiftCardCreate from './pages/user/GiftCardCreate';
+import Refunds from './pages/admin/Refunds';
 
 let socket, selectedChatCompare;
 
@@ -561,6 +562,7 @@ const App = () => {
             <AdminRoute exact path='/admin/product' component={Products} />
             <AdminRoute exact path='/admin/coupon' component={Coupon} />
             <AdminRoute exact path='/admin/orders' component={Orders} />
+            <AdminRoute exact path='/admin/refunds' component={Refunds} />
             <AdminRoute exact path='/admin/event' component={Event} />
             <AdminRoute exact path='/admin/mass-mail' component={MassMail} />
             <AdminRoute

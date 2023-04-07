@@ -116,97 +116,121 @@ const RefundRequest = ({
       style={modalStyles}
       contentLabel='Example Modal'
     >
-      <h2 className='center'>
-        You are entitled to claim a refund on this order until{' '}
-        {moment(createdAt).add(2, 'weeks').format('MMMM Do YYYY')}
-      </h2>
-      <div className='ref-req-section'>
-        <div className='ref-req-header'>
-          <span className='number'>1</span>
-          <h2>Which items would you like to return?</h2>
-        </div>
-        <Select
-          mode='multiple'
-          style={{ width: '100%' }}
-          placeholder='Select your unwanted items...'
-          value={items}
-          onChange={(value) => {
-            setItems(value);
-          }}
-        >
-          {products &&
-            products.length &&
-            products.flatMap((p) =>
-              Array.from({ length: p.count - p.refunded }, (_, i) => (
-                <Option
-                  value={`${p.product._id}-${i}, ${p.product.price}, ${p.product.title}`}
-                  key={`${p.product._id}-${i}`}
-                >
-                  {p.product.title}
-                </Option>
-              ))
-            )}
-        </Select>
-      </div>
-      <div className='ref-req-section'>
-        <div className='ref-req-header'>
-          <span className='number'>2</span>
-          <h2>Tell us why you would like to return your products?</h2>
-        </div>
-        <textarea
-          className='input-field'
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
-          placeholder='Write the reason for the return here...'
-        />
-      </div>
-      <div className='ref-req-section'>
-        <div className='ref-req-header'>
-          <span className='number'>3</span>
-          <h2>
-            Faulty or damaged product? Send us some pictures of how your order
-            was delivered.
+      {products && products.length && (
+        <>
+          <h2 className='center'>
+            You are entitled to claim a refund on this order until{' '}
+            {moment(createdAt).add(2, 'weeks').format('MMMM Do YYYY')}
           </h2>
-        </div>
-        <div className='ref-req-footer'>
-          <PostUpload
-            postImages={refundImages}
-            setPostImages={setRefundImages}
-          />
-        </div>
-        {refundAmount > 0 && (
-          <>
-            <p className='center'>
-              You are eligible to receive the following amount for the items
-              selected:
-            </p>
-            <div className='gift-card-amount'>
-              €
-              <span style={{ width: `${refundAmount.length}ch` }}>
-                {refundAmount}
-              </span>
+          <div className='ref-req-section'>
+            <div className='ref-req-header'>
+              <span className='number'>1</span>
+              <h2>Which items would you like to return?</h2>
             </div>
-            <small className='center'>
-              Please note this amount is subject to a 10% handling fee, as
-              stipulated in our{' '}
-              <Link to='/terms-and-conditions'>terms and conditions</Link>.
-            </small>
-          </>
-        )}
-        <button
-          onClick={requestSubmit}
-          type='submit'
-          className='submit-btn'
-          disabled={!items.length || !reason || loading}
-        >
-          {loading ? (
-            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
-          ) : (
-            <FontAwesomeIcon icon={faPaperPlane} className='fa' />
-          )}
-          Request
-        </button>
-      </div>
+            <Select
+              mode='multiple'
+              style={{ width: '100%' }}
+              placeholder='Select your unwanted items...'
+              value={items}
+              onChange={(value) => setItems(value)}
+              // onChange={(value) => {
+              //   if (value.includes('all')) {
+              //     setItems(
+              //       products.flatMap((p) =>
+              //         Array.from(
+              //           { length: p.count - p.refunded },
+              //           (_, i) =>
+              //             `${p.product._id}-${i}, ${p.product.price}, ${p.product.title}`
+              //         )
+              //       )
+              //     );
+              //   } else {
+              //     setItems(value);
+              //   }
+              // }}
+            >
+              {/* <Option value='all' key='all'>
+                Select All
+              </Option> */}
+              {products.flatMap((p) =>
+                Array.from({ length: p.count - p.refunded }, (_, i) => (
+                  <Option
+                    value={`${p.product._id}-${i}, ${p.product.price}, ${p.product.title}`}
+                    key={`${p.product._id}-${i}`}
+                  >
+                    {p.product.title}
+                  </Option>
+                ))
+              )}
+            </Select>
+          </div>
+          <div className='ref-req-section'>
+            <div className='ref-req-header'>
+              <span className='number'>2</span>
+              <h2>Tell us why you would like to return your products.</h2>
+            </div>
+            <textarea
+              className='input-field'
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder='Write the reason for the return here...'
+            />
+          </div>
+          <div className='ref-req-section'>
+            <div className='ref-req-header'>
+              <span className='number'>3</span>
+              <h2>
+                Faulty or damaged product? Send us some pictures of how your
+                order was delivered.
+              </h2>
+            </div>
+            <div className='ref-req-footer'>
+              <PostUpload
+                postImages={refundImages}
+                setPostImages={setRefundImages}
+              />
+            </div>
+            {refundAmount > 0 && (
+              <>
+                <p className='center'>
+                  You are eligible to receive the following amount for the items
+                  selected:
+                </p>
+                <div className='gift-card-amount'>
+                  €
+                  <span style={{ width: `${refundAmount.length}ch` }}>
+                    {refundAmount}
+                  </span>
+                </div>
+                <small className='center'>
+                  Please note this amount is subject to a 10% handling fee, as
+                  stipulated in our{' '}
+                  <Link to='/terms-and-conditions'>terms and conditions</Link>.
+                </small>
+              </>
+            )}
+            <button
+              onClick={requestSubmit}
+              type='submit'
+              className='submit-btn'
+              disabled={!items.length || !reason || loading}
+            >
+              {loading ? (
+                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+              ) : (
+                <FontAwesomeIcon icon={faPaperPlane} className='fa' />
+              )}
+              Request
+            </button>
+            <button
+              className='submit-btn trash'
+              onClick={() => setRequestRefundModalIsOpen(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </>
+      )}
     </Modal>
   );
 };

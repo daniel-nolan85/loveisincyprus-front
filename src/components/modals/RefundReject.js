@@ -5,49 +5,41 @@ import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import io from 'socket.io-client';
 import { ChatState } from '../../context/ChatProvider';
-import { addPoints } from '../../functions/user';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faSpinner, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
 
 let socket;
 
 Modal.setAppElement('#root');
 
-const VerifApprove = ({
-  verifApproveModalIsOpen,
-  setVerifApproveModalIsOpen,
-  currentVerif,
-  fetchVerifs,
+const RefundReject = ({
+  rejectRefundModalIsOpen,
+  setRejectRefundModalIsOpen,
+  currentRefund,
+  reason,
+  setReason,
+  fetchRefunds,
 }) => {
   const [loading, setLoading] = useState(false);
 
   let { token } = useSelector((state) => state.user);
 
-  const { setNewVerifs } = ChatState();
+  //   const { setNewVerifs } = ChatState();
 
-  useEffect(() => {
-    socket = io(
-      process.env.REACT_APP_SOCKET_IO,
-      { path: '/socket.io' },
-      { reconnection: true },
-      { secure: true }
-    );
-  }, []);
+  //   const fetchNewVerifs = async () => {
+  //     await axios
+  //       .get(`${process.env.REACT_APP_API}/fetch-new-verifs`)
+  //       .then((res) => {
+  //         setNewVerifs(res.data);
+  //       });
+  //   };
 
-  const fetchNewVerifs = async () => {
-    await axios
-      .get(`${process.env.REACT_APP_API}/fetch-new-verifs`)
-      .then((res) => {
-        setNewVerifs(res.data);
-      });
-  };
-
-  const approveVerif = async (verif) => {
+  const rejectRefund = async (refund) => {
     setLoading(true);
     await axios
       .put(
-        `${process.env.REACT_APP_API}/approve-verif`,
-        { verif },
+        `${process.env.REACT_APP_API}/reject-refund`,
+        { refund, reason },
         {
           headers: {
             authtoken: token,
@@ -56,17 +48,15 @@ const VerifApprove = ({
       )
       .then((res) => {
         setLoading(false);
-        socket.emit('new message', res.data.message);
-        toast.success(
-          `You have approved this verification. A confirmation message has been sent to the user.`,
+        toast.error(
+          `You have rejected this refund request. A confirmation email has been sent to the user.`,
           {
             position: toast.POSITION.TOP_CENTER,
           }
         );
-        fetchNewVerifs();
-        fetchVerifs();
-        setVerifApproveModalIsOpen(false);
-        addPoints(80, 'verified', token, res.data.userStatus);
+        // fetchNewVerifs();
+        fetchRefunds();
+        setRejectRefundModalIsOpen(false);
       })
       .catch((err) => {
         setLoading(false);
@@ -98,41 +88,48 @@ const VerifApprove = ({
     },
   };
 
-  const { image, postedBy } = currentVerif;
+  const { refundImages, orderedBy } = currentRefund;
 
   return (
     <Modal
-      isOpen={verifApproveModalIsOpen}
-      onRequestClose={() => setVerifApproveModalIsOpen(false)}
+      isOpen={rejectRefundModalIsOpen}
+      onRequestClose={() => setRejectRefundModalIsOpen(false)}
       style={modalStyles}
       contentLabel='Example Modal'
     >
       <div className='match'>
-        <h1>Are you sure you want to approve this verification?</h1>
+        <h1>Are you sure you want to reject this refund request?</h1>
         <br />
-        {image && (
+        {refundImages && refundImages.length > 0 && (
           <div className='match-images'>
             <img
-              src={image}
-              alt={`${postedBy.username || postedBy.name}'s post`}
+              src={refundImages[0].url}
+              alt={`${orderedBy.username || orderedBy.name}'s post`}
             />
           </div>
         )}
         <br />
+        <input
+          type='text'
+          className='input-field'
+          placeholder='Give a reason?'
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+        />
         <button
           className='submit-btn'
-          onClick={() => approveVerif(currentVerif)}
+          onClick={() => rejectRefund(currentRefund)}
         >
           {loading ? (
             <FontAwesomeIcon icon={faSpinner} className='fa' spin />
           ) : (
-            <FontAwesomeIcon icon={faThumbsUp} className='fa' />
+            <FontAwesomeIcon icon={faThumbsDown} className='fa' />
           )}
-          Yes, I approve
+          Yes, reject
         </button>
         <button
           className='submit-btn trash'
-          onClick={() => setVerifApproveModalIsOpen(false)}
+          onClick={() => setRejectRefundModalIsOpen(false)}
           disabled={loading}
         >
           No, cancel
@@ -142,4 +139,4 @@ const VerifApprove = ({
   );
 };
 
-export default VerifApprove;
+export default RefundReject;

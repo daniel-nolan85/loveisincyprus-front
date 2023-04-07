@@ -152,6 +152,17 @@ const LeftSidebar = () => {
             <span>{newOrders && newOrders.length > 0 && newOrders.length}</span>
           </Link>
         )}
+        {role === 'main-admin' && (
+          <Link to='/admin/refunds'>
+            <FontAwesomeIcon icon={faBarcode} className='fa' />
+            Refunds
+            {/* <span>
+              {refunds &&
+                refunds.length > 0 &&
+                refunds.length}
+            </span> */}
+          </Link>
+        )}
         <Link
           to={{
             pathname: 'https://statcounter.com/p12198487/summary/',
