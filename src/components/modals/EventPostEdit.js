@@ -19,15 +19,11 @@ const EventPostEdit = ({
 }) => {
   const [content, setContent] = useState(post.content);
   const [uploading, setUploading] = useState(false);
-  // const [image, setImage] = useState({});
-  // const [loadingImg, setLoadingImg] = useState(false);
   const [postImages, setPostImages] = useState([]);
 
   const { _id, token, name, username, profileImage } = useSelector(
     (state) => state.user
   );
-
-  console.log('postImages => ', postImages);
 
   const postSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +40,6 @@ const EventPostEdit = ({
         }
       )
       .then((res) => {
-        console.log(res);
         setUploading(false);
 
         if (res.data.error) {

@@ -1,30 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpinner, faThumbsDown } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import PostUpload from '../forms/PostUpload';
 
 Modal.setAppElement('#root');
 
-const RefundReject = ({
-  rejectRefundModalIsOpen,
-  setRejectRefundModalIsOpen,
+const EmailBuyer = ({
+  emailBuyerModalIsOpen,
+  setEmailBuyerModalIsOpen,
   currentRefund,
-  fetchRefunds,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [reason, setReason] = useState('');
+  const [subject, setSubject] = useState('');
+  const [message, setMessage] = useState('');
+  const [refundImages, setRefundImages] = useState([]);
 
   let { token } = useSelector((state) => state.user);
 
-  const rejectRefund = async (refund) => {
+  const sendMessage = async (refund) => {
     setLoading(true);
     await axios
-      .put(
-        `${process.env.REACT_APP_API}/reject-refund`,
-        { refund, reason },
+      .post(
+        `${process.env.REACT_APP_API}/email-buyer`,
+        { orderedBy, subject, message, refundImages },
         {
           headers: {
             authtoken: token,
@@ -33,14 +35,13 @@ const RefundReject = ({
       )
       .then((res) => {
         setLoading(false);
-        toast.error(
-          `You have rejected this refund request. A confirmation email has been sent to the user.`,
-          {
-            position: toast.POSITION.TOP_CENTER,
-          }
-        );
-        fetchRefunds();
-        setRejectRefundModalIsOpen(false);
+        setSubject('');
+        setMessage('');
+        setRefundImages([]);
+        toast.success(`Your message has been sent.`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        setEmailBuyerModalIsOpen(false);
       })
       .catch((err) => {
         setLoading(false);
@@ -72,51 +73,50 @@ const RefundReject = ({
     },
   };
 
-  const { refundImages, orderedBy } = currentRefund;
+  const { orderedBy } = currentRefund;
 
   return (
     <Modal
-      isOpen={rejectRefundModalIsOpen}
-      onRequestClose={() => setRejectRefundModalIsOpen(false)}
+      isOpen={emailBuyerModalIsOpen}
+      onRequestClose={() => setEmailBuyerModalIsOpen(false)}
       style={modalStyles}
       contentLabel='Example Modal'
     >
       <div className='match'>
-        <h1>Are you sure you want to reject this refund request?</h1>
-        <br />
-        {refundImages && refundImages.length > 0 && (
-          <div className='match-images'>
-            <img
-              src={refundImages[0].url}
-              alt={`${orderedBy.username || orderedBy.name}'s post`}
-            />
-          </div>
-        )}
-        <br />
-        <h2>
-          Would you like to give the user a reason for rejecting their request?
-        </h2>
+        <h2>Would you like to email this user regarding their refund?</h2>
         <input
           type='text'
           className='input-field'
-          placeholder='Give a reason'
-          value={reason}
-          onChange={(e) => setReason(e.target.value)}
+          placeholder='Subject'
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
         />
+        <textarea
+          className='input-field'
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+          placeholder='Write a message...'
+        />
+        <div className='ref-req-footer'>
+          <PostUpload
+            postImages={refundImages}
+            setPostImages={setRefundImages}
+          />
+        </div>
         <button
           className='submit-btn'
-          onClick={() => rejectRefund(currentRefund)}
+          onClick={() => sendMessage(currentRefund)}
         >
           {loading ? (
             <FontAwesomeIcon icon={faSpinner} className='fa' spin />
           ) : (
-            <FontAwesomeIcon icon={faThumbsDown} className='fa' />
+            <FontAwesomeIcon icon={faPaperPlane} className='fa' />
           )}
-          Yes, reject
+          Send
         </button>
         <button
           className='submit-btn trash'
-          onClick={() => setRejectRefundModalIsOpen(false)}
+          onClick={() => setEmailBuyerModalIsOpen(false)}
           disabled={loading}
         >
           No, cancel
@@ -126,4 +126,4 @@ const RefundReject = ({
   );
 };
 
-export default RefundReject;
+export default EmailBuyer;

@@ -87,7 +87,6 @@ const LargeEventPostImage = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         setLoadingDelete(false);
         fetchEvent();
         toast.error(`Image deleted.`, {

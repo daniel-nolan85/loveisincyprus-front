@@ -437,9 +437,6 @@ const UserProfile = ({ history }) => {
     profilePhotos,
   } = thisUser ?? {};
 
-  // console.log('thisUser => ', thisUser);
-  console.log('user => ', user);
-
   return (
     <>
       {!thisUser ? (

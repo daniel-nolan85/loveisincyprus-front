@@ -9,8 +9,14 @@ const SideNav = () => {
   const [openNav, setOpenNav] = useState(false);
   const [deviceSize, changeDeviceSize] = useState(window.innerWidth);
 
-  const { newAds, newVerifs, reportedContent, productsForReview, newOrders } =
-    ChatState();
+  const {
+    newAds,
+    newVerifs,
+    reportedContent,
+    productsForReview,
+    newOrders,
+    newRefunds,
+  } = ChatState();
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -127,11 +133,11 @@ const SideNav = () => {
                           onClick={() => setOpenNav(false)}
                         >
                           Refunds
-                          {/* <span className='sidenav-count'>
-                            {refunds &&
-                              refunds.length > 0 &&
-                              refunds.length}
-                          </span> */}
+                          <span className='sidenav-count'>
+                            {newRefunds &&
+                              newRefunds.length > 0 &&
+                              newRefunds.length}
+                          </span>
                         </Link>
                         <br />
                       </>
@@ -281,20 +287,6 @@ const SideNav = () => {
                         Dashboard
                       </Link>
                       <br />
-                      {/* {user.role === 'main-admin' && (
-                        <>
-                          <Link
-                            to='/admin/ad-submissions'
-                            onClick={() => setOpenNav(false)}
-                          >
-                            Ad Submissions
-                            <span className='sidenav-count'>
-                              {newAds && newAds.length > 0 && newAds.length}
-                            </span>
-                          </Link>
-                          <br />
-                        </>
-                      )} */}
                       {user.canVerify && (
                         <>
                           <Link
@@ -327,22 +319,6 @@ const SideNav = () => {
                           <br />
                         </>
                       )}
-                      {/* {user.role === 'main-admin' && (
-                        <>
-                          <Link
-                            to='/admin/product-review'
-                            onClick={() => setOpenNav(false)}
-                          >
-                            Products to Review
-                            <span className='sidenav-count'>
-                              {productsForReview &&
-                                productsForReview.length > 0 &&
-                                productsForReview.length}
-                            </span>
-                          </Link>
-                          <br />
-                        </>
-                      )} */}
                       {user.canOrders && (
                         <>
                           <Link
@@ -416,31 +392,6 @@ const SideNav = () => {
                           <br />
                         </>
                       )}
-                      {/* {user.role === 'main-admin' && (
-                        <>
-                          <Link
-                            to='/admin/geo-block'
-                            onClick={() => setOpenNav(false)}
-                          >
-                            Geo-Block
-                          </Link>
-                          <br />
-                          <Link
-                            to='/admin/ip-block'
-                            onClick={() => setOpenNav(false)}
-                          >
-                            IP-Block
-                          </Link>
-                          <br />
-                          <Link
-                            to='/admin/calling-code-block'
-                            onClick={() => setOpenNav(false)}
-                          >
-                            Calling Code-Block
-                          </Link>
-                          <br />
-                        </>
-                      )} */}
                       {user.canProducts && (
                         <>
                           <Link

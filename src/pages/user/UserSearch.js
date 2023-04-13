@@ -77,8 +77,6 @@ const UserSearch = () => {
   const [inputValues, setInputValues] = useState(initialInputValues);
   const [totalUsersCount, setTotalUsersCount] = useState(0);
 
-  // console.log('users => ', users);
-
   const map = {
     ageOfPartner: setAgeOfPartner,
     relWanted: setRelWanted,

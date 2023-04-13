@@ -40,7 +40,6 @@ const CommentDelete = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         toast.error('Comment deleted', {
           position: toast.POSITION.TOP_CENTER,
         });

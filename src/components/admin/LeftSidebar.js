@@ -37,6 +37,8 @@ const LeftSidebar = () => {
     setProductsForReview,
     newOrders,
     setNewOrders,
+    newRefunds,
+    setNewRefunds,
   } = ChatState();
 
   let {
@@ -60,6 +62,7 @@ const LeftSidebar = () => {
     fetchReportedContent();
     fetchProductsForReview();
     fetchNewOrders();
+    fetchNewRefunds();
   }, []);
 
   const fetchNewAds = async () => {
@@ -99,6 +102,14 @@ const LeftSidebar = () => {
       .get(`${process.env.REACT_APP_API}/fetch-new-orders`)
       .then((res) => {
         setNewOrders(res.data);
+      });
+  };
+
+  const fetchNewRefunds = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-new-refunds`)
+      .then((res) => {
+        setNewRefunds(res.data);
       });
   };
 
@@ -156,11 +167,9 @@ const LeftSidebar = () => {
           <Link to='/admin/refunds'>
             <FontAwesomeIcon icon={faBarcode} className='fa' />
             Refunds
-            {/* <span>
-              {refunds &&
-                refunds.length > 0 &&
-                refunds.length}
-            </span> */}
+            <span>
+              {newRefunds && newRefunds.length > 0 && newRefunds.length}
+            </span>
           </Link>
         )}
         <Link

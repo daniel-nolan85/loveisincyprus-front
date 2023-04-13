@@ -69,8 +69,6 @@ const EventEdit = ({
 
   const { uploadedImages, name, location, when, notes, invitees } = values;
 
-  console.log('eventToEdit => ', eventToEdit);
-
   const eventForm = () => (
     <div className='form-box event update'>
       <div className='button-box'>

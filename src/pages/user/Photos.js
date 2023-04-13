@@ -82,7 +82,6 @@ const Photos = () => {
         }
       )
       .then((res) => {
-        console.log(res);
         setThisUser(res.data);
         if (
           user.role === 'main-admin' ||
@@ -134,7 +133,6 @@ const Photos = () => {
           }
         )
         .then((res) => {
-          console.log(res);
           if (
             user.role === 'main-admin' ||
             user.role === 'secondary-admin' ||

@@ -8,6 +8,7 @@ import {
   faThumbsUp,
   faTruckFast,
   faSpinner,
+  faEnvelope,
 } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
@@ -16,6 +17,8 @@ import LargeRefundImage from '../../components/modals/LargeRefundImage';
 import RefundReject from '../../components/modals/RefundReject';
 import RefundApprove from '../../components/modals/RefundApprove';
 import ItemsReturned from '../../components/modals/ItemsReturned';
+import EmailBuyer from '../../components/modals/EmailBuyer';
+import { ChatState } from '../../context/ChatProvider';
 
 const Refunds = ({ history }) => {
   const [refunds, setRefunds] = useState([]);
@@ -23,20 +26,21 @@ const Refunds = ({ history }) => {
   const [rejectRefundModalIsOpen, setRejectRefundModalIsOpen] = useState(false);
   const [processRefundModalIsOpen, setProcessRefundModalIsOpen] =
     useState(false);
-  const [reason, setReason] = useState('');
   const [refundImageModalIsOpen, setRefundImageModalIsOpen] = useState(false);
   const [itemsReturnedModalIsOpen, setItemsReturnedModalIsOpen] =
     useState(false);
   const [loadingRefunds, setLoadingRefunds] = useState(true);
   const [status, setStatus] = useState('');
+  const [requestedRefunds, setRequestedRefunds] = useState([]);
   const [awaitingRefunds, setAwaitingRefunds] = useState([]);
   const [grantedRefunds, setGrantedRefunds] = useState([]);
   const [partialRefunds, setPartialRefunds] = useState([]);
   const [deniedRefunds, setDeniedRefunds] = useState([]);
+  const [emailBuyerModalIsOpen, setEmailBuyerModalIsOpen] = useState(false);
 
   let { _id, token, role } = useSelector((state) => state.user);
 
-  console.log('refunds => ', refunds);
+  const { setNewRefunds } = ChatState();
 
   useEffect(() => {
     if (role !== 'main-admin') {
@@ -66,6 +70,20 @@ const Refunds = ({ history }) => {
       });
   };
 
+  const fetchNewRefunds = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-new-refunds`)
+      .then((res) => {
+        setNewRefunds(res.data);
+      });
+  };
+
+  const requested = () => {
+    const refRequested = refunds.filter((r) => r.refundStatus === 'requested');
+    setRequestedRefunds(refRequested);
+    setStatus('requested');
+  };
+
   const awaiting = () => {
     const refAwaiting = refunds.filter((r) => r.refundStatus === 'pending');
     setAwaitingRefunds(refAwaiting);
@@ -90,14 +108,6 @@ const Refunds = ({ history }) => {
     setStatus('denied');
   };
 
-  //   const fetchReportedContent = async () => {
-  //     await axios
-  //       .get(`${process.env.REACT_APP_API}/fetch-reported-content`)
-  //       .then((res) => {
-  //         setReportedContent(res.data);
-  //       });
-  //   };
-
   const handleReturns = (refund) => {
     setItemsReturnedModalIsOpen(true);
     setCurrentRefund(refund);
@@ -108,7 +118,7 @@ const Refunds = ({ history }) => {
     setCurrentRefund(refund);
   };
 
-  const rejectRefund = async (refund) => {
+  const rejectRefund = (refund) => {
     setRejectRefundModalIsOpen(true);
     setCurrentRefund(refund);
   };
@@ -116,6 +126,11 @@ const Refunds = ({ history }) => {
   const viewImages = (refund) => {
     setCurrentRefund(refund);
     setRefundImageModalIsOpen(true);
+  };
+
+  const emailBuyer = (refund) => {
+    setCurrentRefund(refund);
+    setEmailBuyerModalIsOpen(true);
   };
 
   return (
@@ -138,6 +153,16 @@ const Refunds = ({ history }) => {
                     onClick={fetchRefunds}
                   >
                     All
+                  </button>
+                  <button
+                    className={
+                      status === 'requested'
+                        ? 'submit-btn-active'
+                        : 'submit-btn'
+                    }
+                    onClick={requested}
+                  >
+                    Requested
                   </button>
                   <button
                     className={
@@ -201,7 +226,14 @@ const Refunds = ({ history }) => {
                           <span>{moment(r.createdAt).fromNow()}</span>
                         </div>
                       </div>
-                      {!r.returned && (
+                      <div className='email-buyer'>
+                        <FontAwesomeIcon
+                          icon={faEnvelope}
+                          className='fa edit'
+                          onClick={() => emailBuyer(r)}
+                        />
+                      </div>
+                      {r.refundStatus === 'requested' && (
                         <div className='post-icons'>
                           <FontAwesomeIcon
                             icon={faTruckFast}
@@ -273,8 +305,6 @@ const Refunds = ({ history }) => {
                               ? r.refundStatus.charAt(0).toUpperCase() +
                                 r.refundStatus.slice(1) +
                                 'ly refunded'
-                              : !r.refundStatus
-                              ? 'Awaiting return'
                               : r.refundStatus.charAt(0).toUpperCase() +
                                 r.refundStatus.slice(1)}
                           </span>
@@ -315,17 +345,90 @@ const Refunds = ({ history }) => {
                           r.refundStatus === 'denied') && (
                           <>
                             <h2>Messages to user:</h2>
-                            {r.messages.length > 0 ? (
+                            {r.messages.length === 1 && r.messages[0] === '' ? (
+                              <p>No message has been sent</p>
+                            ) : (
                               <ol>
                                 {r.messages.map((m, idx) => (
                                   <li key={idx}>{m}</li>
                                 ))}
                               </ol>
-                            ) : (
-                              <p>No message has been sent</p>
                             )}
                           </>
                         )}
+                      </div>
+                      <div className='refund-images'>
+                        {r.refundImages && r.refundImages.length > 0 && (
+                          <img
+                            src={r.refundImages[0].url}
+                            alt={`${
+                              r.orderedBy.username || r.orderedBy.name
+                            }'s post`}
+                            className='post-img'
+                            style={{ cursor: 'zoom-in' }}
+                            onClick={() => viewImages(r)}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))
+              )}
+              {status === 'requested' && requestedRefunds.length === 0 ? (
+                <h1 className='center'>
+                  There are currently no new refunds awaiting response.
+                </h1>
+              ) : (
+                status === 'requested' &&
+                requestedRefunds.length > 0 &&
+                requestedRefunds.map((r) => (
+                  <div className='post-container' key={r._id}>
+                    <div className='post-row'>
+                      <div className='user-profile'>
+                        <Link to={`/user/${r.orderedBy._id}`}>
+                          <img
+                            src={
+                              r.orderedBy.profileImage
+                                ? r.orderedBy.profileImage.url
+                                : defaultProfile
+                            }
+                            alt={`${
+                              r.orderedBy.username || r.orderedBy.name
+                            }'s profile picture`}
+                          />
+                        </Link>
+                        <div>
+                          <Link to={`/user/${r.orderedBy._id}`}>
+                            <p>{r.orderedBy.username || r.orderedBy.name}</p>
+                          </Link>
+                          <span>{moment(r.createdAt).fromNow()}</span>
+                        </div>
+                      </div>
+                      <div className='email-buyer'>
+                        <FontAwesomeIcon
+                          icon={faEnvelope}
+                          className='fa edit'
+                          onClick={() => emailBuyer(r)}
+                        />
+                      </div>
+                    </div>
+                    <br />
+                    <div className='single-refund'>
+                      <div className='refund-info'>
+                        <h2>
+                          Order Id: <span>{r._id}</span>
+                        </h2>
+                        <h2>
+                          Refund status: <span>Requested</span>
+                        </h2>
+                        <h2>Items:</h2>
+                        <ul>
+                          {r.items.map((i, idx) => (
+                            <li key={idx}>{i.title}</li>
+                          ))}
+                        </ul>
+                        <h2>Reason for return:</h2>
+                        <p>{r.reason}</p>
                       </div>
                       <div className='refund-images'>
                         {r.refundImages && r.refundImages.length > 0 && (
@@ -374,26 +477,31 @@ const Refunds = ({ history }) => {
                           <span>{moment(r.createdAt).fromNow()}</span>
                         </div>
                       </div>
-                      {r.refundStatus !== 'granted' && (
-                        <div className='post-icons'>
-                          <FontAwesomeIcon
-                            icon={faTruckFast}
-                            className='fa edit mr'
-                            onClick={() => handleReturns(r)}
-                          />
-                          <FontAwesomeIcon
-                            icon={faThumbsUp}
-                            className='fa pass'
-                            onClick={() => processRefund(r)}
-                          />
+                      <div className='email-buyer'>
+                        <FontAwesomeIcon
+                          icon={faEnvelope}
+                          className='fa edit'
+                          onClick={() => emailBuyer(r)}
+                        />
+                      </div>
+                      <div className='post-icons'>
+                        <FontAwesomeIcon
+                          icon={faTruckFast}
+                          className='fa edit mr'
+                          onClick={() => handleReturns(r)}
+                        />
+                        <FontAwesomeIcon
+                          icon={faThumbsUp}
+                          className='fa pass'
+                          onClick={() => processRefund(r)}
+                        />
 
-                          <FontAwesomeIcon
-                            icon={faThumbsDown}
-                            className='fa trash'
-                            onClick={() => rejectRefund(r)}
-                          />
-                        </div>
-                      )}
+                        <FontAwesomeIcon
+                          icon={faThumbsDown}
+                          className='fa trash'
+                          onClick={() => rejectRefund(r)}
+                        />
+                      </div>
                     </div>
                     <br />
                     <div className='single-refund'>
@@ -461,6 +569,13 @@ const Refunds = ({ history }) => {
                           <span>{moment(r.createdAt).fromNow()}</span>
                         </div>
                       </div>
+                      <div className='email-buyer'>
+                        <FontAwesomeIcon
+                          icon={faEnvelope}
+                          className='fa edit'
+                          onClick={() => emailBuyer(r)}
+                        />
+                      </div>
                     </div>
                     <br />
                     <div className='single-refund'>
@@ -489,14 +604,14 @@ const Refunds = ({ history }) => {
                         <h2>Reason for return:</h2>
                         <p>{r.reason}</p>
                         <h2>Messages to user:</h2>
-                        {r.messages.length > 0 ? (
+                        {r.messages.length === 1 && r.messages[0] === '' ? (
+                          <p>No message has been sent</p>
+                        ) : (
                           <ol>
                             {r.messages.map((m, idx) => (
                               <li key={idx}>{m}</li>
                             ))}
                           </ol>
-                        ) : (
-                          <p>No message has been sent</p>
                         )}
                       </div>
                       <div className='refund-images'>
@@ -547,6 +662,13 @@ const Refunds = ({ history }) => {
                           <span>{moment(r.createdAt).fromNow()}</span>
                         </div>
                       </div>
+                      <div className='email-buyer'>
+                        <FontAwesomeIcon
+                          icon={faEnvelope}
+                          className='fa edit'
+                          onClick={() => emailBuyer(r)}
+                        />
+                      </div>
                       <div className='post-icons'>
                         <FontAwesomeIcon
                           icon={faThumbsUp}
@@ -588,14 +710,14 @@ const Refunds = ({ history }) => {
                         <h2>Reason for return:</h2>
                         <p>{r.reason}</p>
                         <h2>Messages to user:</h2>
-                        {r.messages.length > 0 ? (
+                        {r.messages.length === 1 && r.messages[0] === '' ? (
+                          <p>No message has been sent</p>
+                        ) : (
                           <ol>
                             {r.messages.map((m, idx) => (
                               <li key={idx}>{m}</li>
                             ))}
                           </ol>
-                        ) : (
-                          <p>No message has been sent</p>
                         )}
                       </div>
                       <div className='refund-images'>
@@ -645,6 +767,13 @@ const Refunds = ({ history }) => {
                           <span>{moment(r.createdAt).fromNow()}</span>
                         </div>
                       </div>
+                      <div className='email-buyer'>
+                        <FontAwesomeIcon
+                          icon={faEnvelope}
+                          className='fa edit'
+                          onClick={() => emailBuyer(r)}
+                        />
+                      </div>
                       <div className='post-icons'>
                         <FontAwesomeIcon
                           icon={faThumbsUp}
@@ -671,14 +800,14 @@ const Refunds = ({ history }) => {
                         <h2>Reason for return:</h2>
                         <p>{r.reason}</p>
                         <h2>Messages to user:</h2>
-                        {r.messages.length > 0 ? (
+                        {r.messages.length === 1 && r.messages[0] === '' ? (
+                          <p>No message has been sent</p>
+                        ) : (
                           <ol>
                             {r.messages.map((m, idx) => (
                               <li key={idx}>{m}</li>
                             ))}
                           </ol>
-                        ) : (
-                          <p>No message has been sent</p>
                         )}
                       </div>
                       <div className='refund-images'>
@@ -707,13 +836,12 @@ const Refunds = ({ history }) => {
         setItemsReturnedModalIsOpen={setItemsReturnedModalIsOpen}
         currentRefund={currentRefund}
         fetchRefunds={fetchRefunds}
+        fetchNewRefunds={fetchNewRefunds}
       />
       <RefundReject
         rejectRefundModalIsOpen={rejectRefundModalIsOpen}
         setRejectRefundModalIsOpen={setRejectRefundModalIsOpen}
         currentRefund={currentRefund}
-        reason={reason}
-        setReason={setReason}
         fetchRefunds={fetchRefunds}
       />
       <RefundApprove
@@ -726,6 +854,11 @@ const Refunds = ({ history }) => {
         refundImageModalIsOpen={refundImageModalIsOpen}
         setRefundImageModalIsOpen={setRefundImageModalIsOpen}
         refund={currentRefund}
+      />
+      <EmailBuyer
+        emailBuyerModalIsOpen={emailBuyerModalIsOpen}
+        setEmailBuyerModalIsOpen={setEmailBuyerModalIsOpen}
+        currentRefund={currentRefund}
       />
     </div>
   );

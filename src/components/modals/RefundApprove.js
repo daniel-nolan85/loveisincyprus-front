@@ -72,7 +72,6 @@ const RefundApprove = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         setLoading(false);
         toast.success(
           `This refund is now being processed. A confirmation email has been sent to the user.`,
@@ -163,7 +162,7 @@ const RefundApprove = ({
             </Select>
           </div>
 
-          {products.length > 0 && products.length < items.length && (
+          {products.length > 0 && (
             <div className='ref-req-section'>
               <div className='ref-req-header'>
                 <span className='number'>2</span>

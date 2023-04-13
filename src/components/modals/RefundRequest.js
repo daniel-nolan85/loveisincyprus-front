@@ -60,7 +60,6 @@ const RefundRequest = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         setLoading(false);
 
         if (res.data.error) {
@@ -107,8 +106,6 @@ const RefundRequest = ({
   };
 
   const { _id, createdAt, products, orderedBy, paymentIntent } = currentOrder;
-
-  console.log('currentOrder => ', currentOrder);
 
   return (
     <Modal

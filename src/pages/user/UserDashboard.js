@@ -80,7 +80,6 @@ const UserDashboard = () => {
         }
       )
       .then((res) => {
-        console.log('followersPostsNum => ', res.data);
         if (res.data === 0) {
           setMorePosts(false);
         }

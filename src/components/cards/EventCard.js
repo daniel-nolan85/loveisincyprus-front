@@ -24,8 +24,6 @@ const EventCard = ({
 
   const { name, when, notes, uploadedPhotos } = event;
 
-  console.log('event', event);
-
   return (
     <Card
       cover={

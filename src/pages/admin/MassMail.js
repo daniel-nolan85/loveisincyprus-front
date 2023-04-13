@@ -114,7 +114,6 @@ const MassMail = ({ history }) => {
       setLoading(true);
       sendMassMail(values, subject, token)
         .then((res) => {
-          console.log(res.data);
           setLoading(false);
           setValues({
             image: {},

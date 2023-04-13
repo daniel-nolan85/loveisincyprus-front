@@ -62,8 +62,6 @@ const SingleEvent = ({ event, fetchEvent }) => {
     uploadedPhotos,
   } = event;
 
-  console.log('event', event);
-
   return (
     <div className='small-container single-product single-event'>
       <h1 className='center'>

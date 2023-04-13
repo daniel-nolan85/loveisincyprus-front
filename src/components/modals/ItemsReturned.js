@@ -13,6 +13,7 @@ const ItemsReturned = ({
   setItemsReturnedModalIsOpen,
   currentRefund,
   fetchRefunds,
+  fetchNewRefunds,
 }) => {
   const [loadingReturned, setLoadingReturned] = useState(false);
   const [loadingUnreturned, setLoadingUnreturned] = useState(false);
@@ -32,13 +33,13 @@ const ItemsReturned = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         toast.success('Confirmed - Items returned', {
           position: toast.POSITION.TOP_CENTER,
         });
         setItemsReturnedModalIsOpen(false);
         fetchRefunds();
         setLoadingReturned(false);
+        fetchNewRefunds();
       })
       .catch((err) => {
         setLoadingReturned(false);
@@ -59,13 +60,13 @@ const ItemsReturned = ({
         }
       )
       .then((res) => {
-        console.log(res.data);
         toast.error('Confirmed - Items not returned', {
           position: toast.POSITION.TOP_CENTER,
         });
         setItemsReturnedModalIsOpen(false);
         fetchRefunds();
         setLoadingUnreturned(false);
+        fetchNewRefunds();
       })
       .catch((err) => {
         setLoadingUnreturned(false);

@@ -22,6 +22,7 @@ const ChatProvider = ({ children }) => {
   const [productsForReview, setProductsForReview] = useState(0);
   const [newOrders, setNewOrders] = useState(0);
   const [timerFired, setTimerFired] = useState(false);
+  const [newRefunds, setNewRefunds] = useState(0);
 
   return (
     <ChatContext.Provider
@@ -62,6 +63,8 @@ const ChatProvider = ({ children }) => {
         setNewOrders,
         timerFired,
         setTimerFired,
+        newRefunds,
+        setNewRefunds,
       }}
     >
       {children}
