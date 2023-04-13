@@ -18,6 +18,7 @@ import AddressList from '../../components/modals/AddressList';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import Mobile from '../../components/user/Mobile';
+import LocationWarning from '../../components/modals/LocationWarning';
 
 const Checkout = ({ history }) => {
   const [products, setProducts] = useState([]);
@@ -26,9 +27,8 @@ const Checkout = ({ history }) => {
     firstLine: '',
     secondLine: '',
     city: '',
-    state: '',
     zip: '',
-    country: '',
+    country: 'CYPRUS',
   });
   const [addressSaved, setAddressSaved] = useState(false);
   const [coupon, setCoupon] = useState('');
@@ -40,6 +40,8 @@ const Checkout = ({ history }) => {
   const [loadingCoupon, setLoadingCoupon] = useState(false);
   const [deliverTo, setDeliverTo] = useState('');
   const [couponApplied, setCouponApplied] = useState({});
+  const [locationWarningModalIsOpen, setLocationWarningModalIsOpen] =
+    useState(false);
 
   const { token, address } = useSelector((state) => state.user);
 
@@ -69,6 +71,21 @@ const Checkout = ({ history }) => {
       });
     }
   }, [addressSaved]);
+
+  useEffect(() => {
+    fetch(
+      'https://api.ipregistry.co/76.202.50.183?key=asf3qlfeefwmnv5w&fields=location.country.code'
+    )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (payload) {
+        const userCountryCode = payload['location']['country']['code'];
+        if (userCountryCode !== 'CY') {
+          setLocationWarningModalIsOpen(true);
+        }
+      });
+  }, []);
 
   const fetchUserAddress = () => {
     if (address && address.length > 0) {
@@ -303,6 +320,10 @@ const Checkout = ({ history }) => {
           />
         </div>
       </div>
+      <LocationWarning
+        locationWarningModalIsOpen={locationWarningModalIsOpen}
+        setLocationWarningModalIsOpen={setLocationWarningModalIsOpen}
+      />
       <RightSidebar />
     </div>
   );

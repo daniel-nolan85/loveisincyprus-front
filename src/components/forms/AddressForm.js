@@ -20,15 +20,7 @@ const AddressForm = ({
       .required('Please enter the first line of your address'),
     secondLine: yup.string(),
     city: yup.string().required('Please tell us which city you live in'),
-    state: yup.string().required('Please tell us which state you live in'),
     zip: yup.string().required('Please enter your zip code'),
-    country: yup
-      .string()
-      .oneOf(
-        ['Cyprus', 'cyprus', 'CYPRUS'],
-        'You must reside in Cyprus in order to make a purchase'
-      )
-      .required('Please tell us which country you live in'),
   });
 
   const saveAddress = async (values) => {
@@ -38,6 +30,7 @@ const AddressForm = ({
   return (
     <Formik
       enableReinitialize={true}
+      validateOnMount
       initialValues={userAddress}
       validationSchema={validate}
       onSubmit={(values) => {
@@ -72,18 +65,11 @@ const AddressForm = ({
               placeholder='City'
             />
             <Input
-              label='State'
-              className='input-field'
-              name='state'
-              type='text'
-              placeholder='State'
-            />
-            <Input
-              label='Zip Code'
+              label='Post Code'
               className='input-field'
               name='zip'
               type='text'
-              placeholder='Zip Code'
+              placeholder='Post Code'
             />
             <Input
               label='Country'
@@ -91,6 +77,7 @@ const AddressForm = ({
               name='country'
               type='text'
               placeholder='Country'
+              readOnly
             />
             <div className='contact-form-btns'>
               <button
