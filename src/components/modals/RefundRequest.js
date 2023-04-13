@@ -25,7 +25,7 @@ const RefundRequest = ({
   const [reason, setReason] = useState('');
   const [loading, setLoading] = useState(false);
   const [refundImages, setRefundImages] = useState([]);
-  const [refundAmount, setRefundAmount] = useState(0);
+  const [amountRequested, setAmountRequested] = useState(0);
 
   const { token } = useSelector((state) => state.user);
 
@@ -34,7 +34,7 @@ const RefundRequest = ({
     const priceSum = priceArray.reduce((acc, curr) => acc + curr, 0);
     const tenPercent = priceSum * 0.1;
     const calc = priceSum - tenPercent;
-    setRefundAmount(calc.toFixed(2));
+    setAmountRequested(calc.toFixed(2));
   }, [items]);
 
   const requestSubmit = async (e) => {
@@ -49,8 +49,9 @@ const RefundRequest = ({
           items,
           reason,
           refundImages,
-          refundAmount,
+          amountRequested,
           orderedBy,
+          paymentIntent,
         },
         {
           headers: {
@@ -105,7 +106,7 @@ const RefundRequest = ({
     },
   };
 
-  const { _id, createdAt, products, orderedBy } = currentOrder;
+  const { _id, createdAt, products, orderedBy, paymentIntent } = currentOrder;
 
   console.log('currentOrder => ', currentOrder);
 
@@ -190,7 +191,7 @@ const RefundRequest = ({
                 setPostImages={setRefundImages}
               />
             </div>
-            {refundAmount > 0 && (
+            {amountRequested > 0 && (
               <>
                 <p className='center'>
                   You are eligible to receive the following amount for the items
@@ -198,8 +199,8 @@ const RefundRequest = ({
                 </p>
                 <div className='gift-card-amount'>
                   €
-                  <span style={{ width: `${refundAmount.length}ch` }}>
-                    {refundAmount}
+                  <span style={{ width: `${amountRequested.length}ch` }}>
+                    {amountRequested}
                   </span>
                 </div>
                 <small className='center'>

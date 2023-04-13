@@ -82,6 +82,7 @@ const ProductInCheckout = ({ p }) => {
               icon={faTrashCan}
               className='fa trash'
               onClick={handleRemove}
+              style={{ cursor: 'pointer' }}
             />
           </div>
         </div>

@@ -36,8 +36,7 @@ const MassMail = ({ history }) => {
   const [loading, setLoading] = useState(false);
   const [selectedUsersModalIsOpen, setSelectedUsersModalIsOpen] =
     useState(false);
-
-  console.log('values => ', values);
+  const [subject, setSubject] = useState('');
 
   const { token, _id, canMassMail } = useSelector((state) => state.user);
 
@@ -113,14 +112,16 @@ const MassMail = ({ history }) => {
     e.preventDefault();
     if (content) {
       setLoading(true);
-      sendMassMail(values, token)
+      sendMassMail(values, subject, token)
         .then((res) => {
+          console.log(res.data);
           setLoading(false);
           setValues({
             image: {},
             content: '',
             selected: [],
           });
+          setSubject('');
           socket.emit('new mass mail', res.data);
           toast.success('Your message has been sent', {
             position: toast.POSITION.TOP_CENTER,
@@ -183,6 +184,13 @@ const MassMail = ({ history }) => {
             modules={{ toolbar: ['bold', 'italic', 'underline'] }}
           />
         </div>
+        <input
+          type='text'
+          className='input-field'
+          placeholder='Add a subject'
+          value={subject}
+          onChange={(e) => setSubject(e.target.value)}
+        />
         <button
           onClick={() => setSelectedUsersModalIsOpen(true)}
           type='button'

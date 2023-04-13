@@ -2582,7 +2582,7 @@ nav {
 }
 
 .form-box.mass-mail {
-  height: 385px;
+  height: 425px;
   margin: 0 auto;
 }
 
@@ -4150,6 +4150,10 @@ input:-webkit-autofill:active {
   padding: 0;
 }
 
+.ref-req-section ol {
+  margin-left: 20px;
+}
+
 .ref-req-footer {
   display: flex;
   justify-content: center;
@@ -4164,6 +4168,15 @@ input:-webkit-autofill:active {
 
 .ref-req-section button.trash {
   background-color: #c70000;
+}
+
+.single-refund {
+  display: flex;
+  justify-content: space-between;
+}
+
+.single-refund .refund-images {
+  margin: 0 auto;
 }
 
 .refund-info span {
@@ -4188,12 +4201,22 @@ input:-webkit-autofill:active {
 .refund-info ul {
   list-style: none;
   margin-left: 70px;
-  margin-top: -35px;
+  margin-top: -15px;
+}
+
+.refund-info ol {
+  margin-left: 80px;
+  margin-top: -15px;
 }
 
 .refund-info p {
   margin-left: 70px;
   margin-top: -15px;
+}
+
+.refund-info .am-ref,
+.refund-info .it-ref {
+  color: var(--nav-color);
 }
 
 /* --------------- ad pages --------------- */
@@ -6334,5 +6357,12 @@ table.product-info tbody {
 
   .small-text-2 {
     font-size: 16px;
+  }
+}
+
+/* --------------- media query for refund pages --------------- */
+@media (max-width: 750px) {
+  .single-refund {
+    flex-direction: column;
   }
 }

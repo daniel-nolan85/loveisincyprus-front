@@ -136,7 +136,7 @@ const UsersToSelect = ({
         {values.selected.length === 0 &&
           searches &&
           searches.map((s) => (
-            <>
+            <div key={s._id}>
               <button
                 onClick={() => {
                   userSearch(s.params);
@@ -144,7 +144,7 @@ const UsersToSelect = ({
                 }}
                 type='button'
                 className='submit-btn'
-                key={s._id}
+                // key={s._id}
               >
                 {loading && clickedSearch === s._id ? (
                   <FontAwesomeIcon icon={faSpinner} className='fa' spin />
@@ -156,7 +156,7 @@ const UsersToSelect = ({
               {loading && clickedSearch === s._id && (
                 <p className='center'>This may take a few minutes</p>
               )}
-            </>
+            </div>
           ))}
         {loadingOpen ? (
           <div style={{ textAlign: 'center' }}>

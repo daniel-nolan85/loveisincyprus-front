@@ -36,6 +36,8 @@ const Refunds = ({ history }) => {
 
   let { _id, token, role } = useSelector((state) => state.user);
 
+  console.log('refunds => ', refunds);
+
   useEffect(() => {
     if (role !== 'main-admin') {
       history.push('/admin/dashboard');
@@ -54,7 +56,6 @@ const Refunds = ({ history }) => {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setRefunds(res.data);
         setLoadingRefunds(false);
         setStatus('all');
@@ -128,48 +129,50 @@ const Refunds = ({ history }) => {
             </div>
           ) : (
             <>
-              <div className='refund-filter-btns'>
-                <button
-                  className={
-                    status === 'all' ? 'submit-btn-active' : 'submit-btn'
-                  }
-                  onClick={fetchRefunds}
-                >
-                  All
-                </button>
-                <button
-                  className={
-                    status === 'pending' ? 'submit-btn-active' : 'submit-btn'
-                  }
-                  onClick={awaiting}
-                >
-                  Pending
-                </button>
-                <button
-                  className={
-                    status === 'granted' ? 'submit-btn-active' : 'submit-btn'
-                  }
-                  onClick={granted}
-                >
-                  Granted
-                </button>
-                <button
-                  className={
-                    status === 'partial' ? 'submit-btn-active' : 'submit-btn'
-                  }
-                  onClick={partial}
-                >
-                  Partial
-                </button>
-                <button
-                  className={
-                    status === 'denied' ? 'submit-btn-active' : 'submit-btn'
-                  }
-                  onClick={denied}
-                >
-                  Denied
-                </button>
-              </div>
+              {refunds.length > 0 && (
+                <div className='refund-filter-btns'>
+                  <button
+                    className={
+                      status === 'all' ? 'submit-btn-active' : 'submit-btn'
+                    }
+                    onClick={fetchRefunds}
+                  >
+                    All
+                  </button>
+                  <button
+                    className={
+                      status === 'pending' ? 'submit-btn-active' : 'submit-btn'
+                    }
+                    onClick={awaiting}
+                  >
+                    Pending
+                  </button>
+                  <button
+                    className={
+                      status === 'granted' ? 'submit-btn-active' : 'submit-btn'
+                    }
+                    onClick={granted}
+                  >
+                    Granted
+                  </button>
+                  <button
+                    className={
+                      status === 'partial' ? 'submit-btn-active' : 'submit-btn'
+                    }
+                    onClick={partial}
+                  >
+                    Partial
+                  </button>
+                  <button
+                    className={
+                      status === 'denied' ? 'submit-btn-active' : 'submit-btn'
+                    }
+                    onClick={denied}
+                  >
+                    Denied
+                  </button>
+                </div>
+              )}
               {status === 'all' && refunds.length === 0 ? (
                 <h1 className='center'>There are currently no refunds.</h1>
               ) : (
@@ -246,83 +249,98 @@ const Refunds = ({ history }) => {
                       )}
                     </div>
                     <br />
-                    <div className='refund-info'>
-                      <h2>
-                        Order Id: <span>{r._id}</span>
-                      </h2>
-                      <h2>
-                        Refund status:{' '}
-                        <span
-                          className={
-                            r.refundStatus === 'pending'
-                              ? 'pending'
-                              : '' || r.refundStatus === 'granted'
-                              ? 'granted'
-                              : '' || r.refundStatus === 'partial'
-                              ? 'partial'
-                              : '' || r.refundStatus === 'denied'
-                              ? 'denied'
-                              : ''
-                          }
-                        >
-                          {r.refundStatus === 'partial'
-                            ? r.refundStatus.charAt(0).toUpperCase() +
-                              r.refundStatus.slice(1) +
-                              'ly refunded'
-                            : !r.refundStatus
-                            ? 'Awaiting return'
-                            : r.refundStatus.charAt(0).toUpperCase() +
-                              r.refundStatus.slice(1)}
-                        </span>
-                      </h2>
-                      <h2>Items:</h2>
-                      <ul>
-                        {r.items.map((item, idx) => {
-                          const refundedItemsIds = r.refundedItems.map(
-                            (item) => item.split('-')[0]
-                          );
-
-                          const refundedItemsCount = r.refundedItems.reduce(
-                            (acc, curr) => {
-                              const [id] = curr.split('-');
-                              if (acc[id]) {
-                                acc[id]++;
-                              } else {
-                                acc[id] = 1;
-                              }
-                              return acc;
-                            },
-                            {}
-                          );
-                          return (
-                            <li key={idx}>
-                              {item.title}{' '}
-                              {refundedItemsIds.includes(item._id) &&
-                                Array.from(
-                                  { length: refundedItemsCount[item._id] },
-                                  (_, i) => <span key={i}> Refunded</span>
-                                )}
-                            </li>
-                          );
-                        })}
-                      </ul>
-                      <h2>Reason for return:</h2>
-                      <p>{r.reason}</p>
+                    <div className='single-refund'>
+                      <div className='refund-info'>
+                        <h2>
+                          Order Id: <span>{r._id}</span>
+                        </h2>
+                        <h2>
+                          Refund status:{' '}
+                          <span
+                            className={
+                              r.refundStatus === 'pending'
+                                ? 'pending'
+                                : '' || r.refundStatus === 'granted'
+                                ? 'granted'
+                                : '' || r.refundStatus === 'partial'
+                                ? 'partial'
+                                : '' || r.refundStatus === 'denied'
+                                ? 'denied'
+                                : ''
+                            }
+                          >
+                            {r.refundStatus === 'partial'
+                              ? r.refundStatus.charAt(0).toUpperCase() +
+                                r.refundStatus.slice(1) +
+                                'ly refunded'
+                              : !r.refundStatus
+                              ? 'Awaiting return'
+                              : r.refundStatus.charAt(0).toUpperCase() +
+                                r.refundStatus.slice(1)}
+                          </span>
+                        </h2>
+                        {r.refundStatus !== 'granted' && (
+                          <>
+                            <h2>Items:</h2>
+                            <ul>
+                              {r.items.map((i, idx) => (
+                                <li key={idx}>{i.title}</li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+                        {(r.refundStatus === 'partial' ||
+                          r.refundStatus === 'granted') && (
+                          <>
+                            <h2>Items refunded:</h2>
+                            <ul>
+                              {r.refundedItems.map((i, idx) => (
+                                <li key={idx} className='it-ref'>
+                                  {i.split(',')[2]}
+                                </li>
+                              ))}
+                            </ul>
+                            <h2>
+                              Amount refunded:{' '}
+                              <span className='am-ref'>
+                                €{r.amountGranted.toFixed(2)}
+                              </span>
+                            </h2>
+                          </>
+                        )}
+                        <h2>Reason for return:</h2>
+                        <p>{r.reason}</p>
+                        {(r.refundStatus === 'partial' ||
+                          r.refundStatus === 'granted' ||
+                          r.refundStatus === 'denied') && (
+                          <>
+                            <h2>Messages to user:</h2>
+                            {r.messages.length > 0 ? (
+                              <ol>
+                                {r.messages.map((m, idx) => (
+                                  <li key={idx}>{m}</li>
+                                ))}
+                              </ol>
+                            ) : (
+                              <p>No message has been sent</p>
+                            )}
+                          </>
+                        )}
+                      </div>
+                      <div className='refund-images'>
+                        {r.refundImages && r.refundImages.length > 0 && (
+                          <img
+                            src={r.refundImages[0].url}
+                            alt={`${
+                              r.orderedBy.username || r.orderedBy.name
+                            }'s post`}
+                            className='post-img'
+                            style={{ cursor: 'zoom-in' }}
+                            onClick={() => viewImages(r)}
+                          />
+                        )}
+                      </div>
                     </div>
-                    {r.refundImages && r.refundImages.length > 0 && (
-                      <img
-                        src={r.refundImages[0].url}
-                        alt={`${
-                          r.orderedBy.username || r.orderedBy.name
-                        }'s post`}
-                        className='post-img'
-                        style={{ cursor: 'zoom-in' }}
-                        onClick={() => viewImages(r)}
-                      />
-                    )}
-                    {/* <div
-                        className={r.returned ? 'returned' : 'non-returned'}
-                      ></div> */}
                   </div>
                 ))
               )}
@@ -378,36 +396,38 @@ const Refunds = ({ history }) => {
                       )}
                     </div>
                     <br />
-                    <div className='refund-info'>
-                      <h2>
-                        Order Id: <span>{r._id}</span>
-                      </h2>
-                      <h2>
-                        Refund status: <span className='pending'>Pending</span>
-                      </h2>
-                      <h2>Items:</h2>
-                      <ul>
-                        {r.items.map((i, idx) => (
-                          <li key={idx}>{i.title}</li>
-                        ))}
-                      </ul>
-                      <h2>Reason for return:</h2>
-                      <p>{r.reason}</p>
+                    <div className='single-refund'>
+                      <div className='refund-info'>
+                        <h2>
+                          Order Id: <span>{r._id}</span>
+                        </h2>
+                        <h2>
+                          Refund status:{' '}
+                          <span className='pending'>Pending</span>
+                        </h2>
+                        <h2>Items:</h2>
+                        <ul>
+                          {r.items.map((i, idx) => (
+                            <li key={idx}>{i.title}</li>
+                          ))}
+                        </ul>
+                        <h2>Reason for return:</h2>
+                        <p>{r.reason}</p>
+                      </div>
+                      <div className='refund-images'>
+                        {r.refundImages && r.refundImages.length > 0 && (
+                          <img
+                            src={r.refundImages[0].url}
+                            alt={`${
+                              r.orderedBy.username || r.orderedBy.name
+                            }'s post`}
+                            className='post-img'
+                            style={{ cursor: 'zoom-in' }}
+                            onClick={() => viewImages(r)}
+                          />
+                        )}
+                      </div>
                     </div>
-                    {r.refundImages && r.refundImages.length > 0 && (
-                      <img
-                        src={r.refundImages[0].url}
-                        alt={`${
-                          r.orderedBy.username || r.orderedBy.name
-                        }'s post`}
-                        className='post-img'
-                        style={{ cursor: 'zoom-in' }}
-                        onClick={() => viewImages(r)}
-                      />
-                    )}
-                    {/* <div
-                        className={r.returned ? 'returned' : 'non-returned'}
-                      ></div> */}
                   </div>
                 ))
               )}
@@ -443,36 +463,56 @@ const Refunds = ({ history }) => {
                       </div>
                     </div>
                     <br />
-                    <div className='refund-info'>
-                      <h2>
-                        Order Id: <span>{r._id}</span>
-                      </h2>
-                      <h2>
-                        Refund status: <span className='granted'>Granted</span>
-                      </h2>
-                      <h2>Items:</h2>
-                      <ul>
-                        {r.items.map((i, idx) => (
-                          <li key={idx}>{i.title}</li>
-                        ))}
-                      </ul>
-                      <h2>Reason for return:</h2>
-                      <p>{r.reason}</p>
+                    <div className='single-refund'>
+                      <div className='refund-info'>
+                        <h2>
+                          Order Id: <span>{r._id}</span>
+                        </h2>
+                        <h2>
+                          Refund status:{' '}
+                          <span className='granted'>Granted</span>
+                        </h2>
+                        <h2>Items refunded:</h2>
+                        <ul>
+                          {r.refundedItems.map((i, idx) => (
+                            <li key={idx} className='it-ref'>
+                              {i.split(',')[2]}
+                            </li>
+                          ))}
+                        </ul>
+                        <h2>
+                          Amount refunded:{' '}
+                          <span className='am-ref'>
+                            €{r.amountGranted.toFixed(2)}
+                          </span>
+                        </h2>
+                        <h2>Reason for return:</h2>
+                        <p>{r.reason}</p>
+                        <h2>Messages to user:</h2>
+                        {r.messages.length > 0 ? (
+                          <ol>
+                            {r.messages.map((m, idx) => (
+                              <li key={idx}>{m}</li>
+                            ))}
+                          </ol>
+                        ) : (
+                          <p>No message has been sent</p>
+                        )}
+                      </div>
+                      <div className='refund-images'>
+                        {r.refundImages && r.refundImages.length > 0 && (
+                          <img
+                            src={r.refundImages[0].url}
+                            alt={`${
+                              r.orderedBy.username || r.orderedBy.name
+                            }'s post`}
+                            className='post-img'
+                            style={{ cursor: 'zoom-in' }}
+                            onClick={() => viewImages(r)}
+                          />
+                        )}
+                      </div>
                     </div>
-                    {r.refundImages && r.refundImages.length > 0 && (
-                      <img
-                        src={r.refundImages[0].url}
-                        alt={`${
-                          r.orderedBy.username || r.orderedBy.name
-                        }'s post`}
-                        className='post-img'
-                        style={{ cursor: 'zoom-in' }}
-                        onClick={() => viewImages(r)}
-                      />
-                    )}
-                    {/* <div
-                        className={r.returned ? 'returned' : 'non-returned'}
-                      ></div> */}
                   </div>
                 ))
               )}
@@ -516,37 +556,62 @@ const Refunds = ({ history }) => {
                       </div>
                     </div>
                     <br />
-                    <div className='refund-info'>
-                      <h2>
-                        Order Id: <span>{r._id}</span>
-                      </h2>
-                      <h2>
-                        Refund status:{' '}
-                        <span className='partial'>Partially refunded</span>
-                      </h2>
-                      <h2>Items:</h2>
-                      <ul>
-                        {r.items.map((i, idx) => (
-                          <li key={idx}>{i.title}</li>
-                        ))}
-                      </ul>
-                      <h2>Reason for return:</h2>
-                      <p>{r.reason}</p>
+                    <div className='single-refund'>
+                      <div className='refund-info'>
+                        <h2>
+                          Order Id: <span>{r._id}</span>
+                        </h2>
+                        <h2>
+                          Refund status:{' '}
+                          <span className='partial'>Partially refunded</span>
+                        </h2>
+                        <h2>Items:</h2>
+                        <ul>
+                          {r.items.map((i, idx) => (
+                            <li key={idx}>{i.title}</li>
+                          ))}
+                        </ul>
+                        <h2>Items refunded:</h2>
+                        <ul>
+                          {r.refundedItems.map((i, idx) => (
+                            <li key={idx} className='it-ref'>
+                              {i.split(',')[2]}
+                            </li>
+                          ))}
+                        </ul>
+                        <h2>
+                          Amount refunded:{' '}
+                          <span className='am-ref'>
+                            €{r.amountGranted.toFixed(2)}
+                          </span>
+                        </h2>
+                        <h2>Reason for return:</h2>
+                        <p>{r.reason}</p>
+                        <h2>Messages to user:</h2>
+                        {r.messages.length > 0 ? (
+                          <ol>
+                            {r.messages.map((m, idx) => (
+                              <li key={idx}>{m}</li>
+                            ))}
+                          </ol>
+                        ) : (
+                          <p>No message has been sent</p>
+                        )}
+                      </div>
+                      <div className='refund-images'>
+                        {r.refundImages && r.refundImages.length > 0 && (
+                          <img
+                            src={r.refundImages[0].url}
+                            alt={`${
+                              r.orderedBy.username || r.orderedBy.name
+                            }'s post`}
+                            className='post-img'
+                            style={{ cursor: 'zoom-in' }}
+                            onClick={() => viewImages(r)}
+                          />
+                        )}
+                      </div>
                     </div>
-                    {r.refundImages && r.refundImages.length > 0 && (
-                      <img
-                        src={r.refundImages[0].url}
-                        alt={`${
-                          r.orderedBy.username || r.orderedBy.name
-                        }'s post`}
-                        className='post-img'
-                        style={{ cursor: 'zoom-in' }}
-                        onClick={() => viewImages(r)}
-                      />
-                    )}
-                    {/* <div
-                        className={r.returned ? 'returned' : 'non-returned'}
-                      ></div> */}
                   </div>
                 ))
               )}
@@ -589,36 +654,47 @@ const Refunds = ({ history }) => {
                       </div>
                     </div>
                     <br />
-                    <div className='refund-info'>
-                      <h2>
-                        Order Id: <span>{r._id}</span>
-                      </h2>
-                      <h2>
-                        Refund status: <span className='denied'>Denied</span>
-                      </h2>
-                      <h2>Items:</h2>
-                      <ul>
-                        {r.items.map((i, idx) => (
-                          <li key={idx}>{i.title}</li>
-                        ))}
-                      </ul>
-                      <h2>Reason for return:</h2>
-                      <p>{r.reason}</p>
+                    <div className='single-refund'>
+                      <div className='refund-info'>
+                        <h2>
+                          Order Id: <span>{r._id}</span>
+                        </h2>
+                        <h2>
+                          Refund status: <span className='denied'>Denied</span>
+                        </h2>
+                        <h2>Items:</h2>
+                        <ul>
+                          {r.items.map((i, idx) => (
+                            <li key={idx}>{i.title}</li>
+                          ))}
+                        </ul>
+                        <h2>Reason for return:</h2>
+                        <p>{r.reason}</p>
+                        <h2>Messages to user:</h2>
+                        {r.messages.length > 0 ? (
+                          <ol>
+                            {r.messages.map((m, idx) => (
+                              <li key={idx}>{m}</li>
+                            ))}
+                          </ol>
+                        ) : (
+                          <p>No message has been sent</p>
+                        )}
+                      </div>
+                      <div className='refund-images'>
+                        {r.refundImages && r.refundImages.length > 0 && (
+                          <img
+                            src={r.refundImages[0].url}
+                            alt={`${
+                              r.orderedBy.username || r.orderedBy.name
+                            }'s post`}
+                            className='post-img'
+                            style={{ cursor: 'zoom-in' }}
+                            onClick={() => viewImages(r)}
+                          />
+                        )}
+                      </div>
                     </div>
-                    {r.refundImages && r.refundImages.length > 0 && (
-                      <img
-                        src={r.refundImages[0].url}
-                        alt={`${
-                          r.orderedBy.username || r.orderedBy.name
-                        }'s post`}
-                        className='post-img'
-                        style={{ cursor: 'zoom-in' }}
-                        onClick={() => viewImages(r)}
-                      />
-                    )}
-                    {/* <div
-                        className={r.returned ? 'returned' : 'non-returned'}
-                      ></div> */}
                   </div>
                 ))
               )}
@@ -644,8 +720,6 @@ const Refunds = ({ history }) => {
         processRefundModalIsOpen={processRefundModalIsOpen}
         setProcessRefundModalIsOpen={setProcessRefundModalIsOpen}
         currentRefund={currentRefund}
-        reason={reason}
-        setReason={setReason}
         fetchRefunds={fetchRefunds}
       />
       <LargeRefundImage

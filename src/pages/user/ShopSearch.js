@@ -75,9 +75,11 @@ const ShopSearch = () => {
   };
 
   const fetchProducts = (arg) => {
-    fetchProductsByFilter(arg).then((res) => {
-      setProducts(res.data);
-    });
+    fetchProductsByFilter(arg)
+      .then((res) => {
+        setProducts(res.data);
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleChange = (e) => {

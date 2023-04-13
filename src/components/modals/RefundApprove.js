@@ -16,13 +16,12 @@ const RefundApprove = ({
   setProcessRefundModalIsOpen,
   currentRefund,
   fetchRefunds,
-  reason,
-  setReason,
 }) => {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [refundAmount, setRefundAmount] = useState(0);
   const [itemsToDisplay, setItemsToDisplay] = useState([]);
+  const [message, setMessage] = useState('');
 
   useEffect(() => {
     const priceArray = products.map((product) =>
@@ -36,14 +35,15 @@ const RefundApprove = ({
 
   useEffect(() => {
     if (items) {
+      let itemsToRefund = [...items];
       for (let i = 0; i < refundedItems.length; i++) {
         const [id, index] = refundedItems[i].split(/[-,]/);
-        const itemIndex = items.findIndex((item) => item._id === id);
+        const itemIndex = itemsToRefund.findIndex((item) => item._id === id);
         if (itemIndex !== -1) {
-          items.splice(itemIndex, 1);
+          itemsToRefund.splice(itemIndex, 1);
         }
       }
-      setItemsToDisplay(items);
+      setItemsToDisplay(itemsToRefund);
     }
   }, [currentRefund, products, refundAmount]);
 
@@ -64,7 +64,7 @@ const RefundApprove = ({
     await axios
       .put(
         `${process.env.REACT_APP_API}/process-refund`,
-        { refund, reason, refundAmount, products },
+        { refund, message, refundAmount, products },
         {
           headers: {
             authtoken: token,
@@ -72,7 +72,7 @@ const RefundApprove = ({
         }
       )
       .then((res) => {
-        // console.log(res.data);
+        console.log(res.data);
         setLoading(false);
         toast.success(
           `This refund is now being processed. A confirmation email has been sent to the user.`,
@@ -136,21 +136,22 @@ const RefundApprove = ({
               style={{ width: '100%' }}
               placeholder='Select items...'
               value={products}
-              onChange={(value) => {
-                if (value.includes('all')) {
-                  setProducts(
-                    items.map((i) => `${i._id}, ${i.price}, ${i.title}`)
-                  );
-                } else {
-                  setProducts(value);
-                }
-              }}
+              // onChange={(value) => {
+              //   if (value.includes('all')) {
+              //     setProducts(
+              //       items.map((i) => `${i._id}, ${i.price}, ${i.title}`)
+              //     );
+              //   } else {
+              //     setProducts(value);
+              //   }
+              // }}
+              onChange={(value) => setProducts(value)}
             >
-              {items.length > 1 && (
+              {/* {items.length > 1 && (
                 <Option value='all' key='all'>
                   Select all
                 </Option>
-              )}
+              )} */}
               {itemsToDisplay.map((i, idx) => (
                 <Option
                   value={`${i._id}-${idx}, ${i.price}, ${i.title}`}
@@ -161,18 +162,22 @@ const RefundApprove = ({
               ))}
             </Select>
           </div>
+
           {products.length > 0 && products.length < items.length && (
             <div className='ref-req-section'>
               <div className='ref-req-header'>
                 <span className='number'>2</span>
-                <h2>Tell the user why you decided not to refund some items.</h2>
+                <h2>
+                  Do you want to send the user a message related to their
+                  request?
+                </h2>
               </div>
               <input
                 type='text'
                 className='input-field'
-                placeholder='Give a reason?'
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
+                placeholder='Write a message'
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
               />
             </div>
           )}
