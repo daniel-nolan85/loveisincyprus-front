@@ -9,6 +9,7 @@ import {
   faTruckFast,
   faSpinner,
   faEnvelope,
+  faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
@@ -37,6 +38,7 @@ const Refunds = ({ history }) => {
   const [partialRefunds, setPartialRefunds] = useState([]);
   const [deniedRefunds, setDeniedRefunds] = useState([]);
   const [emailBuyerModalIsOpen, setEmailBuyerModalIsOpen] = useState(false);
+  const [query, setQuery] = useState('');
 
   let { _id, token, role } = useSelector((state) => state.user);
 
@@ -77,6 +79,13 @@ const Refunds = ({ history }) => {
         setNewRefunds(res.data);
       });
   };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setQuery(e.target.value.toLowerCase());
+  };
+
+  const searched = (query) => (r) => r._id.toLowerCase().includes(query);
 
   const requested = () => {
     const refRequested = refunds.filter((r) => r.refundStatus === 'requested');
@@ -145,65 +154,86 @@ const Refunds = ({ history }) => {
           ) : (
             <>
               {refunds.length > 0 && (
-                <div className='refund-filter-btns'>
-                  <button
-                    className={
-                      status === 'all' ? 'submit-btn-active' : 'submit-btn'
-                    }
-                    onClick={fetchRefunds}
-                  >
-                    All
-                  </button>
-                  <button
-                    className={
-                      status === 'requested'
-                        ? 'submit-btn-active'
-                        : 'submit-btn'
-                    }
-                    onClick={requested}
-                  >
-                    Requested
-                  </button>
-                  <button
-                    className={
-                      status === 'pending' ? 'submit-btn-active' : 'submit-btn'
-                    }
-                    onClick={awaiting}
-                  >
-                    Pending
-                  </button>
-                  <button
-                    className={
-                      status === 'granted' ? 'submit-btn-active' : 'submit-btn'
-                    }
-                    onClick={granted}
-                  >
-                    Granted
-                  </button>
-                  <button
-                    className={
-                      status === 'partial' ? 'submit-btn-active' : 'submit-btn'
-                    }
-                    onClick={partial}
-                  >
-                    Partial
-                  </button>
-                  <button
-                    className={
-                      status === 'denied' ? 'submit-btn-active' : 'submit-btn'
-                    }
-                    onClick={denied}
-                  >
-                    Denied
-                  </button>
-                </div>
+                <>
+                  <div className='search-box'>
+                    <FontAwesomeIcon
+                      icon={faMagnifyingGlass}
+                      onClick={handleSearch}
+                      className='fa'
+                    />
+                    <input
+                      type='search'
+                      placeholder='Search refunds by Id'
+                      onChange={handleSearch}
+                      value={query}
+                    />
+                  </div>
+                  <div className='refund-filter-btns'>
+                    <button
+                      className={
+                        status === 'all' ? 'submit-btn-active' : 'submit-btn'
+                      }
+                      onClick={fetchRefunds}
+                    >
+                      All
+                    </button>
+                    <button
+                      className={
+                        status === 'requested'
+                          ? 'submit-btn-active'
+                          : 'submit-btn'
+                      }
+                      onClick={requested}
+                    >
+                      Requested
+                    </button>
+                    <button
+                      className={
+                        status === 'pending'
+                          ? 'submit-btn-active'
+                          : 'submit-btn'
+                      }
+                      onClick={awaiting}
+                    >
+                      Pending
+                    </button>
+                    <button
+                      className={
+                        status === 'granted'
+                          ? 'submit-btn-active'
+                          : 'submit-btn'
+                      }
+                      onClick={granted}
+                    >
+                      Granted
+                    </button>
+                    <button
+                      className={
+                        status === 'partial'
+                          ? 'submit-btn-active'
+                          : 'submit-btn'
+                      }
+                      onClick={partial}
+                    >
+                      Partial
+                    </button>
+                    <button
+                      className={
+                        status === 'denied' ? 'submit-btn-active' : 'submit-btn'
+                      }
+                      onClick={denied}
+                    >
+                      Denied
+                    </button>
+                  </div>
+                </>
               )}
               {status === 'all' && refunds.length === 0 ? (
                 <h1 className='center'>There are currently no refunds.</h1>
               ) : (
                 status === 'all' &&
                 refunds.length > 0 &&
-                refunds.map((r) => (
+                refunds.filter(searched(query)).map((r) => (
                   <div className='post-container' key={r._id}>
                     <div className='post-row'>
                       <div className='user-profile'>
@@ -345,15 +375,11 @@ const Refunds = ({ history }) => {
                           r.refundStatus === 'denied') && (
                           <>
                             <h2>Messages to user:</h2>
-                            {r.messages.length === 1 && r.messages[0] === '' ? (
-                              <p>No message has been sent</p>
-                            ) : (
-                              <ol>
-                                {r.messages.map((m, idx) => (
-                                  <li key={idx}>{m}</li>
-                                ))}
-                              </ol>
-                            )}
+                            <ol>
+                              {r.messages.map((m, idx) => (
+                                <li key={idx}>{m}</li>
+                              ))}
+                            </ol>
                           </>
                         )}
                       </div>
@@ -381,7 +407,7 @@ const Refunds = ({ history }) => {
               ) : (
                 status === 'requested' &&
                 requestedRefunds.length > 0 &&
-                requestedRefunds.map((r) => (
+                requestedRefunds.filter(searched(query)).map((r) => (
                   <div className='post-container' key={r._id}>
                     <div className='post-row'>
                       <div className='user-profile'>
@@ -454,7 +480,7 @@ const Refunds = ({ history }) => {
               ) : (
                 status === 'pending' &&
                 awaitingRefunds.length > 0 &&
-                awaitingRefunds.map((r) => (
+                awaitingRefunds.filter(searched(query)).map((r) => (
                   <div className='post-container' key={r._id}>
                     <div className='post-row'>
                       <div className='user-profile'>
@@ -546,7 +572,7 @@ const Refunds = ({ history }) => {
               ) : (
                 status === 'granted' &&
                 grantedRefunds.length > 0 &&
-                grantedRefunds.map((r) => (
+                grantedRefunds.filter(searched(query)).map((r) => (
                   <div className='post-container' key={r._id}>
                     <div className='post-row'>
                       <div className='user-profile'>
@@ -604,15 +630,11 @@ const Refunds = ({ history }) => {
                         <h2>Reason for return:</h2>
                         <p>{r.reason}</p>
                         <h2>Messages to user:</h2>
-                        {r.messages.length === 1 && r.messages[0] === '' ? (
-                          <p>No message has been sent</p>
-                        ) : (
-                          <ol>
-                            {r.messages.map((m, idx) => (
-                              <li key={idx}>{m}</li>
-                            ))}
-                          </ol>
-                        )}
+                        <ol>
+                          {r.messages.map((m, idx) => (
+                            <li key={idx}>{m}</li>
+                          ))}
+                        </ol>
                       </div>
                       <div className='refund-images'>
                         {r.refundImages && r.refundImages.length > 0 && (
@@ -639,7 +661,7 @@ const Refunds = ({ history }) => {
               ) : (
                 status === 'partial' &&
                 partialRefunds.length > 0 &&
-                partialRefunds.map((r) => (
+                partialRefunds.filter(searched(query)).map((r) => (
                   <div className='post-container' key={r._id}>
                     <div className='post-row'>
                       <div className='user-profile'>
@@ -710,15 +732,11 @@ const Refunds = ({ history }) => {
                         <h2>Reason for return:</h2>
                         <p>{r.reason}</p>
                         <h2>Messages to user:</h2>
-                        {r.messages.length === 1 && r.messages[0] === '' ? (
-                          <p>No message has been sent</p>
-                        ) : (
-                          <ol>
-                            {r.messages.map((m, idx) => (
-                              <li key={idx}>{m}</li>
-                            ))}
-                          </ol>
-                        )}
+                        <ol>
+                          {r.messages.map((m, idx) => (
+                            <li key={idx}>{m}</li>
+                          ))}
+                        </ol>
                       </div>
                       <div className='refund-images'>
                         {r.refundImages && r.refundImages.length > 0 && (
@@ -744,7 +762,7 @@ const Refunds = ({ history }) => {
               ) : (
                 status === 'denied' &&
                 deniedRefunds.length > 0 &&
-                deniedRefunds.map((r) => (
+                deniedRefunds.filter(searched(query)).map((r) => (
                   <div className='post-container' key={r._id}>
                     <div className='post-row'>
                       <div className='user-profile'>
@@ -800,15 +818,11 @@ const Refunds = ({ history }) => {
                         <h2>Reason for return:</h2>
                         <p>{r.reason}</p>
                         <h2>Messages to user:</h2>
-                        {r.messages.length === 1 && r.messages[0] === '' ? (
-                          <p>No message has been sent</p>
-                        ) : (
-                          <ol>
-                            {r.messages.map((m, idx) => (
-                              <li key={idx}>{m}</li>
-                            ))}
-                          </ol>
-                        )}
+                        <ol>
+                          {r.messages.map((m, idx) => (
+                            <li key={idx}>{m}</li>
+                          ))}
+                        </ol>
                       </div>
                       <div className='refund-images'>
                         {r.refundImages && r.refundImages.length > 0 && (
