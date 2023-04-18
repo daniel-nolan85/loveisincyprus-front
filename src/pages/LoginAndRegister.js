@@ -60,7 +60,7 @@ const LoginAndRegister = ({ history }) => {
       isFirstRun.current = false;
       return;
     } else {
-      if (ip) {
+      if (ip !== '' && whitelist.length) {
         checkPermission();
       }
     }

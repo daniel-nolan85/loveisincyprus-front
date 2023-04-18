@@ -65,11 +65,13 @@ const Invoice = ({ order }) => {
           {'\n'}
           <Text>{order.deliveryAddress.firstLine}</Text>
           {'\n'}
-          <Text>{order.deliveryAddress.secondLine}</Text>
-          {'\n'}
+          {order.deliveryAddress.secondLine && (
+            <>
+              <Text>{order.deliveryAddress.secondLine}</Text>
+              {'\n'}
+            </>
+          )}
           <Text>{order.deliveryAddress.city}</Text>
-          {'\n'}
-          <Text>{order.deliveryAddress.state}</Text>
           {'\n'}
           <Text>{order.deliveryAddress.zip}</Text>
           {'\n'}
@@ -101,7 +103,6 @@ const Invoice = ({ order }) => {
               {'\n'}
             </>
           )}
-          {'\n'}
           <Text>
             Delivery Fee: {'   '}€{parseFloat(order.deliveryFee).toFixed(2)}
           </Text>

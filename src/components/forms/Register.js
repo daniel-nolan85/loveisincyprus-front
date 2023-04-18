@@ -56,6 +56,7 @@ const Register = ({ showLogin }) => {
   const [whyNeedThisAnswerModalIsOpen, setWhyNeedThisAnswerModalIsOpen] =
     useState(false);
   const [showAnswer, setShowAnswer] = useState(false);
+  const [isOver18, setIsOver18] = useState(false);
 
   let dispatch = useDispatch();
   const history = useHistory();
@@ -598,6 +599,16 @@ const Register = ({ showLogin }) => {
         value={OTP}
         onChange={verifyOTP}
       />
+      <br />
+      <small>You must be over 18 to sign up to Love is in Cyprus</small>
+      <label>
+        <input
+          type='checkbox'
+          checked={isOver18}
+          onChange={() => setIsOver18(!isOver18)}
+        />{' '}
+        I'm over 18 *
+      </label>
       <p className='required'>
         * <span className='link'>Required fields</span>
       </p>
@@ -611,7 +622,8 @@ const Register = ({ showLogin }) => {
           !validEmail ||
           !mobile ||
           showOTP ||
-          (statement && answer.length < 6)
+          (statement && answer.length < 6) ||
+          !isOver18
         }
       >
         {loading ? (
