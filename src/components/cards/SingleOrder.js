@@ -147,6 +147,7 @@ const SingleOrder = ({ order, loadUserOrders }) => {
       <RefundResponse
         responseRefundModalIsOpen={responseRefundModalIsOpen}
         setResponseRefundModalIsOpen={setResponseRefundModalIsOpen}
+        currentOrder={currentOrder}
       />
     </div>
   );

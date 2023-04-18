@@ -45,10 +45,6 @@ const LoginAndRegister = ({ history }) => {
   };
 
   useEffect(() => {
-    axios.put(`${process.env.REACT_APP_API}/allow-usa`);
-  });
-
-  useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_API}/fetch-whitelist`)
       .then((res) => {
@@ -64,13 +60,15 @@ const LoginAndRegister = ({ history }) => {
       isFirstRun.current = false;
       return;
     } else {
-      checkPermission();
+      if (ip) {
+        checkPermission();
+      }
     }
-  }, [whitelist]);
+  }, [whitelist, ip]);
 
   const checkPermission = () => {
     fetch(
-      'https://api.ipregistry.co/76.202.50.183?key=asf3qlfeefwmnv5w&fields=location.country.code'
+      `https://api.ipregistry.co/${ip}?key=${process.env.REACT_APP_IP_REGISTRY_API_KEY}&fields=location.country.code`
     )
       .then(function (response) {
         return response.json();

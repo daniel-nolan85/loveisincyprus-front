@@ -19,6 +19,7 @@ import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import Mobile from '../../components/user/Mobile';
 import LocationWarning from '../../components/modals/LocationWarning';
+import axios from 'axios';
 
 const Checkout = ({ history }) => {
   const [products, setProducts] = useState([]);
@@ -28,7 +29,7 @@ const Checkout = ({ history }) => {
     secondLine: '',
     city: '',
     zip: '',
-    country: 'CYPRUS',
+    country: 'THE REPUBLIC OF CYPRUS',
   });
   const [addressSaved, setAddressSaved] = useState(false);
   const [coupon, setCoupon] = useState('');
@@ -42,6 +43,7 @@ const Checkout = ({ history }) => {
   const [couponApplied, setCouponApplied] = useState({});
   const [locationWarningModalIsOpen, setLocationWarningModalIsOpen] =
     useState(false);
+  const [userIp, setUserIp] = useState('');
 
   const { token, address } = useSelector((state) => state.user);
 
@@ -54,6 +56,7 @@ const Checkout = ({ history }) => {
   useEffect(() => {
     fetchUserCart();
     fetchUserAddress();
+    getThisIP();
   }, []);
 
   useEffect(() => {
@@ -72,20 +75,28 @@ const Checkout = ({ history }) => {
     }
   }, [addressSaved]);
 
+  const getThisIP = async () => {
+    const res = await axios.get('https://geolocation-db.com/json/');
+    setUserIp(res.data.IPv4);
+  };
+
   useEffect(() => {
-    fetch(
-      'https://api.ipregistry.co/76.202.50.183?key=asf3qlfeefwmnv5w&fields=location.country.code'
-    )
-      .then(function (response) {
-        return response.json();
-      })
-      .then(function (payload) {
-        const userCountryCode = payload['location']['country']['code'];
-        if (userCountryCode !== 'CY') {
-          setLocationWarningModalIsOpen(true);
-        }
-      });
-  }, []);
+    if (userIp) {
+      fetch(
+        `https://api.ipregistry.co/${userIp}?key=${process.env.REACT_APP_IP_REGISTRY_API_KEY}&fields=location.country.code`
+      )
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (payload) {
+          const userCountryCode = payload['location']['country']['code'];
+          console.log('userCountryCode => ', userCountryCode);
+          if (userCountryCode !== 'CY') {
+            setLocationWarningModalIsOpen(true);
+          }
+        });
+    }
+  }, [userIp]);
 
   const fetchUserAddress = () => {
     if (address && address.length > 0) {

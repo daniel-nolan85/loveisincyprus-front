@@ -2586,6 +2586,19 @@ nav {
   margin: 0 auto;
 }
 
+.ql-tooltip[data-mode='link'] {
+  position: fixed !important;
+  left: 50% !important;
+  top: 251px !important;
+  height: -moz-fit-content;
+  height: -webkit-fit-content;
+  height: fit-content;
+}
+
+.ql-tooltip[data-mode='link'] a {
+  color: var(--nav-color);
+}
+
 select.gray {
   background: var(--body-color);
 }
@@ -5037,6 +5050,15 @@ td a {
 
 .total-price.checkout table {
   margin: 0 auto;
+}
+
+.total-price .tooltip .fa {
+  position: absolute;
+  left: 90px;
+  top: -20px;
+  font-size: 20px;
+  color: var(--nav-color);
+  cursor: pointer;
 }
 
 .cart-page td:last-child,

@@ -4,14 +4,20 @@ import { Link } from 'react-router-dom';
 import ProductInCheckout from '../../components/cards/ProductInCheckout';
 import { userCart } from '../../functions/user';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPaperPlane, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import {
+  faPaperPlane,
+  faSpinner,
+  faCircleQuestion,
+} from '@fortawesome/free-solid-svg-icons';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import Mobile from '../../components/user/Mobile';
+import DeliveryInfo from '../../components/modals/DeliveryInfo';
 
 const Cart = ({ history }) => {
   const [loading, setLoading] = useState(false);
   const [deliveryFee, setDeliveryFee] = useState(0);
+  const [deliveryInfoModalIsOpen, setDeliveryInfoModalIsOpen] = useState(false);
 
   const { token } = useSelector((state) => state.user) || {};
   const { cart } = useSelector((state) => ({ ...state }));
@@ -79,6 +85,10 @@ const Cart = ({ history }) => {
     }
   };
 
+  const deliveryInfo = () => {
+    setDeliveryInfoModalIsOpen(true);
+  };
+
   return (
     <div className='container'>
       <LeftSidebar />
@@ -105,7 +115,17 @@ const Cart = ({ history }) => {
                       <td>€{getTotal().toFixed(2)}</td>
                     </tr>
                     <tr>
-                      <td>Delivery fee</td>
+                      <td>
+                        Delivery fee{' '}
+                        <div className='tooltip'>
+                          <FontAwesomeIcon
+                            icon={faCircleQuestion}
+                            className='fa'
+                            onClick={deliveryInfo}
+                          />
+                          <span className='tooltip-text'>What is this?</span>
+                        </div>
+                      </td>
                       <td>€{deliveryFee.toFixed(2)}</td>
                     </tr>
                     <tr>
@@ -145,6 +165,10 @@ const Cart = ({ history }) => {
             </div>
           </>
         )}
+        <DeliveryInfo
+          deliveryInfoModalIsOpen={deliveryInfoModalIsOpen}
+          setDeliveryInfoModalIsOpen={setDeliveryInfoModalIsOpen}
+        />
       </div>
       <RightSidebar />
     </div>

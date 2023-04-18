@@ -6,6 +6,7 @@ Modal.setAppElement('#root');
 const RefundResponse = ({
   responseRefundModalIsOpen,
   setResponseRefundModalIsOpen,
+  currentOrder,
 }) => {
   const modalStyles = {
     content: {
@@ -31,6 +32,8 @@ const RefundResponse = ({
     },
   };
 
+  console.log('currentOrder => ', currentOrder);
+
   return (
     <Modal
       isOpen={responseRefundModalIsOpen}
@@ -41,7 +44,8 @@ const RefundResponse = ({
       <div className='duration-info'>
         <h2 className='center'>Your refund request has been received.</h2>
         <h3>
-          You may now return your unwanted items to us at the following address:
+          You may now return your unwanted items to our goods department at the
+          following address:
         </h3>
         <br />
         <div className='return-address'>
@@ -51,8 +55,18 @@ const RefundResponse = ({
           <p>Cyprus</p>
         </div>
         <br />
-        Your refund will be returned to the bank account your purchase was made
-        with within 30 days from receipt of the goods by us.
+        <h3>Your Order Id is: </h3>
+        <h3 style={{ fontWeight: 'bold' }}>
+          {currentOrder.paymentIntent && currentOrder.paymentIntent.id}
+        </h3>
+        <h3 className='warning center'>
+          You must include your Order Id with your return. Failure to do so may
+          result in your request being rejected.
+        </h3>
+        <br />
+        Your request will be inspected upon our receipt of the items and, if
+        granted, your refund will be returned to the bank account your purchase
+        was made with no more than 30 days later.
         <br />
         This information has also been emailed to you for your reference.
       </div>

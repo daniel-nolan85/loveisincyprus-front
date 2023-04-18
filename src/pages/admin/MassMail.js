@@ -180,7 +180,7 @@ const MassMail = ({ history }) => {
             value={content}
             name='content'
             onChange={(e) => setValues({ ...values, content: e })}
-            modules={{ toolbar: ['bold', 'italic', 'underline'] }}
+            modules={{ toolbar: ['bold', 'italic', 'underline', 'link'] }}
           />
         </div>
         <input

@@ -314,7 +314,7 @@ const Refunds = ({ history }) => {
                     <div className='single-refund'>
                       <div className='refund-info'>
                         <h2>
-                          Order Id: <span>{r._id}</span>
+                          Order Id: <span>{r.paymentIntent.id}</span>
                         </h2>
                         <h2>
                           Refund status:{' '}
@@ -442,7 +442,7 @@ const Refunds = ({ history }) => {
                     <div className='single-refund'>
                       <div className='refund-info'>
                         <h2>
-                          Order Id: <span>{r._id}</span>
+                          Order Id: <span>{r.paymentIntent.id}</span>
                         </h2>
                         <h2>
                           Refund status: <span>Requested</span>
@@ -533,7 +533,7 @@ const Refunds = ({ history }) => {
                     <div className='single-refund'>
                       <div className='refund-info'>
                         <h2>
-                          Order Id: <span>{r._id}</span>
+                          Order Id: <span>{r.paymentIntent.id}</span>
                         </h2>
                         <h2>
                           Refund status:{' '}
@@ -607,7 +607,7 @@ const Refunds = ({ history }) => {
                     <div className='single-refund'>
                       <div className='refund-info'>
                         <h2>
-                          Order Id: <span>{r._id}</span>
+                          Order Id: <span>{r.paymentIntent.id}</span>
                         </h2>
                         <h2>
                           Refund status:{' '}
@@ -703,7 +703,7 @@ const Refunds = ({ history }) => {
                     <div className='single-refund'>
                       <div className='refund-info'>
                         <h2>
-                          Order Id: <span>{r._id}</span>
+                          Order Id: <span>{r.paymentIntent.id}</span>
                         </h2>
                         <h2>
                           Refund status:{' '}
@@ -804,7 +804,7 @@ const Refunds = ({ history }) => {
                     <div className='single-refund'>
                       <div className='refund-info'>
                         <h2>
-                          Order Id: <span>{r._id}</span>
+                          Order Id: <span>{r.paymentIntent.id}</span>
                         </h2>
                         <h2>
                           Refund status: <span className='denied'>Denied</span>
