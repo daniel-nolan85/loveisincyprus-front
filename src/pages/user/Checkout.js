@@ -29,7 +29,7 @@ const Checkout = ({ history }) => {
     secondLine: '',
     city: '',
     zip: '',
-    country: 'THE REPUBLIC OF CYPRUS',
+    country: 'REPUBLIC OF CYPRUS',
   });
   const [addressSaved, setAddressSaved] = useState(false);
   const [coupon, setCoupon] = useState('');
@@ -90,7 +90,6 @@ const Checkout = ({ history }) => {
         })
         .then(function (payload) {
           const userCountryCode = payload['location']['country']['code'];
-          console.log('userCountryCode => ', userCountryCode);
           if (userCountryCode !== 'CY') {
             setLocationWarningModalIsOpen(true);
           }

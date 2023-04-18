@@ -76,9 +76,15 @@ const NotifPost = ({
   const [declinedModalIsOpen, setDeclinedModalIsOpen] = useState(false);
   const [postImageModalIsOpen, setPostImageModalIsOpen] = useState(false);
 
-  const { token, _id, name, profileImage, username } = useSelector(
-    (state) => state.user
-  );
+  const {
+    token,
+    _id,
+    name,
+    profileImage,
+    username,
+    clearPhoto,
+    profilePhotos,
+  } = useSelector((state) => state.user);
 
   const editPost = (post) => {
     setCurrentPost(post);
@@ -421,6 +427,21 @@ const NotifPost = ({
             </Link>
           </div>
           <br />
+          {!clearPhoto ? (
+            <p>
+              {post.notif.username || post.notif.name} could not view your
+              photos clearly because you are not displaying a clear image of
+              yourself.
+            </p>
+          ) : (
+            profilePhotos.length < 2 && (
+              <p>
+                {post.notif.username || post.notif.name} could not view your
+                photos clearly because you have uploaded less than two profile
+                images.
+              </p>
+            )
+          )}
         </div>
       ) : (
         <div className='post-container'>

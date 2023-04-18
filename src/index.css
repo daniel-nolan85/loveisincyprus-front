@@ -4364,6 +4364,20 @@ input:-webkit-autofill:active {
   width: 140px;
 }
 
+.points-filter-btns .submit-btn-active {
+  background-color: #fff;
+  color: var(--nav-color);
+  width: 140px;
+  text-align: center;
+  padding: 10px 30px;
+  cursor: pointer;
+  display: block;
+  margin: 20px auto;
+  border: 1px solid var(--nav-color);
+  outline: none;
+  border-radius: 30px;
+}
+
 .filter-datepicker {
   width: 100%;
   position: relative;
@@ -4700,6 +4714,20 @@ input[name='Photos'] {
 .photos-top-content .submit-btn {
   width: 175px;
   text-align: center;
+}
+
+.photos-top-content .submit-btn-active {
+  background-color: #fff;
+  color: var(--nav-color);
+  width: 175px;
+  text-align: center;
+  padding: 10px 30px;
+  cursor: pointer;
+  display: block;
+  margin: 20px auto;
+  border: 1px solid var(--nav-color);
+  outline: none;
+  border-radius: 30px;
 }
 
 .upload-images {

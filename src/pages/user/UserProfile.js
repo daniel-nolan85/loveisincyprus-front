@@ -119,6 +119,32 @@ const UserProfile = ({ history }) => {
     fetchThisUsersPosts();
   }, [page]);
 
+  useEffect(() => {
+    if (thisUser) {
+      console.log(clearPhoto);
+      console.log(profilePhotos);
+      if (clearPhoto === false) {
+        toast.warning(
+          `You cannot view ${
+            username || name
+          }'s photos clearly because they are not displaying a clear image of themselves.`,
+          {
+            position: toast.POSITION.TOP_CENTER,
+          }
+        );
+      } else if (profilePhotos && profilePhotos.length < 2) {
+        toast.warning(
+          `You cannot view ${
+            username || name
+          }'s photos clearly because they have uploaded less than two profile images.`,
+          {
+            position: toast.POSITION.TOP_CENTER,
+          }
+        );
+      }
+    }
+  }, [thisUser]);
+
   const fetchUser = async () => {
     await axios
       .post(

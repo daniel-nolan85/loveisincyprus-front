@@ -261,31 +261,39 @@ const Photos = () => {
         <div className='photos-top-content'>
           <label
             htmlFor='check1'
-            className='submit-btn'
             onClick={() => {
               setImageType('profile');
               setImageIndex(0);
             }}
+            className={
+              imageType === 'profile' ? 'submit-btn-active' : 'submit-btn'
+            }
           >
             Profile Images
           </label>
           <label
             htmlFor='check2'
-            className='submit-btn'
             onClick={() => {
               setImageType('cover');
               setImageIndex(0);
             }}
+            className={
+              imageType === 'cover' ? 'submit-btn-active' : 'submit-btn'
+            }
           >
             Cover Images
           </label>
           <label
             htmlFor='check3'
-            className='submit-btn'
             onClick={() => {
               setImageType('general upload');
               setImageIndex(0);
             }}
+            className={
+              imageType === 'general upload'
+                ? 'submit-btn-active'
+                : 'submit-btn'
+            }
           >
             Uploads
           </label>

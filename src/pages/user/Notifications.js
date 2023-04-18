@@ -47,6 +47,7 @@ const Notifications = () => {
   const [commentToReport, setCommentToReport] = useState({});
   const [postOfCommentToReport, setPostOfCommentToReport] = useState([]);
   const [loadingNotifs, setLoadingNotifs] = useState(true);
+  const [filterBy, setFilterBy] = useState('today');
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -146,6 +147,7 @@ const Notifications = () => {
       return yesterday < time && time < now;
     });
     setNotifsDisplay(today);
+    setFilterBy('today');
   };
 
   const thisWeek = () => {
@@ -156,6 +158,7 @@ const Notifications = () => {
       return lastWeek < time && time < now;
     });
     setNotifsDisplay(thisWeek);
+    setFilterBy('thisWeek');
   };
 
   const thisMonth = () => {
@@ -166,10 +169,12 @@ const Notifications = () => {
       return currentMonth === +month && currentYear == year;
     });
     setNotifsDisplay(thisMonth);
+    setFilterBy('thisMonth');
   };
 
   const select = () => {
     setDatePickerIsOpen(true);
+    setFilterBy('select');
   };
 
   useEffect(() => {
@@ -453,16 +458,36 @@ const Notifications = () => {
               )}
             </h1>
             <div className='points-filter-btns'>
-              <button className='submit-btn' onClick={today}>
+              <button
+                onClick={today}
+                className={
+                  filterBy === 'today' ? 'submit-btn-active' : 'submit-btn'
+                }
+              >
                 Today
               </button>
-              <button className='submit-btn' onClick={thisWeek}>
+              <button
+                onClick={thisWeek}
+                className={
+                  filterBy === 'thisWeek' ? 'submit-btn-active' : 'submit-btn'
+                }
+              >
                 This Week
               </button>
-              <button className='submit-btn' onClick={thisMonth}>
+              <button
+                onClick={thisMonth}
+                className={
+                  filterBy === 'thisMonth' ? 'submit-btn-active' : 'submit-btn'
+                }
+              >
                 This Month
               </button>
-              <button className='submit-btn' onClick={select}>
+              <button
+                onClick={select}
+                className={
+                  filterBy === 'select' ? 'submit-btn-active' : 'submit-btn'
+                }
+              >
                 Select
               </button>
             </div>

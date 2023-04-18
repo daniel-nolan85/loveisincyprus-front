@@ -79,6 +79,7 @@ const Points = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [datePickerIsOpen, setDatePickerIsOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [filterBy, setFilterBy] = useState('today');
 
   const { pointsQuestionsModalIsOpen, setPointsQuestionsModalIsOpen } =
     ChatState();
@@ -169,6 +170,7 @@ const Points = () => {
     setPointsGainedDisplay(pGained);
     setPointsLostDisplay(pLost);
     setPointsSpentDisplay(pSpent);
+    setFilterBy('today');
   };
 
   const thisWeek = () => {
@@ -189,6 +191,7 @@ const Points = () => {
     setPointsGainedDisplay(pg);
     setPointsLostDisplay(pl);
     setPointsSpentDisplay(ps);
+    setFilterBy('thisWeek');
   };
 
   const thisMonth = () => {
@@ -209,10 +212,12 @@ const Points = () => {
     setPointsGainedDisplay(pg);
     setPointsLostDisplay(pl);
     setPointsSpentDisplay(ps);
+    setFilterBy('thisMonth');
   };
 
   const select = () => {
     setDatePickerIsOpen(true);
+    setFilterBy('select');
   };
 
   useEffect(() => {
@@ -384,16 +389,36 @@ const Points = () => {
               )}
             </div>
             <div className='points-filter-btns'>
-              <button className='submit-btn' onClick={today}>
+              <button
+                onClick={today}
+                className={
+                  filterBy === 'today' ? 'submit-btn-active' : 'submit-btn'
+                }
+              >
                 Today
               </button>
-              <button className='submit-btn' onClick={thisWeek}>
+              <button
+                onClick={thisWeek}
+                className={
+                  filterBy === 'thisWeek' ? 'submit-btn-active' : 'submit-btn'
+                }
+              >
                 This Week
               </button>
-              <button className='submit-btn' onClick={thisMonth}>
+              <button
+                onClick={thisMonth}
+                className={
+                  filterBy === 'thisMonth' ? 'submit-btn-active' : 'submit-btn'
+                }
+              >
                 This Month
               </button>
-              <button className='submit-btn' onClick={select}>
+              <button
+                onClick={select}
+                className={
+                  filterBy === 'select' ? 'submit-btn-active' : 'submit-btn'
+                }
+              >
                 Select
               </button>
             </div>
