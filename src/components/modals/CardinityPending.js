@@ -1,6 +1,5 @@
 import React from 'react';
 import Modal from 'react-modal';
-import { refundSubscription } from '../../functions/cardinity';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -38,28 +37,6 @@ const CardinityPending = ({
       overflowY: 'auto',
     },
   };
-
-  //   const cancelSubscription = async () => {
-  //     refundSubscription(user, user.token)
-  //       .then((res) => {
-  //         dispatch({
-  //           type: 'LOGGED_IN_USER',
-  //           payload: {
-  //             ...user,
-  //             membership: res.data.membership,
-  //           },
-  //         });
-  //         toast.success(
-  //           `Your subscription has been cancelled and your payment has been refunded.`,
-  //           {
-  //             position: toast.POSITION.TOP_CENTER,
-  //           }
-  //         );
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //       });
-  //   };
 
   return (
     <Modal
