@@ -821,10 +821,6 @@ nav {
   transform: scaleX(-1) translateX(5px);
 }
 
-/* .return-cta:active {
-  transform: scaleX(-1);
-} */
-
 .user-profile img {
   width: 45px;
   height: 45px;
