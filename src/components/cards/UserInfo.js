@@ -6,12 +6,12 @@ import _ from 'lodash';
 
 const { Meta } = Card;
 
-const UserInfo = ({ u }) => {
+const UserInfo = ({ u, params, setReturnedFromProfile }) => {
   const { _id, name, profileImage, age, about, username } = u;
 
   return (
     <>
-      <Link to={`/user/${_id}`}>
+      <Link to={{ pathname: `/user/${_id}`, state: { params } }}>
         <Card
           cover={
             <img
@@ -20,6 +20,7 @@ const UserInfo = ({ u }) => {
               alt={`${username || name}'s profile picture`}
             />
           }
+          onClick={() => setReturnedFromProfile(false)}
         >
           <Meta
             title={

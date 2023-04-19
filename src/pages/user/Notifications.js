@@ -81,6 +81,29 @@ const Notifications = () => {
     );
   }, []);
 
+  useEffect(() => {
+    const populateData = async () => {
+      await axios
+        .post(
+          `${process.env.REACT_APP_API}/populate-notifications`,
+          { user },
+          {
+            headers: {
+              authtoken: user.token,
+            },
+          }
+        )
+        .then((res) => {
+          setData(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    populateData();
+  }, [data]);
+
   const fetchNotifications = async () => {
     await axios
       .post(

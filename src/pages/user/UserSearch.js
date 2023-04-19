@@ -37,7 +37,7 @@ const initialInputValues = {
   treatself: '',
 };
 
-const UserSearch = () => {
+const UserSearch = (props) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [ageRange, setAgeRange] = useState([0, 0]);
@@ -76,6 +76,8 @@ const UserSearch = () => {
   const [filtered, setFiltered] = useState(false);
   const [inputValues, setInputValues] = useState(initialInputValues);
   const [totalUsersCount, setTotalUsersCount] = useState(0);
+  const [returnedFromProfile, setReturnedFromProfile] = useState(false);
+  const [returnedParams, setReturnedParams] = useState(props.location.state);
 
   const map = {
     ageOfPartner: setAgeOfPartner,
@@ -140,6 +142,20 @@ const UserSearch = () => {
   }, [text]);
 
   useEffect(() => {
+    if (returnedParams && returnedParams.params.length) {
+      setParams(returnedParams.params);
+      setReturnedFromProfile(true);
+      const unique = Object.values(
+        returnedParams.params.reduce((a, item) => {
+          a[item.field] = item;
+          return a;
+        }, {})
+      );
+      fetchUsers(unique);
+    }
+  }, [returnedFromProfile]);
+
+  useEffect(() => {
     getTotalUsersCount();
   }, []);
 
@@ -179,6 +195,11 @@ const UserSearch = () => {
   };
 
   const handleRadio = (e) => {
+    if (returnedFromProfile) {
+      setParams([]);
+      setReturnedParams(undefined);
+      setReturnedFromProfile(false);
+    }
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
@@ -190,6 +211,11 @@ const UserSearch = () => {
   };
 
   const handleAgeSlider = (value) => {
+    if (returnedFromProfile) {
+      setParams([]);
+      setReturnedParams(undefined);
+      setReturnedFromProfile(false);
+    }
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
@@ -201,6 +227,11 @@ const UserSearch = () => {
   };
 
   const handleIncomeSlider = (value) => {
+    if (returnedFromProfile) {
+      setParams([]);
+      setReturnedParams(undefined);
+      setReturnedFromProfile(false);
+    }
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
@@ -215,6 +246,11 @@ const UserSearch = () => {
   };
 
   const handleInputChange = (e) => {
+    if (returnedFromProfile) {
+      setParams([]);
+      setReturnedParams(undefined);
+      setReturnedFromProfile(false);
+    }
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
@@ -244,6 +280,11 @@ const UserSearch = () => {
   };
 
   const handleDropdown = ({ key, item }) => {
+    if (returnedFromProfile) {
+      setParams([]);
+      setReturnedParams(undefined);
+      setReturnedFromProfile(false);
+    }
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
@@ -2251,7 +2292,11 @@ const UserSearch = () => {
               {users &&
                 users.map((u) => (
                   <div className='product-card' key={u._id}>
-                    <UserInfo u={u} />
+                    <UserInfo
+                      u={u}
+                      params={params}
+                      setReturnedFromProfile={setReturnedFromProfile}
+                    />
                   </div>
                 ))}
             </>
@@ -2275,6 +2320,14 @@ const UserSearch = () => {
           setUserSearchModalIsOpen={setUserSearchModalIsOpen}
           users={users}
           setUsers={setUsers}
+          returnedParams={returnedParams}
+          setReturnedParams={setReturnedParams}
+          returnedFromProfile={returnedFromProfile}
+          setReturnedFromProfile={setReturnedFromProfile}
+          totalUsersCount={totalUsersCount}
+          setTotalUsersCount={setTotalUsersCount}
+          params={params}
+          setParams={setParams}
         />
       </div>
     </div>

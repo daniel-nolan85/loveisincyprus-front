@@ -38,6 +38,14 @@ const UserSearchMobile = ({
   setUserSearchModalIsOpen,
   users,
   setUsers,
+  returnedParams,
+  setReturnedParams,
+  returnedFromProfile,
+  setReturnedFromProfile,
+  totalUsersCount,
+  setTotalUsersCount,
+  params,
+  setParams,
 }) => {
   const [loading, setLoading] = useState(false);
   const [ageRange, setAgeRange] = useState([0, 0]);
@@ -67,14 +75,12 @@ const UserSearchMobile = ({
   const [sexLikes, setSexLikes] = useState('');
   const [sexFrequency, setSexFrequency] = useState('');
   const [searchName, setSearchName] = useState('');
-  const [params, setParams] = useState([]);
   const [loadingSave, setLoadingSave] = useState(false);
   const [loadingSearch, setLoadingSearch] = useState(false);
   const [page, setPage] = useState(1);
   const [filteredPage, setFilteredPage] = useState(1);
   const [filtered, setFiltered] = useState(false);
   const [inputValues, setInputValues] = useState(initialInputValues);
-  const [totalUsersCount, setTotalUsersCount] = useState(0);
 
   const modalStyles = {
     content: {
@@ -163,6 +169,20 @@ const UserSearchMobile = ({
   }, [text]);
 
   useEffect(() => {
+    if (returnedParams && returnedParams.params.length) {
+      setParams(returnedParams.params);
+      setReturnedFromProfile(true);
+      const unique = Object.values(
+        returnedParams.params.reduce((a, item) => {
+          a[item.field] = item;
+          return a;
+        }, {})
+      );
+      fetchUsers(unique);
+    }
+  }, [returnedFromProfile]);
+
+  useEffect(() => {
     getTotalUsersCount();
   }, []);
 
@@ -202,6 +222,11 @@ const UserSearchMobile = ({
   };
 
   const handleRadio = (e) => {
+    if (returnedFromProfile) {
+      setParams([]);
+      setReturnedParams(undefined);
+      setReturnedFromProfile(false);
+    }
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
@@ -213,6 +238,11 @@ const UserSearchMobile = ({
   };
 
   const handleAgeSlider = (value) => {
+    if (returnedFromProfile) {
+      setParams([]);
+      setReturnedParams(undefined);
+      setReturnedFromProfile(false);
+    }
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
@@ -224,6 +254,11 @@ const UserSearchMobile = ({
   };
 
   const handleIncomeSlider = (value) => {
+    if (returnedFromProfile) {
+      setParams([]);
+      setReturnedParams(undefined);
+      setReturnedFromProfile(false);
+    }
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
@@ -238,6 +273,11 @@ const UserSearchMobile = ({
   };
 
   const handleInputChange = (e) => {
+    if (returnedFromProfile) {
+      setParams([]);
+      setReturnedParams(undefined);
+      setReturnedFromProfile(false);
+    }
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },
@@ -267,6 +307,11 @@ const UserSearchMobile = ({
   };
 
   const handleDropdown = ({ key, item }) => {
+    if (returnedFromProfile) {
+      setParams([]);
+      setReturnedParams(undefined);
+      setReturnedFromProfile(false);
+    }
     dispatch({
       type: 'SEARCH_QUERY',
       payload: { text: '' },

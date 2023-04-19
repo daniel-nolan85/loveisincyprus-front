@@ -37,7 +37,7 @@ import ReportPost from '../../components/modals/ReportPost';
 
 let socket;
 
-const UserProfile = ({ history }) => {
+const UserProfile = ({ history, location }) => {
   const [thisUser, setThisUser] = useState({});
   const [coverImageModalIsOpen, setCoverImageModalIsOpen] = useState(false);
   const [profileImageModalIsOpen, setProfileImageModalIsOpen] = useState(false);
@@ -121,8 +121,6 @@ const UserProfile = ({ history }) => {
 
   useEffect(() => {
     if (thisUser) {
-      console.log(clearPhoto);
-      console.log(profilePhotos);
       if (clearPhoto === false) {
         toast.warning(
           `You cannot view ${
@@ -606,6 +604,25 @@ const UserProfile = ({ history }) => {
         _id !== '63dc1d2a8eb01e4110743044' && (
           <>
             <div className='profile-container'>
+              {location.state && location.state.params && (
+                <div className='back-to-search'>
+                  <button
+                    onClick={() =>
+                      history.push({
+                        pathname: `/search-users`,
+                        state: { params: location.state.params },
+                      })
+                    }
+                    className='return-cta'
+                  >
+                    <svg width='13px' height='10px' viewBox='0 0 13 10'>
+                      <polyline points='8 1 12 5 8 9'></polyline>
+                      <path d='M1,5 L11,5'></path>
+                    </svg>
+                    <span>Back to results</span>
+                  </button>
+                </div>
+              )}
               <img
                 src={coverImage ? coverImage.url : defaultCover}
                 alt={`${username || name}'s profile photo`}

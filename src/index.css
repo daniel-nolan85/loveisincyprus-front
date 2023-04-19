@@ -760,6 +760,71 @@ nav {
   justify-content: flex-start;
 }
 
+.back-to-search .return-cta {
+  border: none;
+  background-color: transparent;
+  margin-left: 20px;
+  cursor: pointer;
+  position: fixed;
+  margin: auto;
+  padding: 19px 22px;
+  transition: all 0.2s ease;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.back-to-search .return-cta:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: block;
+  border-radius: 28px;
+  background: rgba(239, 91, 133, 0.5);
+  width: 56px;
+  height: 56px;
+  transition: all 0.3s ease;
+  transform-origin: right center;
+}
+
+.return-cta span {
+  position: relative;
+  font-size: 16px;
+  line-height: 18px;
+  font-weight: 900;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  vertical-align: middle;
+  color: #000;
+}
+
+.back-to-search .return-cta svg {
+  position: relative;
+  top: 3px;
+  margin-right: 10px;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: #000;
+  stroke-width: 2;
+  transform: scaleX(-1);
+  transition: all 0.3s ease;
+}
+
+.back-to-search .return-cta:hover:before {
+  width: 100%;
+  background: rgba(239, 91, 133, 1);
+  transform-origin: left center;
+}
+
+.return-cta:hover svg {
+  transform: scaleX(-1) translateX(5px);
+}
+
+/* .return-cta:active {
+  transform: scaleX(-1);
+} */
+
 .user-profile img {
   width: 45px;
   height: 45px;
