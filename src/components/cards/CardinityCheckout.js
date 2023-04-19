@@ -133,7 +133,10 @@ const CardinityCheckout = ({
           });
           setProcessing(false);
           setSucceeded(true);
-        } else if (res.data.response.status === 'pending') {
+        } else if (
+          res.data.response.status &&
+          res.data.response.status === 'pending'
+        ) {
           console.log(res.data);
           setCardinityPendingModalIsOpen(true);
           setPendingFormData(res.data.form);
