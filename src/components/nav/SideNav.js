@@ -142,6 +142,17 @@ const SideNav = () => {
                         <br />
                       </>
                     )}
+                    {user.role === 'main-admin' && (
+                      <>
+                        <Link
+                          to='/admin/data'
+                          onClick={() => setOpenNav(false)}
+                        >
+                          Data
+                        </Link>
+                        <br />
+                      </>
+                    )}
                     <>
                       <Link
                         to={{

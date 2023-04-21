@@ -1557,6 +1557,7 @@ const Profile = ({ history }) => {
         progress={progress}
         progressModalIsOpen={progressModalIsOpen}
         setProgressModalIsOpen={setProgressModalIsOpen}
+        page='profile'
       />
       <Verify
         verifyModalIsOpen={verifyModalIsOpen}

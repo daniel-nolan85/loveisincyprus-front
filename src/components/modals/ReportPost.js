@@ -30,6 +30,7 @@ const ReportPost = ({
         }
       )
       .then((res) => {
+        console.log(res.data);
         toast.warning('This post has been reported', {
           position: toast.POSITION.TOP_CENTER,
         });

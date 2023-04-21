@@ -2737,6 +2737,65 @@ select.gray {
   stroke: var(--nav-color) !important;
 }
 
+.fa.reverse {
+  font-size: 25px;
+  color: var(--nav-color);
+  cursor: pointer;
+}
+
+.spreadsheet-wrapper {
+  max-width: 800px;
+  height: 70vh;
+  overflow: scroll;
+  margin: 0 auto;
+}
+
+.spreadsheet-wrapper table {
+  border: 1px solid #ddd;
+  border-collapse: collapse;
+}
+
+.spreadsheet-wrapper td,
+.spreadsheet-wrapper th {
+  white-space: nowrap;
+  border: 1px solid #ddd;
+  padding: 20px;
+}
+
+.spreadsheet-wrapper th {
+  background-color: var(--nav-color);
+  color: #fff;
+  position: sticky;
+  top: -1px;
+  z-index: 2;
+}
+
+.spreadsheet-wrapper th:first-of-type {
+  left: 0;
+  z-index: 3;
+}
+
+.spreadsheet-wrapper tbody tr td:first-of-type {
+  background-color: var(--nav-color);
+  color: #fff;
+  position: sticky;
+  left: -1px;
+  z-index: 1;
+}
+
+.spreadsheet-wrapper .fa.check {
+  font-size: 25px;
+  color: green;
+}
+
+.spreadsheet-wrapper .center-cell {
+  text-align: center;
+}
+
+.spreadsheet-wrapper td p {
+  margin: 0;
+}
+
 /* --------------- profile-page --------------- */
 .profile-container {
   padding: 20px 15%;

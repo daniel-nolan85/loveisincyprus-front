@@ -20,6 +20,7 @@ import {
   faBarcode,
   faChartLine,
   faPhone,
+  faTable,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { ChatState } from '../../context/ChatProvider';
@@ -170,6 +171,12 @@ const LeftSidebar = () => {
             <span>
               {newRefunds && newRefunds.length > 0 && newRefunds.length}
             </span>
+          </Link>
+        )}
+        {role === 'main-admin' && (
+          <Link to='/admin/data'>
+            <FontAwesomeIcon icon={faTable} className='fa' />
+            Data
           </Link>
         )}
         <Link

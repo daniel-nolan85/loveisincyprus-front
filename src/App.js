@@ -80,6 +80,7 @@ import HighCompat from './pages/user/HighCompat';
 import CallingCodeBlock from './pages/admin/CallingCodeBlock';
 import GiftCardCreate from './pages/user/GiftCardCreate';
 import Refunds from './pages/admin/Refunds';
+import Data from './pages/admin/Data';
 
 let socket, selectedChatCompare;
 
@@ -219,6 +220,21 @@ const App = () => {
                 profilePhotos: res.data.profilePhotos,
                 coverPhotos: res.data.coverPhotos,
                 uploadedPhotos: res.data.uploadedPhotos,
+                ipAddresses: res.data.ipAddresses,
+                reports: res.data.reports,
+                reported: res.data.reported,
+                messagesSent: res.data.messagesSent,
+                messagesReceived: res.data.messagesReceived,
+                itemsOrdered: res.data.itemsOrdered,
+                itemsOrderedValue: res.data.itemsOrderedValue,
+                giftCardsSent: res.data.giftCardsSent,
+                giftCardsSentValue: res.data.giftCardsSentValue,
+                giftCardsReceived: res.data.giftCardsReceived,
+                giftCardsReceivedValue: res.data.giftCardsReceivedValue,
+                tShirts: res.data.tShirts,
+                sprays: res.data.sprays,
+                droppers: res.data.droppers,
+                perfumes: res.data.perfumes,
               },
             });
           })
@@ -270,6 +286,8 @@ const App = () => {
       handleExpiredCoupons();
       handleExpiredSuspensions();
       updateUserAge();
+      catchIp();
+      calcPoints();
     }
   }, [user && user.token]);
 
@@ -429,6 +447,21 @@ const App = () => {
     });
   };
 
+  const catchIp = async () => {
+    const res = await axios.get('https://geolocation-db.com/json/');
+    const userIp = res.data.IPv4;
+    await axios.put(`${process.env.REACT_APP_API}/catch-ip`, {
+      user,
+      userIp,
+    });
+  };
+
+  const calcPoints = async () => {
+    await axios.put(`${process.env.REACT_APP_API}/calc-points`, {
+      _id: user._id,
+    });
+  };
+
   return (
     <>
       {maintenance ? (
@@ -563,6 +596,7 @@ const App = () => {
             <AdminRoute exact path='/admin/coupon' component={Coupon} />
             <AdminRoute exact path='/admin/orders' component={Orders} />
             <AdminRoute exact path='/admin/refunds' component={Refunds} />
+            <AdminRoute exact path='/admin/data' component={Data} />
             <AdminRoute exact path='/admin/event' component={Event} />
             <AdminRoute exact path='/admin/mass-mail' component={MassMail} />
             <AdminRoute

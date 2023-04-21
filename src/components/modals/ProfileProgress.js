@@ -7,7 +7,9 @@ const ProfileProgress = ({
   progressModalIsOpen,
   setProgressModalIsOpen,
   progress,
+  page,
 }) => {
+  console.log(page);
   const modalStyles = {
     content: {
       position: 'fixed',
@@ -37,6 +39,7 @@ const ProfileProgress = ({
     percentage,
     coverImage,
     profileImage,
+    username,
     name,
     gender,
     about,
@@ -95,7 +98,10 @@ const ProfileProgress = ({
     >
       <div className='match'>
         <>
-          <h2>You have completed {percentage}% of your profile</h2>
+          <h2>
+            {page == 'profile' ? 'You have' : `${username} has`} completed{' '}
+            {percentage}% of your profile
+          </h2>
           <br />
           <div className='progress-container'>
             <ul>

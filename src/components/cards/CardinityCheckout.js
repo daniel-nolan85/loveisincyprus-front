@@ -134,7 +134,7 @@ const CardinityCheckout = ({
           setProcessing(false);
           setSucceeded(true);
         } else if (
-          res.data.response.status &&
+          res.data.response &&
           res.data.response.status === 'pending'
         ) {
           console.log(res.data);

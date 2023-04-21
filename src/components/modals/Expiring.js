@@ -57,11 +57,16 @@ const Expiring = ({ expiringModalIsOpen, setExpiringModalIsOpen }) => {
     >
       <div className='match'>
         <h1>
-          Your paid membership is coming to an end{' '}
+          Your subscription is coming to an end{' '}
           {daysLeft === 1 ? `tomorrow` : `in ${daysLeft} days`}
         </h1>
         <br />
-        <p>Would you like to renew your paid membership now?</p>
+        <p>
+          If you do not renew you will lose access to a number of great features
+          such as live chat and swipe to match.
+        </p>
+        <br />
+        <p>Would you like to renew your subscription now?</p>
         <br />
         <button
           type='button'
