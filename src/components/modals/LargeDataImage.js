@@ -7,6 +7,7 @@ const LargeDataImage = ({
   profileImageModalIsOpen,
   setProfileImageModalIsOpen,
   images,
+  username,
 }) => {
   console.log('images => ', images);
   const modalStyles = {
@@ -64,6 +65,16 @@ const LargeDataImage = ({
       contentLabel='Example Modal'
     >
       <div className='slideshow-container'>
+        <h2 className='center'>
+          {username} currently has
+          <br />
+          <span
+            style={{ color: '#ef5b85', fontWeight: 'bold', fontSize: '24px' }}
+          >
+            {images.length}
+          </span>{' '}
+          {images.length == 1 ? 'profile image' : 'profile images'}
+        </h2>
         {images && images.length > 1 ? (
           <>
             <div className='fade' id='first-slide'>

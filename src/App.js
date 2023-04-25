@@ -288,6 +288,7 @@ const App = () => {
       updateUserAge();
       catchIp();
       calcPoints();
+      updateUserProgress();
     }
   }, [user && user.token]);
 
@@ -458,6 +459,12 @@ const App = () => {
 
   const calcPoints = async () => {
     await axios.put(`${process.env.REACT_APP_API}/calc-points`, {
+      _id: user._id,
+    });
+  };
+
+  const updateUserProgress = async () => {
+    await axios.put(`${process.env.REACT_APP_API}/update-user-progress`, {
       _id: user._id,
     });
   };

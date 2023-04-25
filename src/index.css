@@ -2743,6 +2743,37 @@ select.gray {
   cursor: pointer;
 }
 
+/* .spreadsheet-btns {
+  display: grid;
+  place-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  margin-bottom: 10px;
+  position: relative;
+}
+
+.spreadsheet-btns .fa {
+  font-size: 25px;
+  color: var(--nav-color);
+  cursor: pointer;
+}
+
+.spreadsheet-btns .fa.reverse {
+  justify-self: end;
+  margin-right: 20px;
+}
+
+.spreadsheet-btns .fa.filter {
+  justify-self: start;
+  margin-left: 20px;
+}
+
+.spreadsheet-btns select {
+  position: absolute;
+  width: 380px;
+  top: 30px;
+  z-index: 999;
+} */
+
 .spreadsheet-wrapper {
   max-width: 800px;
   height: 70vh;
@@ -2753,6 +2784,10 @@ select.gray {
 .spreadsheet-wrapper table {
   border: 1px solid #ddd;
   border-collapse: collapse;
+}
+
+.spreadsheet-wrapper thead th {
+  cursor: pointer;
 }
 
 .spreadsheet-wrapper td,
@@ -2793,6 +2828,23 @@ select.gray {
 }
 
 .spreadsheet-wrapper td p {
+  margin: 0;
+}
+
+.spreadsheet-wrapper td p.true {
+  color: green;
+}
+
+.spreadsheet-wrapper td p.false {
+  color: red;
+}
+
+.items-data-list {
+  display: flex;
+  align-items: center;
+}
+
+.items-data-list p {
   margin: 0;
 }
 

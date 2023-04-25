@@ -9,7 +9,6 @@ const ProfileProgress = ({
   progress,
   page,
 }) => {
-  console.log(page);
   const modalStyles = {
     content: {
       position: 'fixed',
@@ -99,152 +98,370 @@ const ProfileProgress = ({
       <div className='match'>
         <>
           <h2>
-            {page == 'profile' ? 'You have' : `${username} has`} completed{' '}
-            {percentage}% of your profile
+            {page === 'profile'
+              ? `You have completed ${percentage}% of your profile`
+              : `${username} has completed ${percentage}% of their profile`}
           </h2>
           <br />
           <div className='progress-container'>
             <ul>
-              {coverImage && <li>You haven't uploaded a cover image yet</li>}
-              {profileImage && (
-                <li>You haven't uploaded a profile image yet</li>
+              {coverImage && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't uploaded a cover image yet`
+                    : `${username} hasn't uploaded a cover image yet`}
+                </li>
               )}
-              {name && <li>You haven't updated your name yet</li>}
-              {gender && <li>You haven't updated your gender yet</li>}
-              {about && <li>You haven't updated your bio yet</li>}
-              {birthday && <li>You haven't updated your birthday yet</li>}
-              {location && <li>You haven't updated your location yet</li>}
+              {profileImage && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't uploaded a profile image yet`
+                    : `${username} hasn't uploaded a profile image yet`}
+                </li>
+              )}
+              {name && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your name yet`
+                    : `${username} hasn't updated their name yet`}
+                </li>
+              )}
+              {gender && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your gender yet`
+                    : `${username} hasn't updated their gender yet`}
+                </li>
+              )}
+              {about && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your bio yet`
+                    : `${username} hasn't updated their bio yet`}
+                </li>
+              )}
+              {birthday && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your birthday yet`
+                    : `${username} hasn't updated their birthday yet`}
+                </li>
+              )}
+              {location && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your location yet`
+                    : `${username} hasn't updated their location yet`}
+                </li>
+              )}
               {genderWanted && (
                 <li>
-                  You haven't updated which gender you are hoping to find yet
+                  {page === 'profile'
+                    ? `You haven't updated which gender you are hoping to find yet`
+                    : `${username} hasn't updated which gender they are hoping to find yet`}
                 </li>
               )}
               {relWanted && (
                 <li>
-                  You haven't updated what kind of relationship you are looking
-                  for yet
+                  {page === 'profile'
+                    ? `You haven't updated what kind of relationship you are looking
+                  for yet`
+                    : `${username} hasn't updated what kind of relationship they are looking
+                  for yet`}
                 </li>
               )}
               {language && (
-                <li>You haven't updated what your native language is yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated what your native language is yet`
+                    : `${username} hasn't updated what their native language is yet`}
+                </li>
               )}
               {maritalStatus && (
-                <li>You haven't updated your marital status yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your marital status yet`
+                    : `${username} hasn't updated their marital status yet`}
+                </li>
               )}
               {numOfChildren && (
-                <li>You haven't updated the number of children you have yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated the number of children you have yet`
+                    : `${username} hasn't updated the number of children they have yet`}
+                </li>
               )}
               {drinks && (
-                <li>You haven't updated how often you like to drink yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated how often you like to drink yet`
+                    : `${username} hasn't updated how often they like to drink yet`}
+                </li>
               )}
               {smokes && (
-                <li>You haven't updated whether or not you smoke yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated whether or not you smoke yet`
+                    : `${username} hasn't updated whether or not they smoke yet`}
+                </li>
               )}
-              {nationality && <li>You haven't updated your nationality yet</li>}
-              {height && <li>You haven't updated your height yet</li>}
-              {build && <li>You haven't updated your build yet</li>}
-              {hairColor && <li>You haven't updated your hair colour yet</li>}
-              {hairStyle && <li>You haven't updated your hair style yet</li>}
-              {hairLength && <li>You haven't updated your hair length yet</li>}
+              {nationality && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your nationality yet`
+                    : `${username} hasn't updated their nationality yet`}
+                </li>
+              )}
+              {height && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your height yet`
+                    : `${username} hasn't updated their height yet`}
+                </li>
+              )}
+              {build && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your build yet`
+                    : `${username} hasn't updated their build yet`}
+                </li>
+              )}
+              {hairColor && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your hair colour yet`
+                    : `${username} hasn't updated their hair colour yet`}
+                </li>
+              )}
+              {hairStyle && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your hair style yet`
+                    : `${username} hasn't updated their hair style yet`}
+                </li>
+              )}
+              {hairLength && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your hair length yet`
+                    : `${username} hasn't updated their hair length yet`}
+                </li>
+              )}
               {eyeColor && (
-                <li>You haven't updated what colour eyes you have yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated what colour eyes you have yet`
+                    : `${username} hasn't updated what colour eyes they have yet`}
+                </li>
               )}
-              {ethnicity && <li>You haven't updated your ethnicity yet</li>}
+              {ethnicity && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your ethnicity yet`
+                    : `${username} hasn't updated their ethnicity yet`}
+                </li>
+              )}
               {feetType && (
-                <li>You haven't updated what type of feet you have yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated what type of feet you have yet`
+                    : `${username} hasn't updated what type of feet they have yet`}
+                </li>
               )}
               {education && (
                 <li>
-                  You haven't updated what level of education you have achieved
-                  yet
+                  {page === 'profile'
+                    ? `You haven't updated what level of education you have achieved
+                  yet`
+                    : `${username} hasn't updated what level of education they have achieved
+                  yet`}
                 </li>
               )}
-              {occupation && <li>You haven't updated your occupation yet</li>}
+              {occupation && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your occupation yet`
+                    : `${username} hasn't updated their occupation yet`}
+                </li>
+              )}
               {politics && (
-                <li>You haven't updated your views on politics yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your views on politics yet`
+                    : `${username} hasn't updated their views on politics yet`}
+                </li>
               )}
               {religion && (
-                <li>You haven't updated your feelings about religion yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your feelings about religion yet`
+                    : `${username} hasn't updated their feelings about religion yet`}
+                </li>
               )}
-              {foods && <li>You haven't updated your taste in foods yet</li>}
-              {livesWith && <li>You haven't updated who you live with yet</li>}
+              {foods && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your taste in foods yet`
+                    : `${username} hasn't updated their taste in foods yet`}
+                </li>
+              )}
+              {livesWith && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated who you live with yet`
+                    : `${username} hasn't updated who they live with yet`}
+                </li>
+              )}
               {roleInLife && (
                 <li>
-                  You haven't updated what you believe your role in life is yet
+                  {page === 'profile'
+                    ? `You haven't updated what you believe your role in life is yet`
+                    : `${username} hasn't updated what they believe their role in life is yet`}
                 </li>
               )}
               {managesEdu && (
                 <li>
-                  You haven't updated who you believe should manage your
-                  children's education yet
+                  {page === 'profile'
+                    ? `You haven't updated who you believe should manage your
+                  children's education yet`
+                    : `${username} hasn't updated who they believe should manage their
+                  children's education yet`}
                 </li>
               )}
               {marriage && (
-                <li>You haven't updated your views on marriage yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your views on marriage yet`
+                    : `${username} hasn't updated their views on marriage yet`}
+                </li>
               )}
-              {income && <li>You haven't updated your annual income yet</li>}
+              {income && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your annual income yet`
+                    : `${username} hasn't updated their annual income yet`}
+                </li>
+              )}
               {ageOfPartner && (
                 <li>
-                  You haven't updated what age you are looking for in a partner
-                  yet
+                  {page === 'profile'
+                    ? `You haven't updated what age you are looking for in a partner yet`
+                    : `${username} hasn't updated what age they are looking for in a partner yet`}
                 </li>
               )}
               {changes && (
                 <li>
-                  You haven't updated what changes you would like to make in
-                  yourself yet
+                  {page === 'profile'
+                    ? `You haven't updated what changes you would like to make in
+                  yourself yet`
+                    : `${username} hasn't updated what changes they would like to make in
+                  themself yet`}
                 </li>
               )}
               {relocate && (
                 <li>
-                  You haven't updated whether you'd be willing to relocate yet
+                  {page === 'profile'
+                    ? `You haven't updated whether you'd be willing to relocate yet`
+                    : `${username} hasn't updated whether they'd be willing to relocate yet`}
                 </li>
               )}
               {sexLikes && (
-                <li>You haven't updated what you like in sex yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated what you like in sex yet`
+                    : `${username} hasn't updated what they like in sex yet`}
+                </li>
               )}
               {sexFrequency && (
-                <li>You haven't updated how often you like to have sex yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated how often you like to have sex yet`
+                    : `${username} hasn't updated how often they like to have sex yet`}
+                </li>
               )}
-              {loves && <li>You haven't updated the things you love yet</li>}
-              {hates && <li>You haven't updated the things you hate yet</li>}
+              {loves && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated the things you love yet`
+                    : `${username} hasn't updated the things they love yet`}
+                </li>
+              )}
+              {hates && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated the things you hate yet`
+                    : `${username} hasn't updated the things they hate yet`}
+                </li>
+              )}
               {pets && (
-                <li>You haven't updated what pets you have (if any) yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated what pets you have (if any) yet`
+                    : `${username} hasn't updated what pets they have (if any) yet`}
+                </li>
               )}
               {interests && (
-                <li>You haven't updated what interests you have yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated what interests you have yet`
+                    : `${username} hasn't updated what interests they have yet`}
+                </li>
               )}
               {music && (
                 <li>
-                  You haven't updated what music you enjoy listening to yet
+                  {page === 'profile'
+                    ? `You haven't updated what music you enjoy listening to yet`
+                    : `${username} hasn't updated what music they enjoy listening to yet`}
                 </li>
               )}
               {books && (
                 <li>
-                  You haven't updated what books you have enjoyed reading yet
+                  {page === 'profile'
+                    ? `You haven't updated what books you have enjoyed reading yet`
+                    : `${username} hasn't updated what books they have enjoyed reading yet`}
                 </li>
               )}
               {films && (
                 <li>
-                  You haven't updated what films you have enjoyed watching yet
+                  {page === 'profile'
+                    ? `You haven't updated what films you have enjoyed watching yet`
+                    : `${username} hasn't updated what films they have enjoyed watching yet`}
                 </li>
               )}
               {sports && (
-                <li>You haven't updated what sports you are a fan of yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated what sports you are a fan of yet`
+                    : `${username} hasn't updated what sports they are a fan of yet`}
+                </li>
               )}
               {hobbies && (
-                <li>You haven't updated what hobbies you enjoy doing yet</li>
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated what hobbies you enjoy doing yet`
+                    : `${username} hasn't updated what hobbies they enjoy doing yet`}
+                </li>
               )}
-              {traits && <li>You haven't updated what traits you have yet</li>}
+              {traits && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated what traits you have yet`
+                    : `${username} hasn't updated what traits they have yet`}
+                </li>
+              )}
               {treatSelf && (
                 <li>
-                  You haven't updated what ways you enjoy treating yourself yet
+                  {page === 'profile'
+                    ? `You haven't updated what ways you enjoy treating yourself yet`
+                    : `${username} hasn't updated what ways they enjoy treating themself yet`}
                 </li>
               )}
               {percentage === 100 && (
                 <li>
-                  Amazing! Your chances of finding your ideal partner will have
-                  improved significantly. Well done!
+                  {page === 'profile'
+                    ? `Amazing! Your chances of finding your ideal partner will have
+                  improved significantly. Well done!`
+                    : `${username} has completed 100% of their profile!`}
                 </li>
               )}
             </ul>

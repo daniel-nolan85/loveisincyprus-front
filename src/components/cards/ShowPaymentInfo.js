@@ -56,8 +56,6 @@ const ShowPaymentInfo = ({ order }) => {
           <br />
           <span>{order.deliveryAddress.city}</span>
           <br />
-          <span>{order.deliveryAddress.state}</span>
-          <br />
           <span>{order.deliveryAddress.zip}</span>
           <br />
           <span>{order.deliveryAddress.country}</span>

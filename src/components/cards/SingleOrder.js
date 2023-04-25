@@ -17,8 +17,7 @@ const SingleOrder = ({ order, loadUserOrders }) => {
 
   const { orderStatus, deliverTo, discount, deliveryFee } = order;
   const { id, amount, status, created } = order.paymentIntent;
-  const { firstLine, secondLine, city, state, zip, country } =
-    order.deliveryAddress;
+  const { firstLine, secondLine, city, zip, country } = order.deliveryAddress;
 
   const requestRefund = (order) => {
     setCurrentOrder(order);
@@ -96,11 +95,13 @@ const SingleOrder = ({ order, loadUserOrders }) => {
               <div className='order-detail'>
                 <span>{firstLine}</span>
                 <br />
-                <span>{secondLine}</span>
-                <br />
+                {secondLine && (
+                  <>
+                    <span>{secondLine}</span>
+                    <br />
+                  </>
+                )}
                 <span>{city}</span>
-                <br />
-                <span>{state}</span>
                 <br />
                 <span>{zip}</span>
                 <br />
