@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
+import ReportedContent from './ReportedContent';
 
 Modal.setAppElement('#root');
 
@@ -9,6 +10,11 @@ const ReportsData = ({
   setReportsDataModalIsOpen,
   username,
 }) => {
+  const [reportedContentModalIsOpen, setReportedContentModalIsOpen] =
+    useState(false);
+  const [currentContent, setCurrentContent] = useState([]);
+  const [currentContentType, setCurrentContentType] = useState('');
+
   const modalStyles = {
     content: {
       position: 'fixed',
@@ -35,18 +41,22 @@ const ReportsData = ({
   };
 
   const viewReportedPosts = (posts) => {
-    console.log('posts => ', posts);
+    setReportedContentModalIsOpen(true);
+    setCurrentContent(posts);
+    setCurrentContentType('posts');
   };
 
   const viewReportedComments = (comments) => {
-    console.log('comments => ', comments);
+    setReportedContentModalIsOpen(true);
+    setCurrentContent(comments);
+    setCurrentContentType('comments');
   };
 
   const viewReportedMessages = (messages) => {
-    console.log('messages => ', messages);
+    setReportedContentModalIsOpen(true);
+    setCurrentContent(messages);
+    setCurrentContentType('messages');
   };
-
-  console.log('reports => ', reports);
 
   return (
     <Modal
@@ -73,114 +83,126 @@ const ReportsData = ({
               ? 'item'
               : 'items'}
           </h2>
-          <h3>
-            They have reported{' '}
-            {reports.post.length == 1 ? (
-              <>
-                <span
-                  style={{
-                    color: '#ef5b85',
-                    fontWeight: 'bold',
-                    fontSize: '18px',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => viewReportedPosts(reports.post)}
-                >
-                  {reports.post.length}
-                </span>{' '}
-                post
-              </>
-            ) : reports.post.length > 1 ? (
-              <>
-                <span
-                  style={{
-                    color: '#ef5b85',
-                    fontWeight: 'bold',
-                    fontSize: '18px',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => viewReportedPosts(reports.post)}
-                >
-                  {reports.post.length}
-                </span>{' '}
-                posts
-              </>
-            ) : (
-              reports.post.length == 0 && <>0 posts</>
-            )}
-          </h3>
-          <h3>
-            They have reported{' '}
-            {reports.comment.length == 1 ? (
-              <>
-                <span
-                  style={{
-                    color: '#ef5b85',
-                    fontWeight: 'bold',
-                    fontSize: '18px',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => viewReportedComments(reports.comment)}
-                >
-                  {reports.comment.length}
-                </span>{' '}
-                comment
-              </>
-            ) : reports.comment.length > 1 ? (
-              <>
-                <span
-                  style={{
-                    color: '#ef5b85',
-                    fontWeight: 'bold',
-                    fontSize: '18px',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => viewReportedComments(reports.comment)}
-                >
-                  {reports.comment.length}
-                </span>{' '}
-                comments
-              </>
-            ) : (
-              reports.comment.length == 0 && <>0 comments</>
-            )}
-          </h3>
-          <h3>
-            They have reported{' '}
-            {reports.message.length == 1 ? (
-              <>
-                <span
-                  style={{
-                    color: '#ef5b85',
-                    fontWeight: 'bold',
-                    fontSize: '18px',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => viewReportedMessages(reports.message)}
-                >
-                  {reports.message.length}
-                </span>{' '}
-                message
-              </>
-            ) : reports.message.length > 1 ? (
-              <>
-                <span
-                  style={{
-                    color: '#ef5b85',
-                    fontWeight: 'bold',
-                    fontSize: '18px',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => viewReportedMessages(reports.message)}
-                >
-                  {reports.message.length}
-                </span>{' '}
-                messages
-              </>
-            ) : (
-              reports.message.length == 0 && <>0 messages</>
-            )}
-          </h3>
+          {reports.post.length > 0 && (
+            <h3>
+              They have reported{' '}
+              {reports.post.length == 1 ? (
+                <>
+                  <span
+                    style={{
+                      color: '#ef5b85',
+                      fontWeight: 'bold',
+                      fontSize: '18px',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => viewReportedPosts(reports.post)}
+                  >
+                    {reports.post.length}
+                  </span>{' '}
+                  post
+                </>
+              ) : (
+                reports.post.length > 1 && (
+                  <>
+                    <span
+                      style={{
+                        color: '#ef5b85',
+                        fontWeight: 'bold',
+                        fontSize: '18px',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => viewReportedPosts(reports.post)}
+                    >
+                      {reports.post.length}
+                    </span>{' '}
+                    posts
+                  </>
+                )
+              )}
+            </h3>
+          )}
+          {reports.comment.length > 0 && (
+            <h3>
+              They have reported{' '}
+              {reports.comment.length == 1 ? (
+                <>
+                  <span
+                    style={{
+                      color: '#ef5b85',
+                      fontWeight: 'bold',
+                      fontSize: '18px',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => viewReportedComments(reports.comment)}
+                  >
+                    {reports.comment.length}
+                  </span>{' '}
+                  comment
+                </>
+              ) : (
+                reports.comment.length > 1 && (
+                  <>
+                    <span
+                      style={{
+                        color: '#ef5b85',
+                        fontWeight: 'bold',
+                        fontSize: '18px',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => viewReportedComments(reports.comment)}
+                    >
+                      {reports.comment.length}
+                    </span>{' '}
+                    comments
+                  </>
+                )
+              )}
+            </h3>
+          )}
+          {reports.message.length > 0 && (
+            <h3>
+              They have reported{' '}
+              {reports.message.length == 1 ? (
+                <>
+                  <span
+                    style={{
+                      color: '#ef5b85',
+                      fontWeight: 'bold',
+                      fontSize: '18px',
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => viewReportedMessages(reports.message)}
+                  >
+                    {reports.message.length}
+                  </span>{' '}
+                  message
+                </>
+              ) : (
+                reports.message.length > 1 && (
+                  <>
+                    <span
+                      style={{
+                        color: '#ef5b85',
+                        fontWeight: 'bold',
+                        fontSize: '18px',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => viewReportedMessages(reports.message)}
+                    >
+                      {reports.message.length}
+                    </span>{' '}
+                    messages
+                  </>
+                )
+              )}
+            </h3>
+          )}
+          <ReportedContent
+            reportedContentModalIsOpen={reportedContentModalIsOpen}
+            setReportedContentModalIsOpen={setReportedContentModalIsOpen}
+            currentContent={currentContent}
+            currentContentType={currentContentType}
+          />
         </div>
       )}
     </Modal>

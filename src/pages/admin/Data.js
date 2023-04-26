@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowsRotate,
   faCheck,
-  faFilter,
+  faMagnifyingGlass,
   faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 import LargeDataImage from '../../components/modals/LargeDataImage';
@@ -26,6 +26,7 @@ const Data = ({ history }) => {
   const [byPage, setByPage] = useState(50);
   const [filteredBy, setFilteredBy] = useState('');
   const [users, setUsers] = useState([]);
+  const [query, setQuery] = useState('');
   const [loading, setLoading] = useState(true);
   const [loading50, setLoading50] = useState(false);
   const [loading100, setLoading100] = useState(false);
@@ -98,6 +99,17 @@ const Data = ({ history }) => {
   const { token, role } = useSelector((state) => state.user);
 
   console.log('users => ', users);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setQuery(e.target.value.toLowerCase());
+  };
+
+  const searched = (query) => (c) =>
+    c.username.toLowerCase().includes(query) ||
+    c.name.toLowerCase().includes(query) ||
+    c.email.toLowerCase().includes(query) ||
+    c.ipAddresses.some((ip) => ip.includes(query));
 
   useEffect(() => {
     if (role !== 'main-admin') {
@@ -480,13 +492,13 @@ const Data = ({ history }) => {
     if (loadingReports) {
       const sortedUsers = users.sort((a, b) => {
         const reportsA =
-          a.reports.posts.length +
-          a.reports.comments.length +
-          a.reports.messages.length;
+          a.reports.post.length +
+          a.reports.comment.length +
+          a.reports.message.length;
         const reportsB =
-          b.reports.posts.length +
-          b.reports.comments.length +
-          b.reports.messages.length;
+          b.reports.post.length +
+          b.reports.comment.length +
+          b.reports.message.length;
 
         return reportsB - reportsA;
       });
@@ -500,13 +512,13 @@ const Data = ({ history }) => {
     if (loadingReported) {
       const sortedUsers = users.sort((a, b) => {
         const reportedA =
-          a.reported.posts.length +
-          a.reported.comments.length +
-          a.reported.messages.length;
+          a.reported.post.length +
+          a.reported.comment.length +
+          a.reported.message.length;
         const reportedB =
-          b.reported.posts.length +
-          b.reported.comments.length +
-          b.reported.messages.length;
+          b.reported.post.length +
+          b.reported.comment.length +
+          b.reported.message.length;
 
         return reportedB - reportedA;
       });
@@ -1094,6 +1106,19 @@ const Data = ({ history }) => {
           </div>
         ) : (
           <>
+            <div className='search-box'>
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                onClick={handleSearch}
+                className='fa'
+              />
+              <input
+                type='search'
+                placeholder='Search Users by Username, Name, Email or IP'
+                onChange={handleSearch}
+                value={query}
+              />
+            </div>
             <div className='refund-filter-btns'>
               <button
                 className={byPage === 50 ? 'submit-btn-active' : 'submit-btn'}
@@ -1575,7 +1600,7 @@ const Data = ({ history }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {users.map((u) => (
+                  {users.filter(searched(query)).map((u) => (
                     <tr key={u._id}>
                       <td>{u.username}</td>
                       <td>{u.name}</td>
