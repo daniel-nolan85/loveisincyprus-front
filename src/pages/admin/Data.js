@@ -1622,9 +1622,9 @@ const Data = ({ history }) => {
                       <td>{u.mobile}</td>
                       <td className='center-cell'>
                         {u.membership.paid ? (
-                          <p className='true'>True</p>
+                          <p className='true'>Paid</p>
                         ) : (
-                          <p className='false'>False</p>
+                          <p className='false'>Unpaid</p>
                         )}
                       </td>
                       <td className='center-cell'>
