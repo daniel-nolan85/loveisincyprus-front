@@ -21,6 +21,7 @@ import {
   faChartLine,
   faPhone,
   faTable,
+  faCommentSms,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { ChatState } from '../../context/ChatProvider';
@@ -198,6 +199,12 @@ const LeftSidebar = () => {
           <Link to='/admin/users'>
             <FontAwesomeIcon icon={faUsers} className='fa' />
             Users
+          </Link>
+        )}
+        {role === 'main-admin' && (
+          <Link to='/admin/chats'>
+            <FontAwesomeIcon icon={faCommentSms} className='fa' />
+            Chats
           </Link>
         )}
         {canMassMail && (

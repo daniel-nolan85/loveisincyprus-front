@@ -421,7 +421,7 @@ const Chats = ({ history }) => {
                                       {renderHtml(
                                         chat.latestMessage.content.substring(
                                           0,
-                                          26
+                                          25
                                         ) + '...'
                                       )}
                                     </span>

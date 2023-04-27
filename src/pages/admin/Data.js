@@ -91,6 +91,7 @@ const Data = ({ history }) => {
   const [reportsData, setReportsData] = useState({});
   const [reportedData, setReportedData] = useState({});
   const [messagesData, setMessagesData] = useState({});
+  const [messagesType, setMessagesType] = useState('');
   const [itemsData, setItemsData] = useState([]);
   const [itemsOrderedData, setItemsOrderedData] = useState(0);
   const [itemsValueData, setItemsValueData] = useState([]);
@@ -1087,12 +1088,14 @@ const Data = ({ history }) => {
   const viewMessagesSent = (u, username) => {
     setMessagesDataModalIsOpen(true);
     setMessagesData(u);
+    setMessagesType('sent');
     setCurrentUsername(username);
   };
 
   const viewMessagesReceived = (u, username) => {
     setMessagesDataModalIsOpen(true);
     setMessagesData(u);
+    setMessagesType('received');
     setCurrentUsername(username);
   };
 
@@ -1887,6 +1890,7 @@ const Data = ({ history }) => {
         messagesDataModalIsOpen={messagesDataModalIsOpen}
         setMessagesDataModalIsOpen={setMessagesDataModalIsOpen}
         username={currentUsername}
+        messagesType={messagesType}
       />
       <ItemsData
         items={itemsData}

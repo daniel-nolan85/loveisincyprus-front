@@ -1,19 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import renderHtml from 'react-render-html';
 import defaultProfile from '../../assets/defaultProfile.png';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 Modal.setAppElement('#root');
 
-const MessagesData = ({
-  messages,
-  messagesDataModalIsOpen,
-  setMessagesDataModalIsOpen,
-  username,
-  messagesType,
+const UsersChat = ({
+  chatId,
+  usersChatModalIsOpen,
+  setUsersChatModalIsOpen,
 }) => {
   const [modalContentRendered, setModalContentRendered] = useState(false);
   const [modalContentHeight, setModalContentHeight] = useState(0);
+  const [messages, setMessages] = useState([]);
+
+  const { token } = useSelector((state) => state.user);
 
   const handleModalContentRef = (ref) => {
     if (ref && !modalContentRendered) {
@@ -22,6 +26,24 @@ const MessagesData = ({
       setModalContentHeight(height);
     }
   };
+
+  useEffect(() => {
+    if (chatId) {
+      axios
+        .get(`${process.env.REACT_APP_API}/chats/${chatId}`, {
+          headers: {
+            authtoken: token,
+          },
+        })
+        .then((res) => {
+          setMessages(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }, [chatId]);
+
   const modalStyles = {
     content: {
       top: `${modalContentRendered && modalContentHeight > 0 ? '0' : '50%'}`,
@@ -50,43 +72,32 @@ const MessagesData = ({
     },
   };
 
+  console.log('messages => ', messages);
+
   return (
     <Modal
-      isOpen={messagesDataModalIsOpen}
-      onRequestClose={() => setMessagesDataModalIsOpen(false)}
+      isOpen={usersChatModalIsOpen}
+      onRequestClose={() => setUsersChatModalIsOpen(false)}
       style={modalStyles}
       contentLabel='Example Modal'
     >
       {messages && messages.length > 0 && (
         <div ref={handleModalContentRef}>
-          <h2 className='center'>
-            {username} has currently{' '}
-            {messagesType === 'received' ? 'received' : 'sent'} a total of{' '}
-            <span
-              style={{ color: '#ef5b85', fontWeight: 'bold', fontSize: '24px' }}
-            >
-              {messages.length}
-            </span>{' '}
-            {messages.length == 1 ? 'message' : 'messages'}
-          </h2>
           <div className='messages-data'>
             {messages.map((m, i) => (
-              <div
-                key={m._id}
-                style={{ borderBottom: '1px solid #efefef', padding: '10px 0' }}
-              >
+              <div key={m._id} style={{ padding: '10px 0' }}>
                 {m.image && (
                   <div className='msg-image'>
                     <img
                       src={m.image.url}
-                      alt={`${username}'s post`}
+                      alt={`${m.sender.username}'s post`}
                       className='message-img'
                     />
                   </div>
                 )}
                 <div className='message-sender'>
                   <div className='message-sender-avatar'>
-                    {m.hasOwnProperty('sender') ? (
+                    <Link to={`/user/${m.sender._id}`}>
                       <img
                         src={
                           m.sender.profileImage
@@ -97,29 +108,18 @@ const MessagesData = ({
                           m.sender.username || m.sender.name
                         }'s profile picture`}
                       />
-                    ) : (
-                      m.hasOwnProperty('receiver') && (
-                        <img
-                          src={
-                            m.receiver.profileImage
-                              ? m.receiver.profileImage.url
-                              : defaultProfile
-                          }
-                          alt={`${
-                            m.receiver.username || m.receiver.name
-                          }'s profile picture`}
-                        />
-                      )
-                    )}
+                    </Link>
                   </div>
                   <div
                     className='message-sender-message'
                     style={{
                       backgroundColor: `${
-                        m.hasOwnProperty('sender') ? '#b9f5d0' : '#bee3f8'
+                        m.sender._id === m.chat.users[0] ? '#b9f5d0' : '#bee3f8'
                       }`,
                       padding: '5px 10px',
-                      marginLeft: `${m.hasOwnProperty('sender') ? '' : 'auto'}`,
+                      marginLeft: `${
+                        m.sender._id === m.chat.users[0] ? '' : 'auto'
+                      }`,
                     }}
                   >
                     <p>{renderHtml(m.content)}</p>
@@ -134,4 +134,4 @@ const MessagesData = ({
   );
 };
 
-export default MessagesData;
+export default UsersChat;

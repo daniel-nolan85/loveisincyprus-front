@@ -188,6 +188,17 @@ const SideNav = () => {
                         <br />
                       </>
                     )}
+                    {user.role === 'main-admin' && (
+                      <>
+                        <Link
+                          to='/admin/chats'
+                          onClick={() => setOpenNav(false)}
+                        >
+                          Chats
+                        </Link>
+                        <br />
+                      </>
+                    )}
                     {user.canMassMail && (
                       <>
                         <Link

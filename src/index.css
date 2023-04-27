@@ -2820,6 +2820,41 @@ select.gray {
   margin: 0;
 }
 
+.user-chats {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+
+.user-imgs {
+  display: flex;
+  justify-content: space-between;
+}
+
+.latest-msg {
+  display: flex;
+  width: 200px;
+}
+
+.latest-msg .fa {
+  opacity: 0.2;
+}
+
+.latest-msg p {
+  margin-top: 15px;
+  margin-left: -25px;
+  font-style: italic;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+small.user-chats-date {
+  position: absolute;
+  left: 45px;
+  bottom: 10px;
+}
+
 /* --------------- profile-page --------------- */
 .profile-container {
   padding: 20px 15%;
