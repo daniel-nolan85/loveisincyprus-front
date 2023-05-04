@@ -2682,6 +2682,22 @@ nav {
   margin: 0 auto;
 }
 
+.form-box.coupon .ant-select-selector {
+  border: none;
+  background-color: transparent;
+  padding-left: 0;
+}
+
+.form-box.coupon .ant-select-selection-placeholder {
+  color: #626262;
+  left: 0;
+}
+
+.form-box.coupon .ant-select-selection-item {
+  background-color: transparent;
+  padding-left: 0;
+}
+
 .form-box.coupon .react-datepicker-popper {
   position: relative;
   z-index: 20000;
@@ -2689,6 +2705,11 @@ nav {
 
 .form-box.coupon .react-datepicker__input-container input {
   background-color: #efefef;
+}
+
+.form-box.coupon.update .react-datepicker__day--today {
+  background-color: transparent !important;
+  font-weight: normal;
 }
 
 .form-box.event {
@@ -5432,6 +5453,11 @@ table.product-info tbody {
 /* .add-wish:hover {
   color: var(--nav-color);
 } */
+
+.discount-applied {
+  font-weight: bold;
+  color: var(--nav-color);
+}
 
 /* --------------- information pages --------------- */
 .info-img-bg {

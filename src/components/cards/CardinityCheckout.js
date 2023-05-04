@@ -97,7 +97,7 @@ const CardinityCheckout = ({
           setProcessing(false);
         }
         if (res.data.status === 'approved') {
-          if (coupon) deleteCoupon();
+          if (coupon) handleCoupon();
           addPoints(Math.floor(payable / 100), 'store purchase', token);
           toast.success(
             `Payment successful!
@@ -168,9 +168,10 @@ const CardinityCheckout = ({
       });
   };
 
-  const deleteCoupon = async () => {
-    await axios.delete(
-      `${process.env.REACT_APP_API}/delete-coupon/${couponApplied._id}`,
+  const handleCoupon = async () => {
+    await axios.put(
+      `${process.env.REACT_APP_API}/handle-coupon/${couponApplied._id}`,
+      { cartTotal },
       {
         headers: {
           authtoken: token,

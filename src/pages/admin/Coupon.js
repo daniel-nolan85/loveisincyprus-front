@@ -20,9 +20,15 @@ import {
 import LeftSidebar from '../../components/admin/LeftSidebar';
 import CouponDelete from '../../components/modals/CouponDelete';
 import CouponEdit from '../../components/modals/CouponEdit';
+import { Select } from 'antd';
+import { getProductsByCount } from '../../functions/product';
+
+const { Option } = Select;
 
 const Coupon = ({ history }) => {
   const [name, setName] = useState('');
+  const [products, setProducts] = useState([]);
+  const [selectedProducts, setSelectedProducts] = useState([]);
   const [discount, setDiscount] = useState('');
   const [expiry, setExpiry] = useState('');
   const [loading, setLoading] = useState(false);
@@ -35,6 +41,8 @@ const Coupon = ({ history }) => {
 
   const { token, canCoupon } = useSelector((state) => state.user);
 
+  console.log('selectedProducts => ', selectedProducts);
+
   useEffect(() => {
     if (!canCoupon) {
       history.push('/admin/dashboard');
@@ -43,25 +51,46 @@ const Coupon = ({ history }) => {
 
   useEffect(() => {
     loadCoupons();
+    loadAllProducts();
   }, []);
 
   useEffect(() => {}, [expiry]);
 
   const loadCoupons = () => getCoupons().then((c) => setCoupons(c.data));
 
+  const loadAllProducts = () => {
+    getProductsByCount(100)
+      .then((res) => {
+        setProducts(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    createCoupon({ name, expiry, discount }, token)
+    createCoupon({ name, selectedProducts, expiry, discount }, token)
       .then((res) => {
-        setLoading(false);
-        setName('');
-        setDiscount('');
-        setExpiry('');
-        toast.success(`${res.data.name} has been created`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        loadCoupons();
+        console.log(res);
+        if (res.data.errors) {
+          toast.error(`${res.data.message}`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setLoading(false);
+          return;
+        } else {
+          setLoading(false);
+          setName('');
+          setSelectedProducts([]);
+          setDiscount('');
+          setExpiry('');
+          toast.success(`${res.data.name} has been created`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          loadCoupons();
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -101,6 +130,21 @@ const Coupon = ({ history }) => {
           autoFocus
           required
         />
+        <Select
+          mode='multiple'
+          className='input-field'
+          style={{ width: '100%' }}
+          placeholder='Products'
+          value={selectedProducts}
+          onChange={(value) => setSelectedProducts(value)}
+        >
+          {products.length &&
+            products.map((p) => (
+              <Option value={p._id} key={p._id}>
+                {p.title}
+              </Option>
+            ))}
+        </Select>
         <input
           type='text'
           className='input-field'
@@ -110,7 +154,7 @@ const Coupon = ({ history }) => {
           required
         />
         <DatePicker
-          selected={new Date()}
+          selected={expiry || new Date()}
           value={expiry}
           onChange={(date) => {
             setExpiry(date);
@@ -157,7 +201,12 @@ const Coupon = ({ history }) => {
                 <br />
                 <br />
                 <h3>{c.name}</h3>
-                <p>Discount: {c.discount}%</p>
+                <p>
+                  Discount:{' '}
+                  {c.name.slice(0, 5) === 'GIFT-'
+                    ? `€${c.discount}`
+                    : `${c.discount}%`}
+                </p>
                 <p>Expiry: {new Date(c.expiry).toLocaleDateString()}</p>
               </div>
               <FontAwesomeIcon
@@ -190,6 +239,7 @@ const Coupon = ({ history }) => {
           loading={loading}
           setLoading={setLoading}
           loadCoupons={loadCoupons}
+          products={products}
         />
       </div>
     </div>

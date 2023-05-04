@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
@@ -6,6 +6,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { Select } from 'antd';
+
+const { Option } = Select;
 
 Modal.setAppElement('#root');
 
@@ -17,17 +20,38 @@ const CouponEdit = ({
   loading,
   setLoading,
   loadCoupons,
+  products,
 }) => {
-  const [name, setName] = useState(couponToEdit.name);
-  const [discount, setDiscount] = useState(couponToEdit.discount);
-  const [expiry, setExpiry] = useState(couponToEdit.expiry);
+  const [name, setName] = useState('');
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [discount, setDiscount] = useState(0);
+  const [expiry, setExpiry] = useState('');
+
+  useEffect(() => {
+    if (couponToEdit) {
+      setName(couponToEdit.name);
+      setSelectedProducts(couponToEdit.products);
+      setDiscount(couponToEdit.discount);
+      setExpiry(couponToEdit.expiry);
+    }
+  }, [couponToEdit]);
+
+  console.log('couponToEdit => ', couponToEdit);
+  console.log('name => ', name);
+  console.log('selectedProducts => ', selectedProducts);
+  console.log('discount => ', discount);
+  console.log('expiry => ', expiry);
 
   let { token } = useSelector((state) => state.user);
 
   const editCoupon = async (e, coupon) => {
     e.preventDefault();
     setLoading(true);
-    updateCoupon(coupon._id, { name, discount, expiry }, token)
+    updateCoupon(
+      coupon._id,
+      { name, selectedProducts, discount, expiry },
+      token
+    )
       .then((res) => {
         setLoading(false);
         toast.success(`${res.data.name} has been updated`, {
@@ -55,24 +79,39 @@ const CouponEdit = ({
           type='text'
           className='input-field'
           placeholder='Name'
-          defaultValue={couponToEdit.name}
+          defaultValue={name}
           onChange={(e) => {
             setName(e.target.value);
           }}
           autoFocus
           required
         />
+        <Select
+          mode='multiple'
+          className='input-field'
+          style={{ width: '100%' }}
+          placeholder='Products'
+          defaultValue={selectedProducts}
+          onChange={(value) => setSelectedProducts(value)}
+        >
+          {products.length &&
+            products.map((p) => (
+              <Option value={p._id} key={p._id}>
+                {p.title}
+              </Option>
+            ))}
+        </Select>
         <input
           type='text'
           className='input-field'
           placeholder='Discount'
-          defaultValue={couponToEdit.discount}
+          defaultValue={discount}
           onChange={(e) => setDiscount(e.target.value)}
           required
         />
         <DatePicker
-          selected={new Date()}
-          defaultValue={couponToEdit.expiry}
+          selected={new Date(expiry)}
+          defaultValue={expiry}
           onChange={(date) => setExpiry(date)}
           dateFormat='dd/MM/yyyy'
           minDate={new Date('01-01-1900')}

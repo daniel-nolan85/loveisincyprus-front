@@ -163,9 +163,9 @@ const Checkout = ({ history }) => {
             <tr>
               <td>Cart total: €{(total + deliveryFee).toFixed(2)}</td>
             </tr>
-            {totalAfterDiscount > 0 && (
+            {Object.keys(couponApplied).length !== 0 && (
               <tr>
-                <td>
+                <td className='discount-applied'>
                   Discount applied! Total payable: €
                   {(totalAfterDiscount + deliveryFee).toFixed(2)}
                 </td>
@@ -247,6 +247,7 @@ const Checkout = ({ history }) => {
     e.preventDefault();
     setLoadingCoupon(true);
     applyUserCoupon(coupon, token).then((res) => {
+      console.log(res.data);
       if (res.data.err) {
         setLoadingCoupon(false);
         setDiscountError(res.data.err);
