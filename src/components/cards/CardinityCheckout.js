@@ -87,8 +87,8 @@ const CardinityCheckout = ({
 
   const handleSubmit = async (values) => {
     setProcessing(true);
-    createPayment(values, payable, userAgent, token, deliveryFee).then(
-      (res) => {
+    createPayment(values, payable, userAgent, token, deliveryFee)
+      .then((res) => {
         console.log(res);
         if (res.data.errors) {
           toast.error(res.data.errors[0].message, {
@@ -134,12 +134,14 @@ const CardinityCheckout = ({
           setProcessing(false);
           setSucceeded(true);
         } else if (
-          res.data.response &&
-          res.data.response.status === 'pending'
+          // res.data.response &&
+          // res.data.response.status === 'pending'
+          res.data.status === 'pending'
         ) {
           console.log(res.data);
           setCardinityPendingModalIsOpen(true);
-          setPendingFormData(res.data.form);
+          // setPendingFormData(res.data.form);
+          setPendingFormData(res.data);
           toast.warning(`Payment pending.`, {
             position: toast.POSITION.TOP_CENTER,
           });
@@ -156,8 +158,14 @@ const CardinityCheckout = ({
           });
           setProcessing(false);
         }
-      }
-    );
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(`Payment declined.`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        setProcessing(false);
+      });
   };
 
   const deleteCoupon = async () => {

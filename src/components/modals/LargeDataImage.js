@@ -9,7 +9,6 @@ const LargeDataImage = ({
   images,
   username,
 }) => {
-  console.log('images => ', images);
   const modalStyles = {
     content: {
       top: '50%',

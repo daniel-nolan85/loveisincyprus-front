@@ -1884,6 +1884,125 @@ nav {
   outline: none;
 }
 
+.gift-card .card {
+  margin: auto;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  -webkit-perspective: 1200px;
+  perspective: 1200px;
+  transition: 1s;
+}
+
+.gift-card .card:hover {
+  transform: rotate(-5deg);
+}
+
+.gift-card .card:hover .outside {
+  transform: rotateY(-130deg);
+}
+
+.gift-card .outside,
+.gift-card .inside {
+  height: 100%;
+  width: 50%;
+  position: absolute;
+  left: 50.1%;
+}
+
+.gift-card .inside {
+  background: linear-gradient(to right, #e0e0e0, #fff 30%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  left: 50%;
+}
+
+.gift-card .outside {
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  z-index: 1;
+  transform-origin: left;
+  transition: 2s;
+}
+
+.gift-card .front,
+.gift-card .back {
+  height: 100%;
+  width: 100%;
+  background-color: #fff;
+  position: absolute;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: rotateX(0deg);
+}
+
+.gift-card .front {
+  background-color: #fff;
+  text-align: center;
+}
+
+.gift-card .back {
+  transform: rotateY(180deg);
+  background: linear-gradient(to left, #e0e0e0, #fff 30%);
+}
+
+.gift-card .outside p {
+  text-transform: uppercase;
+  margin-top: 20px;
+  text-align: center;
+  letter-spacing: 6px;
+  color: var(--nav-color);
+}
+
+.gift-card .inside p {
+  text-align: center;
+  color: var(--nav-color);
+  padding: 0 5px;
+}
+
+.gift-card .inside .coupon-card {
+  background: linear-gradient(135deg, #7158fe, #9d4de6);
+  color: #fff;
+  text-align: center;
+  border-radius: 15px;
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.15);
+  position: relative;
+  width: 90%;
+  padding: 0 5px;
+}
+
+.gift-card .inside .logo {
+  border-radius: 8px;
+  margin: 5px 0 0 0;
+}
+
+.gift-card .inside .coupon-card h3 {
+  font-weight: 400;
+}
+
+.gift-card .inside .coupon-row {
+  display: flex;
+  align-items: center;
+  margin: 0 auto;
+  width: fit-content;
+}
+
+.gift-card .inside #cpnCode {
+  border: 1px dashed #fff;
+  border-right: 0;
+}
+
+.gift-card .inside #cpnBtn {
+  border: 1px solid #fff;
+  background: #fff;
+  color: #7158fe;
+  cursor: pointer;
+}
+
 .gc-preview {
   height: 400px;
   background-color: var(--nav-color);
@@ -1898,64 +2017,6 @@ nav {
   width: 320px;
   height: 220px;
   position: absolute;
-  margin: auto;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  -webkit-perspective: 1200px;
-  perspective: 1200px;
-  transition: 1s;
-}
-
-.gc-preview .card:hover {
-  transform: rotate(-5deg);
-}
-
-.gc-preview .card:hover .outside {
-  transform: rotateY(-130deg);
-}
-
-.gc-preview .outside,
-.gc-preview .inside {
-  height: 100%;
-  width: 50%;
-  position: absolute;
-  left: 50.1%;
-}
-
-.gc-preview .inside {
-  background: linear-gradient(to right, #e0e0e0, #fff 30%);
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  left: 50%;
-}
-
-.gc-preview .outside {
-  -webkit-transform-style: preserve-3d;
-  transform-style: preserve-3d;
-  z-index: 1;
-  transform-origin: left;
-  transition: 2s;
-}
-
-.gc-preview .front,
-.gc-preview .back {
-  height: 100%;
-  width: 100%;
-  background-color: #fff;
-  position: absolute;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  transform: rotateX(0deg);
-}
-
-.gc-preview .front {
-  background-color: #fff;
-  text-align: center;
 }
 
 .gc-preview .front img {
@@ -1963,66 +2024,59 @@ nav {
   max-height: 120px;
 }
 
-.gc-preview .back {
-  transform: rotateY(180deg);
-  background: linear-gradient(to left, #e0e0e0, #fff 30%);
-}
-
 .gc-preview .outside p {
-  font-size: 10px;
-  text-transform: uppercase;
-  margin-top: 20px;
-  text-align: center;
-  letter-spacing: 6px;
-  color: var(--nav-color);
+  font-size: 9px;
 }
 
 .gc-preview .inside p {
   font-size: 8px;
-  text-align: center;
-  color: var(--nav-color);
-  padding: 0 5px;
 }
 
 .gc-preview .inside .coupon-card {
-  background: linear-gradient(135deg, #7158fe, #9d4de6);
-  color: #fff;
-  text-align: center;
-  border-radius: 15px;
-  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.15);
-  position: relative;
   font-size: 6px;
-  width: 90%;
-  padding: 0 5px;
 }
 
 .gc-preview .inside .logo {
   width: 20px;
-  border-radius: 8px;
-  margin: 5px 0 0 0;
 }
 
-.gc-preview .inside .coupon-card h3 {
-  font-weight: 400;
+.gc-actual {
+  height: 500px;
 }
 
-.gc-preview .inside .coupon-row {
-  display: flex;
-  align-items: center;
-  margin: 0 auto;
-  width: fit-content;
+.gc-actual .card {
+  width: 620px;
+  height: 480px;
 }
 
-.gc-preview .inside #cpnCode {
-  border: 1px dashed #fff;
-  border-right: 0;
+.gc-actual .front img {
+  max-width: 240px;
+  max-height: 240px;
 }
 
-.gc-preview .inside #cpnBtn {
-  border: 1px solid #fff;
-  background: #fff;
-  color: #7158fe;
-  cursor: pointer;
+.gc-actual .outside p {
+  font-size: 20px;
+  padding: 0 10px;
+}
+
+.gc-actual .inside p {
+  font-size: 16px;
+}
+
+.gc-actual .inside .coupon-card {
+  font-size: 12px;
+}
+
+.gc-actual .inside .logo {
+  width: 40px;
+}
+
+.gc-actual .inside #cpnCode {
+  padding: 10px;
+}
+
+.gc-actual .inside #cpnBtn {
+  padding: 10px;
 }
 
 /* --------------- advertisement-pages --------------- */
@@ -2853,6 +2907,12 @@ small.user-chats-date {
   position: absolute;
   left: 45px;
   bottom: 10px;
+}
+
+.fa.arrow-or-xmark {
+  font-size: 20px;
+  color: var(--nav-color);
+  padding: 5px 10px 0 10px;
 }
 
 /* --------------- profile-page --------------- */
@@ -6609,5 +6669,168 @@ table.product-info tbody {
 @media (max-width: 750px) {
   .single-refund {
     flex-direction: column;
+  }
+}
+
+/* --------------- media query for gift card pages --------------- */
+@media (min-width: 1201px) and (max-width: 1400px) {
+  .gc-actual {
+    height: 400px;
+  }
+
+  .gc-actual .card {
+    width: 500px;
+    height: 380px;
+  }
+
+  .gc-actual .front img {
+    max-width: 200px;
+    max-height: 200px;
+  }
+
+  .gc-actual .outside p {
+    font-size: 18px;
+    padding: 0 10px;
+  }
+
+  .gc-actual .inside p {
+    font-size: 12px;
+  }
+
+  .gc-actual .inside .coupon-card {
+    font-size: 10px;
+  }
+
+  .gc-actual .inside .logo {
+    width: 30px;
+  }
+
+  .gc-actual .inside #cpnCode {
+    padding: 5px;
+  }
+
+  .gc-actual .inside #cpnBtn {
+    padding: 5px;
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1200px) {
+  .gc-actual {
+    height: 240px;
+  }
+
+  .gc-actual .card {
+    width: 320px;
+    height: 220px;
+  }
+
+  .gc-actual .front img {
+    max-width: 100px;
+    max-height: 100px;
+  }
+
+  .gc-actual .outside p {
+    font-size: 9px;
+  }
+
+  .gc-actual .inside p {
+    font-size: 8px;
+  }
+
+  .gc-actual .inside .coupon-card {
+    font-size: 6px;
+  }
+
+  .gc-actual .inside .logo {
+    width: 20px;
+  }
+
+  .gc-actual .inside #cpnCode {
+    padding: 0;
+  }
+
+  .gc-actual .inside #cpnBtn {
+    padding: 0;
+  }
+}
+
+@media (min-width: 451px) and (max-width: 900px) {
+  .gc-actual {
+    height: 400px;
+  }
+
+  .gc-actual .card {
+    width: 500px;
+    height: 380px;
+  }
+
+  .gc-actual .front img {
+    max-width: 200px;
+    max-height: 200px;
+  }
+
+  .gc-actual .outside p {
+    font-size: 18px;
+    padding: 0 10px;
+  }
+
+  .gc-actual .inside p {
+    font-size: 12px;
+  }
+
+  .gc-actual .inside .coupon-card {
+    font-size: 10px;
+  }
+
+  .gc-actual .inside .logo {
+    width: 30px;
+  }
+
+  .gc-actual .inside #cpnCode {
+    padding: 5px;
+  }
+
+  .gc-actual .inside #cpnBtn {
+    padding: 5px;
+  }
+}
+
+@media (max-width: 450px) {
+  .gc-actual {
+    height: 240px;
+  }
+
+  .gc-actual .card {
+    width: 320px;
+    height: 220px;
+  }
+
+  .gc-actual .front img {
+    max-width: 100px;
+    max-height: 100px;
+  }
+
+  .gc-actual .outside p {
+    font-size: 9px;
+  }
+
+  .gc-actual .inside p {
+    font-size: 8px;
+  }
+
+  .gc-actual .inside .coupon-card {
+    font-size: 6px;
+  }
+
+  .gc-actual .inside .logo {
+    width: 20px;
+  }
+
+  .gc-actual .inside #cpnCode {
+    padding: 0;
+  }
+
+  .gc-actual .inside #cpnBtn {
+    padding: 0;
   }
 }

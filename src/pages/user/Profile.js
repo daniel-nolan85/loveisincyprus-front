@@ -429,7 +429,6 @@ const Profile = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setLoading(false);
         if (res.data.error) {
           toast.error(res.data.error, {

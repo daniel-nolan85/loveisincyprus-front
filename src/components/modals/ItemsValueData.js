@@ -35,8 +35,6 @@ const ItemsValueData = ({
     },
   };
 
-  console.log('items => ', items);
-
   return (
     <Modal
       isOpen={itemsValueDataModalIsOpen}

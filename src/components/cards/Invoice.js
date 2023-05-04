@@ -10,7 +10,6 @@ import {
 import moment from 'moment';
 
 const Invoice = ({ order }) => {
-  console.log('order => ', order);
   return (
     <Document>
       <Page style={styles.body}>

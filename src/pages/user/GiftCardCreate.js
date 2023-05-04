@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCamera,
@@ -13,37 +13,92 @@ import GCPaymentForm from '../../components/forms/GCPaymentForm';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import Mobile from '../../components/user/Mobile';
+import { createGCPayment } from '../../functions/cardinity';
 import { useParams, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import defaultProfile from '../../assets/defaultProfile.png';
+import io from 'socket.io-client';
+
+let socket;
 
 const GiftCardCreate = () => {
   const [thisUser, setThisUser] = useState({});
   const [greeting, setGreeting] = useState('');
   const [image, setImage] = useState({});
   const [message, setMessage] = useState('');
+  const [paymentDetails, setPaymentDetails] = useState({
+    cardHolder: '',
+    cardNumber: '',
+    expiry: '',
+    cvc: '',
+  });
+  const [formReady, setFormReady] = useState(false);
   const [amount, setAmount] = useState('0.00');
   const [validAmount, setValidAmount] = useState(false);
-  const [paid, setPaid] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [previewGCModalIsOpen, setPreviewGCModalIsOpen] = useState(false);
+  const [succeeded, setSucceeded] = useState(false);
+  const [processing, setProcessing] = useState(false);
+  const [userAgent, setUserAgent] = useState('');
+  const [couponCode, setCouponCode] = useState('');
 
   const { userId } = useParams();
 
   const { user } = useSelector((state) => ({ ...state }));
+
+  const isFirstRun = useRef(true);
+  const formikRef = useRef();
 
   useEffect(() => {
     fetchUser();
   }, [userId]);
 
   useEffect(() => {
+    socket = io(
+      process.env.REACT_APP_SOCKET_IO,
+      { path: '/socket.io' },
+      { reconnection: true },
+      { secure: true }
+    );
+  }, []);
+
+  useEffect(() => {
     if (amount === '0.00' || amount === '.00') {
+      setValidAmount(false);
       return;
     } else {
       setValidAmount(validateAmount(amount));
     }
   }, [amount]);
+
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      if (formReady) paymentSubmit();
+    }
+  }, [paymentDetails, formReady]);
+
+  useEffect(() => {
+    setUserAgent(window.navigator.userAgent);
+  }, []);
+
+  useEffect(() => {
+    function makeid(length) {
+      var result = '';
+      var characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+      var charactersLength = characters.length;
+      for (var i = 0; i < length; i++) {
+        result += characters.charAt(
+          Math.floor(Math.random() * charactersLength)
+        );
+      }
+      return result;
+    }
+    if (!succeeded) setCouponCode('GIFT-' + makeid(8));
+  }, [succeeded]);
 
   const fetchUser = async () => {
     await axios
@@ -70,9 +125,47 @@ const GiftCardCreate = () => {
     setPreviewGCModalIsOpen(true);
   };
 
+  const paymentSubmit = () => {
+    if (!amount || !validAmount) {
+      toast.error(`Please enter an amount.`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      setFormReady(false);
+      return;
+    }
+    setProcessing(true);
+    createGCPayment(paymentDetails, amount, userAgent, user.token)
+      .then((res) => {
+        if (res.data.errors) {
+          toast.error(res.data.errors[0].message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+        }
+        if (res.data.status === 'approved') {
+          toast.success(`Payment successful!`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+          setSucceeded(true);
+        } else {
+          toast.error(`Payment declined.`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        toast.error(`Payment declined.`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        setProcessing(false);
+      });
+  };
+
   const cardSubmit = async (e) => {
     e.preventDefault();
-    console.log(greeting, image, message, amount, paid);
     setLoading(true);
     await axios
       .post(`${process.env.REACT_APP_API}/send-card`, {
@@ -80,7 +173,10 @@ const GiftCardCreate = () => {
         image,
         message,
         amount,
-        paid,
+        succeeded,
+        from: user._id,
+        to: _id,
+        couponCode,
       })
       .then((res) => {
         setLoading(false);
@@ -96,7 +192,16 @@ const GiftCardCreate = () => {
           setImage({});
           setMessage('');
           setAmount('0.00');
-          setPaid(false);
+          setSucceeded(false);
+          setFormReady(false);
+          setPaymentDetails({
+            cardHolder: '',
+            cardNumber: '',
+            expiry: '',
+            cvc: '',
+          });
+          formikRef.current.resetForm();
+          socket.emit('new gift card', res.data);
         }
       })
       .catch((err) => {
@@ -136,7 +241,7 @@ const GiftCardCreate = () => {
       <LeftSidebar />
       <div className='main-content'>
         <Mobile />
-        <h1 className='center'>Create gift card for</h1>
+        <h1 className='center'>Create a gift card for</h1>
         <div className='target-user-info'>
           <Link to={`/user/${_id}`}>
             <img
@@ -216,6 +321,7 @@ const GiftCardCreate = () => {
                 style={{ width: `${amount.length}ch` }}
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
+                readOnly={succeeded}
               />
             </div>
           </div>
@@ -233,7 +339,14 @@ const GiftCardCreate = () => {
             <span className='number'>5</span>
             <h2>Finally, please enter your payment details.</h2>
           </div>
-          <GCPaymentForm />
+          <GCPaymentForm
+            paymentDetails={paymentDetails}
+            setPaymentDetails={setPaymentDetails}
+            setFormReady={setFormReady}
+            processing={processing}
+            succeeded={succeeded}
+            formikRef={formikRef}
+          />
           <GCPreview
             greeting={greeting}
             image={image}
@@ -254,7 +367,8 @@ const GiftCardCreate = () => {
             !amount ||
             !validAmount ||
             uploading ||
-            loading
+            loading ||
+            !succeeded
           }
         >
           {loading ? (

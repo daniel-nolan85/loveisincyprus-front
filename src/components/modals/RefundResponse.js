@@ -32,8 +32,6 @@ const RefundResponse = ({
     },
   };
 
-  console.log('currentOrder => ', currentOrder);
-
   return (
     <Modal
       isOpen={responseRefundModalIsOpen}

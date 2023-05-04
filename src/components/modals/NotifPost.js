@@ -443,6 +443,33 @@ const NotifPost = ({
             )
           )}
         </div>
+      ) : post.notif && post.notif.giftCard ? (
+        <div className='match'>
+          <h2>
+            <Link to={`/user/${post.notif.from}`} className='link'>
+              {post.notif.username || post.notif.name}
+            </Link>{' '}
+            sent you a gift card
+          </h2>
+          <div className='match-images'>
+            <Link to={`/user/${post.notif.giftCard.from}`} className='link'>
+              <img
+                src={
+                  post.notif.profileImage
+                    ? post.notif.profileImage.url
+                    : defaultProfile
+                }
+                alt={`${
+                  post.notif.username || post.notif.name
+                }'s profile picture`}
+              />
+            </Link>
+          </div>
+          <br />
+          <Link to='gift-cards' className='link'>
+            View card
+          </Link>
+        </div>
       ) : (
         <div className='post-container'>
           <p>This content has been deleted</p>

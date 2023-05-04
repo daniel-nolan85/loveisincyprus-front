@@ -82,6 +82,7 @@ import GiftCardCreate from './pages/user/GiftCardCreate';
 import Refunds from './pages/admin/Refunds';
 import Data from './pages/admin/Data';
 import UserChats from './pages/admin/UserChats';
+import GiftCards from './pages/user/GiftCards';
 
 let socket, selectedChatCompare;
 
@@ -279,6 +280,9 @@ const App = () => {
       });
       socket.on('event added', (e) => {
         incrementNewNotifications(e, 'event');
+      });
+      socket.on('gift card added', (g) => {
+        incrementNewNotifications(g, 'gift');
       });
       removeExpiredFeatures();
       handleExpiredAds();
@@ -542,6 +546,7 @@ const App = () => {
               component={PurchaseHistory}
             />
             <UserRoute exact path='/wishlist' component={Wishlist} />
+            <UserRoute exact path='/gift-cards' component={GiftCards} />
             <UserRoute exact path='/points' component={Points} />
             <UserRoute exact path='/notifications' component={Notifications} />
             <UserRoute exact path='/search-users' component={UserSearch} />

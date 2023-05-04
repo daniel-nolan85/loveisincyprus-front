@@ -10,6 +10,7 @@ import {
   faPeopleArrows,
   faMagnifyingGlass,
   faUsers,
+  faGift,
 } from '@fortawesome/free-solid-svg-icons';
 import { useSelector, useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
@@ -89,6 +90,10 @@ const LeftSidebar = () => {
             <Link to='/wishlist'>
               <FontAwesomeIcon icon={faStar} className='fa' />
               Wishlist
+            </Link>
+            <Link to='/gift-cards'>
+              <FontAwesomeIcon icon={faGift} className='fa' />
+              Gift Cards
             </Link>
           </>
         )}

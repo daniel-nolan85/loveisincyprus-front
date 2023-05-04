@@ -41,7 +41,6 @@ const Chats = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setChats(res.data);
       })
       .catch((err) => {
@@ -53,21 +52,6 @@ const Chats = ({ history }) => {
     setChatId(id);
     setUsersChatModalIsOpen(true);
   };
-
-  // const viewChat = async (chatId) => {
-  //   await axios
-  //     .get(`${process.env.REACT_APP_API}/chats/${chatId}`, {
-  //       headers: {
-  //         authtoken: token,
-  //       },
-  //     })
-  //     .then((res) => {
-  //       console.log(res.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
 
   const handleSearch = (e) => {
     e.preventDefault();

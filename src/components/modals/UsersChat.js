@@ -72,8 +72,6 @@ const UsersChat = ({
     },
   };
 
-  console.log('messages => ', messages);
-
   return (
     <Modal
       isOpen={usersChatModalIsOpen}

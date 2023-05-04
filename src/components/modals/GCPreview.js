@@ -53,7 +53,7 @@ const GCPreview = ({
       style={modalStyles}
       contentLabel='Example Modal'
     >
-      <div className='gc-preview'>
+      <div className='gift-card gc-preview'>
         <h1 className='center'>
           {deviceSize > 1280 ? 'Hover' : 'Touch'} card to open
         </h1>

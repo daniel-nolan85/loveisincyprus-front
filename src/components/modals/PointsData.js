@@ -34,7 +34,6 @@ const PointsData = ({
     },
   };
 
-  console.log('pointsData => ', pointsData);
   const { sumPointsGained, sumPointsLost, sumPointsSpent } = pointsData;
 
   return (

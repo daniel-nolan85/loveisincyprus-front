@@ -21,6 +21,11 @@ import ReportedData from '../../components/modals/ReportedData';
 import MessagesData from '../../components/modals/MessagesData';
 import ItemsData from '../../components/modals/ItemsData';
 import ItemsValueData from '../../components/modals/ItemsValueData';
+import GCSentData from '../../components/modals/GCSentData';
+import GCSentValueData from '../../components/modals/GCSentValueData';
+import GCReceivedData from '../../components/modals/GCReceivedData';
+import GCReceivedValueData from '../../components/modals/GCReceivedValueData';
+import { Link } from 'react-router-dom';
 
 const Data = ({ history }) => {
   const [byPage, setByPage] = useState(50);
@@ -63,6 +68,10 @@ const Data = ({ history }) => {
   const [loadingItemsOrdered, setLoadingItemsOrdered] = useState(false);
   const [loadingItemsOrderedValue, setLoadingItemsOrderedValue] =
     useState(false);
+  const [loadingGCSent, setLoadingGCSent] = useState(false);
+  const [loadingGCSentValue, setLoadingGCSentValue] = useState(false);
+  const [loadingGCReceived, setLoadingGCReceived] = useState(false);
+  const [loadingGCReceivedValue, setLoadingGCReceivedValue] = useState(false);
   const [loadingTshirts, setLoadingTshirts] = useState(false);
   const [loadingSprays, setLoadingSprays] = useState(false);
   const [loadingDroppers, setLoadingDroppers] = useState(false);
@@ -82,6 +91,13 @@ const Data = ({ history }) => {
   const [itemsDataModalIsOpen, setItemsDataModalIsOpen] = useState(false);
   const [itemsValueDataModalIsOpen, setItemsValueDataModalIsOpen] =
     useState(false);
+  const [gCSentDataModalIsOpen, setGCSentDataModalIsOpen] = useState(false);
+  const [gCSentValueDataModalIsOpen, setGCSentValueDataModalIsOpen] =
+    useState(false);
+  const [gCReceivedDataModalIsOpen, setGCReceivedDataModalIsOpen] =
+    useState(false);
+  const [gCReceivedValueDataModalIsOpen, setGCReceivedValueDataModalIsOpen] =
+    useState(false);
   const [profileImages, setProfileImages] = useState([]);
   const [progress, setProgress] = useState({});
   const [pointsData, setPointsData] = useState({});
@@ -96,10 +112,12 @@ const Data = ({ history }) => {
   const [itemsOrderedData, setItemsOrderedData] = useState(0);
   const [itemsValueData, setItemsValueData] = useState([]);
   const [itemsOrderedValueData, setItemsOrderedValueData] = useState(0);
+  const [gCSentData, setGCSentData] = useState({});
+  const [gCSentValueData, setGCSentValueData] = useState({});
+  const [gCReceivedData, setGCReceivedData] = useState({});
+  const [gCReceivedValueData, setGCReceivedValueData] = useState({});
 
   const { token, role } = useSelector((state) => state.user);
-
-  console.log('users => ', users);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -594,6 +612,58 @@ const Data = ({ history }) => {
   }, [loadingItemsOrderedValue]);
 
   useEffect(() => {
+    if (loadingGCSent) {
+      const sortedUsers = users.sort((a, b) => {
+        const giftCardsSentA = a.giftCardsSent || 0;
+        const giftCardsSentB = b.giftCardsSent || 0;
+        return giftCardsSentB - giftCardsSentA;
+      });
+      setUsers(sortedUsers);
+      setFilteredBy('giftCardsSent');
+      setLoadingGCSent(false);
+    }
+  }, [loadingGCSent]);
+
+  useEffect(() => {
+    if (loadingGCSentValue) {
+      const sortedUsers = users.sort((a, b) => {
+        const giftCardsSentValueA = a.giftCardsSentValue || 0;
+        const giftCardsSentValueB = b.giftCardsSentValue || 0;
+        return giftCardsSentValueB - giftCardsSentValueA;
+      });
+      setUsers(sortedUsers);
+      setFilteredBy('giftCardsSentValue');
+      setLoadingGCSent(false);
+    }
+  }, [loadingGCSentValue]);
+
+  useEffect(() => {
+    if (loadingGCReceived) {
+      const sortedUsers = users.sort((a, b) => {
+        const giftCardsReceivedA = a.giftCardsReceived || 0;
+        const giftCardsReceivedB = b.giftCardsReceived || 0;
+        return giftCardsReceivedB - giftCardsReceivedA;
+      });
+      setUsers(sortedUsers);
+      setFilteredBy('giftCardsReceived');
+      setLoadingGCReceived(false);
+    }
+  }, [loadingGCReceived]);
+
+  useEffect(() => {
+    if (loadingGCReceivedValue) {
+      const sortedUsers = users.sort((a, b) => {
+        const giftCardsReceivedValueA = a.giftCardsReceivedValue || 0;
+        const giftCardsReceivedValueB = b.giftCardsReceivedValue || 0;
+        return giftCardsReceivedValueB - giftCardsReceivedValueA;
+      });
+      setUsers(sortedUsers);
+      setFilteredBy('giftCardsReceivedValue');
+      setLoadingGCReceived(false);
+    }
+  }, [loadingGCReceivedValue]);
+
+  useEffect(() => {
     if (loadingTshirts) {
       const sortedUsers = users.sort((a, b) => {
         const tshirtsA = a.tShirts || 0;
@@ -690,6 +760,30 @@ const Data = ({ history }) => {
       setItemsValueDataModalIsOpen(true);
     }
   }, [itemsValueData]);
+
+  useEffect(() => {
+    if (Object.keys(gCSentData).length !== 0) {
+      setGCSentDataModalIsOpen(true);
+    }
+  }, [gCSentData]);
+
+  useEffect(() => {
+    if (Object.keys(gCSentValueData).length !== 0) {
+      setGCSentValueDataModalIsOpen(true);
+    }
+  }, [gCSentValueData]);
+
+  useEffect(() => {
+    if (Object.keys(gCReceivedData).length !== 0) {
+      setGCReceivedDataModalIsOpen(true);
+    }
+  }, [gCReceivedData]);
+
+  useEffect(() => {
+    if (Object.keys(gCReceivedValueData).length !== 0) {
+      setGCReceivedValueDataModalIsOpen(true);
+    }
+  }, [gCReceivedValueData]);
 
   const fetch50 = async () => {
     setLoading50(true);
@@ -823,6 +917,22 @@ const Data = ({ history }) => {
     setLoadingItemsOrderedValue(true);
   };
 
+  const sortGCSent = () => {
+    setLoadingGCSent(true);
+  };
+
+  const sortGCReceivedValue = () => {
+    setLoadingGCReceivedValue(true);
+  };
+
+  const sortGCReceived = () => {
+    setLoadingGCReceived(true);
+  };
+
+  const sortGCSentValue = () => {
+    setLoadingGCSentValue(true);
+  };
+
   const sortTshirts = () => {
     setLoadingTshirts(true);
   };
@@ -851,7 +961,6 @@ const Data = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setUsers(res.data);
         setLoading(false);
         setLoading50(false);
@@ -1036,7 +1145,6 @@ const Data = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         const uniqueProducts = {};
         res.data.forEach((order) => {
           const products = order.products;
@@ -1064,6 +1172,172 @@ const Data = ({ history }) => {
       })
       .catch((err) => {
         console.log(err);
+      });
+  };
+
+  const fetchGiftCardsSent = async (id, username) => {
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/gc-sent-data`,
+        {
+          id,
+        },
+        {
+          headers: {
+            authtoken: token,
+          },
+        }
+      )
+      .then((res) => {
+        const totalCardsSentData = Object.entries(
+          res.data.reduce((acc, curr) => {
+            const toId = curr.to._id;
+            if (!acc[toId]) {
+              acc[toId] = {
+                count: 0,
+                name: curr.to.name,
+                username: curr.to.username,
+                profileImage: curr.to.profileImage,
+              };
+            }
+            acc[toId].count += 1;
+            return acc;
+          }, {})
+        ).map(([id, { name, username, profileImage, count }]) => ({
+          id,
+          name,
+          username,
+          profileImage,
+          count,
+        }));
+        setGCSentData(totalCardsSentData);
+        setCurrentUsername(username);
+      });
+  };
+
+  const fetchGiftCardsSentValue = async (id, username) => {
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/gc-sent-data`,
+        {
+          id,
+        },
+        {
+          headers: {
+            authtoken: token,
+          },
+        }
+      )
+      .then((res) => {
+        const totalCardsSentValueData = Object.entries(
+          res.data.reduce((acc, curr) => {
+            const toId = curr.to._id;
+            if (!acc[toId]) {
+              acc[toId] = {
+                count: 0,
+                name: curr.to.name,
+                username: curr.to.username,
+                profileImage: curr.to.profileImage,
+                totalAmount: 0,
+              };
+            }
+            acc[toId].count += 1;
+            acc[toId].totalAmount += curr.amount;
+            return acc;
+          }, {})
+        ).map(([id, { name, username, profileImage, count, totalAmount }]) => ({
+          id,
+          name,
+          username,
+          profileImage,
+          count,
+          totalAmount,
+        }));
+        setGCSentValueData(totalCardsSentValueData);
+        setCurrentUsername(username);
+      });
+  };
+
+  const fetchGiftCardsReceived = async (id, username) => {
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/gc-received-data`,
+        {
+          id,
+        },
+        {
+          headers: {
+            authtoken: token,
+          },
+        }
+      )
+      .then((res) => {
+        const totalCardsReceivedData = Object.entries(
+          res.data.reduce((acc, curr) => {
+            const fromId = curr.from._id;
+            if (!acc[fromId]) {
+              acc[fromId] = {
+                count: 0,
+                name: curr.from.name,
+                username: curr.from.username,
+                profileImage: curr.from.profileImage,
+              };
+            }
+            acc[fromId].count += 1;
+            return acc;
+          }, {})
+        ).map(([id, { name, username, profileImage, count }]) => ({
+          id,
+          name,
+          username,
+          profileImage,
+          count,
+        }));
+        setGCReceivedData(totalCardsReceivedData);
+        setCurrentUsername(username);
+      });
+  };
+
+  const fetchGiftCardsReceivedValue = async (id, username) => {
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/gc-received-data`,
+        {
+          id,
+        },
+        {
+          headers: {
+            authtoken: token,
+          },
+        }
+      )
+      .then((res) => {
+        const totalCardsReceivedValueData = Object.entries(
+          res.data.reduce((acc, curr) => {
+            const fromId = curr.from._id;
+            if (!acc[fromId]) {
+              acc[fromId] = {
+                count: 0,
+                name: curr.from.name,
+                username: curr.from.username,
+                profileImage: curr.from.profileImage,
+                totalAmount: 0,
+              };
+            }
+            acc[fromId].count += 1;
+            acc[fromId].totalAmount += curr.amount;
+            return acc;
+          }, {})
+        ).map(([id, { name, username, profileImage, count, totalAmount }]) => ({
+          id,
+          name,
+          username,
+          profileImage,
+          count,
+          totalAmount,
+        }));
+        setGCReceivedValueData(totalCardsReceivedValueData);
+        setCurrentUsername(username);
       });
   };
 
@@ -1544,10 +1818,63 @@ const Data = ({ history }) => {
                         '€ Items Ordered'
                       )}
                     </th>
-                    <th># Gift Cards Sent</th>
-                    <th>€ Gift Cards Sent</th>
-                    <th># Gift Cards Received</th>
-                    <th>€ Gift Cards Received</th>
+                    <th
+                      onClick={sortGCSent}
+                      style={{
+                        backgroundColor:
+                          filteredBy === 'giftCardsSent' && '#fff',
+                        color: filteredBy === 'giftCardsSent' && '#ef5b85',
+                      }}
+                    >
+                      {loadingGCSent ? (
+                        <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                      ) : (
+                        '# Gift Cards Sent'
+                      )}
+                    </th>
+                    <th
+                      onClick={sortGCSentValue}
+                      style={{
+                        backgroundColor:
+                          filteredBy === 'giftCardsSentValue' && '#fff',
+                        color: filteredBy === 'giftCardsSentValue' && '#ef5b85',
+                      }}
+                    >
+                      {loadingGCSentValue ? (
+                        <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                      ) : (
+                        '€ Gift Cards Sent'
+                      )}
+                    </th>
+                    <th
+                      onClick={sortGCReceived}
+                      style={{
+                        backgroundColor:
+                          filteredBy === 'giftCardsReceived' && '#fff',
+                        color: filteredBy === 'giftCardsReceived' && '#ef5b85',
+                      }}
+                    >
+                      {loadingGCReceived ? (
+                        <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                      ) : (
+                        '# Gift Cards Received'
+                      )}
+                    </th>
+                    <th
+                      onClick={sortGCReceivedValue}
+                      style={{
+                        backgroundColor:
+                          filteredBy === 'giftCardsReceivedValue' && '#fff',
+                        color:
+                          filteredBy === 'giftCardsReceivedValue' && '#ef5b85',
+                      }}
+                    >
+                      {loadingGCReceivedValue ? (
+                        <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                      ) : (
+                        '€ Gift Cards Received'
+                      )}
+                    </th>
                     <th
                       onClick={sortTshirts}
                       style={{
@@ -1605,7 +1932,14 @@ const Data = ({ history }) => {
                 <tbody>
                   {users.filter(searched(query)).map((u) => (
                     <tr key={u._id}>
-                      <td>{u.username}</td>
+                      <td>
+                        <Link
+                          to={`/user/${u._id}`}
+                          style={{ color: '#fff', fontSize: '14px' }}
+                        >
+                          {u.username}
+                        </Link>
+                      </td>
                       <td>{u.name}</td>
                       <td>{u.email}</td>
                       <td className='center-cell'>
@@ -1813,15 +2147,35 @@ const Data = ({ history }) => {
                         {u.itemsOrderedValue &&
                           `€${u.itemsOrderedValue.toFixed(2)}`}
                       </td>
-                      <td className='center-cell link'>{u.giftCardsSent}</td>
-                      <td className='center-cell link'>
+                      <td
+                        className='center-cell link'
+                        onClick={() => fetchGiftCardsSent(u._id, u.username)}
+                      >
+                        {u.giftCardsSent}
+                      </td>
+                      <td
+                        className='center-cell link'
+                        onClick={() =>
+                          fetchGiftCardsSentValue(u._id, u.username)
+                        }
+                      >
                         {u.giftCardsSentValue &&
                           `€${u.giftCardsSentValue.toFixed(2)}`}
                       </td>
-                      <td className='center-cell link'>
+                      <td
+                        className='center-cell link'
+                        onClick={() =>
+                          fetchGiftCardsReceived(u._id, u.username)
+                        }
+                      >
                         {u.giftCardsReceived}
                       </td>
-                      <td className='center-cell link'>
+                      <td
+                        className='center-cell link'
+                        onClick={() =>
+                          fetchGiftCardsReceivedValue(u._id, u.username)
+                        }
+                      >
                         {u.giftCardsReceivedValue &&
                           `€${u.giftCardsReceivedValue.toFixed(2)}`}
                       </td>
@@ -1904,6 +2258,30 @@ const Data = ({ history }) => {
         itemsOrderedValue={itemsOrderedValueData}
         itemsValueDataModalIsOpen={itemsValueDataModalIsOpen}
         setItemsValueDataModalIsOpen={setItemsValueDataModalIsOpen}
+        username={currentUsername}
+      />
+      <GCSentData
+        cards={gCSentData}
+        gCSentDataModalIsOpen={gCSentDataModalIsOpen}
+        setGCSentDataModalIsOpen={setGCSentDataModalIsOpen}
+        username={currentUsername}
+      />
+      <GCSentValueData
+        cards={gCSentValueData}
+        gCSentValueDataModalIsOpen={gCSentValueDataModalIsOpen}
+        setGCSentValueDataModalIsOpen={setGCSentValueDataModalIsOpen}
+        username={currentUsername}
+      />
+      <GCReceivedData
+        cards={gCReceivedData}
+        gCReceivedDataModalIsOpen={gCReceivedDataModalIsOpen}
+        setGCReceivedDataModalIsOpen={setGCReceivedDataModalIsOpen}
+        username={currentUsername}
+      />
+      <GCReceivedValueData
+        cards={gCReceivedValueData}
+        gCReceivedValueDataModalIsOpen={gCReceivedValueDataModalIsOpen}
+        setGCReceivedValueDataModalIsOpen={setGCReceivedValueDataModalIsOpen}
         username={currentUsername}
       />
     </div>

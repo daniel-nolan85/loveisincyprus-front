@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Formik, Form } from 'formik';
 import { Input } from './TextFields';
 import * as yup from 'yup';
@@ -7,10 +7,17 @@ import {
   faSpinner,
   faUndo,
   faMoneyCheck,
+  faCheck,
 } from '@fortawesome/free-solid-svg-icons';
 
-// const GCPaymentForm = ({ handleSubmit, processing, succeeded }) => {
-const GCPaymentForm = () => {
+const GCPaymentForm = ({
+  paymentDetails,
+  setPaymentDetails,
+  processing,
+  succeeded,
+  setFormReady,
+  formikRef
+}) => {
   const validate = yup.object({
     cardHolder: yup.string().required('Please enter your full name'),
     cardNumber: yup
@@ -36,16 +43,13 @@ const GCPaymentForm = () => {
 
   return (
     <Formik
-      initialValues={{
-        cardHolder: '',
-        cardNumber: '',
-        expiry: '',
-        cvc: '',
-      }}
+      initialValues={paymentDetails}
       validationSchema={validate}
-      //   onSubmit={(values) => {
-      //     handleSubmit(values);
-      //   }}
+      onSubmit={(values) => {
+        setPaymentDetails(values);
+        setFormReady(true);
+      }}
+      innerRef={formikRef}
     >
       {(formik) => (
         <div className='form-box ad-payment' style={{ marginBottom: '0' }}>
@@ -82,21 +86,34 @@ const GCPaymentForm = () => {
               <button
                 type='submit'
                 className='submit-btn'
-                disabled={!(formik.isValid && formik.dirty)}
-                // disabled={!(formik.isValid && formik.dirty) || loading}
-                // disabled={processing || succeeded}
+                disabled={
+                  !(formik.isValid && formik.dirty) || processing || succeeded
+                }
               >
-                {/* {processing ? (
-                  <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                {!processing && !succeeded ? (
+                  <>
+                    <FontAwesomeIcon icon={faMoneyCheck} className='fa' />
+                    Submit
+                  </>
+                ) : processing && !succeeded ? (
+                  <>
+                    <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                    Submit
+                  </>
                 ) : (
-                  <FontAwesomeIcon icon={faMoneyCheck} className='fa' />
-                )} */}
-                Submit
+                  !processing &&
+                  succeeded && (
+                    <>
+                      <FontAwesomeIcon icon={faCheck} className='fa' />
+                      Submitted
+                    </>
+                  )
+                )}
               </button>
               <button
                 type='reset'
                 className='submit-btn reset'
-                // disabled={processing}
+                disabled={processing}
               >
                 <FontAwesomeIcon icon={faUndo} className='fa' />
                 Reset
