@@ -52,6 +52,20 @@ const CardinityCheckout = ({
   }, []);
 
   useEffect(() => {
+    const pendingData = {
+      discount,
+      deliverTo,
+      userAddress,
+      couponApplied,
+      deliveryFee,
+      cartTotal,
+      payable,
+    };
+
+    localStorage.setItem('pendingData', JSON.stringify(pendingData));
+  }, [discount, deliverTo, userAddress, couponApplied, deliveryFee]);
+
+  useEffect(() => {
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
@@ -117,8 +131,10 @@ const CardinityCheckout = ({
             deliveryFee
           ).then((response) => {
             if (response.data.paymentIntent.status === 'approved') {
-              if (typeof window !== 'undefined')
+              if (typeof window !== 'undefined') {
                 localStorage.removeItem('cart');
+                localStorage.removeItem('pendingData');
+              }
               dispatch({
                 type: 'ADD_TO_CART',
                 payload: [],
@@ -133,19 +149,14 @@ const CardinityCheckout = ({
           });
           setProcessing(false);
           setSucceeded(true);
-        } else if (
-          // res.data.response &&
-          // res.data.response.status === 'pending'
-          res.data.status === 'pending'
-        ) {
+        } else if (res.data.status === 'pending') {
           console.log(res.data);
           setCardinityPendingModalIsOpen(true);
-          // setPendingFormData(res.data.form);
           setPendingFormData(res.data);
           toast.warning(`Payment pending.`, {
             position: toast.POSITION.TOP_CENTER,
           });
-          // setProcessing(false);
+          return;
         } else if (res.data.status === 'declined') {
           toast.error(`Payment declined.`, {
             position: toast.POSITION.TOP_CENTER,
@@ -257,7 +268,6 @@ const CardinityCheckout = ({
       />
       <CardinityPending
         cardinityPendingModalIsOpen={cardinityPendingModalIsOpen}
-        setCardinityPendingModalIsOpen={setCardinityPendingModalIsOpen}
         pendingFormData={pendingFormData}
       />
     </div>

@@ -83,6 +83,7 @@ import Refunds from './pages/admin/Refunds';
 import Data from './pages/admin/Data';
 import UserChats from './pages/admin/UserChats';
 import GiftCards from './pages/user/GiftCards';
+import FinalizingPayment from './pages/user/FinalizingPayment';
 
 let socket, selectedChatCompare;
 
@@ -577,6 +578,11 @@ const App = () => {
               path='/chats'
               component={Chats}
               onLeave={() => setSelectedChat(undefined)}
+            />
+            <UserRoute
+              exact
+              path='/finalizing-payment'
+              component={FinalizingPayment}
             />
             <SubscriberRoute exact path='/swipe-to-match' component={Swipe} />
             <SubscriberRoute
