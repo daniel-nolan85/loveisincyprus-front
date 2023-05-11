@@ -84,6 +84,9 @@ import Data from './pages/admin/Data';
 import UserChats from './pages/admin/UserChats';
 import GiftCards from './pages/user/GiftCards';
 import FinalizingPayment from './pages/user/FinalizingPayment';
+import FinalizingGCPayment from './pages/user/FinalizingGCPayment';
+import FinalizingMembershipPayment from './pages/user/FinalizingMembershipPayment';
+import FinalizingAdPayment from './pages/admin/FinalizingAdPayment';
 import Analytics from './pages/admin/Analytics';
 
 let socket, selectedChatCompare;
@@ -585,6 +588,16 @@ const App = () => {
               path='/finalizing-payment'
               component={FinalizingPayment}
             />
+            <UserRoute
+              exact
+              path='/finalizing-gc-payment'
+              component={FinalizingGCPayment}
+            />
+            <UserRoute
+              exact
+              path='/finalizing-membership-payment'
+              component={FinalizingMembershipPayment}
+            />
             <SubscriberRoute exact path='/swipe-to-match' component={Swipe} />
             <SubscriberRoute
               exact
@@ -640,6 +653,11 @@ const App = () => {
               exact
               path='/admin/product-review'
               component={ProductReview}
+            />
+            <UserRoute
+              exact
+              path='/finalizing-ad-payment'
+              component={FinalizingAdPayment}
             />
           </Switch>
         </>

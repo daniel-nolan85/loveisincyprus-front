@@ -11,6 +11,7 @@ import PaymentForm from '../../components/forms/PaymentForm';
 import { toast } from 'react-toastify';
 import { createMembershipPayment } from '../../functions/cardinity';
 import Mobile from '../../components/user/Mobile';
+import CardinityPending from '../../components/modals/CardinityPending';
 
 const BecomePaid = ({ history }) => {
   const [succeeded, setSucceeded] = useState(false);
@@ -19,6 +20,9 @@ const BecomePaid = ({ history }) => {
   const [payable, setPayable] = useState('10.00');
   const [daysLeft, setDaysLeft] = useState(0);
   const [userBankDetails, setUserBankDetails] = useState({});
+  const [cardinityPendingModalIsOpen, setCardinityPendingModalIsOpen] =
+    useState(false);
+  const [pendingFormData, setPendingFormData] = useState('');
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -51,13 +55,17 @@ const BecomePaid = ({ history }) => {
     setProcessing(true);
     createMembershipPayment(values, payable, userAgent, user, user.token).then(
       (res) => {
-        if (res.data.response.errors) {
+        console.log(res);
+        if (
+          (res.data.response && res.data.response.errors) ||
+          res.data.errors
+        ) {
           toast.error(res.data.response.errors[0].message, {
             position: toast.POSITION.TOP_CENTER,
           });
           setProcessing(false);
         }
-        if (res.data.response.status === 'approved') {
+        if (res.data.response && res.data.response.status === 'approved') {
           toast.success(
             `Payment successful. Your paid membership will last for ${
               payable === '10.00'
@@ -94,15 +102,21 @@ const BecomePaid = ({ history }) => {
             );
           });
           setUserBankDetails(result);
-        }
-        if (res.data.response.status === 'pending') {
+        } else if (res.data.status === 'pending') {
+          console.log(res.data);
+          setCardinityPendingModalIsOpen(true);
+          setPendingFormData(res.data);
           toast.warning(`Payment pending.`, {
             position: toast.POSITION.TOP_CENTER,
           });
-          setProcessing(false);
-        }
-        if (res.data.response.status === 'declined') {
+          return;
+        } else if (res.data.status === 'declined') {
           toast.error(`Payment declined.`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+        } else if (res.data.status === 401) {
+          toast.error(res.data.detail, {
             position: toast.POSITION.TOP_CENTER,
           });
           setProcessing(false);
@@ -157,6 +171,10 @@ const BecomePaid = ({ history }) => {
         </>
       </div>
       <RightSidebar />
+      <CardinityPending
+        cardinityPendingModalIsOpen={cardinityPendingModalIsOpen}
+        pendingFormData={pendingFormData}
+      />
     </div>
   );
 };

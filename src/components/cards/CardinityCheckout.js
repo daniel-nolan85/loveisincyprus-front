@@ -162,8 +162,7 @@ const CardinityCheckout = ({
             position: toast.POSITION.TOP_CENTER,
           });
           setProcessing(false);
-        }
-        if (res.data.status === 401) {
+        } else if (res.data.status === 401) {
           toast.error(res.data.detail, {
             position: toast.POSITION.TOP_CENTER,
           });

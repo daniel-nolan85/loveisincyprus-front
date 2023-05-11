@@ -19,6 +19,7 @@ import AdPayment from '../../components/modals/AdPayment';
 import { createAdPayment } from '../../functions/cardinity';
 import AdRemove from '../../components/modals/AdRemove';
 import { Link } from 'react-router-dom';
+import CardinityPending from '../../components/modals/CardinityPending';
 
 const AdSubmissions = ({ history }) => {
   const [ads, setAds] = useState([]);
@@ -34,6 +35,9 @@ const AdSubmissions = ({ history }) => {
   const [succeeded, setSucceeded] = useState(false);
   const [payable, setPayable] = useState('');
   const [userAgent, setUserAgent] = useState('');
+  const [cardinityPendingModalIsOpen, setCardinityPendingModalIsOpen] =
+    useState(false);
+  const [pendingFormData, setPendingFormData] = useState('');
 
   const { token, role } = useSelector((state) => state.user);
 
@@ -115,6 +119,7 @@ const AdSubmissions = ({ history }) => {
     setProcessing(true);
     createAdPayment(ad.accountInfo, payable, userAgent, token, ad._id).then(
       (res) => {
+        console.log(res);
         if (res.data.errors) {
           toast.error(res.data.errors[0].message, {
             position: toast.POSITION.TOP_CENTER,
@@ -130,15 +135,20 @@ const AdSubmissions = ({ history }) => {
           setPayable('');
           setUserAgent('');
           fetchAds();
-        }
-        if (res.data.status === 'pending') {
+        } else if (res.data.status === 'pending') {
+          setCardinityPendingModalIsOpen(true);
+          setPendingFormData(res.data);
           toast.warning(`Payment pending.`, {
             position: toast.POSITION.TOP_CENTER,
           });
-          setProcessing(false);
-        }
-        if (res.data.status === 'declined') {
+          return;
+        } else if (res.data.status === 'declined') {
           toast.error(`Payment declined.`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+        } else if (res.data.status === 401) {
+          toast.error(res.data.detail, {
             position: toast.POSITION.TOP_CENTER,
           });
           setProcessing(false);
@@ -279,6 +289,10 @@ const AdSubmissions = ({ history }) => {
           fetchAds={fetchAds}
           loading={loading}
           setLoading={setLoading}
+        />
+        <CardinityPending
+          cardinityPendingModalIsOpen={cardinityPendingModalIsOpen}
+          pendingFormData={pendingFormData}
         />
       </div>
     </div>
