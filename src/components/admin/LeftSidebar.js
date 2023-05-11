@@ -22,6 +22,7 @@ import {
   faPhone,
   faTable,
   faCommentSms,
+  faCalculator,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { ChatState } from '../../context/ChatProvider';
@@ -180,14 +181,20 @@ const LeftSidebar = () => {
             Data
           </Link>
         )}
+        {role === 'main-admin' && (
+          <Link to='/admin/analytics'>
+            <FontAwesomeIcon icon={faChartLine} className='fa' />
+            Analytics
+          </Link>
+        )}
         <Link
           to={{
             pathname: 'https://statcounter.com/p12198487/summary/',
           }}
           target='_blank'
         >
-          <FontAwesomeIcon icon={faChartLine} className='fa' />
-          Analytics
+          <FontAwesomeIcon icon={faCalculator} className='fa' />
+          Stat Counter
         </Link>
         {canPosts && (
           <Link to='/admin/posts'>

@@ -153,6 +153,17 @@ const SideNav = () => {
                         <br />
                       </>
                     )}
+                    {user.role === 'main-admin' && (
+                      <>
+                        <Link
+                          to='/admin/analytics'
+                          onClick={() => setOpenNav(false)}
+                        >
+                          Analytics
+                        </Link>
+                        <br />
+                      </>
+                    )}
                     <>
                       <Link
                         to={{
@@ -162,7 +173,7 @@ const SideNav = () => {
                         target='_blank'
                         onClick={() => setOpenNav(false)}
                       >
-                        Analytics
+                        Stat Counter
                       </Link>
                       <br />
                     </>

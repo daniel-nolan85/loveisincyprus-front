@@ -84,6 +84,7 @@ import Data from './pages/admin/Data';
 import UserChats from './pages/admin/UserChats';
 import GiftCards from './pages/user/GiftCards';
 import FinalizingPayment from './pages/user/FinalizingPayment';
+import Analytics from './pages/admin/Analytics';
 
 let socket, selectedChatCompare;
 
@@ -616,6 +617,7 @@ const App = () => {
             <AdminRoute exact path='/admin/orders' component={Orders} />
             <AdminRoute exact path='/admin/refunds' component={Refunds} />
             <AdminRoute exact path='/admin/data' component={Data} />
+            <AdminRoute exact path='/admin/analytics' component={Analytics} />
             <AdminRoute exact path='/admin/event' component={Event} />
             <AdminRoute exact path='/admin/mass-mail' component={MassMail} />
             <AdminRoute exact path='/admin/chats' component={UserChats} />
