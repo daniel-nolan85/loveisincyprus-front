@@ -153,7 +153,7 @@ const SideNav = () => {
                         <br />
                       </>
                     )}
-                    {user.role === 'main-admin' && (
+                    {/* {user.role === 'main-admin' && (
                       <>
                         <Link
                           to='/admin/analytics'
@@ -163,7 +163,7 @@ const SideNav = () => {
                         </Link>
                         <br />
                       </>
-                    )}
+                    )} */}
                     <>
                       <Link
                         to={{

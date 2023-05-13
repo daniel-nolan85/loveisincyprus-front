@@ -43,7 +43,7 @@ const Mobile = () => {
 
   useEffect(() => {
     fetchNumOfUpcomingEvents();
-    fetchApprovedAds();
+    fetchPaidAds();
   }, []);
 
   useEffect(() => {
@@ -66,9 +66,9 @@ const Mobile = () => {
       });
   };
 
-  const fetchApprovedAds = async () => {
+  const fetchPaidAds = async () => {
     await axios
-      .get(`${process.env.REACT_APP_API}/fetch-approved-ads`)
+      .get(`${process.env.REACT_APP_API}/fetch-paid-ads`)
       .then((res) => {
         setAds(res.data);
       });

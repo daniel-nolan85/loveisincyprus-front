@@ -19,6 +19,9 @@ import { sendMassMail } from '../../functions/chat';
 import io from 'socket.io-client';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import renderHtml from 'react-render-html';
+import moment from 'moment';
+import Logo from '../../assets/logo.png';
 
 let socket;
 
@@ -30,6 +33,7 @@ const initialState = {
 
 const MassMail = ({ history }) => {
   const [optIns, setOptIns] = useState([]);
+  const [massMessages, setMassMessages] = useState([]);
   const [values, setValues] = useState(initialState);
   const [loadingOpen, setLoadingOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -58,6 +62,7 @@ const MassMail = ({ history }) => {
   useEffect(() => {
     if (token) {
       fetchOptIns();
+      fetchMassMessages();
     }
   }, [token]);
 
@@ -80,6 +85,26 @@ const MassMail = ({ history }) => {
       .catch((err) => {
         console.log(err);
         setLoadingOpen(false);
+      });
+  };
+
+  const fetchMassMessages = async () => {
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/fetch-mass-messages`,
+        { _id },
+        {
+          headers: {
+            authtoken: token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        setMassMessages(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -121,6 +146,7 @@ const MassMail = ({ history }) => {
             selected: [],
           });
           setSubject('');
+          fetchMassMessages();
           socket.emit('new mass mail', res.data);
           toast.success('Your message has been sent', {
             position: toast.POSITION.TOP_CENTER,
@@ -256,6 +282,21 @@ const MassMail = ({ history }) => {
               </div>
             ))}
         </div>
+        {massMessages &&
+          massMessages.map((m) => (
+            <div className='post-container' key={m._id}>
+              <div className='post-row'>
+                <div className='user-profile'>
+                  <img src={Logo} alt="main admin's profile picture" />
+                  <span>{moment(m.createdAt).fromNow()}</span>
+                </div>
+              </div>
+              <p className='post-text'>{renderHtml(m.content)}</p>
+              {m.image && (
+                <img src={m.image.url} alt='mail image' className='post-img' />
+              )}
+            </div>
+          ))}
         <UsersToSelect
           selectedUsersModalIsOpen={selectedUsersModalIsOpen}
           setSelectedUsersModalIsOpen={setSelectedUsersModalIsOpen}

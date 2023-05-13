@@ -86,8 +86,9 @@ import GiftCards from './pages/user/GiftCards';
 import FinalizingPayment from './pages/user/FinalizingPayment';
 import FinalizingGCPayment from './pages/user/FinalizingGCPayment';
 import FinalizingMembershipPayment from './pages/user/FinalizingMembershipPayment';
-import FinalizingAdPayment from './pages/admin/FinalizingAdPayment';
+import FinalizingAdPayment from './pages/user/FinalizingAdPayment';
 import Analytics from './pages/admin/Analytics';
+import AdFinalize from './pages/user/AdFinalize';
 
 let socket, selectedChatCompare;
 
@@ -531,6 +532,12 @@ const App = () => {
             <Route exact path='/shop/search' component={ShopSearch} />
             <Route exact path='/cart' component={Cart} />
             <Route exact path='/ad-submission' component={AdSubmission} />
+            <Route exact path='/ad-finalize' component={AdFinalize} />
+            <Route
+              exact
+              path='/finalizing-ad-payment'
+              component={FinalizingAdPayment}
+            />
             <UserRoute exact path='/user/dashboard' component={UserDashboard} />
             <UserRoute exact path='/user/profile/:userId' component={Profile} />
             <UserRoute exact path='/liked-users' component={Following} />
@@ -653,11 +660,6 @@ const App = () => {
               exact
               path='/admin/product-review'
               component={ProductReview}
-            />
-            <UserRoute
-              exact
-              path='/finalizing-ad-payment'
-              component={FinalizingAdPayment}
             />
           </Switch>
         </>

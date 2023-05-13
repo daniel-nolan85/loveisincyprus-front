@@ -5,17 +5,11 @@ import * as yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faUndo,
-  faFloppyDisk,
-  faCheck,
+  faSpinner,
+  faMoneyCheck,
 } from '@fortawesome/free-solid-svg-icons';
-import { toast } from 'react-toastify';
 
-const AdPayment = ({
-  accountInfoSaved,
-  setAccountInfoSaved,
-  setAccountInfo,
-  loading,
-}) => {
+const AdPayment = ({ setAccountInfo, loading }) => {
   const validate = yup.object({
     cardHolder: yup.string().required('Please enter your full name'),
     cardNumber: yup
@@ -49,11 +43,7 @@ const AdPayment = ({
       }}
       validationSchema={validate}
       onSubmit={(values) => {
-        setAccountInfoSaved(true);
         setAccountInfo(values);
-        toast.success(`Account info saved.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
       }}
     >
       {(formik) => (
@@ -93,17 +83,12 @@ const AdPayment = ({
                 className='submit-btn'
                 disabled={!(formik.isValid && formik.dirty) || loading}
               >
-                {!accountInfoSaved ? (
-                  <>
-                    <FontAwesomeIcon icon={faFloppyDisk} className='fa' />
-                    Save
-                  </>
+                {loading ? (
+                  <FontAwesomeIcon icon={faSpinner} className='fa' spin />
                 ) : (
-                  <>
-                    <FontAwesomeIcon icon={faCheck} className='fa' />
-                    Saved
-                  </>
+                  <FontAwesomeIcon icon={faMoneyCheck} className='fa' />
                 )}
+                Submit
               </button>
               <button type='reset' className='submit-btn reset'>
                 <FontAwesomeIcon icon={faUndo} className='fa' />

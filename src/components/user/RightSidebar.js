@@ -7,7 +7,7 @@ import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { ChatState } from '../../context/ChatProvider';
 
-const RightSidebar = () => {
+const RightSidebar = ({ rerenderAds }) => {
   const [numOfUpcomingEvents, setNumOfUpcomingEvents] = useState('');
   const [ads, setAds] = useState([]);
   const [targetedAds, setTargetedAds] = useState([]);
@@ -26,6 +26,13 @@ const RightSidebar = () => {
     fetchReportedContent();
     fetchProductsForReview();
   }, []);
+
+  useEffect(() => {
+    if (rerenderAds) {
+      console.log('rerenderAds => ', rerenderAds);
+      fetchPaidAds();
+    }
+  }, [rerenderAds]);
 
   const fetchNewAds = async () => {
     await axios
@@ -61,7 +68,7 @@ const RightSidebar = () => {
 
   useEffect(() => {
     fetchNumOfUpcomingEvents();
-    fetchApprovedAds();
+    fetchPaidAds();
   }, []);
 
   useEffect(() => {
@@ -84,10 +91,11 @@ const RightSidebar = () => {
       });
   };
 
-  const fetchApprovedAds = async () => {
+  const fetchPaidAds = async () => {
     await axios
-      .get(`${process.env.REACT_APP_API}/fetch-approved-ads`)
+      .get(`${process.env.REACT_APP_API}/fetch-paid-ads`)
       .then((res) => {
+        console.log(res.data);
         setAds(res.data);
       });
   };

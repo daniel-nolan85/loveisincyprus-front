@@ -181,12 +181,12 @@ const LeftSidebar = () => {
             Data
           </Link>
         )}
-        {role === 'main-admin' && (
+        {/* {role === 'main-admin' && (
           <Link to='/admin/analytics'>
             <FontAwesomeIcon icon={faChartLine} className='fa' />
             Analytics
           </Link>
-        )}
+        )} */}
         <Link
           to={{
             pathname: 'https://statcounter.com/p12198487/summary/',

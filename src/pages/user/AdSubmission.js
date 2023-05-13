@@ -13,7 +13,6 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import AdPreview from '../../components/modals/AdPreview';
 import AdContact from '../../components/forms/AdContact';
-import AdPayment from '../../components/forms/AdPayment';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import HyperlinkInfo from '../../components/modals/HyperlinkInfo';
@@ -33,8 +32,6 @@ const AdSubmission = () => {
   const [previewModalIsOpen, setPreviewModalIsOpen] = useState(false);
   const [contactInfo, setContactInfo] = useState({});
   const [contactInfoSaved, setContactInfoSaved] = useState(false);
-  const [accountInfo, setAccountInfo] = useState({});
-  const [accountInfoSaved, setAccountInfoSaved] = useState(false);
   const [demographic, setDemographic] = useState([]);
   const [selectedGender, setSelectedGender] = useState([]);
   const [showGender, setShowGender] = useState(false);
@@ -78,7 +75,6 @@ const AdSubmission = () => {
         duration,
         demographic,
         contactInfo,
-        accountInfo,
       })
       .then((res) => {
         setLoading(false);
@@ -94,7 +90,6 @@ const AdSubmission = () => {
           setImage({});
           setDuration('one day');
           setContactInfo({});
-          setAccountInfo({});
           setDemographic([]);
           setSelectedGender([]);
           setSelectedAge([]);
@@ -129,12 +124,23 @@ const AdSubmission = () => {
       });
   };
 
+  const handleHyperlink = (e) => {
+    let value = e.target.value.trim();
+    value = value.replace(/^http:\/\//i, '');
+
+    if (value && !value.startsWith('https://')) {
+      value = `https://${value}`;
+    }
+    value = value.replace(/^https?:\/\/(https?:\/\/)/, 'https://');
+    setHyperlink(value);
+  };
+
   return (
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
         <Mobile />
-        <h1 className='center'>Advertisement submission</h1>
+        <h1 className='center'>Advertisement Submission</h1>
         <br />
         <div className='ad-section'>
           <div className='ad-header'>
@@ -177,7 +183,7 @@ const AdSubmission = () => {
             className='input-field'
             type='text'
             placeholder='Add an external link to your site if you have one'
-            onChange={(e) => setHyperlink(e.target.value)}
+            onChange={handleHyperlink}
             value={hyperlink}
           />
         </div>
@@ -367,28 +373,6 @@ const AdSubmission = () => {
             loading={loading}
           />
         </div>
-        <div className='ad-section'>
-          <div className='ad-header'>
-            <span className='number'>6</span>
-            <h2>Finally, please enter your payment details.</h2>
-          </div>
-          <p>
-            You will not be charged until your submission has been approved.
-          </p>
-          <AdPayment
-            accountInfoSaved={accountInfoSaved}
-            setAccountInfoSaved={setAccountInfoSaved}
-            setAccountInfo={setAccountInfo}
-            loading={loading}
-          />
-          <AdPreview
-            content={content}
-            image={image}
-            previewModalIsOpen={previewModalIsOpen}
-            setPreviewModalIsOpen={setPreviewModalIsOpen}
-            hyperlink={hyperlink}
-          />
-        </div>
         <button
           onClick={adSubmit}
           type='submit'
@@ -396,7 +380,6 @@ const AdSubmission = () => {
           disabled={
             !content ||
             Object.keys(contactInfo).length === 0 ||
-            Object.keys(accountInfo).length === 0 ||
             uploading ||
             loading
           }
@@ -408,6 +391,13 @@ const AdSubmission = () => {
           )}
           Submit your ad
         </button>
+        <AdPreview
+          content={content}
+          image={image}
+          previewModalIsOpen={previewModalIsOpen}
+          setPreviewModalIsOpen={setPreviewModalIsOpen}
+          hyperlink={hyperlink}
+        />
         <HyperlinkInfo
           hyperlinkInfoModalIsOpen={hyperlinkInfoModalIsOpen}
           setHyperlinkInfoModalIsOpen={setHyperlinkInfoModalIsOpen}

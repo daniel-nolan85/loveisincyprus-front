@@ -1,47 +1,32 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import LeftSidebar from '../../components/admin/LeftSidebar';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faTrashCan,
   faThumbsDown,
   faThumbsUp,
   faUser,
-  faCreditCard,
 } from '@fortawesome/free-solid-svg-icons';
 import moment from 'moment';
 import AdDisapprove from '../../components/modals/AdDisapprove';
 import AdApprove from '../../components/modals/AdApprove';
 import AdContactInfo from '../../components/modals/AdContactInfo';
-import AdPayment from '../../components/modals/AdPayment';
-import { createAdPayment } from '../../functions/cardinity';
 import AdRemove from '../../components/modals/AdRemove';
 import { Link } from 'react-router-dom';
-import CardinityPending from '../../components/modals/CardinityPending';
 
 const AdSubmissions = ({ history }) => {
   const [ads, setAds] = useState([]);
   const [contactInfoModalIsOpen, setContactInfoModalIsOpen] = useState(false);
-  const [paymentModalIsOpen, setPaymentModalIsOpen] = useState(false);
   const [adRemoveModalIsOpen, setAdRemoveModalIsOpen] = useState(false);
   const [adDisapproveModalIsOpen, setAdDisapproveModalIsOpen] = useState(false);
   const [adApproveModalIsOpen, setAdApproveModalIsOpen] = useState(false);
   const [currentAd, setCurrentAd] = useState({});
   const [reason, setReason] = useState('');
   const [loading, setLoading] = useState(false);
-  const [processing, setProcessing] = useState('');
-  const [succeeded, setSucceeded] = useState(false);
-  const [payable, setPayable] = useState('');
-  const [userAgent, setUserAgent] = useState('');
-  const [cardinityPendingModalIsOpen, setCardinityPendingModalIsOpen] =
-    useState(false);
-  const [pendingFormData, setPendingFormData] = useState('');
 
-  const { token, role } = useSelector((state) => state.user);
-
-  const isFirstRun = useRef(true);
+  const { role } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (role !== 'main-admin') {
@@ -52,15 +37,6 @@ const AdSubmissions = ({ history }) => {
   useEffect(() => {
     fetchAds();
   }, []);
-
-  useEffect(() => {
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      return;
-    } else if (payable && userAgent) {
-      runPayment(currentAd);
-    }
-  }, [payable && userAgent]);
 
   const fetchAds = async () => {
     await axios
@@ -78,12 +54,6 @@ const AdSubmissions = ({ history }) => {
     setCurrentAd(ad);
   };
 
-  const handlePayment = (ad) => {
-    setSucceeded(false);
-    setPaymentModalIsOpen(true);
-    setCurrentAd(ad);
-  };
-
   const removeAd = (ad) => {
     setAdRemoveModalIsOpen(true);
     setCurrentAd(ad);
@@ -97,64 +67,6 @@ const AdSubmissions = ({ history }) => {
   const handleApprove = (ad) => {
     setAdApproveModalIsOpen(true);
     setCurrentAd(ad);
-  };
-
-  const preparePayment = (ad) => {
-    if (ad.duration === 'one day') {
-      setPayable('5.00');
-    }
-    if (ad.duration === 'one week') {
-      setPayable('20.00');
-    }
-    if (ad.duration === 'two weeks') {
-      setPayable('30.00');
-    }
-    if (ad.duration === 'one month') {
-      setPayable('50.00');
-    }
-    setUserAgent(window.navigator.userAgent);
-  };
-
-  const runPayment = async (ad) => {
-    setProcessing(true);
-    createAdPayment(ad.accountInfo, payable, userAgent, token, ad._id).then(
-      (res) => {
-        console.log(res);
-        if (res.data.errors) {
-          toast.error(res.data.errors[0].message, {
-            position: toast.POSITION.TOP_CENTER,
-          });
-          setProcessing(false);
-        }
-        if (res.data.status === 'approved') {
-          toast.success(`Payment successful.`, {
-            position: toast.POSITION.TOP_CENTER,
-          });
-          setProcessing(false);
-          setSucceeded(true);
-          setPayable('');
-          setUserAgent('');
-          fetchAds();
-        } else if (res.data.status === 'pending') {
-          setCardinityPendingModalIsOpen(true);
-          setPendingFormData(res.data);
-          toast.warning(`Payment pending.`, {
-            position: toast.POSITION.TOP_CENTER,
-          });
-          return;
-        } else if (res.data.status === 'declined') {
-          toast.error(`Payment declined.`, {
-            position: toast.POSITION.TOP_CENTER,
-          });
-          setProcessing(false);
-        } else if (res.data.status === 401) {
-          toast.error(res.data.detail, {
-            position: toast.POSITION.TOP_CENTER,
-          });
-          setProcessing(false);
-        }
-      }
-    );
   };
 
   return (
@@ -184,13 +96,6 @@ const AdSubmissions = ({ history }) => {
                       className='fa user'
                       onClick={() => showContactInfo(ad)}
                     />
-                    <FontAwesomeIcon
-                      icon={faCreditCard}
-                      className='fa payment'
-                      onClick={() => handlePayment(ad)}
-                    />
-                  </div>
-                  <div className='post-icons'>
                     <FontAwesomeIcon
                       icon={faTrashCan}
                       className='fa trash'
@@ -256,14 +161,6 @@ const AdSubmissions = ({ history }) => {
           setContactInfoModalIsOpen={setContactInfoModalIsOpen}
           currentAd={currentAd}
         />
-        <AdPayment
-          paymentModalIsOpen={paymentModalIsOpen}
-          setPaymentModalIsOpen={setPaymentModalIsOpen}
-          currentAd={currentAd}
-          preparePayment={preparePayment}
-          processing={processing}
-          succeeded={succeeded}
-        />
         <AdRemove
           adRemoveModalIsOpen={adRemoveModalIsOpen}
           setAdRemoveModalIsOpen={setAdRemoveModalIsOpen}
@@ -289,10 +186,6 @@ const AdSubmissions = ({ history }) => {
           fetchAds={fetchAds}
           loading={loading}
           setLoading={setLoading}
-        />
-        <CardinityPending
-          cardinityPendingModalIsOpen={cardinityPendingModalIsOpen}
-          pendingFormData={pendingFormData}
         />
       </div>
     </div>

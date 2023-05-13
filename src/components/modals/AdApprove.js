@@ -71,7 +71,7 @@ const AdApprove = ({
     },
   };
 
-  const { content, image, contactInfo, status } = currentAd;
+  const { content, image, contactInfo } = currentAd;
 
   return (
     <Modal
@@ -91,14 +91,8 @@ const AdApprove = ({
           </div>
         )}
         <br />
-        <button
-          className='submit-btn'
-          onClick={() => approveAd(currentAd)}
-          disabled={status !== 'paid'}
-        >
-          {status !== 'paid' ? (
-            'Payment pending'
-          ) : loading ? (
+        <button className='submit-btn' onClick={() => approveAd(currentAd)}>
+          {loading ? (
             <FontAwesomeIcon icon={faSpinner} className='fa' spin />
           ) : (
             'Yes, I approve'
