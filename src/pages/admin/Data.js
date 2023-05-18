@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import LeftSidebar from '../../components/admin/LeftSidebar';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowsRotate,
   faCheck,
+  faFileExcel,
   faMagnifyingGlass,
   faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
@@ -26,6 +27,7 @@ import GCSentValueData from '../../components/modals/GCSentValueData';
 import GCReceivedData from '../../components/modals/GCReceivedData';
 import GCReceivedValueData from '../../components/modals/GCReceivedValueData';
 import { Link } from 'react-router-dom';
+import * as XLSX from 'xlsx';
 
 const Data = ({ history }) => {
   const [byPage, setByPage] = useState(50);
@@ -38,6 +40,7 @@ const Data = ({ history }) => {
   const [loading500, setLoading500] = useState(false);
   const [loadingAll, setLoadingAll] = useState(false);
   const [loadingReverse, setLoadingReverse] = useState(false);
+  const [exporting, setExporting] = useState(false);
   const [loadingUsername, setLoadingUsername] = useState(false);
   const [loadingName, setLoadingName] = useState(false);
   const [loadingEmail, setLoadingEmail] = useState(false);
@@ -116,8 +119,146 @@ const Data = ({ history }) => {
   const [gCSentValueData, setGCSentValueData] = useState({});
   const [gCReceivedData, setGCReceivedData] = useState({});
   const [gCReceivedValueData, setGCReceivedValueData] = useState({});
+  const [excelData, setExcelData] = useState([]);
+
+  console.log('users => ', users);
+  console.log('excelData => ', excelData);
 
   const { token, role } = useSelector((state) => state.user);
+
+  const isFirstRun = useRef(true);
+
+  const handleExport = () => {
+    setExporting(true);
+    const dataToExport = [
+      [
+        'Username',
+        'Name',
+        'Email',
+        'Gender',
+        'Age',
+        'Registered',
+        'Last Login',
+        'IP Address(es)',
+        'Mobile',
+        'Paid or Unpaid?',
+        '1 Month Member',
+        '6 Month Member',
+        '12 Month Member',
+        'Verified?',
+        '# Profile Images',
+        '% Profile Completion',
+        '# Points',
+        'Featured?',
+        '# Following',
+        '# Followers',
+        '# Visitors',
+        '# Reports',
+        '# Reported',
+        '# Messages Sent',
+        '# Messages Received',
+        '# Items Ordered',
+        '€ Items Ordered',
+        '# Gift Cards Sent',
+        '€ Gift Cards Sent',
+        '# Gift Cards Received',
+        '€ Gift Cards Received',
+        '# T-shirts',
+        '# Sprays',
+        '# Droppers',
+        '# Perfumes',
+      ],
+      ...users.map((u) => [
+        u.username,
+        u.name,
+        u.email,
+        u.gender === 'male' ? 'Male' : 'Female',
+        u.age,
+        moment(u.createdAt).format('MMMM Do YYYY'),
+        u.lastLogin
+          ? moment(u.lastLogin).format('MMMM Do YYYY')
+          : moment(u.createdAt).format('MMMM Do YYYY'),
+        u.ipAddresses && u.ipAddresses.length > 0
+          ? u.ipAddresses.map((ip) => ip).join(', ')
+          : '',
+        u.mobile,
+        u.membership.paid ? 'Paid' : 'Unpaid',
+        u.membership.cost === '10.00' ? 'Yes' : '',
+        u.membership.cost === '50.00' ? 'Yes' : '',
+        u.membership.cost === '90.00' ? 'Yes' : '',
+        u.verified === 'true' ? 'True' : 'False',
+        u.profilePhotos.length > 0 ? u.profilePhotos.length : 0,
+        u.profilePercentage && `${u.profilePercentage} %`,
+        u.pointsTotal,
+        u.featuredMember ? 'True' : 'False',
+        u.following.length > 0 ? u.following.length : 0,
+        u.followers.length > 0 ? u.followers.length : 0,
+        u.visitors.length > 0 ? u.visitors.length : 0,
+        u.reports.post.length +
+          u.reports.comment.length +
+          u.reports.message.length >
+        0
+          ? u.reports.post.length +
+            u.reports.comment.length +
+            u.reports.message.length
+          : 0,
+        u.reported.post.length +
+          u.reported.comment.length +
+          u.reported.message.length >
+        0
+          ? u.reported.post.length +
+            u.reported.comment.length +
+            u.reported.message.length
+          : 0,
+        u.messagesSent.length > 0 ? u.messagesSent.length : 0,
+        u.messagesReceived.length > 0 ? u.messagesReceived.length : 0,
+        u.itemsOrdered || 0,
+        (u.itemsOrderedValue && `€${u.itemsOrderedValue.toFixed(2)}`) || 0,
+        u.giftCardsSent || 0,
+        (u.giftCardsSentValue && `€${u.giftCardsSentValue.toFixed(2)}`) || 0,
+        u.giftCardsReceived || 0,
+        (u.giftCardsReceivedValue &&
+          `€${u.giftCardsReceivedValue.toFixed(2)}`) ||
+          0,
+        u.tShirts || 0,
+        u.sprays || 0,
+        u.droppers || 0,
+        u.perfumes || 0,
+      ]),
+    ];
+    setExcelData(dataToExport);
+  };
+
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      if (excelData.length > 0) {
+        const worksheet = XLSX.utils.aoa_to_sheet(excelData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet 1');
+
+        const excelFile = XLSX.write(workbook, {
+          bookType: 'xlsx',
+          type: 'array',
+        });
+
+        const blob = new Blob([excelFile], {
+          type: 'application/octet-stream',
+        });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'user-data.xlsx';
+        link.click();
+
+        URL.revokeObjectURL(url);
+        setExporting(false);
+      }
+    }
+  }, [excelData]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -1453,6 +1594,19 @@ const Data = ({ history }) => {
                 onClick={reverse}
               />
             )}
+            {exporting ? (
+              <FontAwesomeIcon
+                icon={faSpinner}
+                className='fa reverse center'
+                spin
+              />
+            ) : (
+              <FontAwesomeIcon
+                icon={faFileExcel}
+                className='fa reverse center'
+                onClick={handleExport}
+              />
+            )}
             <div className='spreadsheet-wrapper'>
               <table>
                 <thead>
@@ -2126,63 +2280,95 @@ const Data = ({ history }) => {
                       ) : (
                         <td className='center-cell'>0</td>
                       )}
-                      <td
-                        className='center-cell link'
-                        onClick={() =>
-                          fetchItems(u._id, u.username, u.itemsOrdered)
-                        }
-                      >
-                        {u.itemsOrdered}
+                      {u.itemsOrdered ? (
+                        <td
+                          className='center-cell link'
+                          onClick={() =>
+                            fetchItems(u._id, u.username, u.itemsOrdered)
+                          }
+                        >
+                          {u.itemsOrdered}
+                        </td>
+                      ) : (
+                        <td className='center-cell'>0</td>
+                      )}
+                      {u.itemsOrderedValue ? (
+                        <td
+                          className='center-cell link'
+                          onClick={() =>
+                            fetchItemsValue(
+                              u._id,
+                              u.username,
+                              u.itemsOrderedValue
+                            )
+                          }
+                        >
+                          {u.itemsOrderedValue &&
+                            `€${u.itemsOrderedValue.toFixed(2)}`}
+                        </td>
+                      ) : (
+                        <td className='center-cell'>0</td>
+                      )}
+                      {u.giftCardsSent ? (
+                        <td
+                          className='center-cell link'
+                          onClick={() => fetchGiftCardsSent(u._id, u.username)}
+                        >
+                          {u.giftCardsSent}
+                        </td>
+                      ) : (
+                        <td className='center-cell'>0</td>
+                      )}
+                      {u.giftCardsSentValue ? (
+                        <td
+                          className='center-cell link'
+                          onClick={() =>
+                            fetchGiftCardsSentValue(u._id, u.username)
+                          }
+                        >
+                          {u.giftCardsSentValue &&
+                            `€${u.giftCardsSentValue.toFixed(2)}`}
+                        </td>
+                      ) : (
+                        <td className='center-cell'>0</td>
+                      )}
+                      {u.giftCardsReceived ? (
+                        <td
+                          className='center-cell link'
+                          onClick={() =>
+                            fetchGiftCardsReceived(u._id, u.username)
+                          }
+                        >
+                          {u.giftCardsReceived}
+                        </td>
+                      ) : (
+                        <td className='center-cell'>0</td>
+                      )}
+                      {u.giftCardsReceivedValue ? (
+                        <td
+                          className='center-cell link'
+                          onClick={() =>
+                            fetchGiftCardsReceivedValue(u._id, u.username)
+                          }
+                        >
+                          {u.giftCardsReceivedValue &&
+                            `€${u.giftCardsReceivedValue.toFixed(2)}`}
+                        </td>
+                      ) : (
+                        <td className='center-cell'>0</td>
+                      )}
+                      <td className='center-cell'>
+                        {u.tShirts ? u.tShirts : '0'}
                       </td>
-                      <td
-                        className='center-cell link'
-                        onClick={() =>
-                          fetchItemsValue(
-                            u._id,
-                            u.username,
-                            u.itemsOrderedValue
-                          )
-                        }
-                      >
-                        {u.itemsOrderedValue &&
-                          `€${u.itemsOrderedValue.toFixed(2)}`}
+                      <td className='center-cell'>
+                        {u.sprays ? u.sprays : '0'}
                       </td>
-                      <td
-                        className='center-cell link'
-                        onClick={() => fetchGiftCardsSent(u._id, u.username)}
-                      >
-                        {u.giftCardsSent}
+                      <td className='center-cell'>
+                        {u.droppers ? u.droppers : '0'}
                       </td>
-                      <td
-                        className='center-cell link'
-                        onClick={() =>
-                          fetchGiftCardsSentValue(u._id, u.username)
-                        }
-                      >
-                        {u.giftCardsSentValue &&
-                          `€${u.giftCardsSentValue.toFixed(2)}`}
+                      <td className='center-cell'>
+                        {u.perfumes ? u.perfumes : '0'}
                       </td>
-                      <td
-                        className='center-cell link'
-                        onClick={() =>
-                          fetchGiftCardsReceived(u._id, u.username)
-                        }
-                      >
-                        {u.giftCardsReceived}
-                      </td>
-                      <td
-                        className='center-cell link'
-                        onClick={() =>
-                          fetchGiftCardsReceivedValue(u._id, u.username)
-                        }
-                      >
-                        {u.giftCardsReceivedValue &&
-                          `€${u.giftCardsReceivedValue.toFixed(2)}`}
-                      </td>
-                      <td className='center-cell'>{u.tShirts}</td>
-                      <td className='center-cell'>{u.sprays}</td>
-                      <td className='center-cell'>{u.droppers}</td>
-                      <td className='center-cell'>{u.perfumes}</td>
                     </tr>
                   ))}
                 </tbody>

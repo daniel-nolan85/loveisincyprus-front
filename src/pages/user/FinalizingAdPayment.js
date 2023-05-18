@@ -9,11 +9,14 @@ import { useHistory } from 'react-router-dom';
 
 const AdFinalize = () => {
   const [status, setStatus] = useState('');
-  const [response, setResponse] = useState({});
+  const [approvedData, setApprovedData] = useState({});
+  const [demographic, setDemographic] = useState([]);
   const [ok, setOk] = useState(false);
 
   console.log('status => ', status);
-  console.log('response => ', response);
+  console.log('approvedData => ', approvedData);
+  console.log('demographic => ', demographic);
+  console.log('ok => ', ok);
 
   const isFirstRun = useRef(true);
 
@@ -23,31 +26,35 @@ const AdFinalize = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const getStatus = searchParams.get('status');
     const getResponse = searchParams.get('response');
+    const getDemographic = searchParams.get('demographic');
+
     setStatus(getStatus);
-    setResponse(JSON.parse(decodeURIComponent(getResponse)));
+    setApprovedData(JSON.parse(decodeURIComponent(getResponse)));
+    setDemographic(JSON.parse(decodeURIComponent(getDemographic)));
   }, []);
 
   useEffect(() => {
     if (status && status === 'approved') {
       setOk(true);
     }
-  }, [status, response]);
+  }, [status, approvedData]);
 
-  // useEffect(() => {
-  //   if (isFirstRun.current) {
-  //     isFirstRun.current = false;
-  //     return;
-  //   } else {
-  //     if (ok) {
-  //       toast.success(`Payment successful.`, {
-  //         position: toast.POSITION.TOP_CENTER,
-  //       });
-  //       history.push(
-  //         `/ad-finalize?ad=${encodeURIComponent(JSON.stringify(ad))}`
-  //       );
-  //     }
-  //   }
-  // }, [ok]);
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
+      if (ok) {
+        toast.success(`Payment successful.`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        history.push({
+          pathname: '/ad-successful',
+          state: { approvedData, demographic },
+        });
+      }
+    }
+  }, [ok]);
 
   return (
     <div className='container'>

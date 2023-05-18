@@ -11,7 +11,7 @@ import { createAdPayment } from '../../functions/cardinity';
 import CardinityPending from '../../components/modals/CardinityPending';
 import axios from 'axios';
 
-const AdFinalize = () => {
+const AdFinalize = ({ history }) => {
   const [ad, setAd] = useState({});
   const [accountInfo, setAccountInfo] = useState({});
   const [loading, setLoading] = useState(true);
@@ -23,9 +23,14 @@ const AdFinalize = () => {
   const [pendingFormData, setPendingFormData] = useState('');
   const [rerenderAds, setRerenderAds] = useState(false);
   const [status, setStatus] = useState('');
+  const [succeeded, setSucceeded] = useState(false);
+  const [approvedData, setApprovedData] = useState({});
+  const [demographic, setDemographic] = useState([]);
 
   console.log('ad => ', ad);
   console.log('status => ', status);
+  console.log('accountInfo => ', accountInfo);
+  console.log('demographic => ', demographic);
 
   const isFirstRun = useRef(true);
 
@@ -33,6 +38,7 @@ const AdFinalize = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const getAd = searchParams.get('ad');
     setAd(JSON.parse(decodeURIComponent(getAd)));
+    setDemographic(JSON.parse(decodeURIComponent(getAd)).demographic);
   }, []);
 
   useEffect(() => {
@@ -51,6 +57,14 @@ const AdFinalize = () => {
       if (accountInfo) adSubmit();
     }
   }, [accountInfo]);
+
+  useEffect(() => {
+    if (succeeded)
+      history.push({
+        pathname: '/ad-successful',
+        state: { approvedData, demographic },
+      });
+  }, [approvedData]);
 
   const preparePayment = () => {
     if (ad.duration === 'one day') {
@@ -92,41 +106,45 @@ const AdFinalize = () => {
   const adSubmit = async () => {
     setProcessing(true);
     setRerenderAds(false);
-    createAdPayment(accountInfo, payable, userAgent, ad._id).then((res) => {
-      console.log(res);
-      if (res.data.errors) {
-        toast.error(res.data.errors[0].message, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setProcessing(false);
+    createAdPayment(accountInfo, payable, userAgent, ad._id, demographic).then(
+      (res) => {
+        console.log(res);
+        if (res.data.errors) {
+          toast.error(res.data.errors[0].message, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+        }
+        if (res.data.status === 'approved') {
+          toast.success(`Payment successful!`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+          setSucceeded(true);
+          setUserAgent('');
+          setRerenderAds(true);
+          setApprovedData(res.data);
+          setPayable('');
+        } else if (res.data.status === 'pending') {
+          setCardinityPendingModalIsOpen(true);
+          setPendingFormData(res.data);
+          toast.warning(`Payment pending.`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          return;
+        } else if (res.data.status === 'declined') {
+          toast.error(`Payment declined.`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+        } else if (res.data.status === 401) {
+          toast.error(res.data.detail, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setProcessing(false);
+        }
       }
-      if (res.data.status === 'approved') {
-        toast.success(`Payment successful.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setProcessing(false);
-        setPayable('');
-        setUserAgent('');
-        setRerenderAds(true);
-      } else if (res.data.status === 'pending') {
-        setCardinityPendingModalIsOpen(true);
-        setPendingFormData(res.data);
-        toast.warning(`Payment pending.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        return;
-      } else if (res.data.status === 'declined') {
-        toast.error(`Payment declined.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setProcessing(false);
-      } else if (res.data.status === 401) {
-        toast.error(res.data.detail, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setProcessing(false);
-      }
-    });
+    );
   };
 
   const { hyperlink, image, content } = ad;
@@ -141,9 +159,31 @@ const AdFinalize = () => {
             <FontAwesomeIcon icon={faSpinner} className='fa' spin />
           </div>
         ) : status === 'deleted' ? (
-          <h1>Ad deleted</h1>
+          <>
+            <h1 className='center'>This ad has since been deleted</h1>
+            <br />
+            <p className='center'>
+              If you have another product or service you would like to submit a
+              new advertisement for please click{' '}
+              <Link to='/ad-submission' className='link'>
+                here
+              </Link>
+              .
+            </p>
+          </>
         ) : status === 'paid' ? (
-          <h1>Ad paid</h1>
+          <>
+            <h1 className='center'>This ad has already been paid for</h1>
+            <br />
+            <p className='center'>
+              If you have another product or service you would like to submit a
+              new advertisement for please click{' '}
+              <Link to='/ad-submission' className='link'>
+                here
+              </Link>
+              .
+            </p>
+          </>
         ) : (
           <>
             <h1 className='center'>Advertisement Submission</h1>

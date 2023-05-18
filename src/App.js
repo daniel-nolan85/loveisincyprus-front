@@ -89,6 +89,7 @@ import FinalizingMembershipPayment from './pages/user/FinalizingMembershipPaymen
 import FinalizingAdPayment from './pages/user/FinalizingAdPayment';
 import Analytics from './pages/admin/Analytics';
 import AdFinalize from './pages/user/AdFinalize';
+import AdSuccess from './pages/user/AdSuccess';
 
 let socket, selectedChatCompare;
 
@@ -538,6 +539,7 @@ const App = () => {
               path='/finalizing-ad-payment'
               component={FinalizingAdPayment}
             />
+            <Route exact path='/ad-successful' component={AdSuccess} />
             <UserRoute exact path='/user/dashboard' component={UserDashboard} />
             <UserRoute exact path='/user/profile/:userId' component={Profile} />
             <UserRoute exact path='/liked-users' component={Following} />

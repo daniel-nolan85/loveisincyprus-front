@@ -67,12 +67,12 @@ const BecomePaid = ({ history }) => {
         }
         if (res.data.response && res.data.response.status === 'approved') {
           toast.success(
-            `Payment successful. Your paid membership will last for ${
+            `Payment successful! Your paid membership will last for ${
               payable === '10.00'
-                ? 'one month'
+                ? 'one month.'
                 : payable === '50.00'
-                ? 'six months'
-                : payable === '90.00' && 'one year'
+                ? 'six months.'
+                : payable === '90.00' && 'one year.'
             }`,
             {
               position: toast.POSITION.TOP_CENTER,

@@ -13,12 +13,13 @@ export const createPayment = (
     { headers: { authtoken } }
   );
 
-export const createAdPayment = (values, payable, userAgent, _id) =>
+export const createAdPayment = (values, payable, userAgent, _id, demographic) =>
   axios.post(`${process.env.REACT_APP_API}/create-ad-payment`, {
     values,
     payable,
     userAgent,
     _id,
+    demographic,
   });
 
 export const createGCPayment = (values, amount, userAgent, authtoken) =>

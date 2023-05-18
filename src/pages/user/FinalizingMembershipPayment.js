@@ -55,12 +55,12 @@ const FinalizingMembershipPayment = () => {
     } else {
       if (ok) {
         toast.success(
-          `Payment successful. Your paid membership will last for ${
+          `Payment successful! Your paid membership will last for ${
             amount === '10.00'
-              ? 'one month'
+              ? 'one month.'
               : amount === '50.00'
-              ? 'six months'
-              : amount === '90.00' && 'one year'
+              ? 'six months.'
+              : amount === '90.00' && 'one year.'
           }`,
           {
             position: toast.POSITION.TOP_CENTER,
