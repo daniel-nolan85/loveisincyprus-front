@@ -38,10 +38,10 @@ export const isSameUser = (messages, m, i) => {
   return i > 0 && messages[i - 1].sender._id === m.sender._id;
 };
 
-export const sendMassMail = async (massMail, subject, authtoken) =>
+export const sendMassMail = async (massMail, subject, authtoken, logo) =>
   await axios.post(
     `${process.env.REACT_APP_API}/mass-mail`,
-    { massMail, subject },
+    { massMail, subject, logo },
     {
       headers: {
         authtoken,

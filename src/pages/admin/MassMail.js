@@ -137,7 +137,7 @@ const MassMail = ({ history }) => {
     e.preventDefault();
     if (content) {
       setLoading(true);
-      sendMassMail(values, subject, token)
+      sendMassMail(values, subject, token, Logo)
         .then((res) => {
           setLoading(false);
           setValues({
