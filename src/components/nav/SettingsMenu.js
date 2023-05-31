@@ -7,6 +7,7 @@ import {
   faEnvelope,
   faMoon,
   faPlay,
+  faReply,
   faSun,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
@@ -117,6 +118,21 @@ const SettingsMenu = ({
             <Link to='/become-paid-member'>
               <FontAwesomeIcon icon={faPlay} className='fa' />
               Become Paid Member
+            </Link>
+          </div>
+        )}
+        {Math.abs(
+          (new Date(membership.expiry) - new Date()) / (1000 * 60 * 60 * 24)
+        ) <= 7 && (
+          <div
+            className='settings-links'
+            onClick={() => {
+              setSettingsMenu(false);
+            }}
+          >
+            <Link to='/become-paid-member'>
+              <FontAwesomeIcon icon={faReply} className='fa' />
+              Renew Subscription
             </Link>
           </div>
         )}

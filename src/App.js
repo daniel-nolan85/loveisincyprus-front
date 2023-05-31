@@ -244,6 +244,8 @@ const App = () => {
                 sprays: res.data.sprays,
                 droppers: res.data.droppers,
                 perfumes: res.data.perfumes,
+                visits: res.data.visits,
+                productsViewed: res.data.productsViewed,
               },
             });
           })

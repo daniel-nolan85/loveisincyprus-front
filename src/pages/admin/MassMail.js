@@ -34,6 +34,8 @@ const initialState = {
 const MassMail = ({ history }) => {
   const [optIns, setOptIns] = useState([]);
   const [massMessages, setMassMessages] = useState([]);
+  const [mailsAvailable, setMailsAvailable] = useState(0);
+  const [nextAutomation, setNextAutomation] = useState('');
   const [values, setValues] = useState(initialState);
   const [loadingOpen, setLoadingOpen] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -63,6 +65,7 @@ const MassMail = ({ history }) => {
     if (token) {
       fetchOptIns();
       fetchMassMessages();
+      fetchMailchimpData();
     }
   }, [token]);
 
@@ -85,6 +88,27 @@ const MassMail = ({ history }) => {
       .catch((err) => {
         console.log(err);
         setLoadingOpen(false);
+      });
+  };
+
+  const fetchMailchimpData = async () => {
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/fetch-mailchimp-data`,
+        { _id },
+        {
+          headers: {
+            authtoken: token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        setMailsAvailable(5 - res.data.listsNum);
+        setNextAutomation(res.data.nextAutomation);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   };
 
@@ -240,6 +264,18 @@ const MassMail = ({ history }) => {
     <div className='container search-container'>
       <LeftSidebar />
       <div className='admin-main-content'>
+        <h1 className='center'>
+          Mass mails available:{' '}
+          <span style={{ color: '#ef5b85', fontWeight: 'bold' }}>
+            {mailsAvailable}
+          </span>
+        </h1>
+        <h1 className='center'>
+          Next automation:{' '}
+          <span style={{ color: '#ef5b85', fontWeight: 'bold' }}>
+            {nextAutomation}
+          </span>
+        </h1>
         {messageForm()}
         <div className='admin-cards'>
           {selected &&

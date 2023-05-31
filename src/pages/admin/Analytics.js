@@ -23,6 +23,9 @@ const Analytics = ({ history }) => {
   const [showRegistrationGraphs, setShowRegistrationGraphs] = useState(false);
   const [registrationNumGraph, setRegistrationNumGraph] = useState({});
   const [registrationPerGraph, setRegistrationPerGraph] = useState({});
+  const [showVisitationGraphs, setShowVisitationGraphs] = useState(false);
+  const [visitationNumGraph, setVisitationNumGraph] = useState({});
+  const [visitationPerGraph, setVisitationPerGraph] = useState({});
   const [showGenderGraphs, setShowGenderGraphs] = useState(false);
   const [genderNumGraph, setGenderNumGraph] = useState({});
   const [genderPerGraph, setGenderPerGraph] = useState({});
@@ -32,6 +35,21 @@ const Analytics = ({ history }) => {
   const [showBuildGraphs, setShowBuildGraphs] = useState(false);
   const [buildNumGraph, setBuildNumGraph] = useState({});
   const [buildPerGraph, setBuildPerGraph] = useState({});
+  const [showHairColourGraphs, setShowHairColourGraphs] = useState(false);
+  const [hairColourNumGraph, setHairColourNumGraph] = useState({});
+  const [hairColourPerGraph, setHairColourPerGraph] = useState({});
+  const [showHairStyleGraphs, setShowHairStyleGraphs] = useState(false);
+  const [hairStyleNumGraph, setHairStyleNumGraph] = useState({});
+  const [hairStylePerGraph, setHairStylePerGraph] = useState({});
+  const [showHairLengthGraphs, setShowHairLengthGraphs] = useState(false);
+  const [hairLengthNumGraph, setHairLengthNumGraph] = useState({});
+  const [hairLengthPerGraph, setHairLengthPerGraph] = useState({});
+  const [showEyeColourGraphs, setShowEyeColourGraphs] = useState(false);
+  const [eyeColourNumGraph, setEyeColourNumGraph] = useState({});
+  const [eyeColourPerGraph, setEyeColourPerGraph] = useState({});
+  const [showFeetTypeGraphs, setShowFeetTypeGraphs] = useState(false);
+  const [feetTypeNumGraph, setFeetTypeNumGraph] = useState({});
+  const [feetTypePerGraph, setFeetTypePerGraph] = useState({});
   const [showMaritalGraphs, setShowMaritalGraphs] = useState(false);
   const [maritalNumGraph, setMaritalNumGraph] = useState({});
   const [maritalPerGraph, setMaritalPerGraph] = useState({});
@@ -47,6 +65,12 @@ const Analytics = ({ history }) => {
   const [showLivesWithGraphs, setShowLivesWithGraphs] = useState(false);
   const [livesWithNumGraph, setLivesWithNumGraph] = useState({});
   const [livesWithPerGraph, setLivesWithPerGraph] = useState({});
+  const [showNationalityGraphs, setShowNationalityGraphs] = useState(false);
+  const [nationalityNumGraph, setNationalityNumGraph] = useState({});
+  const [nationalityPerGraph, setNationalityPerGraph] = useState({});
+  const [showLanguageGraphs, setShowLanguageGraphs] = useState(false);
+  const [languageNumGraph, setLanguageNumGraph] = useState({});
+  const [languagePerGraph, setLanguagePerGraph] = useState({});
   const [showEthnicityGraphs, setShowEthnicityGraphs] = useState(false);
   const [ethnicityNumGraph, setEthnicityNumGraph] = useState({});
   const [ethnicityPerGraph, setEthnicityPerGraph] = useState({});
@@ -86,6 +110,13 @@ const Analytics = ({ history }) => {
   const [showTreatsGraphs, setShowTreatsGraphs] = useState(false);
   const [treatsNumGraph, setTreatsNumGraph] = useState({});
   const [treatsPerGraph, setTreatsPerGraph] = useState({});
+  const [showRelWantedGraphs, setShowRelWantedGraphs] = useState(false);
+  const [relWantedNumGraph, setRelWantedNumGraph] = useState({});
+  const [relWantedPerGraph, setRelWantedPerGraph] = useState({});
+  const [showProductsViewedGraphs, setShowProductsViewedGraphs] =
+    useState(false);
+  const [productsViewedNumGraph, setProductsViewedNumGraph] = useState({});
+  const [productsViewedPerGraph, setProductsViewedPerGraph] = useState({});
 
   let { _id, token, role } = useSelector((state) => state.user);
 
@@ -98,6 +129,10 @@ const Analytics = ({ history }) => {
   useEffect(() => {
     fetchUsersForAnalytics();
   }, []);
+
+  useEffect(() => {
+    if (allUsers && allUsers.length > 0) registrationGraphs();
+  }, [allUsers]);
 
   const fetchUsersForAnalytics = async () => {
     await axios
@@ -119,14 +154,22 @@ const Analytics = ({ history }) => {
 
   const registrationGraphs = () => {
     setOpenFilter(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -140,6 +183,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowRegistrationGraphs(true);
 
     const registrationCount = allUsers.reduce((count, user) => {
@@ -191,16 +236,24 @@ const Analytics = ({ history }) => {
     });
   };
 
-  const genderGraphs = () => {
+  const visitationGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -214,6 +267,97 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
+    setShowVisitationGraphs(true);
+
+    const visitationCount = allUsers.reduce((count, user) => {
+      const createdAt = new Date(user.createdAt);
+      const day = createdAt.toLocaleDateString();
+      count[day] = (count[day] || 0) + 1;
+      user.visits.forEach((visit) => {
+        const visitDate = new Date(visit);
+        const visitDay = visitDate.toLocaleDateString();
+        count[visitDay] = (count[visitDay] || 0) + 1;
+      });
+      return count;
+    }, {});
+
+    const visitationSorted = Object.entries(visitationCount)
+      .map(([date, count]) => ({ date, count }))
+      .sort((a, b) => new Date(a.date) - new Date(b.date));
+
+    console.log('visitationSorted => ', visitationSorted);
+
+    const labels = visitationSorted.map((item) => item.date);
+    const num = visitationSorted.map((item) => item.count);
+    const per = visitationSorted.map(
+      (item) => (item.count / allUsers.length) * 100
+    );
+
+    setVisitationNumGraph({
+      labels,
+      datasets: [
+        {
+          label: 'Number of users by date of each visit',
+          data: num,
+          backgroundColor: 'rgba(239, 91, 133, 0.2)',
+          borderColor: 'rgba(239, 91, 133, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(239, 91, 133, 0.4)',
+          hoverBorderColor: 'rgba(239, 91, 133, 1)',
+        },
+      ],
+    });
+    setVisitationPerGraph({
+      labels,
+      datasets: [
+        {
+          label: 'Percentage of users by date of each visit',
+          data: per,
+          backgroundColor: 'rgba(239, 91, 133, 0.2)',
+          borderColor: 'rgba(239, 91, 133, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(239, 91, 133, 0.4)',
+          hoverBorderColor: 'rgba(239, 91, 133, 1)',
+        },
+      ],
+    });
+  };
+
+  const genderGraphs = () => {
+    setOpenFilter(false);
+    setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
+    setShowHeightGraphs(false);
+    setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
+    setShowMaritalGraphs(false);
+    setShowLocationGraphs(false);
+    setShowAgeGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
+    setShowEthnicityGraphs(false);
+    setShowMusicGraphs(false);
+    setShowMoviesGraphs(false);
+    setShowReligionGraphs(false);
+    setShowOccupationGraphs(false);
+    setShowEducationGraphs(false);
+    setShowHobbiesGraphs(false);
+    setShowBooksGraphs(false);
+    setShowSportsGraphs(false);
+    setShowSmokesGraphs(false);
+    setShowDrinksGraphs(false);
+    setShowFoodGraphs(false);
+    setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowGenderGraphs(true);
 
     const gendersCount = allUsers.reduce(
@@ -288,13 +432,21 @@ const Analytics = ({ history }) => {
   const heightGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -308,6 +460,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowHeightGraphs(true);
 
     const allHeights = [
@@ -787,13 +941,21 @@ const Analytics = ({ history }) => {
   const buildGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -807,6 +969,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowBuildGraphs(true);
 
     const allBuilds = [
@@ -969,16 +1133,24 @@ const Analytics = ({ history }) => {
     });
   };
 
-  const maritalGraphs = () => {
+  const hairColourGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
+    setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -992,6 +1164,793 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
+    setShowHairColourGraphs(true);
+
+    const allHairColours = [
+      'black',
+      'blonde',
+      'brown',
+      'chestnut',
+      'dyed',
+      'golden',
+      'red',
+      'white',
+    ];
+    const hairColoursCount = {};
+    allHairColours.forEach((hairColour) => (hairColoursCount[hairColour] = 0));
+    hairColoursCount['na'] = 0;
+    allUsers.forEach((user) => {
+      const hairColour = user.hairColor || 'na';
+      if (allHairColours.includes(hairColour)) {
+        hairColoursCount[hairColour]++;
+      } else {
+        hairColoursCount['na']++;
+      }
+    });
+
+    const numOfBlack = hairColoursCount['black'];
+    const numOfBlonde = hairColoursCount['blonde'];
+    const numOfBrown = hairColoursCount['brown'];
+    const numOfChestnut = hairColoursCount['chestnut'];
+    const numOfDyed = hairColoursCount['dyed'];
+    const numOfGolden = hairColoursCount['golden'];
+    const numOfRed = hairColoursCount['red'];
+    const numOfWhite = hairColoursCount['white'];
+    setCurrentNumNa(hairColoursCount['na']);
+
+    const perOfBlack = (hairColoursCount['black'] / allUsers.length) * 100;
+    const perOfBlonde = (hairColoursCount['blonde'] / allUsers.length) * 100;
+    const perOfBrown = (hairColoursCount['brown'] / allUsers.length) * 100;
+    const perOfChestnut =
+      (hairColoursCount['chestnut'] / allUsers.length) * 100;
+    const perOfDyed = (hairColoursCount['dyed'] / allUsers.length) * 100;
+    const perOfGolden = (hairColoursCount['golden'] / allUsers.length) * 100;
+    const perOfRed = (hairColoursCount['red'] / allUsers.length) * 100;
+    const perOfWhite = (hairColoursCount['white'] / allUsers.length) * 100;
+    setCurrentPerNa((hairColoursCount['na'] / allUsers.length) * 100);
+
+    console.log('hairColoursCount => ', hairColoursCount);
+
+    setHairColourNumGraph({
+      labels: ['Number of users by hair colour'],
+      datasets: [
+        {
+          label: 'Black',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [numOfBlack],
+        },
+        {
+          label: 'Blonde',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [numOfBlonde],
+        },
+        {
+          label: 'Brown',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [numOfBrown],
+        },
+        {
+          label: 'Chestnut',
+          backgroundColor: 'rgba(0, 128, 0, 0.2)',
+          borderColor: 'rgba(0, 128, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(0, 128, 0, 0.4)',
+          hoverBorderColor: 'rgba(0, 128, 0, 1)',
+          data: [numOfChestnut],
+        },
+        {
+          label: 'Dyed',
+          backgroundColor: 'rgba(0, 0, 255, 0.2)',
+          borderColor: 'rgba(0, 0, 255, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(0, 0, 255, 0.4)',
+          hoverBorderColor: 'rgba(0, 0, 255, 1)',
+          data: [numOfDyed],
+        },
+        {
+          label: 'Golden',
+          backgroundColor: 'rgba(75, 0, 130, 0.2)',
+          borderColor: 'rgba(75, 0, 130, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(75, 0, 130, 0.4)',
+          hoverBorderColor: 'rgba(75, 0, 130, 1)',
+          data: [numOfGolden],
+        },
+        {
+          label: 'Red',
+          backgroundColor: 'rgba(238, 130, 238, 0.2)',
+          borderColor: 'rgba(238, 130, 238, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(238, 130, 238, 0.4)',
+          hoverBorderColor: 'rgba(238, 130, 238, 1)',
+          data: [numOfRed],
+        },
+        {
+          label: 'White',
+          backgroundColor: 'rgba(128, 0, 0, 0.2)',
+          borderColor: 'rgba(128, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(128, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(128, 0, 0, 1)',
+          data: [numOfWhite],
+        },
+      ],
+    });
+
+    setHairColourPerGraph({
+      labels: ['Percentage of users by hair colour'],
+      datasets: [
+        {
+          label: 'Black',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [perOfBlack],
+        },
+        {
+          label: 'Blonde',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [perOfBlonde],
+        },
+        {
+          label: 'Brown',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [perOfBrown],
+        },
+        {
+          label: 'Chestnut',
+          backgroundColor: 'rgba(0, 128, 0, 0.2)',
+          borderColor: 'rgba(0, 128, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(0, 128, 0, 0.4)',
+          hoverBorderColor: 'rgba(0, 128, 0, 1)',
+          data: [perOfChestnut],
+        },
+        {
+          label: 'Dyed',
+          backgroundColor: 'rgba(0, 0, 255, 0.2)',
+          borderColor: 'rgba(0, 0, 255, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(0, 0, 255, 0.4)',
+          hoverBorderColor: 'rgba(0, 0, 255, 1)',
+          data: [perOfDyed],
+        },
+        {
+          label: 'Golden',
+          backgroundColor: 'rgba(75, 0, 130, 0.2)',
+          borderColor: 'rgba(75, 0, 130, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(75, 0, 130, 0.4)',
+          hoverBorderColor: 'rgba(75, 0, 130, 1)',
+          data: [perOfGolden],
+        },
+        {
+          label: 'Red',
+          backgroundColor: 'rgba(238, 130, 238, 0.2)',
+          borderColor: 'rgba(238, 130, 238, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(238, 130, 238, 0.4)',
+          hoverBorderColor: 'rgba(238, 130, 238, 1)',
+          data: [perOfRed],
+        },
+        {
+          label: 'White',
+          backgroundColor: 'rgba(128, 0, 0, 0.2)',
+          borderColor: 'rgba(128, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(128, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(128, 0, 0, 1)',
+          data: [perOfWhite],
+        },
+      ],
+    });
+  };
+
+  const hairStyleGraphs = () => {
+    setOpenFilter(false);
+    setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
+    setShowGenderGraphs(false);
+    setShowHeightGraphs(false);
+    setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
+    setShowMaritalGraphs(false);
+    setShowLocationGraphs(false);
+    setShowAgeGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
+    setShowEthnicityGraphs(false);
+    setShowMusicGraphs(false);
+    setShowMoviesGraphs(false);
+    setShowReligionGraphs(false);
+    setShowOccupationGraphs(false);
+    setShowEducationGraphs(false);
+    setShowHobbiesGraphs(false);
+    setShowBooksGraphs(false);
+    setShowSportsGraphs(false);
+    setShowSmokesGraphs(false);
+    setShowDrinksGraphs(false);
+    setShowFoodGraphs(false);
+    setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
+    setShowHairStyleGraphs(true);
+
+    const allHairStyles = ['curvy', 'straight', 'wavy'];
+    const hairStylesCount = {};
+    allHairStyles.forEach((hairStyle) => (hairStylesCount[hairStyle] = 0));
+    hairStylesCount['na'] = 0;
+    allUsers.forEach((user) => {
+      const hairStyle = user.hairStyle || 'na';
+      if (allHairStyles.includes(hairStyle)) {
+        hairStylesCount[hairStyle]++;
+      } else {
+        hairStylesCount['na']++;
+      }
+    });
+
+    const numOfCurvy = hairStylesCount['curvy'];
+    const numOfStraight = hairStylesCount['straight'];
+    const numOfWavy = hairStylesCount['wavy'];
+    setCurrentNumNa(hairStylesCount['na']);
+
+    const perOfCurvy = (hairStylesCount['curvy'] / allUsers.length) * 100;
+    const perOfStraight = (hairStylesCount['straight'] / allUsers.length) * 100;
+    const perOfWavy = (hairStylesCount['wavy'] / allUsers.length) * 100;
+    setCurrentPerNa((hairStylesCount['na'] / allUsers.length) * 100);
+
+    console.log('hairStylesCount => ', hairStylesCount);
+
+    setHairStyleNumGraph({
+      labels: ['Number of users by hair style'],
+      datasets: [
+        {
+          label: 'Curvy',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [numOfCurvy],
+        },
+        {
+          label: 'Straight',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [numOfStraight],
+        },
+        {
+          label: 'Wavy',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [numOfWavy],
+        },
+      ],
+    });
+
+    setHairStylePerGraph({
+      labels: ['Percentage of users by hair style'],
+      datasets: [
+        {
+          label: 'Curvy',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [perOfCurvy],
+        },
+        {
+          label: 'Straight',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [perOfStraight],
+        },
+        {
+          label: 'Wavy',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [perOfWavy],
+        },
+      ],
+    });
+  };
+
+  const hairLengthGraphs = () => {
+    setOpenFilter(false);
+    setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
+    setShowGenderGraphs(false);
+    setShowHeightGraphs(false);
+    setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
+    setShowMaritalGraphs(false);
+    setShowLocationGraphs(false);
+    setShowAgeGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
+    setShowEthnicityGraphs(false);
+    setShowMusicGraphs(false);
+    setShowMoviesGraphs(false);
+    setShowReligionGraphs(false);
+    setShowOccupationGraphs(false);
+    setShowEducationGraphs(false);
+    setShowHobbiesGraphs(false);
+    setShowBooksGraphs(false);
+    setShowSportsGraphs(false);
+    setShowSmokesGraphs(false);
+    setShowDrinksGraphs(false);
+    setShowFoodGraphs(false);
+    setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
+    setShowHairLengthGraphs(true);
+
+    const allHairLengths = ['bald', 'short', 'medium', 'long'];
+    const hairLengthsCount = {};
+    allHairLengths.forEach((hairLength) => (hairLengthsCount[hairLength] = 0));
+    hairLengthsCount['na'] = 0;
+    allUsers.forEach((user) => {
+      const hairLength = user.hairLength || 'na';
+      if (allHairLengths.includes(hairLength)) {
+        hairLengthsCount[hairLength]++;
+      } else {
+        hairLengthsCount['na']++;
+      }
+    });
+
+    const numOfBald = hairLengthsCount['bald'];
+    const numOfShort = hairLengthsCount['short'];
+    const numOfMedium = hairLengthsCount['medium'];
+    const numOfLong = hairLengthsCount['long'];
+    setCurrentNumNa(hairLengthsCount['na']);
+
+    const perOfBald = (hairLengthsCount['bald'] / allUsers.length) * 100;
+    const perOfShort = (hairLengthsCount['short'] / allUsers.length) * 100;
+    const perOfMedium = (hairLengthsCount['medium'] / allUsers.length) * 100;
+    const perOfLong = (hairLengthsCount['long'] / allUsers.length) * 100;
+    setCurrentPerNa((hairLengthsCount['na'] / allUsers.length) * 100);
+
+    console.log('hairLengthsCount => ', hairLengthsCount);
+
+    setHairLengthNumGraph({
+      labels: ['Number of users by hair Length'],
+      datasets: [
+        {
+          label: 'Bald',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [numOfBald],
+        },
+        {
+          label: 'Short',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [numOfShort],
+        },
+        {
+          label: 'Medium',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [numOfMedium],
+        },
+        {
+          label: 'Long',
+          backgroundColor: 'rgba(0, 128, 0, 0.2)',
+          borderColor: 'rgba(0, 128, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(0, 128, 0, 0.4)',
+          hoverBorderColor: 'rgba(0, 128, 0, 1)',
+          data: [numOfLong],
+        },
+      ],
+    });
+
+    setHairLengthPerGraph({
+      labels: ['Percentage of users by hair Length'],
+      datasets: [
+        {
+          label: 'Bald',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [perOfBald],
+        },
+        {
+          label: 'Short',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [perOfShort],
+        },
+        {
+          label: 'Medium',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [perOfMedium],
+        },
+        {
+          label: 'Long',
+          backgroundColor: 'rgba(0, 128, 0, 0.2)',
+          borderColor: 'rgba(0, 128, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(0, 128, 0, 0.4)',
+          hoverBorderColor: 'rgba(0, 128, 0, 1)',
+          data: [perOfLong],
+        },
+      ],
+    });
+  };
+
+  const eyeColourGraphs = () => {
+    setOpenFilter(false);
+    setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
+    setShowGenderGraphs(false);
+    setShowHeightGraphs(false);
+    setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowFeetTypeGraphs(false);
+    setShowMaritalGraphs(false);
+    setShowLocationGraphs(false);
+    setShowAgeGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
+    setShowEthnicityGraphs(false);
+    setShowMusicGraphs(false);
+    setShowMoviesGraphs(false);
+    setShowReligionGraphs(false);
+    setShowOccupationGraphs(false);
+    setShowEducationGraphs(false);
+    setShowHobbiesGraphs(false);
+    setShowBooksGraphs(false);
+    setShowSportsGraphs(false);
+    setShowSmokesGraphs(false);
+    setShowDrinksGraphs(false);
+    setShowFoodGraphs(false);
+    setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
+    setShowEyeColourGraphs(true);
+
+    const allEyeColours = ['blue', 'brown', 'green', 'hazel'];
+    const eyeColoursCount = {};
+    allEyeColours.forEach((eyeColour) => (eyeColoursCount[eyeColour] = 0));
+    eyeColoursCount['na'] = 0;
+    allUsers.forEach((user) => {
+      const eyeColour = user.eyeColor || 'na';
+      if (allEyeColours.includes(eyeColour)) {
+        eyeColoursCount[eyeColour]++;
+      } else {
+        eyeColoursCount['na']++;
+      }
+    });
+
+    const numOfBlue = eyeColoursCount['blue'];
+    const numOfBrown = eyeColoursCount['brown'];
+    const numOfGreen = eyeColoursCount['green'];
+    const numOfHazel = eyeColoursCount['hazel'];
+    setCurrentNumNa(eyeColoursCount['na']);
+
+    const perOfBlue = (eyeColoursCount['blue'] / allUsers.length) * 100;
+    const perOfBrown = (eyeColoursCount['brown'] / allUsers.length) * 100;
+    const perOfGreen = (eyeColoursCount['green'] / allUsers.length) * 100;
+    const perOfHazel = (eyeColoursCount['hazel'] / allUsers.length) * 100;
+    setCurrentPerNa((eyeColoursCount['na'] / allUsers.length) * 100);
+
+    console.log('eyeColoursCount => ', eyeColoursCount);
+
+    setEyeColourNumGraph({
+      labels: ['Number of users by eye colour'],
+      datasets: [
+        {
+          label: 'Blue',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [numOfBlue],
+        },
+        {
+          label: 'Brown',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [numOfBrown],
+        },
+        {
+          label: 'Green',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [numOfGreen],
+        },
+        {
+          label: 'Hazel',
+          backgroundColor: 'rgba(0, 128, 0, 0.2)',
+          borderColor: 'rgba(0, 128, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(0, 128, 0, 0.4)',
+          hoverBorderColor: 'rgba(0, 128, 0, 1)',
+          data: [numOfHazel],
+        },
+      ],
+    });
+
+    setEyeColourPerGraph({
+      labels: ['Percentage of users by hair Length'],
+      datasets: [
+        {
+          label: 'Blue',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [perOfBlue],
+        },
+        {
+          label: 'Brown',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [perOfBrown],
+        },
+        {
+          label: 'Green',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [perOfGreen],
+        },
+        {
+          label: 'Hazel',
+          backgroundColor: 'rgba(0, 128, 0, 0.2)',
+          borderColor: 'rgba(0, 128, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(0, 128, 0, 0.4)',
+          hoverBorderColor: 'rgba(0, 128, 0, 1)',
+          data: [perOfHazel],
+        },
+      ],
+    });
+  };
+
+  const feetTypeGraphs = () => {
+    setOpenFilter(false);
+    setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
+    setShowGenderGraphs(false);
+    setShowHeightGraphs(false);
+    setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowMaritalGraphs(false);
+    setShowLocationGraphs(false);
+    setShowAgeGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
+    setShowEthnicityGraphs(false);
+    setShowMusicGraphs(false);
+    setShowMoviesGraphs(false);
+    setShowReligionGraphs(false);
+    setShowOccupationGraphs(false);
+    setShowEducationGraphs(false);
+    setShowHobbiesGraphs(false);
+    setShowBooksGraphs(false);
+    setShowSportsGraphs(false);
+    setShowSmokesGraphs(false);
+    setShowDrinksGraphs(false);
+    setShowFoodGraphs(false);
+    setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
+    setShowFeetTypeGraphs(true);
+
+    const allFeetTypes = ['egyptian', 'greek', 'roman'];
+    const feetTypesCount = {};
+    allFeetTypes.forEach((feetType) => (feetTypesCount[feetType] = 0));
+    feetTypesCount['na'] = 0;
+    allUsers.forEach((user) => {
+      const feetType = user.feetType || 'na';
+      if (allFeetTypes.includes(feetType)) {
+        feetTypesCount[feetType]++;
+      } else {
+        feetTypesCount['na']++;
+      }
+    });
+
+    const numOfEgyptian = feetTypesCount['egyptian'];
+    const numOfGreek = feetTypesCount['greek'];
+    const numOfRoman = feetTypesCount['roman'];
+    setCurrentNumNa(feetTypesCount['na']);
+
+    const perOfEgyptian = (feetTypesCount['egyptian'] / allUsers.length) * 100;
+    const perOfGreek = (feetTypesCount['greek'] / allUsers.length) * 100;
+    const perOfRoman = (feetTypesCount['roman'] / allUsers.length) * 100;
+    setCurrentPerNa((feetTypesCount['na'] / allUsers.length) * 100);
+
+    console.log('feetTypesCount => ', feetTypesCount);
+
+    setFeetTypeNumGraph({
+      labels: ['Number of users by feet type'],
+      datasets: [
+        {
+          label: 'Egyptian',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [numOfEgyptian],
+        },
+        {
+          label: 'Greek',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [numOfGreek],
+        },
+        {
+          label: 'Roman',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [numOfRoman],
+        },
+      ],
+    });
+
+    setFeetTypePerGraph({
+      labels: ['Percentage of users by hair style'],
+      datasets: [
+        {
+          label: 'Egyptian',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [perOfEgyptian],
+        },
+        {
+          label: 'Greek',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [perOfGreek],
+        },
+        {
+          label: 'Roman',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [perOfRoman],
+        },
+      ],
+    });
+  };
+
+  const maritalGraphs = () => {
+    setOpenFilter(false);
+    setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
+    setShowGenderGraphs(false);
+    setShowHeightGraphs(false);
+    setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
+    setShowLocationGraphs(false);
+    setShowAgeGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
+    setShowEthnicityGraphs(false);
+    setShowMusicGraphs(false);
+    setShowMoviesGraphs(false);
+    setShowReligionGraphs(false);
+    setShowOccupationGraphs(false);
+    setShowEducationGraphs(false);
+    setShowHobbiesGraphs(false);
+    setShowBooksGraphs(false);
+    setShowSportsGraphs(false);
+    setShowSmokesGraphs(false);
+    setShowDrinksGraphs(false);
+    setShowFoodGraphs(false);
+    setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowMaritalGraphs(true);
 
     const allMaritals = [
@@ -1136,13 +2095,21 @@ const Analytics = ({ history }) => {
   const locationGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -1156,6 +2123,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowLocationGraphs(true);
 
     const allLocations = [
@@ -1299,13 +2268,21 @@ const Analytics = ({ history }) => {
   const ageGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -1319,6 +2296,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowAgeGraphs(true);
 
     const ageRanges = [
@@ -1530,13 +2509,21 @@ const Analytics = ({ history }) => {
   const childrenGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -1550,6 +2537,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowChildrenGraphs(true);
 
     const numOfChildrenCount = [
@@ -1739,13 +2728,21 @@ const Analytics = ({ history }) => {
   const livesWithGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -1759,6 +2756,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowLivesWithGraphs(true);
 
     const allLivesWiths = [
@@ -1900,17 +2899,25 @@ const Analytics = ({ history }) => {
     });
   };
 
-  const ethnicityGraphs = () => {
+  const nationalityGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
-    setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowLanguageGraphs(false);
+    setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
     setShowReligionGraphs(false);
@@ -1923,6 +2930,199 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
+    setShowNationalityGraphs(true);
+
+    const nationalityCounts = {};
+    let numNa = 0;
+
+    allUsers.map((user) => {
+      if (!user.nationality) {
+        numNa++;
+      } else {
+        if (!nationalityCounts[user.nationality]) {
+          nationalityCounts[user.nationality] = 1;
+        } else {
+          nationalityCounts[user.nationality]++;
+        }
+      }
+    });
+
+    setCurrentNumNa(numNa);
+    setCurrentPerNa((numNa / allUsers.length) * 100);
+
+    delete nationalityCounts.na;
+
+    const labels = Object.keys(nationalityCounts);
+    const num = Object.values(nationalityCounts);
+    const per = {};
+    Object.keys(nationalityCounts).forEach((genre) => {
+      per[genre] = ((nationalityCounts[genre] / allUsers.length) * 100).toFixed(
+        2
+      );
+    });
+
+    console.log('nationalityCounts => ', nationalityCounts);
+
+    setNationalityNumGraph({
+      labels,
+      datasets: [
+        {
+          label: 'Number of users by nationality',
+          backgroundColor: 'rgba(239, 91, 133, 0.2)',
+          borderColor: 'rgba(239, 91, 133, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(239, 91, 133, 0.4)',
+          hoverBorderColor: 'rgba(239, 91, 133, 1)',
+          data: num,
+        },
+      ],
+    });
+
+    setNationalityPerGraph({
+      labels,
+      datasets: [
+        {
+          label: 'Percentage of users by nationality',
+          backgroundColor: 'rgba(239, 91, 133, 0.2)',
+          borderColor: 'rgba(239, 91, 133, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(239, 91, 133, 0.4)',
+          hoverBorderColor: 'rgba(239, 91, 133, 1)',
+          data: per,
+        },
+      ],
+    });
+  };
+
+  const languageGraphs = () => {
+    setOpenFilter(false);
+    setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
+    setShowGenderGraphs(false);
+    setShowHeightGraphs(false);
+    setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
+    setShowMaritalGraphs(false);
+    setShowLocationGraphs(false);
+    setShowAgeGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowEthnicityGraphs(false);
+    setShowMusicGraphs(false);
+    setShowMoviesGraphs(false);
+    setShowReligionGraphs(false);
+    setShowOccupationGraphs(false);
+    setShowEducationGraphs(false);
+    setShowHobbiesGraphs(false);
+    setShowBooksGraphs(false);
+    setShowSportsGraphs(false);
+    setShowSmokesGraphs(false);
+    setShowDrinksGraphs(false);
+    setShowFoodGraphs(false);
+    setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
+    setShowLanguageGraphs(true);
+
+    const languageCounts = {};
+    let numNa = 0;
+
+    allUsers.map((user) => {
+      if (!user.language) {
+        numNa++;
+      } else {
+        if (!languageCounts[user.language]) {
+          languageCounts[user.language] = 1;
+        } else {
+          languageCounts[user.language]++;
+        }
+      }
+    });
+
+    setCurrentNumNa(numNa);
+    setCurrentPerNa((numNa / allUsers.length) * 100);
+
+    delete languageCounts.na;
+
+    const labels = Object.keys(languageCounts);
+    const num = Object.values(languageCounts);
+    const per = {};
+    Object.keys(languageCounts).forEach((genre) => {
+      per[genre] = ((languageCounts[genre] / allUsers.length) * 100).toFixed(2);
+    });
+
+    console.log('languageCounts => ', languageCounts);
+
+    setLanguageNumGraph({
+      labels,
+      datasets: [
+        {
+          label: 'Number of users by native language',
+          backgroundColor: 'rgba(239, 91, 133, 0.2)',
+          borderColor: 'rgba(239, 91, 133, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(239, 91, 133, 0.4)',
+          hoverBorderColor: 'rgba(239, 91, 133, 1)',
+          data: num,
+        },
+      ],
+    });
+
+    setLanguagePerGraph({
+      labels,
+      datasets: [
+        {
+          label: 'Percentage of users by native language',
+          backgroundColor: 'rgba(239, 91, 133, 0.2)',
+          borderColor: 'rgba(239, 91, 133, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(239, 91, 133, 0.4)',
+          hoverBorderColor: 'rgba(239, 91, 133, 1)',
+          data: per,
+        },
+      ],
+    });
+  };
+
+  const ethnicityGraphs = () => {
+    setOpenFilter(false);
+    setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
+    setShowGenderGraphs(false);
+    setShowHeightGraphs(false);
+    setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
+    setShowMaritalGraphs(false);
+    setShowLocationGraphs(false);
+    setShowAgeGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
+    setShowMusicGraphs(false);
+    setShowMoviesGraphs(false);
+    setShowReligionGraphs(false);
+    setShowOccupationGraphs(false);
+    setShowEducationGraphs(false);
+    setShowHobbiesGraphs(false);
+    setShowBooksGraphs(false);
+    setShowSportsGraphs(false);
+    setShowSmokesGraphs(false);
+    setShowDrinksGraphs(false);
+    setShowFoodGraphs(false);
+    setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowEthnicityGraphs(true);
 
     const allEthnicities = [
@@ -2132,14 +3332,22 @@ const Analytics = ({ history }) => {
   const musicGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMoviesGraphs(false);
     setShowReligionGraphs(false);
@@ -2152,6 +3360,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowMusicGraphs(true);
 
     const musicCounts = {};
@@ -2218,14 +3428,22 @@ const Analytics = ({ history }) => {
   const moviesGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowReligionGraphs(false);
@@ -2238,6 +3456,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowMoviesGraphs(true);
 
     const movieCounts = {};
@@ -2304,14 +3524,22 @@ const Analytics = ({ history }) => {
   const religionGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -2324,6 +3552,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowReligionGraphs(true);
 
     const allReligions = [
@@ -2617,14 +3847,22 @@ const Analytics = ({ history }) => {
   const occupationGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -2637,6 +3875,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowOccupationGraphs(true);
 
     const occupationCounts = {};
@@ -2704,14 +3944,22 @@ const Analytics = ({ history }) => {
   const educationGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -2724,6 +3972,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowEducationGraphs(true);
 
     const allEducations = [
@@ -2892,14 +4142,22 @@ const Analytics = ({ history }) => {
   const hobbiesGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -2912,6 +4170,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowHobbiesGraphs(true);
 
     const hobbiesCounts = {};
@@ -2978,14 +4238,22 @@ const Analytics = ({ history }) => {
   const booksGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -2998,6 +4266,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowBooksGraphs(true);
 
     const booksCounts = {};
@@ -3064,14 +4334,22 @@ const Analytics = ({ history }) => {
   const sportsGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -3084,6 +4362,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowSportsGraphs(true);
 
     const sportsCounts = {};
@@ -3150,14 +4430,22 @@ const Analytics = ({ history }) => {
   const smokesGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -3170,6 +4458,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowSmokesGraphs(true);
 
     const allSmokes = ['never', 'often', 'sometimes'];
@@ -3267,14 +4557,22 @@ const Analytics = ({ history }) => {
   const drinksGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -3287,6 +4585,8 @@ const Analytics = ({ history }) => {
     setShowSmokesGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowDrinksGraphs(true);
 
     const allDrinks = ['never', 'often', 'sometimes'];
@@ -3384,14 +4684,22 @@ const Analytics = ({ history }) => {
   const foodGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -3404,6 +4712,8 @@ const Analytics = ({ history }) => {
     setShowSmokesGraphs(false);
     setShowDrinksGraphs(false);
     setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowFoodGraphs(true);
 
     const allFoods = [
@@ -3569,14 +4879,22 @@ const Analytics = ({ history }) => {
   const treatsGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
     setShowMaritalGraphs(false);
     setShowLocationGraphs(false);
     setShowAgeGraphs(false);
     setShowChildrenGraphs(false);
     setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
     setShowEthnicityGraphs(false);
     setShowMusicGraphs(false);
     setShowMoviesGraphs(false);
@@ -3589,6 +4907,8 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowSportsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(false);
     setShowTreatsGraphs(true);
 
     const treatsCounts = {};
@@ -3652,6 +4972,447 @@ const Analytics = ({ history }) => {
     });
   };
 
+  const relWantedGraphs = () => {
+    setOpenFilter(false);
+    setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
+    setShowGenderGraphs(false);
+    setShowHeightGraphs(false);
+    setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
+    setShowMaritalGraphs(false);
+    setShowLocationGraphs(false);
+    setShowAgeGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
+    setShowEthnicityGraphs(false);
+    setShowMusicGraphs(false);
+    setShowMoviesGraphs(false);
+    setShowReligionGraphs(false);
+    setShowOccupationGraphs(false);
+    setShowEducationGraphs(false);
+    setShowHobbiesGraphs(false);
+    setShowBooksGraphs(false);
+    setShowSportsGraphs(false);
+    setShowSmokesGraphs(false);
+    setShowDrinksGraphs(false);
+    setShowFoodGraphs(false);
+    setShowTreatsGraphs(false);
+    setShowProductsViewedGraphs(false);
+    setShowRelWantedGraphs(true);
+
+    const allRelWanted = [
+      'casual dating',
+      'friendship',
+      'long-term relationship',
+      'marriage',
+    ];
+    const relWantedCount = {};
+    allRelWanted.forEach((relWanted) => (relWantedCount[relWanted] = 0));
+    relWantedCount['na'] = 0;
+    allUsers.forEach((user) => {
+      const relWanted = user.relWanted || 'na';
+      if (allRelWanted.includes(relWanted)) {
+        relWantedCount[relWanted]++;
+      } else {
+        relWantedCount['na']++;
+      }
+    });
+
+    const numOfCasualDating = relWantedCount['casual dating'];
+    const numOfFriendship = relWantedCount['friendship'];
+    const numOfLongtermRelationship = relWantedCount['long-term relationship'];
+    const numOfMarriage = relWantedCount['marriage'];
+    setCurrentNumNa(relWantedCount['na']);
+
+    const perOfCasualDating =
+      (relWantedCount['casual dating'] / allUsers.length) * 100;
+    const perOfFriendship =
+      (relWantedCount['friendship'] / allUsers.length) * 100;
+    const perOfLongtermRelationship =
+      (relWantedCount['long-term relationship'] / allUsers.length) * 100;
+    const perOfMarriage = (relWantedCount['marriage'] / allUsers.length) * 100;
+    setCurrentPerNa((relWantedCount['na'] / allUsers.length) * 100);
+
+    console.log('relWantedCount => ', relWantedCount);
+
+    setRelWantedNumGraph({
+      labels: ['Number of users by kind of relationship they want'],
+      datasets: [
+        {
+          label: 'Casual dating',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [numOfCasualDating],
+        },
+        {
+          label: 'Friendship',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [numOfFriendship],
+        },
+        {
+          label: 'Long-term relationship',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [numOfLongtermRelationship],
+        },
+        {
+          label: 'Marriage',
+          backgroundColor: 'rgba(0, 128, 0, 0.2)',
+          borderColor: 'rgba(0, 128, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(0, 128, 0, 0.4)',
+          hoverBorderColor: 'rgba(0, 128, 0, 1)',
+          data: [numOfMarriage],
+        },
+      ],
+    });
+
+    setRelWantedPerGraph({
+      labels: ['Percentage of users by kind of relationship they want'],
+      datasets: [
+        {
+          label: 'Casual dating',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [perOfCasualDating],
+        },
+        {
+          label: 'Friendship',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [perOfFriendship],
+        },
+        {
+          label: 'Long-term relationship',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [perOfLongtermRelationship],
+        },
+        {
+          label: 'Marriage',
+          backgroundColor: 'rgba(0, 128, 0, 0.2)',
+          borderColor: 'rgba(0, 128, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(0, 128, 0, 0.4)',
+          hoverBorderColor: 'rgba(0, 128, 0, 1)',
+          data: [perOfMarriage],
+        },
+      ],
+    });
+  };
+
+  const productsViewedGraphs = () => {
+    setOpenFilter(false);
+    setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
+    setShowGenderGraphs(false);
+    setShowHeightGraphs(false);
+    setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
+    setShowMaritalGraphs(false);
+    setShowLocationGraphs(false);
+    setShowAgeGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
+    setShowEthnicityGraphs(false);
+    setShowMusicGraphs(false);
+    setShowMoviesGraphs(false);
+    setShowReligionGraphs(false);
+    setShowOccupationGraphs(false);
+    setShowEducationGraphs(false);
+    setShowHobbiesGraphs(false);
+    setShowBooksGraphs(false);
+    setShowSportsGraphs(false);
+    setShowSmokesGraphs(false);
+    setShowDrinksGraphs(false);
+    setShowFoodGraphs(false);
+    setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowProductsViewedGraphs(true);
+
+    const allProductsViewed = [
+      'Eau de Parfum Volupté(s) de Bach - 30ml',
+      'Eau de Parfum Délice(s) de Bach - 30ml',
+      'T-Shirt Love is in Cyprus (Medium Size)',
+      'T-Shirt Love is in Cyprus (Short Size)',
+      'Libido Enhancer - 20ml dropper (Organic)',
+      'Slimness enhancer - 10ml oral spray (Organic)',
+      'Energy booster - 10ml oral spray (Organic)',
+      'Self-Confidence enhancer - 20ml dropper (Organic)',
+    ];
+    const productsViewedCount = {};
+    allProductsViewed.forEach(
+      (product) => (productsViewedCount[product] = { count: 0, amount: 0 })
+    );
+    productsViewedCount['na'] = { count: 0, amount: 0 };
+
+    allUsers.forEach((user) => {
+      const productsViewed = user.productsViewed || [];
+      if (productsViewed.length > 0) {
+        productsViewed.forEach((viewedProduct) => {
+          const productTitle = viewedProduct.item.title;
+          const productAmount = viewedProduct.amount;
+          if (allProductsViewed.includes(productTitle)) {
+            productsViewedCount[productTitle].count++;
+            productsViewedCount[productTitle].amount += productAmount;
+          } else {
+            productsViewedCount['na'].count++;
+            productsViewedCount['na'].amount += productAmount;
+          }
+        });
+      } else {
+        productsViewedCount['na'].count++;
+      }
+    });
+
+    console.log('productsViewedCount => ', productsViewedCount);
+
+    const numOfVoluptes =
+      productsViewedCount['Eau de Parfum Volupté(s) de Bach - 30ml'].amount;
+    const numOfDelices =
+      productsViewedCount['Eau de Parfum Délice(s) de Bach - 30ml'].amount;
+    const numOfMediumTee =
+      productsViewedCount['T-Shirt Love is in Cyprus (Medium Size)'].amount;
+    const numOfShortTee =
+      productsViewedCount['T-Shirt Love is in Cyprus (Short Size)'].amount;
+    const numOfLibido =
+      productsViewedCount['Libido Enhancer - 20ml dropper (Organic)'].amount;
+    const numOfSlimness =
+      productsViewedCount['Slimness enhancer - 10ml oral spray (Organic)']
+        .amount;
+    const numOfEnergy =
+      productsViewedCount['Energy booster - 10ml oral spray (Organic)'].amount;
+    const numOfConfidence =
+      productsViewedCount['Self-Confidence enhancer - 20ml dropper (Organic)']
+        .amount;
+    setCurrentNumNa(productsViewedCount['na'].count);
+
+    const perOfVoluptes =
+      (productsViewedCount['Eau de Parfum Volupté(s) de Bach - 30ml'].amount /
+        allUsers.length) *
+      100;
+    const perOfDelices =
+      (productsViewedCount['Eau de Parfum Délice(s) de Bach - 30ml'].amount /
+        allUsers.length) *
+      100;
+    const perOfMediumTee =
+      (productsViewedCount['T-Shirt Love is in Cyprus (Medium Size)'].amount /
+        allUsers.length) *
+      100;
+    const perOfShortTee =
+      (productsViewedCount['T-Shirt Love is in Cyprus (Short Size)'].amount /
+        allUsers.length) *
+      100;
+    const perOfLibido =
+      (productsViewedCount['Libido Enhancer - 20ml dropper (Organic)'].amount /
+        allUsers.length) *
+      100;
+    const perOfSlimness =
+      (productsViewedCount['Slimness enhancer - 10ml oral spray (Organic)']
+        .amount /
+        allUsers.length) *
+      100;
+    const perOfEnergy =
+      (productsViewedCount['Energy booster - 10ml oral spray (Organic)']
+        .amount /
+        allUsers.length) *
+      100;
+    const perOfConfidence =
+      (productsViewedCount['Self-Confidence enhancer - 20ml dropper (Organic)']
+        .amount /
+        allUsers.length) *
+      100;
+    setCurrentPerNa((productsViewedCount['na'].count / allUsers.length) * 100);
+
+    setProductsViewedNumGraph({
+      labels: ['Number of users by product view'],
+      datasets: [
+        {
+          label: 'Eau de Parfum Volupté(s) de Bach - 30ml',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [numOfVoluptes],
+        },
+        {
+          label: 'Eau de Parfum Délice(s) de Bach - 30ml',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [numOfDelices],
+        },
+        {
+          label: 'T-Shirt Love is in Cyprus (Medium Size)',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [numOfMediumTee],
+        },
+        {
+          label: 'T-Shirt Love is in Cyprus (Short Size)',
+          backgroundColor: 'rgba(0, 128, 0, 0.2)',
+          borderColor: 'rgba(0, 128, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(0, 128, 0, 0.4)',
+          hoverBorderColor: 'rgba(0, 128, 0, 1)',
+          data: [numOfShortTee],
+        },
+        {
+          label: 'Libido Enhancer - 20ml dropper (Organic)',
+          backgroundColor: 'rgba(0, 0, 255, 0.2)',
+          borderColor: 'rgba(0, 0, 255, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(0, 0, 255, 0.4)',
+          hoverBorderColor: 'rgba(0, 0, 255, 1)',
+          data: [numOfLibido],
+        },
+        {
+          label: 'Slimness enhancer - 10ml oral spray (Organic)',
+          backgroundColor: 'rgba(75, 0, 130, 0.2)',
+          borderColor: 'rgba(75, 0, 130, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(75, 0, 130, 0.4)',
+          hoverBorderColor: 'rgba(75, 0, 130, 1)',
+          data: [numOfSlimness],
+        },
+        {
+          label: 'Energy booster - 10ml oral spray (Organic)',
+          backgroundColor: 'rgba(238, 130, 238, 0.2)',
+          borderColor: 'rgba(238, 130, 238, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(238, 130, 238, 0.4)',
+          hoverBorderColor: 'rgba(238, 130, 238, 1)',
+          data: [numOfEnergy],
+        },
+        {
+          label: 'Self-Confidence enhancer - 20ml dropper (Organic)',
+          backgroundColor: 'rgba(128, 0, 0, 0.2)',
+          borderColor: 'rgba(128, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(128, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(128, 0, 0, 1)',
+          data: [numOfConfidence],
+        },
+      ],
+    });
+
+    setProductsViewedPerGraph({
+      labels: ['Number of users by product view'],
+      datasets: [
+        {
+          label: 'Eau de Parfum Volupté(s) de Bach - 30ml',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [perOfVoluptes],
+        },
+        {
+          label: 'Eau de Parfum Délice(s) de Bach - 30ml',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [perOfDelices],
+        },
+        {
+          label: 'T-Shirt Love is in Cyprus (Medium Size)',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [perOfMediumTee],
+        },
+        {
+          label: 'T-Shirt Love is in Cyprus (Short Size)',
+          backgroundColor: 'rgba(0, 128, 0, 0.2)',
+          borderColor: 'rgba(0, 128, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(0, 128, 0, 0.4)',
+          hoverBorderColor: 'rgba(0, 128, 0, 1)',
+          data: [perOfShortTee],
+        },
+        {
+          label: 'Libido Enhancer - 20ml dropper (Organic)',
+          backgroundColor: 'rgba(0, 0, 255, 0.2)',
+          borderColor: 'rgba(0, 0, 255, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(0, 0, 255, 0.4)',
+          hoverBorderColor: 'rgba(0, 0, 255, 1)',
+          data: [perOfLibido],
+        },
+        {
+          label: 'Slimness enhancer - 10ml oral spray (Organic)',
+          backgroundColor: 'rgba(75, 0, 130, 0.2)',
+          borderColor: 'rgba(75, 0, 130, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(75, 0, 130, 0.4)',
+          hoverBorderColor: 'rgba(75, 0, 130, 1)',
+          data: [perOfSlimness],
+        },
+        {
+          label: 'Energy booster - 10ml oral spray (Organic)',
+          backgroundColor: 'rgba(238, 130, 238, 0.2)',
+          borderColor: 'rgba(238, 130, 238, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(238, 130, 238, 0.4)',
+          hoverBorderColor: 'rgba(238, 130, 238, 1)',
+          data: [perOfEnergy],
+        },
+        {
+          label: 'Self-Confidence enhancer - 20ml dropper (Organic)',
+          backgroundColor: 'rgba(128, 0, 0, 0.2)',
+          borderColor: 'rgba(128, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(128, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(128, 0, 0, 1)',
+          data: [perOfConfidence],
+        },
+      ],
+    });
+  };
+
   return (
     <div className='container search-container'>
       <LeftSidebar />
@@ -3663,9 +5424,6 @@ const Analytics = ({ history }) => {
             </div>
           ) : (
             <>
-              <h1 className='center'>
-                We currently have {allUsers.length} users
-              </h1>
               <div className='filter-btn'>
                 <FontAwesomeIcon
                   icon={faFilter}
@@ -3675,20 +5433,23 @@ const Analytics = ({ history }) => {
                 {openFilter && (
                   <ul className='filter-options'>
                     <li onClick={registrationGraphs}>Date range</li>
-                    <li>Visiting frequency</li>
+                    <li onClick={visitationGraphs}>Visiting frequency</li>
                     <li onClick={genderGraphs}>Gender</li>
                     <li onClick={heightGraphs}>Height</li>
                     <li onClick={buildGraphs}>Body shape</li>
+                    <li onClick={hairColourGraphs}>Hair colour</li>
+                    <li onClick={hairStyleGraphs}>Hair style</li>
+                    <li onClick={hairLengthGraphs}>Hair length</li>
+                    <li onClick={eyeColourGraphs}>Eye colour</li>
+                    <li onClick={feetTypeGraphs}>Feet type</li>
                     <li onClick={maritalGraphs}>Marital status</li>
                     <li onClick={locationGraphs}>Location</li>
                     <li onClick={ageGraphs}>Age range</li>
                     <li onClick={childrenGraphs}>Has children</li>
                     <li onClick={livesWithGraphs}>Lives with</li>
-                    <li>Nationality</li>
-                    <li>Languages</li>
+                    <li onClick={nationalityGraphs}>Nationality</li>
+                    <li onClick={languageGraphs}>Languages</li>
                     <li onClick={ethnicityGraphs}>Ethnicity</li>
-                    <li>Appearance</li>
-                    <li>Style</li>
                     <li onClick={musicGraphs}>Music</li>
                     <li onClick={moviesGraphs}>Movies</li>
                     <li onClick={religionGraphs}>Religion</li>
@@ -3701,9 +5462,11 @@ const Analytics = ({ history }) => {
                     <li onClick={drinksGraphs}>Drinks</li>
                     <li onClick={foodGraphs}>Food</li>
                     <li onClick={treatsGraphs}>How they treat themselves</li>
-                    <li>Dating purpose</li>
+                    <li onClick={relWantedGraphs}>Dating purpose</li>
                     <li># Points</li>
-                    <li># Page visits of each item in shop</li>
+                    <li onClick={productsViewedGraphs}>
+                      # Page visits of each item in shop
+                    </li>
                     <li>Total amount paid in the shop</li>
                     <li>Amount paid in shop since beginning</li>
                     <li>Average amount by order in shop</li>
@@ -3716,6 +5479,7 @@ const Analytics = ({ history }) => {
               </div>
               {showRegistrationGraphs && (
                 <>
+                  <h1 className='center'>Date range</h1>
                   <Bar
                     data={registrationNumGraph}
                     style={{
@@ -3730,8 +5494,26 @@ const Analytics = ({ history }) => {
                   />
                 </>
               )}
+              {showVisitationGraphs && (
+                <>
+                  <h1 className='center'>Visiting frequency</h1>
+                  <Bar
+                    data={visitationNumGraph}
+                    style={{
+                      marginBottom: '20px',
+                    }}
+                  />
+                  <Bar
+                    data={visitationPerGraph}
+                    style={{
+                      marginBottom: '20px',
+                    }}
+                  />
+                </>
+              )}
               {showGenderGraphs && (
                 <>
+                  <h1 className='center'>Gender</h1>
                   <Bar
                     data={genderNumGraph}
                     style={{
@@ -3756,6 +5538,7 @@ const Analytics = ({ history }) => {
               )}
               {showHeightGraphs && (
                 <>
+                  <h1 className='center'>Height</h1>
                   <Bar
                     data={heightNumGraph}
                     style={{
@@ -3780,6 +5563,7 @@ const Analytics = ({ history }) => {
               )}
               {showBuildGraphs && (
                 <>
+                  <h1 className='center'>Body shape</h1>
                   <Bar
                     data={buildNumGraph}
                     style={{
@@ -3802,8 +5586,134 @@ const Analytics = ({ history }) => {
                   </h2>
                 </>
               )}
+              {showHairColourGraphs && (
+                <>
+                  <h1 className='center'>Hair colour</h1>
+                  <Bar
+                    data={hairColourNumGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentNumNa}</span> users have not yet updated their
+                    hair colour
+                  </h2>
+                  <Bar
+                    data={hairColourPerGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentPerNa.toFixed(2)}%</span> of users have not
+                    yet updated their hair colour
+                  </h2>
+                </>
+              )}
+              {showHairStyleGraphs && (
+                <>
+                  <h1 className='center'>Hair style</h1>
+                  <Bar
+                    data={hairStyleNumGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentNumNa}</span> users have not yet updated their
+                    hair style
+                  </h2>
+                  <Bar
+                    data={hairStylePerGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentPerNa.toFixed(2)}%</span> of users have not
+                    yet updated their hair style
+                  </h2>
+                </>
+              )}
+              {showHairLengthGraphs && (
+                <>
+                  <h1 className='center'>Hair length</h1>
+                  <Bar
+                    data={hairLengthNumGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentNumNa}</span> users have not yet updated their
+                    hair length
+                  </h2>
+                  <Bar
+                    data={hairLengthPerGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentPerNa.toFixed(2)}%</span> of users have not
+                    yet updated their hair length
+                  </h2>
+                </>
+              )}
+              {showEyeColourGraphs && (
+                <>
+                  <h1 className='center'>Eye colour</h1>
+                  <Bar
+                    data={eyeColourNumGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentNumNa}</span> users have not yet updated their
+                    eye colour
+                  </h2>
+                  <Bar
+                    data={eyeColourPerGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentPerNa.toFixed(2)}%</span> of users have not
+                    yet updated their eye colour
+                  </h2>
+                </>
+              )}
+              {showFeetTypeGraphs && (
+                <>
+                  <h1 className='center'>Feet type</h1>
+                  <Bar
+                    data={feetTypeNumGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentNumNa}</span> users have not yet updated their
+                    feet type
+                  </h2>
+                  <Bar
+                    data={feetTypePerGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentPerNa.toFixed(2)}%</span> of users have not
+                    yet updated their feet type
+                  </h2>
+                </>
+              )}
               {showMaritalGraphs && (
                 <>
+                  <h1 className='center'>Marital status</h1>
                   <Bar
                     data={maritalNumGraph}
                     style={{
@@ -3828,6 +5738,7 @@ const Analytics = ({ history }) => {
               )}
               {showLocationGraphs && (
                 <>
+                  <h1 className='center'>Location</h1>
                   <Bar
                     data={locationNumGraph}
                     style={{
@@ -3852,6 +5763,7 @@ const Analytics = ({ history }) => {
               )}
               {showAgeGraphs && (
                 <>
+                  <h1 className='center'>Age range</h1>
                   <Bar
                     data={ageNumGraph}
                     style={{
@@ -3876,6 +5788,7 @@ const Analytics = ({ history }) => {
               )}
               {showChildrenGraphs && (
                 <>
+                  <h1 className='center'>Has children</h1>
                   <Bar
                     data={childrenNumGraph}
                     style={{
@@ -3900,6 +5813,7 @@ const Analytics = ({ history }) => {
               )}
               {showLivesWithGraphs && (
                 <>
+                  <h1 className='center'>Lives with</h1>
                   <Bar
                     data={livesWithNumGraph}
                     style={{
@@ -3922,8 +5836,59 @@ const Analytics = ({ history }) => {
                   </h2>
                 </>
               )}
+              {showNationalityGraphs && (
+                <>
+                  <h1 className='center'>Nationality</h1>
+                  <Bar
+                    data={nationalityNumGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentNumNa}</span> users have not yet updated their
+                    nationality
+                  </h2>
+                  <Bar
+                    data={nationalityPerGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentPerNa.toFixed(2)}%</span> of users have not
+                    yet updated their nationality
+                  </h2>
+                </>
+              )}
+              {showLanguageGraphs && (
+                <>
+                  <h1 className='center'>Languages</h1>
+                  <Bar
+                    data={languageNumGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentNumNa}</span> users have not yet updated their
+                    native language
+                  </h2>
+                  <Bar
+                    data={languagePerGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentPerNa.toFixed(2)}%</span> of users have not
+                    yet updated their native language
+                  </h2>
+                </>
+              )}
               {showEthnicityGraphs && (
                 <>
+                  <h1 className='center'>Ethnicity</h1>
                   <Bar
                     data={ethnicityNumGraph}
                     style={{
@@ -3948,6 +5913,7 @@ const Analytics = ({ history }) => {
               )}
               {showMusicGraphs && (
                 <>
+                  <h1 className='center'>Music</h1>
                   <Bar
                     data={musicNumGraph}
                     style={{
@@ -3972,6 +5938,7 @@ const Analytics = ({ history }) => {
               )}
               {showMoviesGraphs && (
                 <>
+                  <h1 className='center'>Movies</h1>
                   <Bar
                     data={moviesNumGraph}
                     style={{
@@ -3996,6 +5963,7 @@ const Analytics = ({ history }) => {
               )}
               {showReligionGraphs && (
                 <>
+                  <h1 className='center'>Religion</h1>
                   <Bar
                     data={religionNumGraph}
                     style={{
@@ -4020,6 +5988,7 @@ const Analytics = ({ history }) => {
               )}
               {showOccupationGraphs && (
                 <>
+                  <h1 className='center'>Occupation</h1>
                   <Bar
                     data={occupationNumGraph}
                     style={{
@@ -4044,6 +6013,7 @@ const Analytics = ({ history }) => {
               )}
               {showEducationGraphs && (
                 <>
+                  <h1 className='center'>Education</h1>
                   <Bar
                     data={educationNumGraph}
                     style={{
@@ -4068,6 +6038,7 @@ const Analytics = ({ history }) => {
               )}
               {showHobbiesGraphs && (
                 <>
+                  <h1 className='center'>Hobbies</h1>
                   <Bar
                     data={hobbiesNumGraph}
                     style={{
@@ -4092,6 +6063,7 @@ const Analytics = ({ history }) => {
               )}
               {showBooksGraphs && (
                 <>
+                  <h1 className='center'>Books</h1>
                   <Bar
                     data={booksNumGraph}
                     style={{
@@ -4116,6 +6088,7 @@ const Analytics = ({ history }) => {
               )}
               {showSportsGraphs && (
                 <>
+                  <h1 className='center'>Sports</h1>
                   <Bar
                     data={sportsNumGraph}
                     style={{
@@ -4140,6 +6113,7 @@ const Analytics = ({ history }) => {
               )}
               {showSmokesGraphs && (
                 <>
+                  <h1 className='center'>Smokes</h1>
                   <Bar
                     data={smokesNumGraph}
                     style={{
@@ -4164,6 +6138,7 @@ const Analytics = ({ history }) => {
               )}
               {showDrinksGraphs && (
                 <>
+                  <h1 className='center'>Drinks</h1>
                   <Bar
                     data={drinksNumGraph}
                     style={{
@@ -4188,6 +6163,7 @@ const Analytics = ({ history }) => {
               )}
               {showFoodGraphs && (
                 <>
+                  <h1 className='center'>Food</h1>
                   <Bar
                     data={foodNumGraph}
                     style={{
@@ -4212,6 +6188,7 @@ const Analytics = ({ history }) => {
               )}
               {showTreatsGraphs && (
                 <>
+                  <h1 className='center'>How they treat themselves</h1>
                   <Bar
                     data={treatsNumGraph}
                     style={{
@@ -4231,6 +6208,56 @@ const Analytics = ({ history }) => {
                   <h2 className='center'>
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated how they treat themselves
+                  </h2>
+                </>
+              )}
+              {showRelWantedGraphs && (
+                <>
+                  <h1 className='center'>Dating purpose</h1>
+                  <Bar
+                    data={relWantedNumGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentNumNa}</span> users have not yet updated what
+                    type of relationship they are looking for
+                  </h2>
+                  <Bar
+                    data={relWantedPerGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentPerNa.toFixed(2)}%</span> of users have not
+                    yet updated what type of relationship they are looking for
+                  </h2>
+                </>
+              )}
+              {showProductsViewedGraphs && (
+                <>
+                  <h1 className='center'># Page visits of each item in shop</h1>
+                  <Bar
+                    data={productsViewedNumGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentNumNa}</span> users have not yet viewed any
+                    products
+                  </h2>
+                  <Bar
+                    data={productsViewedPerGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentPerNa.toFixed(2)}%</span> of users have not
+                    yet viewed any products
                   </h2>
                 </>
               )}

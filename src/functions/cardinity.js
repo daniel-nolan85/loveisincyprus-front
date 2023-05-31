@@ -34,11 +34,12 @@ export const createMembershipPayment = (
   payable,
   userAgent,
   user,
-  authtoken
+  authtoken,
+  daysLeft
 ) =>
   axios.post(
     `${process.env.REACT_APP_API}/create-membership-payment`,
-    { values, payable, userAgent, user },
+    { values, payable, userAgent, user, daysLeft },
     { headers: { authtoken } }
   );
 

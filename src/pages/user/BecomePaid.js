@@ -53,76 +53,77 @@ const BecomePaid = ({ history }) => {
 
   const handleSubmit = async (values) => {
     setProcessing(true);
-    createMembershipPayment(values, payable, userAgent, user, user.token).then(
-      (res) => {
-        console.log(res);
-        if (
-          (res.data.response && res.data.response.errors) ||
-          res.data.errors
-        ) {
-          toast.error(res.data.response.errors[0].message, {
-            position: toast.POSITION.TOP_CENTER,
-          });
-          setProcessing(false);
-        }
-        if (res.data.response && res.data.response.status === 'approved') {
-          toast.success(
-            `Payment successful! Your paid membership will last for ${
-              payable === '10.00'
-                ? 'one month.'
-                : payable === '50.00'
-                ? 'six months.'
-                : payable === '90.00' && 'one year.'
-            }`,
-            {
-              position: toast.POSITION.TOP_CENTER,
-            }
-          );
-          setProcessing(false);
-          setSucceeded(true);
-          dispatch({
-            type: 'LOGGED_IN_USER',
-            payload: {
-              ...user,
-              membership: res.data.amendMembership.membership,
-              bankDetails: res.data.amendMembership.bankDetails,
-            },
-          });
-          const result = res.data.amendMembership.bankDetails.filter((obj) => {
-            return (
-              obj.cardBrand ===
-                res.data.response.payment_instrument.card_brand &&
-              obj.cardHolder === res.data.response.payment_instrument.holder &&
-              obj.cardNumber.slice(-4) ===
-                res.data.response.payment_instrument.pan &&
-              parseInt(obj.expiry.slice(0, 2)) ===
-                res.data.response.payment_instrument.exp_month &&
-              parseInt(obj.expiry.slice(-4)) ===
-                res.data.response.payment_instrument.exp_year
-            );
-          });
-          setUserBankDetails(result);
-        } else if (res.data.status === 'pending') {
-          console.log(res.data);
-          setCardinityPendingModalIsOpen(true);
-          setPendingFormData(res.data);
-          toast.warning(`Payment pending.`, {
-            position: toast.POSITION.TOP_CENTER,
-          });
-          return;
-        } else if (res.data.status === 'declined') {
-          toast.error(`Payment declined.`, {
-            position: toast.POSITION.TOP_CENTER,
-          });
-          setProcessing(false);
-        } else if (res.data.status === 401) {
-          toast.error(res.data.detail, {
-            position: toast.POSITION.TOP_CENTER,
-          });
-          setProcessing(false);
-        }
+    createMembershipPayment(
+      values,
+      payable,
+      userAgent,
+      user,
+      user.token,
+      daysLeft
+    ).then((res) => {
+      console.log(res);
+      if ((res.data.response && res.data.response.errors) || res.data.errors) {
+        toast.error(res.data.response.errors[0].message, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        setProcessing(false);
       }
-    );
+      if (res.data.response && res.data.response.status === 'approved') {
+        toast.success(
+          `Payment successful! Your paid membership will last for ${
+            payable === '10.00'
+              ? 'one month.'
+              : payable === '50.00'
+              ? 'six months.'
+              : payable === '90.00' && 'one year.'
+          }`,
+          {
+            position: toast.POSITION.TOP_CENTER,
+          }
+        );
+        setProcessing(false);
+        setSucceeded(true);
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+            membership: res.data.amendMembership.membership,
+            bankDetails: res.data.amendMembership.bankDetails,
+          },
+        });
+        const result = res.data.amendMembership.bankDetails.filter((obj) => {
+          return (
+            obj.cardBrand === res.data.response.payment_instrument.card_brand &&
+            obj.cardHolder === res.data.response.payment_instrument.holder &&
+            obj.cardNumber.slice(-4) ===
+              res.data.response.payment_instrument.pan &&
+            parseInt(obj.expiry.slice(0, 2)) ===
+              res.data.response.payment_instrument.exp_month &&
+            parseInt(obj.expiry.slice(-4)) ===
+              res.data.response.payment_instrument.exp_year
+          );
+        });
+        setUserBankDetails(result);
+      } else if (res.data.status === 'pending') {
+        console.log(res.data);
+        setCardinityPendingModalIsOpen(true);
+        setPendingFormData(res.data);
+        toast.warning(`Payment pending.`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        return;
+      } else if (res.data.status === 'declined') {
+        toast.error(`Payment declined.`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        setProcessing(false);
+      } else if (res.data.status === 401) {
+        toast.error(res.data.detail, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        setProcessing(false);
+      }
+    });
   };
 
   return (
@@ -131,11 +132,17 @@ const BecomePaid = ({ history }) => {
       <div className='main-content'>
         <Mobile />
         {user.membership.paid ? (
-          <h1 className='center'>
-            You currently have{' '}
-            {daysLeft === 1 ? `${daysLeft} day` : `${daysLeft} days`} of your
-            paid membership remaining
-          </h1>
+          <>
+            <h1 className='center'>
+              You currently have{' '}
+              {daysLeft === 1 ? `${daysLeft} day` : `${daysLeft} days`} of your
+              paid membership remaining
+            </h1>
+            <h2 className='center'>
+              These will be rolled over to your renewed subscription.
+            </h2>
+            <br />
+          </>
         ) : (
           <h1 className='center'>
             Would you like to become a paid member and receive full access to

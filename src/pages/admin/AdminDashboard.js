@@ -41,7 +41,7 @@ const AdminDashboard = () => {
   const fetchNumOfUsers = async () => {
     await axios
       .get(`${process.env.REACT_APP_API}/total-users`)
-      .then((res) => setNumUsers(res.data));
+      .then((res) => setNumUsers(res.data - 1));
   };
 
   const fetchNumOfMessages = async () => {

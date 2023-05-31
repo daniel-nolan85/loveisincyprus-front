@@ -21,6 +21,7 @@ import {
   removeFromWishlist,
 } from '../../functions/user';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const { TabPane } = Tabs;
 
@@ -33,8 +34,31 @@ const SingleProduct = ({ product, onStarClick, star }) => {
   let history = useHistory();
 
   useEffect(() => {
+    if (user && user.token) incrementViews();
+  }, [product]);
+
+  useEffect(() => {
     if (user && user.token) loadWishlist();
   }, [wishlist]);
+
+  const incrementViews = async () => {
+    await axios
+      .put(
+        `${process.env.REACT_APP_API}/increment-views`,
+        { _id: user._id, product },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const loadWishlist = () =>
     getWishlist(user.token).then((res) => {
