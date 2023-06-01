@@ -11,7 +11,7 @@ import {
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import defaultProfile from '../../assets/defaultProfile.png';
-import { Line, Bar } from 'react-chartjs-2';
+import { Line, Bar, Scatter } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto';
 
 const Analytics = ({ history }) => {
@@ -20,6 +20,7 @@ const Analytics = ({ history }) => {
   const [openFilter, setOpenFilter] = useState(false);
   const [currentNumNa, setCurrentNumNa] = useState(0);
   const [currentPerNa, setCurrentPerNa] = useState(0);
+  const [currentAverage, setCurrentAverage] = useState(0);
   const [showRegistrationGraphs, setShowRegistrationGraphs] = useState(false);
   const [registrationNumGraph, setRegistrationNumGraph] = useState({});
   const [registrationPerGraph, setRegistrationPerGraph] = useState({});
@@ -113,10 +114,18 @@ const Analytics = ({ history }) => {
   const [showRelWantedGraphs, setShowRelWantedGraphs] = useState(false);
   const [relWantedNumGraph, setRelWantedNumGraph] = useState({});
   const [relWantedPerGraph, setRelWantedPerGraph] = useState({});
+  const [showPointsGraphs, setShowPointsGraphs] = useState(false);
+  const [pointsGraph, setPointsGraph] = useState({});
   const [showProductsViewedGraphs, setShowProductsViewedGraphs] =
     useState(false);
   const [productsViewedNumGraph, setProductsViewedNumGraph] = useState({});
   const [productsViewedPerGraph, setProductsViewedPerGraph] = useState({});
+  const [showTotalPaidGraphs, setShowTotalPaidGraphs] = useState(false);
+  const [totalPaidGraph, setTotalPaidGraph] = useState({});
+  const [showOrdersGraphs, setShowOrdersGraphs] = useState(false);
+  const [ordersGraph, setOrdersGraph] = useState({});
+  const [showKeyWordsGraphs, setShowKeyWordsGraphs] = useState(false);
+  const [keyWordsGraph, setKeyWordsGraph] = useState({});
 
   let { _id, token, role } = useSelector((state) => state.user);
 
@@ -184,7 +193,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowRegistrationGraphs(true);
 
     const registrationCount = allUsers.reduce((count, user) => {
@@ -268,7 +281,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowVisitationGraphs(true);
 
     const visitationCount = allUsers.reduce((count, user) => {
@@ -357,7 +374,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowGenderGraphs(true);
 
     const gendersCount = allUsers.reduce(
@@ -461,7 +482,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowHeightGraphs(true);
 
     const allHeights = [
@@ -970,7 +995,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowBuildGraphs(true);
 
     const allBuilds = [
@@ -1165,7 +1194,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowHairColourGraphs(true);
 
     const allHairColours = [
@@ -1218,74 +1251,74 @@ const Analytics = ({ history }) => {
       datasets: [
         {
           label: 'Black',
-          backgroundColor: 'rgba(255, 0, 0, 0.2)',
-          borderColor: 'rgba(255, 0, 0, 1)',
+          backgroundColor: 'rgba(0, 0, 0, 0.2)',
+          borderColor: 'rgba(0, 0, 0, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
-          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          hoverBackgroundColor: 'rgba(0, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(0, 0, 0, 1)',
           data: [numOfBlack],
         },
         {
           label: 'Blonde',
-          backgroundColor: 'rgba(255, 165, 0, 0.2)',
-          borderColor: 'rgba(255, 165, 0, 1)',
-          borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
-          hoverBorderColor: 'rgba(255, 165, 0, 1)',
-          data: [numOfBlonde],
-        },
-        {
-          label: 'Brown',
           backgroundColor: 'rgba(255, 255, 0, 0.2)',
           borderColor: 'rgba(255, 255, 0, 1)',
           borderWidth: 1,
           hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
           hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [numOfBlonde],
+        },
+        {
+          label: 'Brown',
+          backgroundColor: 'rgba(165, 42, 42, 0.2)',
+          borderColor: 'rgba(165, 42, 42, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(165, 42, 42, 0.4)',
+          hoverBorderColor: 'rgba(165, 42, 42, 1)',
           data: [numOfBrown],
         },
         {
           label: 'Chestnut',
-          backgroundColor: 'rgba(0, 128, 0, 0.2)',
-          borderColor: 'rgba(0, 128, 0, 1)',
+          backgroundColor: 'rgba(139, 69, 19, 0.2)',
+          borderColor: 'rgba(139, 69, 19, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(0, 128, 0, 0.4)',
-          hoverBorderColor: 'rgba(0, 128, 0, 1)',
+          hoverBackgroundColor: 'rgba(139, 69, 19, 0.4)',
+          hoverBorderColor: 'rgba(139, 69, 19, 1)',
           data: [numOfChestnut],
         },
         {
           label: 'Dyed',
-          backgroundColor: 'rgba(0, 0, 255, 0.2)',
-          borderColor: 'rgba(0, 0, 255, 1)',
+          backgroundColor: 'rgba(128, 128, 128, 0.2)',
+          borderColor: 'rgba(128, 128, 128, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(0, 0, 255, 0.4)',
-          hoverBorderColor: 'rgba(0, 0, 255, 1)',
+          hoverBackgroundColor: 'rgba(128, 128, 128, 0.4)',
+          hoverBorderColor: 'rgba(128, 128, 128, 1)',
           data: [numOfDyed],
         },
         {
           label: 'Golden',
-          backgroundColor: 'rgba(75, 0, 130, 0.2)',
-          borderColor: 'rgba(75, 0, 130, 1)',
+          backgroundColor: 'rgba(255, 215, 0, 0.2)',
+          borderColor: 'rgba(255, 215, 0, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(75, 0, 130, 0.4)',
-          hoverBorderColor: 'rgba(75, 0, 130, 1)',
+          hoverBackgroundColor: 'rgba(255, 215, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 215, 0, 1)',
           data: [numOfGolden],
         },
         {
           label: 'Red',
-          backgroundColor: 'rgba(238, 130, 238, 0.2)',
-          borderColor: 'rgba(238, 130, 238, 1)',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(238, 130, 238, 0.4)',
-          hoverBorderColor: 'rgba(238, 130, 238, 1)',
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
           data: [numOfRed],
         },
         {
           label: 'White',
-          backgroundColor: 'rgba(128, 0, 0, 0.2)',
-          borderColor: 'rgba(128, 0, 0, 1)',
+          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+          borderColor: 'rgba(255, 255, 255, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(128, 0, 0, 0.4)',
-          hoverBorderColor: 'rgba(128, 0, 0, 1)',
+          hoverBackgroundColor: 'rgba(255, 255, 255, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 255, 1)',
           data: [numOfWhite],
         },
       ],
@@ -1296,74 +1329,74 @@ const Analytics = ({ history }) => {
       datasets: [
         {
           label: 'Black',
-          backgroundColor: 'rgba(255, 0, 0, 0.2)',
-          borderColor: 'rgba(255, 0, 0, 1)',
+          backgroundColor: 'rgba(0, 0, 0, 0.2)',
+          borderColor: 'rgba(0, 0, 0, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
-          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          hoverBackgroundColor: 'rgba(0, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(0, 0, 0, 1)',
           data: [perOfBlack],
         },
         {
           label: 'Blonde',
-          backgroundColor: 'rgba(255, 165, 0, 0.2)',
-          borderColor: 'rgba(255, 165, 0, 1)',
-          borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
-          hoverBorderColor: 'rgba(255, 165, 0, 1)',
-          data: [perOfBlonde],
-        },
-        {
-          label: 'Brown',
           backgroundColor: 'rgba(255, 255, 0, 0.2)',
           borderColor: 'rgba(255, 255, 0, 1)',
           borderWidth: 1,
           hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
           hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [perOfBlonde],
+        },
+        {
+          label: 'Brown',
+          backgroundColor: 'rgba(165, 42, 42, 0.2)',
+          borderColor: 'rgba(165, 42, 42, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(165, 42, 42, 0.4)',
+          hoverBorderColor: 'rgba(165, 42, 42, 1)',
           data: [perOfBrown],
         },
         {
           label: 'Chestnut',
-          backgroundColor: 'rgba(0, 128, 0, 0.2)',
-          borderColor: 'rgba(0, 128, 0, 1)',
+          backgroundColor: 'rgba(139, 69, 19, 0.2)',
+          borderColor: 'rgba(139, 69, 19, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(0, 128, 0, 0.4)',
-          hoverBorderColor: 'rgba(0, 128, 0, 1)',
+          hoverBackgroundColor: 'rgba(139, 69, 19, 0.4)',
+          hoverBorderColor: 'rgba(139, 69, 19, 1)',
           data: [perOfChestnut],
         },
         {
           label: 'Dyed',
-          backgroundColor: 'rgba(0, 0, 255, 0.2)',
-          borderColor: 'rgba(0, 0, 255, 1)',
+          backgroundColor: 'rgba(128, 128, 128, 0.2)',
+          borderColor: 'rgba(128, 128, 128, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(0, 0, 255, 0.4)',
-          hoverBorderColor: 'rgba(0, 0, 255, 1)',
+          hoverBackgroundColor: 'rgba(128, 128, 128, 0.4)',
+          hoverBorderColor: 'rgba(128, 128, 128, 1)',
           data: [perOfDyed],
         },
         {
           label: 'Golden',
-          backgroundColor: 'rgba(75, 0, 130, 0.2)',
-          borderColor: 'rgba(75, 0, 130, 1)',
+          backgroundColor: 'rgba(255, 215, 0, 0.2)',
+          borderColor: 'rgba(255, 215, 0, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(75, 0, 130, 0.4)',
-          hoverBorderColor: 'rgba(75, 0, 130, 1)',
+          hoverBackgroundColor: 'rgba(255, 215, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 215, 0, 1)',
           data: [perOfGolden],
         },
         {
           label: 'Red',
-          backgroundColor: 'rgba(238, 130, 238, 0.2)',
-          borderColor: 'rgba(238, 130, 238, 1)',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(238, 130, 238, 0.4)',
-          hoverBorderColor: 'rgba(238, 130, 238, 1)',
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
           data: [perOfRed],
         },
         {
           label: 'White',
-          backgroundColor: 'rgba(128, 0, 0, 0.2)',
-          borderColor: 'rgba(128, 0, 0, 1)',
+          backgroundColor: 'rgba(255, 255, 255, 0.2)',
+          borderColor: 'rgba(255, 255, 255, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(128, 0, 0, 0.4)',
-          hoverBorderColor: 'rgba(128, 0, 0, 1)',
+          hoverBackgroundColor: 'rgba(255, 255, 255, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 255, 1)',
           data: [perOfWhite],
         },
       ],
@@ -1402,7 +1435,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowHairStyleGraphs(true);
 
     const allHairStyles = ['curvy', 'straight', 'wavy'];
@@ -1529,7 +1566,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowHairLengthGraphs(true);
 
     const allHairLengths = ['bald', 'short', 'medium', 'long'];
@@ -1676,7 +1717,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowEyeColourGraphs(true);
 
     const allEyeColours = ['blue', 'brown', 'green', 'hazel'];
@@ -1711,38 +1756,38 @@ const Analytics = ({ history }) => {
       datasets: [
         {
           label: 'Blue',
-          backgroundColor: 'rgba(255, 0, 0, 0.2)',
-          borderColor: 'rgba(255, 0, 0, 1)',
+          backgroundColor: 'rgba(0, 0, 255, 0.2)',
+          borderColor: 'rgba(0, 0, 255, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
-          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          hoverBackgroundColor: 'rgba(0, 0, 255, 0.4)',
+          hoverBorderColor: 'rgba(0, 0, 255, 1)',
           data: [numOfBlue],
         },
         {
           label: 'Brown',
-          backgroundColor: 'rgba(255, 165, 0, 0.2)',
-          borderColor: 'rgba(255, 165, 0, 1)',
+          backgroundColor: 'rgba(139, 69, 19, 0.2)',
+          borderColor: 'rgba(139, 69, 19, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
-          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          hoverBackgroundColor: 'rgba(139, 69, 19, 0.4)',
+          hoverBorderColor: 'rgba(139, 69, 19, 1)',
           data: [numOfBrown],
         },
         {
           label: 'Green',
-          backgroundColor: 'rgba(255, 255, 0, 0.2)',
-          borderColor: 'rgba(255, 255, 0, 1)',
-          borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
-          hoverBorderColor: 'rgba(255, 255, 0, 1)',
-          data: [numOfGreen],
-        },
-        {
-          label: 'Hazel',
           backgroundColor: 'rgba(0, 128, 0, 0.2)',
           borderColor: 'rgba(0, 128, 0, 1)',
           borderWidth: 1,
           hoverBackgroundColor: 'rgba(0, 128, 0, 0.4)',
           hoverBorderColor: 'rgba(0, 128, 0, 1)',
+          data: [numOfGreen],
+        },
+        {
+          label: 'Hazel',
+          backgroundColor: 'rgba(189, 183, 107, 0.2)',
+          borderColor: 'rgba(189, 183, 107, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(189, 183, 107, 0.4)',
+          hoverBorderColor: 'rgba(189, 183, 107, 1)',
           data: [numOfHazel],
         },
       ],
@@ -1753,38 +1798,38 @@ const Analytics = ({ history }) => {
       datasets: [
         {
           label: 'Blue',
-          backgroundColor: 'rgba(255, 0, 0, 0.2)',
-          borderColor: 'rgba(255, 0, 0, 1)',
+          backgroundColor: 'rgba(0, 0, 255, 0.2)',
+          borderColor: 'rgba(0, 0, 255, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
-          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          hoverBackgroundColor: 'rgba(0, 0, 255, 0.4)',
+          hoverBorderColor: 'rgba(0, 0, 255, 1)',
           data: [perOfBlue],
         },
         {
           label: 'Brown',
-          backgroundColor: 'rgba(255, 165, 0, 0.2)',
-          borderColor: 'rgba(255, 165, 0, 1)',
+          backgroundColor: 'rgba(139, 69, 19, 0.2)',
+          borderColor: 'rgba(139, 69, 19, 1)',
           borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
-          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          hoverBackgroundColor: 'rgba(139, 69, 19, 0.4)',
+          hoverBorderColor: 'rgba(139, 69, 19, 1)',
           data: [perOfBrown],
         },
         {
           label: 'Green',
-          backgroundColor: 'rgba(255, 255, 0, 0.2)',
-          borderColor: 'rgba(255, 255, 0, 1)',
-          borderWidth: 1,
-          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
-          hoverBorderColor: 'rgba(255, 255, 0, 1)',
-          data: [perOfGreen],
-        },
-        {
-          label: 'Hazel',
           backgroundColor: 'rgba(0, 128, 0, 0.2)',
           borderColor: 'rgba(0, 128, 0, 1)',
           borderWidth: 1,
           hoverBackgroundColor: 'rgba(0, 128, 0, 0.4)',
           hoverBorderColor: 'rgba(0, 128, 0, 1)',
+          data: [perOfGreen],
+        },
+        {
+          label: 'Hazel',
+          backgroundColor: 'rgba(189, 183, 107, 0.2)',
+          borderColor: 'rgba(189, 183, 107, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(189, 183, 107, 0.4)',
+          hoverBorderColor: 'rgba(189, 183, 107, 1)',
           data: [perOfHazel],
         },
       ],
@@ -1823,7 +1868,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowFeetTypeGraphs(true);
 
     const allFeetTypes = ['egyptian', 'greek', 'roman'];
@@ -1950,7 +1999,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowMaritalGraphs(true);
 
     const allMaritals = [
@@ -2124,7 +2177,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowLocationGraphs(true);
 
     const allLocations = [
@@ -2297,7 +2354,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowAgeGraphs(true);
 
     const ageRanges = [
@@ -2538,7 +2599,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowChildrenGraphs(true);
 
     const numOfChildrenCount = [
@@ -2757,7 +2822,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowLivesWithGraphs(true);
 
     const allLivesWiths = [
@@ -2931,7 +3000,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowNationalityGraphs(true);
 
     const nationalityCounts = {};
@@ -3027,7 +3100,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowLanguageGraphs(true);
 
     const languageCounts = {};
@@ -3122,7 +3199,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowEthnicityGraphs(true);
 
     const allEthnicities = [
@@ -3361,7 +3442,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowMusicGraphs(true);
 
     const musicCounts = {};
@@ -3457,7 +3542,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowMoviesGraphs(true);
 
     const movieCounts = {};
@@ -3553,7 +3642,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowReligionGraphs(true);
 
     const allReligions = [
@@ -3876,7 +3969,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowOccupationGraphs(true);
 
     const occupationCounts = {};
@@ -3973,7 +4070,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowEducationGraphs(true);
 
     const allEducations = [
@@ -4171,7 +4272,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowHobbiesGraphs(true);
 
     const hobbiesCounts = {};
@@ -4267,7 +4372,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowBooksGraphs(true);
 
     const booksCounts = {};
@@ -4363,7 +4472,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowSportsGraphs(true);
 
     const sportsCounts = {};
@@ -4459,7 +4572,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowSmokesGraphs(true);
 
     const allSmokes = ['never', 'often', 'sometimes'];
@@ -4586,7 +4703,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowDrinksGraphs(true);
 
     const allDrinks = ['never', 'often', 'sometimes'];
@@ -4615,7 +4736,7 @@ const Analytics = ({ history }) => {
     console.log('drinksCount => ', drinksCount);
 
     setDrinksNumGraph({
-      labels: ['Number of users by whether or not they drink'],
+      labels: ['Number of users by how often they drink alcohol'],
       datasets: [
         {
           label: 'Never',
@@ -4648,7 +4769,7 @@ const Analytics = ({ history }) => {
     });
 
     setDrinksPerGraph({
-      labels: ['Percentage of users by whether or not they drink'],
+      labels: ['Percentage of users by how often they drink alcohol'],
       datasets: [
         {
           label: 'Never',
@@ -4713,7 +4834,11 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowFoodGraphs(true);
 
     const allFoods = [
@@ -4908,7 +5033,11 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowSportsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowTreatsGraphs(true);
 
     const treatsCounts = {};
@@ -5004,7 +5133,11 @@ const Analytics = ({ history }) => {
     setShowDrinksGraphs(false);
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
+    setShowPointsGraphs(false);
     setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowRelWantedGraphs(true);
 
     const allRelWanted = [
@@ -5127,6 +5260,70 @@ const Analytics = ({ history }) => {
     });
   };
 
+  const pointsGraphs = () => {
+    setOpenFilter(false);
+    setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
+    setShowGenderGraphs(false);
+    setShowHeightGraphs(false);
+    setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
+    setShowMaritalGraphs(false);
+    setShowLocationGraphs(false);
+    setShowAgeGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
+    setShowEthnicityGraphs(false);
+    setShowMusicGraphs(false);
+    setShowMoviesGraphs(false);
+    setShowReligionGraphs(false);
+    setShowOccupationGraphs(false);
+    setShowEducationGraphs(false);
+    setShowHobbiesGraphs(false);
+    setShowBooksGraphs(false);
+    setShowSmokesGraphs(false);
+    setShowDrinksGraphs(false);
+    setShowFoodGraphs(false);
+    setShowSportsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowTreatsGraphs(false);
+    setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
+    setShowPointsGraphs(true);
+
+    const totalPoints = allUsers.reduce(
+      (sum, user) => sum + (user.pointsTotal || 0),
+      0
+    );
+    setCurrentAverage(totalPoints / allUsers.length);
+
+    setPointsGraph({
+      labels: [],
+      datasets: [
+        {
+          label: 'User points totals',
+          backgroundColor: 'rgba(239, 91, 133, 0.2)',
+          borderColor: 'rgba(239, 91, 133, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(239, 91, 133, 0.4)',
+          hoverBorderColor: 'rgba(239, 91, 133, 1)',
+          data: allUsers.map((user, index) => ({
+            x: index,
+            y: user.pointsTotal,
+          })),
+        },
+      ],
+    });
+  };
+
   const productsViewedGraphs = () => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -5160,6 +5357,10 @@ const Analytics = ({ history }) => {
     setShowFoodGraphs(false);
     setShowTreatsGraphs(false);
     setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
     setShowProductsViewedGraphs(true);
 
     const allProductsViewed = [
@@ -5413,6 +5614,256 @@ const Analytics = ({ history }) => {
     });
   };
 
+  const totalPaidGraphs = () => {
+    setOpenFilter(false);
+    setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
+    setShowGenderGraphs(false);
+    setShowHeightGraphs(false);
+    setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
+    setShowMaritalGraphs(false);
+    setShowLocationGraphs(false);
+    setShowAgeGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
+    setShowEthnicityGraphs(false);
+    setShowMusicGraphs(false);
+    setShowMoviesGraphs(false);
+    setShowReligionGraphs(false);
+    setShowOccupationGraphs(false);
+    setShowEducationGraphs(false);
+    setShowHobbiesGraphs(false);
+    setShowBooksGraphs(false);
+    setShowSmokesGraphs(false);
+    setShowDrinksGraphs(false);
+    setShowFoodGraphs(false);
+    setShowSportsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowTreatsGraphs(false);
+    setShowPointsGraphs(false);
+    setShowProductsViewedGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
+    setShowTotalPaidGraphs(true);
+
+    const usersWithoutPaidTotal = allUsers.filter(
+      (user) => user.itemsOrderedValue === undefined
+    );
+    setCurrentNumNa(usersWithoutPaidTotal.length);
+
+    const totalPaid = allUsers.reduce(
+      (sum, user) => sum + (user.itemsOrderedValue || 0),
+      0
+    );
+    setCurrentAverage(totalPaid / allUsers.length);
+
+    setTotalPaidGraph({
+      labels: [],
+      datasets: [
+        {
+          label: 'User spending in shop totals',
+          backgroundColor: 'rgba(239, 91, 133, 0.2)',
+          borderColor: 'rgba(239, 91, 133, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(239, 91, 133, 0.4)',
+          hoverBorderColor: 'rgba(239, 91, 133, 1)',
+          data: allUsers.map((user, index) => ({
+            x: index,
+            y: user.itemsOrderedValue,
+          })),
+        },
+      ],
+    });
+  };
+
+  const ordersGraphs = () => {
+    setOpenFilter(false);
+    setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
+    setShowGenderGraphs(false);
+    setShowHeightGraphs(false);
+    setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
+    setShowMaritalGraphs(false);
+    setShowLocationGraphs(false);
+    setShowAgeGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
+    setShowEthnicityGraphs(false);
+    setShowMusicGraphs(false);
+    setShowMoviesGraphs(false);
+    setShowReligionGraphs(false);
+    setShowOccupationGraphs(false);
+    setShowEducationGraphs(false);
+    setShowHobbiesGraphs(false);
+    setShowBooksGraphs(false);
+    setShowSmokesGraphs(false);
+    setShowDrinksGraphs(false);
+    setShowFoodGraphs(false);
+    setShowSportsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowTreatsGraphs(false);
+    setShowPointsGraphs(false);
+    setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowKeyWordsGraphs(false);
+    setShowOrdersGraphs(true);
+
+    const usersWithoutOrders = allUsers.filter(
+      (user) => user.orders === undefined
+    );
+    setCurrentNumNa(usersWithoutOrders.length);
+
+    const totalOrders = allUsers.reduce(
+      (sum, user) => sum + (user.orders || 0),
+      0
+    );
+    setCurrentAverage(totalOrders / allUsers.length);
+
+    setOrdersGraph({
+      labels: [],
+      datasets: [
+        {
+          label: 'User orders placed',
+          backgroundColor: 'rgba(239, 91, 133, 0.2)',
+          borderColor: 'rgba(239, 91, 133, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(239, 91, 133, 0.4)',
+          hoverBorderColor: 'rgba(239, 91, 133, 1)',
+          data: allUsers.map((user, index) => ({
+            x: index,
+            y: user.orders,
+          })),
+        },
+      ],
+    });
+  };
+
+  const keyWordsGraphs = () => {
+    setOpenFilter(false);
+    setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
+    setShowGenderGraphs(false);
+    setShowHeightGraphs(false);
+    setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
+    setShowMaritalGraphs(false);
+    setShowLocationGraphs(false);
+    setShowAgeGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
+    setShowEthnicityGraphs(false);
+    setShowMusicGraphs(false);
+    setShowMoviesGraphs(false);
+    setShowReligionGraphs(false);
+    setShowOccupationGraphs(false);
+    setShowEducationGraphs(false);
+    setShowHobbiesGraphs(false);
+    setShowBooksGraphs(false);
+    setShowSmokesGraphs(false);
+    setShowDrinksGraphs(false);
+    setShowFoodGraphs(false);
+    setShowSportsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowTreatsGraphs(false);
+    setShowPointsGraphs(false);
+    setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(true);
+
+    const stopwords = [
+      'a',
+      'an',
+      'the',
+      'and',
+      'or',
+      'but',
+      'in',
+      'on',
+      'at',
+      'i',
+      'to',
+      'for',
+      'am',
+      'of',
+      'my',
+      'with',
+      'me',
+      'have',
+      'you',
+      'is',
+      'who',
+      'just',
+      "i'm",
+      'that',
+      'very',
+      ',',
+    ];
+    setCurrentNumNa(allUsers.filter((user) => !user.about).length);
+
+    const aboutWordsCount = {};
+    allUsers.forEach((user) => {
+      if (user.about) {
+        const words = user.about.toLowerCase().split(' ');
+        words.forEach((word) => {
+          if (!stopwords.includes(word)) {
+            if (aboutWordsCount[word]) {
+              aboutWordsCount[word]++;
+            } else {
+              aboutWordsCount[word] = 1;
+            }
+          }
+        });
+      }
+    });
+
+    const top15Words = Object.entries(aboutWordsCount)
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 15)
+      .map(([word, count]) => ({ word, count }));
+
+    console.log('Number of users without about:', currentNumNa);
+    console.log('Top 15 words in about fields:', top15Words);
+
+    const labels = top15Words.map((wordData) => wordData.word);
+    const counts = top15Words.map((wordData) => wordData.count);
+
+    setKeyWordsGraph({
+      labels,
+      datasets: [
+        {
+          label: 'Most common key words in users about sections',
+          backgroundColor: 'rgba(239, 91, 133, 0.2)',
+          borderColor: 'rgba(239, 91, 133, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(239, 91, 133, 0.4)',
+          hoverBorderColor: 'rgba(239, 91, 133, 1)',
+          data: counts,
+        },
+      ],
+    });
+  };
+
   return (
     <div className='container search-container'>
       <LeftSidebar />
@@ -5463,17 +5914,15 @@ const Analytics = ({ history }) => {
                     <li onClick={foodGraphs}>Food</li>
                     <li onClick={treatsGraphs}>How they treat themselves</li>
                     <li onClick={relWantedGraphs}>Dating purpose</li>
-                    <li># Points</li>
+                    <li onClick={pointsGraphs}># Points</li>
                     <li onClick={productsViewedGraphs}>
                       # Page visits of each item in shop
                     </li>
-                    <li>Total amount paid in the shop</li>
-                    <li>Amount paid in shop since beginning</li>
-                    <li>Average amount by order in shop</li>
-                    <li># Orders in shop</li>
-                    <li>Category of item ordered in shop</li>
-                    <li>Sub-category of item ordered in shop</li>
-                    <li>Free keywords</li>
+                    <li onClick={totalPaidGraphs}>
+                      Total amount paid in the shop
+                    </li>
+                    <li onClick={ordersGraphs}># Orders in shop</li>
+                    <li onClick={keyWordsGraphs}>Free keywords</li>
                   </ul>
                 )}
               </div>
@@ -6236,6 +6685,40 @@ const Analytics = ({ history }) => {
                   </h2>
                 </>
               )}
+              {showPointsGraphs && (
+                <>
+                  <h1 className='center'># Points</h1>
+                  <Scatter
+                    data={pointsGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                    options={{
+                      plugins: {
+                        tooltip: {
+                          enabled: true,
+                          mode: 'nearest',
+                          callbacks: {
+                            title: function () {
+                              return '';
+                            },
+                            label: function (context) {
+                              const dataPoint = context.parsed;
+                              const userIndex = dataPoint.x;
+                              const user = allUsers[userIndex];
+                              return `${user.username} - Points: ${dataPoint.y}`;
+                            },
+                          },
+                        },
+                      },
+                    }}
+                  />
+                  <h2 className='center'>
+                    The average amount of points per user is currently
+                    <span>{currentAverage.toFixed(2)}</span>
+                  </h2>
+                </>
+              )}
               {showProductsViewedGraphs && (
                 <>
                   <h1 className='center'># Page visits of each item in shop</h1>
@@ -6258,6 +6741,118 @@ const Analytics = ({ history }) => {
                   <h2 className='center'>
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet viewed any products
+                  </h2>
+                </>
+              )}
+              {showTotalPaidGraphs && (
+                <>
+                  <h1 className='center'>Total amount paid in the shop</h1>
+                  <Scatter
+                    data={totalPaidGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                    options={{
+                      scales: {
+                        x: {
+                          beginAtZero: true,
+                        },
+                        y: {
+                          beginAtZero: true,
+                          ticks: {
+                            callback: function (value) {
+                              return '€' + value;
+                            },
+                          },
+                        },
+                      },
+                      plugins: {
+                        tooltip: {
+                          enabled: true,
+                          mode: 'nearest',
+                          callbacks: {
+                            title: function () {
+                              return '';
+                            },
+                            label: function (context) {
+                              const dataPoint = context.parsed;
+                              const userIndex = dataPoint.x;
+                              const user = allUsers[userIndex];
+                              return `${user.username} - Spent: €${dataPoint.y}`;
+                            },
+                          },
+                        },
+                      },
+                    }}
+                  />
+                  <h2 className='center'>
+                    The average amount paid in the shop per user is currently
+                    <span>€{currentAverage.toFixed(2)}</span>
+                  </h2>
+                  <h2 className='center'>
+                    <span>{currentNumNa}</span> users have not yet made a store
+                    purchase
+                  </h2>
+                </>
+              )}
+              {showOrdersGraphs && (
+                <>
+                  <h1 className='center'># Orders in shop</h1>
+                  <Scatter
+                    data={ordersGraph}
+                    style={{
+                      marginBottom: '30px',
+                    }}
+                    options={{
+                      scales: {
+                        x: {
+                          beginAtZero: true,
+                        },
+                        y: {
+                          beginAtZero: true,
+                        },
+                      },
+                      plugins: {
+                        tooltip: {
+                          enabled: true,
+                          mode: 'nearest',
+                          callbacks: {
+                            title: function () {
+                              return '';
+                            },
+                            label: function (context) {
+                              const dataPoint = context.parsed;
+                              const userIndex = dataPoint.x;
+                              const user = allUsers[userIndex];
+                              return `${user.username} - Orders: ${dataPoint.y}`;
+                            },
+                          },
+                        },
+                      },
+                    }}
+                  />
+                  <h2 className='center'>
+                    The average amount of orders placed per user is currently
+                    <span>{currentAverage.toFixed(2)}</span>
+                  </h2>
+                  <h2 className='center'>
+                    <span>{currentNumNa}</span> users have not yet placed an
+                    order
+                  </h2>
+                </>
+              )}
+              {showKeyWordsGraphs && (
+                <>
+                  <h1 className='center'>Free keywords</h1>
+                  <Bar
+                    data={keyWordsGraph}
+                    style={{
+                      marginBottom: '20px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentNumNa}</span> users have not yet updated their
+                    about section
                   </h2>
                 </>
               )}
