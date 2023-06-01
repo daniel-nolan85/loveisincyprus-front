@@ -6,21 +6,29 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSpinner,
   faFilter,
-  faHeartPulse,
+  faCalendarDays,
+  faFilePdf,
 } from '@fortawesome/free-solid-svg-icons';
-import moment from 'moment';
-import { Link } from 'react-router-dom';
-import defaultProfile from '../../assets/defaultProfile.png';
-import { Line, Bar, Scatter } from 'react-chartjs-2';
+import { Bar, Scatter } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 const Analytics = ({ history }) => {
   const [loading, setLoading] = useState(true);
   const [allUsers, setAllUsers] = useState([]);
+  const [allUsersLoaded, setAllUsersLoaded] = useState(false);
   const [openFilter, setOpenFilter] = useState(false);
+  const [datePickerIsOpen, setDatePickerIsOpen] = useState(false);
+  const [filterByDate, setFilterByDate] = useState(false);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [currentNumNa, setCurrentNumNa] = useState(0);
   const [currentPerNa, setCurrentPerNa] = useState(0);
   const [currentAverage, setCurrentAverage] = useState(0);
+  const [currentGraph, setCurrentGraph] = useState('');
   const [showRegistrationGraphs, setShowRegistrationGraphs] = useState(false);
   const [registrationNumGraph, setRegistrationNumGraph] = useState({});
   const [registrationPerGraph, setRegistrationPerGraph] = useState({});
@@ -140,8 +148,35 @@ const Analytics = ({ history }) => {
   }, []);
 
   useEffect(() => {
-    if (allUsers && allUsers.length > 0) registrationGraphs();
-  }, [allUsers]);
+    if (allUsers && allUsers.length > 0 && allUsersLoaded) {
+      registrationGraphs();
+      setAllUsersLoaded(false);
+    }
+  }, [allUsers, allUsersLoaded]);
+
+  useEffect(() => {
+    if (startDate && endDate) {
+      console.log('re-rendering');
+      filterUsers();
+    }
+  }, [endDate]);
+
+  useEffect(() => {
+    if (allUsers && filterByDate) {
+      reRenderCurrentGraph();
+      setFilterByDate(false);
+    }
+  }, [allUsers, filterByDate]);
+
+  const chooseDuration = () => {
+    setDatePickerIsOpen(!datePickerIsOpen);
+  };
+
+  const setRange = (dates) => {
+    const [start, end] = dates;
+    setStartDate(start);
+    setEndDate(end);
+  };
 
   const fetchUsersForAnalytics = async () => {
     await axios
@@ -151,8 +186,8 @@ const Analytics = ({ history }) => {
         },
       })
       .then((res) => {
-        console.log(res.data);
         setAllUsers(res.data);
+        setAllUsersLoaded(true);
         setLoading(false);
       })
       .catch((err) => {
@@ -161,7 +196,70 @@ const Analytics = ({ history }) => {
       });
   };
 
+  const filterUsers = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-users-for-analytics`, {
+        headers: {
+          authtoken: token,
+        },
+      })
+      .then((res) => {
+        setDatePickerIsOpen(false);
+        const filtered = res.data.filter((user) => {
+          const createdAt = new Date(user.createdAt);
+          return createdAt >= startDate && createdAt <= endDate;
+        });
+        setAllUsers(filtered);
+        setFilterByDate(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
+
+  const reRenderCurrentGraph = () => {
+    console.log('reRenderCurrentGraph');
+    if (currentGraph === 'registration') registrationGraphs();
+    if (currentGraph === 'visitation') visitationGraphs();
+    if (currentGraph === 'gender') genderGraphs();
+    if (currentGraph === 'height') heightGraphs();
+    if (currentGraph === 'build') buildGraphs();
+    if (currentGraph === 'hairColour') hairColourGraphs();
+    if (currentGraph === 'hairStyle') hairStyleGraphs();
+    if (currentGraph === 'hairLength') hairLengthGraphs();
+    if (currentGraph === 'eyeColour') eyeColourGraphs();
+    if (currentGraph === 'feetType') feetTypeGraphs();
+    if (currentGraph === 'marital') maritalGraphs();
+    if (currentGraph === 'location') locationGraphs();
+    if (currentGraph === 'age') ageGraphs();
+    if (currentGraph === 'children') childrenGraphs();
+    if (currentGraph === 'livesWith') livesWithGraphs();
+    if (currentGraph === 'nationality') nationalityGraphs();
+    if (currentGraph === 'language') languageGraphs();
+    if (currentGraph === 'ethnicity') ethnicityGraphs();
+    if (currentGraph === 'music') musicGraphs();
+    if (currentGraph === 'movies') moviesGraphs();
+    if (currentGraph === 'religion') religionGraphs();
+    if (currentGraph === 'occupation') occupationGraphs();
+    if (currentGraph === 'education') educationGraphs();
+    if (currentGraph === 'hobbies') hobbiesGraphs();
+    if (currentGraph === 'books') booksGraphs();
+    if (currentGraph === 'sports') sportsGraphs();
+    if (currentGraph === 'smokes') smokesGraphs();
+    if (currentGraph === 'drinks') drinksGraphs();
+    if (currentGraph === 'food') foodGraphs();
+    if (currentGraph === 'treats') treatsGraphs();
+    if (currentGraph === 'relWanted') relWantedGraphs();
+    if (currentGraph === 'points') pointsGraphs();
+    if (currentGraph === 'productsViewed') productsViewedGraphs();
+    if (currentGraph === 'totalPaid') totalPaidGraphs();
+    if (currentGraph === 'orders') ordersGraphs();
+    if (currentGraph === 'keyWords') keyWordsGraphs();
+  };
+
   const registrationGraphs = () => {
+    setCurrentGraph('registration');
     setOpenFilter(false);
     setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
@@ -211,8 +309,6 @@ const Analytics = ({ history }) => {
       .map(([date, count]) => ({ date, count }))
       .sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    console.log('registrationSorted => ', registrationSorted);
-
     const labels = registrationSorted.map((item) => item.date);
     const num = registrationSorted.map((item) => item.count);
     const per = registrationSorted.map(
@@ -250,6 +346,7 @@ const Analytics = ({ history }) => {
   };
 
   const visitationGraphs = () => {
+    setCurrentGraph('visitation');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowGenderGraphs(false);
@@ -304,8 +401,6 @@ const Analytics = ({ history }) => {
       .map(([date, count]) => ({ date, count }))
       .sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    console.log('visitationSorted => ', visitationSorted);
-
     const labels = visitationSorted.map((item) => item.date);
     const num = visitationSorted.map((item) => item.count);
     const per = visitationSorted.map(
@@ -343,6 +438,7 @@ const Analytics = ({ history }) => {
   };
 
   const genderGraphs = () => {
+    setCurrentGraph('gender');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -451,6 +547,7 @@ const Analytics = ({ history }) => {
   };
 
   const heightGraphs = () => {
+    setCurrentGraph('height');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -569,8 +666,6 @@ const Analytics = ({ history }) => {
     const perOf66 = (heightsCount['6-6'] / allUsers.length) * 100;
     const perOf67 = (heightsCount['6-7'] / allUsers.length) * 100;
     setCurrentPerNa((heightsCount['na'] / allUsers.length) * 100);
-
-    console.log('heightsCount => ', heightsCount);
 
     setHeightNumGraph({
       labels: ['Number of users by height'],
@@ -964,6 +1059,7 @@ const Analytics = ({ history }) => {
   };
 
   const buildGraphs = () => {
+    setCurrentGraph('build');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -1038,8 +1134,6 @@ const Analytics = ({ history }) => {
     const perOfSkinny = (buildsCount['skinny'] / allUsers.length) * 100;
     const perOfSlim = (buildsCount['slim'] / allUsers.length) * 100;
     setCurrentPerNa((buildsCount['na'] / allUsers.length) * 100);
-
-    console.log('buildsCount => ', buildsCount);
 
     setBuildNumGraph({
       labels: ['Number of users by body shape'],
@@ -1163,6 +1257,7 @@ const Analytics = ({ history }) => {
   };
 
   const hairColourGraphs = () => {
+    setCurrentGraph('hairColour');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -1243,8 +1338,6 @@ const Analytics = ({ history }) => {
     const perOfRed = (hairColoursCount['red'] / allUsers.length) * 100;
     const perOfWhite = (hairColoursCount['white'] / allUsers.length) * 100;
     setCurrentPerNa((hairColoursCount['na'] / allUsers.length) * 100);
-
-    console.log('hairColoursCount => ', hairColoursCount);
 
     setHairColourNumGraph({
       labels: ['Number of users by hair colour'],
@@ -1404,6 +1497,7 @@ const Analytics = ({ history }) => {
   };
 
   const hairStyleGraphs = () => {
+    setCurrentGraph('hairStyle');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -1464,8 +1558,6 @@ const Analytics = ({ history }) => {
     const perOfStraight = (hairStylesCount['straight'] / allUsers.length) * 100;
     const perOfWavy = (hairStylesCount['wavy'] / allUsers.length) * 100;
     setCurrentPerNa((hairStylesCount['na'] / allUsers.length) * 100);
-
-    console.log('hairStylesCount => ', hairStylesCount);
 
     setHairStyleNumGraph({
       labels: ['Number of users by hair style'],
@@ -1535,6 +1627,7 @@ const Analytics = ({ history }) => {
   };
 
   const hairLengthGraphs = () => {
+    setCurrentGraph('hairLength');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -1597,8 +1690,6 @@ const Analytics = ({ history }) => {
     const perOfMedium = (hairLengthsCount['medium'] / allUsers.length) * 100;
     const perOfLong = (hairLengthsCount['long'] / allUsers.length) * 100;
     setCurrentPerNa((hairLengthsCount['na'] / allUsers.length) * 100);
-
-    console.log('hairLengthsCount => ', hairLengthsCount);
 
     setHairLengthNumGraph({
       labels: ['Number of users by hair Length'],
@@ -1686,6 +1777,7 @@ const Analytics = ({ history }) => {
   };
 
   const eyeColourGraphs = () => {
+    setCurrentGraph('eyeColour');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -1748,8 +1840,6 @@ const Analytics = ({ history }) => {
     const perOfGreen = (eyeColoursCount['green'] / allUsers.length) * 100;
     const perOfHazel = (eyeColoursCount['hazel'] / allUsers.length) * 100;
     setCurrentPerNa((eyeColoursCount['na'] / allUsers.length) * 100);
-
-    console.log('eyeColoursCount => ', eyeColoursCount);
 
     setEyeColourNumGraph({
       labels: ['Number of users by eye colour'],
@@ -1837,6 +1927,7 @@ const Analytics = ({ history }) => {
   };
 
   const feetTypeGraphs = () => {
+    setCurrentGraph('feetType');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -1897,8 +1988,6 @@ const Analytics = ({ history }) => {
     const perOfGreek = (feetTypesCount['greek'] / allUsers.length) * 100;
     const perOfRoman = (feetTypesCount['roman'] / allUsers.length) * 100;
     setCurrentPerNa((feetTypesCount['na'] / allUsers.length) * 100);
-
-    console.log('feetTypesCount => ', feetTypesCount);
 
     setFeetTypeNumGraph({
       labels: ['Number of users by feet type'],
@@ -1968,6 +2057,7 @@ const Analytics = ({ history }) => {
   };
 
   const maritalGraphs = () => {
+    setCurrentGraph('marital');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -2039,8 +2129,6 @@ const Analytics = ({ history }) => {
     const perOfSeparated = (maritalsCount['separated'] / allUsers.length) * 100;
     const perOfWidowed = (maritalsCount['widowed'] / allUsers.length) * 100;
     setCurrentPerNa((maritalsCount['na'] / allUsers.length) * 100);
-
-    console.log('maritalsCount => ', maritalsCount);
 
     setMaritalNumGraph({
       labels: ['Number of users by marital status'],
@@ -2146,6 +2234,7 @@ const Analytics = ({ history }) => {
   };
 
   const locationGraphs = () => {
+    setCurrentGraph('location');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -2216,8 +2305,6 @@ const Analytics = ({ history }) => {
     const perOfNicosia = (locationsCount['nicosia'] / allUsers.length) * 100;
     const perOfPaphos = (locationsCount['paphos'] / allUsers.length) * 100;
     setCurrentPerNa((locationsCount['na'] / allUsers.length) * 100);
-
-    console.log('locationsCount => ', locationsCount);
 
     setLocationNumGraph({
       labels: ['Number of users by location'],
@@ -2323,6 +2410,7 @@ const Analytics = ({ history }) => {
   };
 
   const ageGraphs = () => {
+    setCurrentGraph('age');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -2407,8 +2495,6 @@ const Analytics = ({ history }) => {
     const perOf7180 = (ageGroups['71-80'] / allUsers.length) * 100;
     const perOfOver80 = (ageGroups['Over 80'] / allUsers.length) * 100;
     setCurrentPerNa((ageGroups['na'] / allUsers.length) * 100);
-
-    console.log('ageGroups => ', ageGroups);
 
     setAgeNumGraph({
       labels: ['Number of users by age range'],
@@ -2568,6 +2654,7 @@ const Analytics = ({ history }) => {
   };
 
   const childrenGraphs = () => {
+    setCurrentGraph('children');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -2648,8 +2735,6 @@ const Analytics = ({ history }) => {
     const perOf5 = (numOfChildrenSort[5].count / allUsers.length) * 100;
     const perOf6 = (numOfChildrenSort[6].count / allUsers.length) * 100;
     setCurrentPerNa((numOfChildrenSort[7].count / allUsers.length) * 100);
-
-    console.log('numOfChildrenSort => ', numOfChildrenSort);
 
     setChildrenNumGraph({
       labels: ['Number of users by number of children'],
@@ -2791,6 +2876,7 @@ const Analytics = ({ history }) => {
   };
 
   const livesWithGraphs = () => {
+    setCurrentGraph('livesWith');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -2862,8 +2948,6 @@ const Analytics = ({ history }) => {
     const perOfParents = (livesWithsCount['parents'] / allUsers.length) * 100;
     const perOfPartner = (livesWithsCount['partner'] / allUsers.length) * 100;
     setCurrentPerNa((livesWithsCount['na'] / allUsers.length) * 100);
-
-    console.log('livesWithsCount => ', livesWithsCount);
 
     setLivesWithNumGraph({
       labels: ['Number of users by who they live with'],
@@ -2969,6 +3053,7 @@ const Analytics = ({ history }) => {
   };
 
   const nationalityGraphs = () => {
+    setCurrentGraph('nationality');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -3036,8 +3121,6 @@ const Analytics = ({ history }) => {
       );
     });
 
-    console.log('nationalityCounts => ', nationalityCounts);
-
     setNationalityNumGraph({
       labels,
       datasets: [
@@ -3070,6 +3153,7 @@ const Analytics = ({ history }) => {
   };
 
   const languageGraphs = () => {
+    setCurrentGraph('language');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -3134,8 +3218,6 @@ const Analytics = ({ history }) => {
       per[genre] = ((languageCounts[genre] / allUsers.length) * 100).toFixed(2);
     });
 
-    console.log('languageCounts => ', languageCounts);
-
     setLanguageNumGraph({
       labels,
       datasets: [
@@ -3168,6 +3250,7 @@ const Analytics = ({ history }) => {
   };
 
   const ethnicityGraphs = () => {
+    setCurrentGraph('ethnicity');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -3250,8 +3333,6 @@ const Analytics = ({ history }) => {
     const perOfWhite = (ethnicitiesCount['white'] / allUsers.length) * 100;
     const perOfOther = (ethnicitiesCount['other'] / allUsers.length) * 100;
     setCurrentPerNa((ethnicitiesCount['na'] / allUsers.length) * 100);
-
-    console.log('ethnicitiesCount => ', ethnicitiesCount);
 
     setEthnicityNumGraph({
       labels: ['Number of users by ethnicity'],
@@ -3411,6 +3492,7 @@ const Analytics = ({ history }) => {
   };
 
   const musicGraphs = () => {
+    setCurrentGraph('music');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -3477,8 +3559,6 @@ const Analytics = ({ history }) => {
       per[genre] = ((musicCounts[genre] / allUsers.length) * 100).toFixed(2);
     });
 
-    console.log('musicCounts => ', musicCounts);
-
     setMusicNumGraph({
       labels,
       datasets: [
@@ -3511,6 +3591,7 @@ const Analytics = ({ history }) => {
   };
 
   const moviesGraphs = () => {
+    setCurrentGraph('movies');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -3577,8 +3658,6 @@ const Analytics = ({ history }) => {
       per[genre] = ((movieCounts[genre] / allUsers.length) * 100).toFixed(2);
     });
 
-    console.log('movieCounts => ', movieCounts);
-
     setMoviesNumGraph({
       labels,
       datasets: [
@@ -3611,6 +3690,7 @@ const Analytics = ({ history }) => {
   };
 
   const religionGraphs = () => {
+    setCurrentGraph('religion');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -3705,8 +3785,6 @@ const Analytics = ({ history }) => {
       (religionsCount['spiritual'] / allUsers.length) * 100;
     const perOfOther = (religionsCount['other'] / allUsers.length) * 100;
     setCurrentPerNa((religionsCount['na'] / allUsers.length) * 100);
-
-    console.log('religionsCount => ', religionsCount);
 
     setReligionNumGraph({
       labels: ['Number of users by religion'],
@@ -3938,6 +4016,7 @@ const Analytics = ({ history }) => {
   };
 
   const occupationGraphs = () => {
+    setCurrentGraph('occupation');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4005,8 +4084,6 @@ const Analytics = ({ history }) => {
       );
     });
 
-    console.log('occupationCounts => ', occupationCounts);
-
     setOccupationNumGraph({
       labels,
       datasets: [
@@ -4039,6 +4116,7 @@ const Analytics = ({ history }) => {
   };
 
   const educationGraphs = () => {
+    setCurrentGraph('education');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4116,8 +4194,6 @@ const Analytics = ({ history }) => {
     const perOfMasters = (educationsCount['masters'] / allUsers.length) * 100;
     const perOfDoctoral = (educationsCount['doctoral'] / allUsers.length) * 100;
     setCurrentPerNa((educationsCount['na'] / allUsers.length) * 100);
-
-    console.log('educationsCount => ', educationsCount);
 
     setEducationNumGraph({
       labels: ['Number of users by education'],
@@ -4241,6 +4317,7 @@ const Analytics = ({ history }) => {
   };
 
   const hobbiesGraphs = () => {
+    setCurrentGraph('hobbies');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4307,8 +4384,6 @@ const Analytics = ({ history }) => {
       per[genre] = ((hobbiesCounts[genre] / allUsers.length) * 100).toFixed(2);
     });
 
-    console.log('hobbiesCounts => ', hobbiesCounts);
-
     setHobbiesNumGraph({
       labels,
       datasets: [
@@ -4341,6 +4416,7 @@ const Analytics = ({ history }) => {
   };
 
   const booksGraphs = () => {
+    setCurrentGraph('books');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4407,8 +4483,6 @@ const Analytics = ({ history }) => {
       per[genre] = ((booksCounts[genre] / allUsers.length) * 100).toFixed(2);
     });
 
-    console.log('booksCounts => ', booksCounts);
-
     setBooksNumGraph({
       labels,
       datasets: [
@@ -4441,6 +4515,7 @@ const Analytics = ({ history }) => {
   };
 
   const sportsGraphs = () => {
+    setCurrentGraph('sports');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4507,8 +4582,6 @@ const Analytics = ({ history }) => {
       per[genre] = ((sportsCounts[genre] / allUsers.length) * 100).toFixed(2);
     });
 
-    console.log('sportsCounts => ', sportsCounts);
-
     setSportsNumGraph({
       labels,
       datasets: [
@@ -4541,6 +4614,7 @@ const Analytics = ({ history }) => {
   };
 
   const smokesGraphs = () => {
+    setCurrentGraph('smokes');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4601,8 +4675,6 @@ const Analytics = ({ history }) => {
     const perOfOften = (smokesCount['often'] / allUsers.length) * 100;
     const perOfSometimes = (smokesCount['sometimes'] / allUsers.length) * 100;
     setCurrentPerNa((smokesCount['na'] / allUsers.length) * 100);
-
-    console.log('smokesCount => ', smokesCount);
 
     setSmokesNumGraph({
       labels: ['Number of users by whether or not they smoke'],
@@ -4672,6 +4744,7 @@ const Analytics = ({ history }) => {
   };
 
   const drinksGraphs = () => {
+    setCurrentGraph('drinks');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4732,8 +4805,6 @@ const Analytics = ({ history }) => {
     const perOfOften = (drinksCount['often'] / allUsers.length) * 100;
     const perOfSometimes = (drinksCount['sometimes'] / allUsers.length) * 100;
     setCurrentPerNa((drinksCount['na'] / allUsers.length) * 100);
-
-    console.log('drinksCount => ', drinksCount);
 
     setDrinksNumGraph({
       labels: ['Number of users by how often they drink alcohol'],
@@ -4803,6 +4874,7 @@ const Analytics = ({ history }) => {
   };
 
   const foodGraphs = () => {
+    setCurrentGraph('food');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4877,8 +4949,6 @@ const Analytics = ({ history }) => {
     const perOfVegan = (foodsCount['vegan'] / allUsers.length) * 100;
     const perOfVegetarian = (foodsCount['vegetarian'] / allUsers.length) * 100;
     setCurrentPerNa((foodsCount['na'] / allUsers.length) * 100);
-
-    console.log('foodsCount => ', foodsCount);
 
     setFoodNumGraph({
       labels: ['Number of users by taste in foods'],
@@ -5002,6 +5072,7 @@ const Analytics = ({ history }) => {
   };
 
   const treatsGraphs = () => {
+    setCurrentGraph('treats');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -5068,8 +5139,6 @@ const Analytics = ({ history }) => {
       per[genre] = ((treatsCounts[genre] / allUsers.length) * 100).toFixed(2);
     });
 
-    console.log('treatsCounts => ', treatsCounts);
-
     setTreatsNumGraph({
       labels,
       datasets: [
@@ -5102,6 +5171,7 @@ const Analytics = ({ history }) => {
   };
 
   const relWantedGraphs = () => {
+    setCurrentGraph('relWanted');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -5172,8 +5242,6 @@ const Analytics = ({ history }) => {
       (relWantedCount['long-term relationship'] / allUsers.length) * 100;
     const perOfMarriage = (relWantedCount['marriage'] / allUsers.length) * 100;
     setCurrentPerNa((relWantedCount['na'] / allUsers.length) * 100);
-
-    console.log('relWantedCount => ', relWantedCount);
 
     setRelWantedNumGraph({
       labels: ['Number of users by kind of relationship they want'],
@@ -5261,6 +5329,7 @@ const Analytics = ({ history }) => {
   };
 
   const pointsGraphs = () => {
+    setCurrentGraph('points');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -5325,6 +5394,7 @@ const Analytics = ({ history }) => {
   };
 
   const productsViewedGraphs = () => {
+    setCurrentGraph('productsViewed');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -5397,8 +5467,6 @@ const Analytics = ({ history }) => {
         productsViewedCount['na'].count++;
       }
     });
-
-    console.log('productsViewedCount => ', productsViewedCount);
 
     const numOfVoluptes =
       productsViewedCount['Eau de Parfum Volupté(s) de Bach - 30ml'].amount;
@@ -5615,6 +5683,7 @@ const Analytics = ({ history }) => {
   };
 
   const totalPaidGraphs = () => {
+    setCurrentGraph('totalPaid');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -5684,6 +5753,7 @@ const Analytics = ({ history }) => {
   };
 
   const ordersGraphs = () => {
+    setCurrentGraph('orders');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -5753,6 +5823,7 @@ const Analytics = ({ history }) => {
   };
 
   const keyWordsGraphs = () => {
+    setCurrentGraph('keyWords');
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -5842,9 +5913,6 @@ const Analytics = ({ history }) => {
       .slice(0, 15)
       .map(([word, count]) => ({ word, count }));
 
-    console.log('Number of users without about:', currentNumNa);
-    console.log('Top 15 words in about fields:', top15Words);
-
     const labels = top15Words.map((wordData) => wordData.word);
     const counts = top15Words.map((wordData) => wordData.count);
 
@@ -5875,57 +5943,105 @@ const Analytics = ({ history }) => {
             </div>
           ) : (
             <>
-              <div className='filter-btn'>
+              <div className='analytics-btns'>
                 <FontAwesomeIcon
                   icon={faFilter}
                   className='fa'
                   onClick={() => setOpenFilter(!openFilter)}
                 />
-                {openFilter && (
-                  <ul className='filter-options'>
-                    <li onClick={registrationGraphs}>Date range</li>
-                    <li onClick={visitationGraphs}>Visiting frequency</li>
-                    <li onClick={genderGraphs}>Gender</li>
-                    <li onClick={heightGraphs}>Height</li>
-                    <li onClick={buildGraphs}>Body shape</li>
-                    <li onClick={hairColourGraphs}>Hair colour</li>
-                    <li onClick={hairStyleGraphs}>Hair style</li>
-                    <li onClick={hairLengthGraphs}>Hair length</li>
-                    <li onClick={eyeColourGraphs}>Eye colour</li>
-                    <li onClick={feetTypeGraphs}>Feet type</li>
-                    <li onClick={maritalGraphs}>Marital status</li>
-                    <li onClick={locationGraphs}>Location</li>
-                    <li onClick={ageGraphs}>Age range</li>
-                    <li onClick={childrenGraphs}>Has children</li>
-                    <li onClick={livesWithGraphs}>Lives with</li>
-                    <li onClick={nationalityGraphs}>Nationality</li>
-                    <li onClick={languageGraphs}>Languages</li>
-                    <li onClick={ethnicityGraphs}>Ethnicity</li>
-                    <li onClick={musicGraphs}>Music</li>
-                    <li onClick={moviesGraphs}>Movies</li>
-                    <li onClick={religionGraphs}>Religion</li>
-                    <li onClick={occupationGraphs}>Occupation</li>
-                    <li onClick={educationGraphs}>Education</li>
-                    <li onClick={hobbiesGraphs}>Hobbies</li>
-                    <li onClick={booksGraphs}>Books</li>
-                    <li onClick={sportsGraphs}>Sports</li>
-                    <li onClick={smokesGraphs}>Smokes</li>
-                    <li onClick={drinksGraphs}>Drinks</li>
-                    <li onClick={foodGraphs}>Food</li>
-                    <li onClick={treatsGraphs}>How they treat themselves</li>
-                    <li onClick={relWantedGraphs}>Dating purpose</li>
-                    <li onClick={pointsGraphs}># Points</li>
-                    <li onClick={productsViewedGraphs}>
-                      # Page visits of each item in shop
-                    </li>
-                    <li onClick={totalPaidGraphs}>
-                      Total amount paid in the shop
-                    </li>
-                    <li onClick={ordersGraphs}># Orders in shop</li>
-                    <li onClick={keyWordsGraphs}>Free keywords</li>
-                  </ul>
-                )}
+                <FontAwesomeIcon
+                  icon={faCalendarDays}
+                  className='fa'
+                  onClick={chooseDuration}
+                />
+                <div>
+                  <PDFDownloadLink
+                    // document={<Invoice order={order} />}
+                    fileName='chart.pdf'
+                    className='fa'
+                  >
+                    <FontAwesomeIcon
+                      icon={faFilePdf}
+                      // className='fa'
+                    />
+                  </PDFDownloadLink>
+                </div>
               </div>
+              <DatePicker
+                selected={startDate}
+                onChange={(dates) => {
+                  setRange(dates);
+                }}
+                startDate={startDate}
+                endDate={endDate}
+                selectsRange
+                open={datePickerIsOpen}
+                onClickOutside={() => setDatePickerIsOpen(false)}
+              />
+              {startDate && endDate ? (
+                <div className='selected-dates'>
+                  <p className='center'>
+                    <span>{allUsers.length}</span>{' '}
+                    {allUsers.length === 1 ? 'member' : 'members'} registered
+                    between{' '}
+                    <span>{moment(startDate).format('dddd, D MMMM YYYY')}</span>{' '}
+                    and{' '}
+                    <span>{moment(endDate).format('dddd, D MMMM YYYY')}</span>
+                  </p>
+                </div>
+              ) : (
+                <div className='selected-dates'>
+                  <p className='center'>
+                    There are currently <span>{allUsers.length}</span>{' '}
+                    registered members
+                  </p>
+                </div>
+              )}
+              {openFilter && (
+                <ul className='filter-options'>
+                  <li onClick={registrationGraphs}>Date range</li>
+                  <li onClick={visitationGraphs}>Visiting frequency</li>
+                  <li onClick={genderGraphs}>Gender</li>
+                  <li onClick={heightGraphs}>Height</li>
+                  <li onClick={buildGraphs}>Body shape</li>
+                  <li onClick={hairColourGraphs}>Hair colour</li>
+                  <li onClick={hairStyleGraphs}>Hair style</li>
+                  <li onClick={hairLengthGraphs}>Hair length</li>
+                  <li onClick={eyeColourGraphs}>Eye colour</li>
+                  <li onClick={feetTypeGraphs}>Feet type</li>
+                  <li onClick={maritalGraphs}>Marital status</li>
+                  <li onClick={locationGraphs}>Location</li>
+                  <li onClick={ageGraphs}>Age range</li>
+                  <li onClick={childrenGraphs}>Has children</li>
+                  <li onClick={livesWithGraphs}>Lives with</li>
+                  <li onClick={nationalityGraphs}>Nationality</li>
+                  <li onClick={languageGraphs}>Languages</li>
+                  <li onClick={ethnicityGraphs}>Ethnicity</li>
+                  <li onClick={musicGraphs}>Music</li>
+                  <li onClick={moviesGraphs}>Movies</li>
+                  <li onClick={religionGraphs}>Religion</li>
+                  <li onClick={occupationGraphs}>Occupation</li>
+                  <li onClick={educationGraphs}>Education</li>
+                  <li onClick={hobbiesGraphs}>Hobbies</li>
+                  <li onClick={booksGraphs}>Books</li>
+                  <li onClick={sportsGraphs}>Sports</li>
+                  <li onClick={smokesGraphs}>Smokes</li>
+                  <li onClick={drinksGraphs}>Drinks</li>
+                  <li onClick={foodGraphs}>Food</li>
+                  <li onClick={treatsGraphs}>How they treat themselves</li>
+                  <li onClick={relWantedGraphs}>Dating purpose</li>
+                  <li onClick={pointsGraphs}># Points</li>
+                  <li onClick={productsViewedGraphs}>
+                    # Page visits of each item in shop
+                  </li>
+                  <li onClick={totalPaidGraphs}>
+                    Total amount paid in the shop
+                  </li>
+                  <li onClick={ordersGraphs}># Orders in shop</li>
+                  <li onClick={keyWordsGraphs}>Free keywords</li>
+                </ul>
+              )}
+
               {showRegistrationGraphs && (
                 <>
                   <h1 className='center'>Date range</h1>

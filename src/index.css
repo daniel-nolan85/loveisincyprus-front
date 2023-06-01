@@ -2936,21 +2936,11 @@ small.user-chats-date {
   padding: 5px 10px 0 10px;
 }
 
-.filter-btn {
-  position: relative;
-}
-
-.filter-btn .fa {
-  font-size: 25px;
-  color: var(--nav-color);
-  cursor: pointer;
-}
-
 .filter-options {
   list-style-type: none;
   position: absolute;
   left: 35px;
-  top: 0;
+  top: 40px;
 }
 
 .filter-options li {
@@ -2966,6 +2956,12 @@ small.user-chats-date {
   color: #fff;
 }
 
+.analytics .analytics-btns {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-around;
+}
+
 .analytics h2 span {
   color: var(--nav-color);
   padding-left: 30px;
@@ -2974,6 +2970,30 @@ small.user-chats-date {
 
 .analytics h2 {
   margin-bottom: 40px;
+}
+
+.analytics .fa {
+  color: var(--nav-color);
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.analytics .react-datepicker-popper {
+  top: 2.5% !important;
+  left: 50% !important;
+  transform: translate(-50%) !important;
+}
+
+.analytics .react-datepicker__input-container {
+  display: none;
+}
+
+.analytics .selected-dates p {
+  font-size: 25px;
+}
+
+.analytics .selected-dates p span {
+  color: var(--nav-color);
 }
 
 /* --------------- profile-page --------------- */
