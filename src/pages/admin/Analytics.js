@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import LeftSidebar from '../../components/admin/LeftSidebar';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useSelector, useStore } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSpinner,
   faFilter,
   faCalendarDays,
   faFilePdf,
+  faRotateLeft,
+  faFloppyDisk,
 } from '@fortawesome/free-solid-svg-icons';
 import { Bar, Scatter } from 'react-chartjs-2';
 import { Chart as ChartJS } from 'chart.js/auto';
@@ -15,6 +17,9 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import Chart from '../../components/cards/Chart';
+// import { useScreenshot } from 'use-react-screenshot';
+import html2canvas from 'html2canvas';
 
 const Analytics = ({ history }) => {
   const [loading, setLoading] = useState(true);
@@ -134,8 +139,50 @@ const Analytics = ({ history }) => {
   const [ordersGraph, setOrdersGraph] = useState({});
   const [showKeyWordsGraphs, setShowKeyWordsGraphs] = useState(false);
   const [keyWordsGraph, setKeyWordsGraph] = useState({});
+  const [chartImage, setChartImage] = useState(null);
+  const [loadingChartImage, setLoadingChartImage] = useState(false);
 
   let { _id, token, role } = useSelector((state) => state.user);
+
+  // const [takeScreenshot, { getScreenshot }] = useScreenshot();
+
+  const isFirstRun = useRef(true);
+  const registrationGraphRef = useRef(null);
+  const visitationGraphRef = useRef(null);
+  const genderGraphRef = useRef(null);
+  const heightGraphRef = useRef(null);
+  const buildGraphRef = useRef(null);
+  const hairColourGraphRef = useRef(null);
+  const hairStyleGraphRef = useRef(null);
+  const hairLengthGraphRef = useRef(null);
+  const eyeColourGraphRef = useRef(null);
+  const feetTypeGraphRef = useRef(null);
+  const maritalGraphRef = useRef(null);
+  const locationGraphRef = useRef(null);
+  const ageGraphRef = useRef(null);
+  const childrenGraphRef = useRef(null);
+  const livesWithGraphRef = useRef(null);
+  const nationalityGraphRef = useRef(null);
+  const languageGraphRef = useRef(null);
+  const ethnicityGraphRef = useRef(null);
+  const musicGraphRef = useRef(null);
+  const moviesGraphRef = useRef(null);
+  const religionGraphRef = useRef(null);
+  const occupationGraphRef = useRef(null);
+  const educationGraphRef = useRef(null);
+  const hobbiesGraphRef = useRef(null);
+  const booksGraphRef = useRef(null);
+  const sportsGraphRef = useRef(null);
+  const smokesGraphRef = useRef(null);
+  const drinksGraphRef = useRef(null);
+  const foodGraphRef = useRef(null);
+  const treatsGraphRef = useRef(null);
+  const relWantedGraphRef = useRef(null);
+  const pointsGraphRef = useRef(null);
+  const productsViewedGraphRef = useRef(null);
+  const totalPaidGraphRef = useRef(null);
+  const ordersGraphRef = useRef(null);
+  const keyWordsGraphRef = useRef(null);
 
   useEffect(() => {
     if (role !== 'main-admin') {
@@ -155,8 +202,10 @@ const Analytics = ({ history }) => {
   }, [allUsers, allUsersLoaded]);
 
   useEffect(() => {
-    if (startDate && endDate) {
-      console.log('re-rendering');
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    } else {
       filterUsers();
     }
   }, [endDate]);
@@ -169,7 +218,12 @@ const Analytics = ({ history }) => {
   }, [allUsers, filterByDate]);
 
   const chooseDuration = () => {
-    setDatePickerIsOpen(!datePickerIsOpen);
+    setDatePickerIsOpen(true);
+  };
+
+  const resetDates = () => {
+    setStartDate(null);
+    setEndDate(null);
   };
 
   const setRange = (dates) => {
@@ -197,69 +251,126 @@ const Analytics = ({ history }) => {
   };
 
   const filterUsers = async () => {
-    await axios
-      .get(`${process.env.REACT_APP_API}/fetch-users-for-analytics`, {
-        headers: {
-          authtoken: token,
-        },
-      })
-      .then((res) => {
-        setDatePickerIsOpen(false);
-        const filtered = res.data.filter((user) => {
-          const createdAt = new Date(user.createdAt);
-          return createdAt >= startDate && createdAt <= endDate;
+    if (startDate && !endDate) return;
+    else {
+      setChartImage(null);
+      await axios
+        .get(`${process.env.REACT_APP_API}/fetch-users-for-analytics`, {
+          headers: {
+            authtoken: token,
+          },
+        })
+        .then((res) => {
+          setDatePickerIsOpen(false);
+          if (endDate !== null) {
+            const filtered = res.data.filter((user) => {
+              const createdAt = new Date(user.createdAt);
+              return createdAt >= startDate && createdAt <= endDate;
+            });
+            setAllUsers(filtered);
+          } else if (startDate === null) {
+            setAllUsers(res.data);
+          }
+          setFilterByDate(true);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false);
         });
-        setAllUsers(filtered);
-        setFilterByDate(true);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
+    }
+  };
+
+  const preparePdf = () => {
+    if (showRegistrationGraphs) captureScreenshot(registrationGraphRef);
+    if (showVisitationGraphs) captureScreenshot(visitationGraphRef);
+    if (showGenderGraphs) captureScreenshot(genderGraphRef);
+    if (showHeightGraphs) captureScreenshot(heightGraphRef);
+    if (showBuildGraphs) captureScreenshot(buildGraphRef);
+    if (showHairColourGraphs) captureScreenshot(hairColourGraphRef);
+    if (showHairStyleGraphs) captureScreenshot(hairStyleGraphRef);
+    if (showHairLengthGraphs) captureScreenshot(hairLengthGraphRef);
+    if (showEyeColourGraphs) captureScreenshot(eyeColourGraphRef);
+    if (showFeetTypeGraphs) captureScreenshot(feetTypeGraphRef);
+    if (showMaritalGraphs) captureScreenshot(maritalGraphRef);
+    if (showLocationGraphs) captureScreenshot(locationGraphRef);
+    if (showAgeGraphs) captureScreenshot(ageGraphRef);
+    if (showChildrenGraphs) captureScreenshot(childrenGraphRef);
+    if (showLivesWithGraphs) captureScreenshot(livesWithGraphRef);
+    if (showNationalityGraphs) captureScreenshot(nationalityGraphRef);
+    if (showLanguageGraphs) captureScreenshot(languageGraphRef);
+    if (showEthnicityGraphs) captureScreenshot(ethnicityGraphRef);
+    if (showMusicGraphs) captureScreenshot(musicGraphRef);
+    if (showMoviesGraphs) captureScreenshot(moviesGraphRef);
+    if (showReligionGraphs) captureScreenshot(religionGraphRef);
+    if (showOccupationGraphs) captureScreenshot(occupationGraphRef);
+    if (showEducationGraphs) captureScreenshot(educationGraphRef);
+    if (showHobbiesGraphs) captureScreenshot(hobbiesGraphRef);
+    if (showBooksGraphs) captureScreenshot(booksGraphRef);
+    if (showSportsGraphs) captureScreenshot(sportsGraphRef);
+    if (showSmokesGraphs) captureScreenshot(smokesGraphRef);
+    if (showDrinksGraphs) captureScreenshot(drinksGraphRef);
+    if (showFoodGraphs) captureScreenshot(foodGraphRef);
+    if (showTreatsGraphs) captureScreenshot(treatsGraphRef);
+    if (showRelWantedGraphs) captureScreenshot(relWantedGraphRef);
+    if (showPointsGraphs) captureScreenshot(pointsGraphRef);
+    if (showProductsViewedGraphs) captureScreenshot(productsViewedGraphRef);
+    if (showTotalPaidGraphs) captureScreenshot(totalPaidGraphRef);
+    if (showOrdersGraphs) captureScreenshot(ordersGraphRef);
+    if (showKeyWordsGraphs) captureScreenshot(keyWordsGraphRef);
+  };
+
+  const captureScreenshot = (graphRef) => {
+    setLoadingChartImage(true);
+    html2canvas(graphRef.current).then((canvas) => {
+      const image = canvas.toDataURL('image/png');
+      setChartImage(image);
+      setLoadingChartImage(false);
+    });
   };
 
   const reRenderCurrentGraph = () => {
-    console.log('reRenderCurrentGraph');
-    if (currentGraph === 'registration') registrationGraphs();
-    if (currentGraph === 'visitation') visitationGraphs();
-    if (currentGraph === 'gender') genderGraphs();
-    if (currentGraph === 'height') heightGraphs();
-    if (currentGraph === 'build') buildGraphs();
-    if (currentGraph === 'hairColour') hairColourGraphs();
-    if (currentGraph === 'hairStyle') hairStyleGraphs();
-    if (currentGraph === 'hairLength') hairLengthGraphs();
-    if (currentGraph === 'eyeColour') eyeColourGraphs();
-    if (currentGraph === 'feetType') feetTypeGraphs();
-    if (currentGraph === 'marital') maritalGraphs();
-    if (currentGraph === 'location') locationGraphs();
-    if (currentGraph === 'age') ageGraphs();
-    if (currentGraph === 'children') childrenGraphs();
-    if (currentGraph === 'livesWith') livesWithGraphs();
-    if (currentGraph === 'nationality') nationalityGraphs();
-    if (currentGraph === 'language') languageGraphs();
-    if (currentGraph === 'ethnicity') ethnicityGraphs();
-    if (currentGraph === 'music') musicGraphs();
-    if (currentGraph === 'movies') moviesGraphs();
-    if (currentGraph === 'religion') religionGraphs();
-    if (currentGraph === 'occupation') occupationGraphs();
-    if (currentGraph === 'education') educationGraphs();
-    if (currentGraph === 'hobbies') hobbiesGraphs();
-    if (currentGraph === 'books') booksGraphs();
-    if (currentGraph === 'sports') sportsGraphs();
-    if (currentGraph === 'smokes') smokesGraphs();
-    if (currentGraph === 'drinks') drinksGraphs();
-    if (currentGraph === 'food') foodGraphs();
-    if (currentGraph === 'treats') treatsGraphs();
-    if (currentGraph === 'relWanted') relWantedGraphs();
-    if (currentGraph === 'points') pointsGraphs();
-    if (currentGraph === 'productsViewed') productsViewedGraphs();
-    if (currentGraph === 'totalPaid') totalPaidGraphs();
-    if (currentGraph === 'orders') ordersGraphs();
-    if (currentGraph === 'keyWords') keyWordsGraphs();
+    if (currentGraph === 'Date range') registrationGraphs();
+    if (currentGraph === 'Visiting frequency') visitationGraphs();
+    if (currentGraph === 'Gender') genderGraphs();
+    if (currentGraph === 'Height') heightGraphs();
+    if (currentGraph === 'Body shape') buildGraphs();
+    if (currentGraph === 'Hair colour') hairColourGraphs();
+    if (currentGraph === 'Hair Style') hairStyleGraphs();
+    if (currentGraph === 'Hair length') hairLengthGraphs();
+    if (currentGraph === 'Eye colour') eyeColourGraphs();
+    if (currentGraph === 'Feet type') feetTypeGraphs();
+    if (currentGraph === 'Marital status') maritalGraphs();
+    if (currentGraph === 'Location') locationGraphs();
+    if (currentGraph === 'Age range') ageGraphs();
+    if (currentGraph === 'Has children') childrenGraphs();
+    if (currentGraph === 'Lives with') livesWithGraphs();
+    if (currentGraph === 'Nationality') nationalityGraphs();
+    if (currentGraph === 'Languages') languageGraphs();
+    if (currentGraph === 'Ethnicity') ethnicityGraphs();
+    if (currentGraph === 'Music') musicGraphs();
+    if (currentGraph === 'Movies') moviesGraphs();
+    if (currentGraph === 'Religion') religionGraphs();
+    if (currentGraph === 'Occupation') occupationGraphs();
+    if (currentGraph === 'Education') educationGraphs();
+    if (currentGraph === 'Hobbies') hobbiesGraphs();
+    if (currentGraph === 'Books') booksGraphs();
+    if (currentGraph === 'Sports') sportsGraphs();
+    if (currentGraph === 'Smokes') smokesGraphs();
+    if (currentGraph === 'Drinks') drinksGraphs();
+    if (currentGraph === 'Food') foodGraphs();
+    if (currentGraph === 'How they treat themselves') treatsGraphs();
+    if (currentGraph === 'Dating purpose') relWantedGraphs();
+    if (currentGraph === '# Points') pointsGraphs();
+    if (currentGraph === '# Page visits of each item in the shop')
+      productsViewedGraphs();
+    if (currentGraph === 'Total amount paid in shop') totalPaidGraphs();
+    if (currentGraph === '# Orders in shop') ordersGraphs();
+    if (currentGraph === 'Free keywords') keyWordsGraphs();
   };
 
   const registrationGraphs = () => {
-    setCurrentGraph('registration');
+    setCurrentGraph('Date range');
+    setChartImage(null);
     setOpenFilter(false);
     setShowVisitationGraphs(false);
     setShowGenderGraphs(false);
@@ -346,7 +457,8 @@ const Analytics = ({ history }) => {
   };
 
   const visitationGraphs = () => {
-    setCurrentGraph('visitation');
+    setCurrentGraph('Visiting frequency');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowGenderGraphs(false);
@@ -438,7 +550,8 @@ const Analytics = ({ history }) => {
   };
 
   const genderGraphs = () => {
-    setCurrentGraph('gender');
+    setCurrentGraph('Gender');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -547,7 +660,8 @@ const Analytics = ({ history }) => {
   };
 
   const heightGraphs = () => {
-    setCurrentGraph('height');
+    setCurrentGraph('Height');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -1059,7 +1173,8 @@ const Analytics = ({ history }) => {
   };
 
   const buildGraphs = () => {
-    setCurrentGraph('build');
+    setCurrentGraph('Body shape');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -1257,7 +1372,8 @@ const Analytics = ({ history }) => {
   };
 
   const hairColourGraphs = () => {
-    setCurrentGraph('hairColour');
+    setCurrentGraph('Hair colour');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -1497,7 +1613,8 @@ const Analytics = ({ history }) => {
   };
 
   const hairStyleGraphs = () => {
-    setCurrentGraph('hairStyle');
+    setCurrentGraph('Hair style');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -1627,7 +1744,8 @@ const Analytics = ({ history }) => {
   };
 
   const hairLengthGraphs = () => {
-    setCurrentGraph('hairLength');
+    setCurrentGraph('Hair length');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -1777,7 +1895,8 @@ const Analytics = ({ history }) => {
   };
 
   const eyeColourGraphs = () => {
-    setCurrentGraph('eyeColour');
+    setCurrentGraph('Eye colour');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -1927,7 +2046,8 @@ const Analytics = ({ history }) => {
   };
 
   const feetTypeGraphs = () => {
-    setCurrentGraph('feetType');
+    setCurrentGraph('Feet type');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -2057,7 +2177,8 @@ const Analytics = ({ history }) => {
   };
 
   const maritalGraphs = () => {
-    setCurrentGraph('marital');
+    setCurrentGraph('Marital status');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -2234,7 +2355,8 @@ const Analytics = ({ history }) => {
   };
 
   const locationGraphs = () => {
-    setCurrentGraph('location');
+    setCurrentGraph('Location');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -2410,7 +2532,8 @@ const Analytics = ({ history }) => {
   };
 
   const ageGraphs = () => {
-    setCurrentGraph('age');
+    setCurrentGraph('Age range');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -2654,7 +2777,8 @@ const Analytics = ({ history }) => {
   };
 
   const childrenGraphs = () => {
-    setCurrentGraph('children');
+    setCurrentGraph('Has children');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -2876,7 +3000,8 @@ const Analytics = ({ history }) => {
   };
 
   const livesWithGraphs = () => {
-    setCurrentGraph('livesWith');
+    setCurrentGraph('Lives with');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -3053,7 +3178,8 @@ const Analytics = ({ history }) => {
   };
 
   const nationalityGraphs = () => {
-    setCurrentGraph('nationality');
+    setCurrentGraph('Nationality');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -3153,7 +3279,8 @@ const Analytics = ({ history }) => {
   };
 
   const languageGraphs = () => {
-    setCurrentGraph('language');
+    setCurrentGraph('Languages');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -3250,7 +3377,8 @@ const Analytics = ({ history }) => {
   };
 
   const ethnicityGraphs = () => {
-    setCurrentGraph('ethnicity');
+    setCurrentGraph('Ethnicity');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -3492,7 +3620,8 @@ const Analytics = ({ history }) => {
   };
 
   const musicGraphs = () => {
-    setCurrentGraph('music');
+    setCurrentGraph('Music');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -3591,7 +3720,8 @@ const Analytics = ({ history }) => {
   };
 
   const moviesGraphs = () => {
-    setCurrentGraph('movies');
+    setCurrentGraph('Movies');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -3690,7 +3820,8 @@ const Analytics = ({ history }) => {
   };
 
   const religionGraphs = () => {
-    setCurrentGraph('religion');
+    setCurrentGraph('Religion');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4016,7 +4147,8 @@ const Analytics = ({ history }) => {
   };
 
   const occupationGraphs = () => {
-    setCurrentGraph('occupation');
+    setCurrentGraph('Occupation');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4116,7 +4248,8 @@ const Analytics = ({ history }) => {
   };
 
   const educationGraphs = () => {
-    setCurrentGraph('education');
+    setCurrentGraph('Education');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4317,7 +4450,8 @@ const Analytics = ({ history }) => {
   };
 
   const hobbiesGraphs = () => {
-    setCurrentGraph('hobbies');
+    setCurrentGraph('Hobbies');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4416,7 +4550,8 @@ const Analytics = ({ history }) => {
   };
 
   const booksGraphs = () => {
-    setCurrentGraph('books');
+    setCurrentGraph('Books');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4515,7 +4650,8 @@ const Analytics = ({ history }) => {
   };
 
   const sportsGraphs = () => {
-    setCurrentGraph('sports');
+    setCurrentGraph('Sports');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4614,7 +4750,8 @@ const Analytics = ({ history }) => {
   };
 
   const smokesGraphs = () => {
-    setCurrentGraph('smokes');
+    setCurrentGraph('Smokes');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4744,7 +4881,8 @@ const Analytics = ({ history }) => {
   };
 
   const drinksGraphs = () => {
-    setCurrentGraph('drinks');
+    setCurrentGraph('Drinks');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -4874,7 +5012,8 @@ const Analytics = ({ history }) => {
   };
 
   const foodGraphs = () => {
-    setCurrentGraph('food');
+    setCurrentGraph('Food');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -5072,7 +5211,8 @@ const Analytics = ({ history }) => {
   };
 
   const treatsGraphs = () => {
-    setCurrentGraph('treats');
+    setCurrentGraph('How they treat themselves');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -5171,7 +5311,8 @@ const Analytics = ({ history }) => {
   };
 
   const relWantedGraphs = () => {
-    setCurrentGraph('relWanted');
+    setCurrentGraph('Dating purpose');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -5329,7 +5470,8 @@ const Analytics = ({ history }) => {
   };
 
   const pointsGraphs = () => {
-    setCurrentGraph('points');
+    setCurrentGraph('# Points');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -5394,7 +5536,8 @@ const Analytics = ({ history }) => {
   };
 
   const productsViewedGraphs = () => {
-    setCurrentGraph('productsViewed');
+    setCurrentGraph('# Page visits of each item in the shop');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -5683,7 +5826,8 @@ const Analytics = ({ history }) => {
   };
 
   const totalPaidGraphs = () => {
-    setCurrentGraph('totalPaid');
+    setCurrentGraph('Total amount paid in the shop');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -5753,7 +5897,8 @@ const Analytics = ({ history }) => {
   };
 
   const ordersGraphs = () => {
-    setCurrentGraph('orders');
+    setCurrentGraph('# Orders in shop');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -5823,7 +5968,8 @@ const Analytics = ({ history }) => {
   };
 
   const keyWordsGraphs = () => {
-    setCurrentGraph('keyWords');
+    setCurrentGraph('Free keywords');
+    setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
@@ -5949,23 +6095,46 @@ const Analytics = ({ history }) => {
                   className='fa'
                   onClick={() => setOpenFilter(!openFilter)}
                 />
-                <FontAwesomeIcon
-                  icon={faCalendarDays}
-                  className='fa'
-                  onClick={chooseDuration}
-                />
-                <div>
-                  <PDFDownloadLink
-                    // document={<Invoice order={order} />}
-                    fileName='chart.pdf'
-                    className='fa'
-                  >
+                {endDate ? (
+                  <div className='analytics-dates'>
                     <FontAwesomeIcon
-                      icon={faFilePdf}
-                      // className='fa'
+                      icon={faCalendarDays}
+                      className='fa'
+                      onClick={chooseDuration}
                     />
+                    <FontAwesomeIcon
+                      icon={faRotateLeft}
+                      className='fa reset'
+                      onClick={resetDates}
+                    />
+                  </div>
+                ) : (
+                  <FontAwesomeIcon
+                    icon={faCalendarDays}
+                    className='fa'
+                    onClick={chooseDuration}
+                  />
+                )}
+                {!chartImage && !loadingChartImage ? (
+                  <FontAwesomeIcon
+                    icon={faFloppyDisk}
+                    className='fa'
+                    onClick={preparePdf}
+                  />
+                ) : (
+                  !chartImage &&
+                  loadingChartImage && (
+                    <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+                  )
+                )}
+                {chartImage && (
+                  <PDFDownloadLink
+                    document={<Chart chartImage={chartImage} />}
+                    fileName='chart.pdf'
+                  >
+                    <FontAwesomeIcon icon={faFilePdf} className='fa' />
                   </PDFDownloadLink>
-                </div>
+                )}
               </div>
               <DatePicker
                 selected={startDate}
@@ -6041,9 +6210,8 @@ const Analytics = ({ history }) => {
                   <li onClick={keyWordsGraphs}>Free keywords</li>
                 </ul>
               )}
-
               {showRegistrationGraphs && (
-                <>
+                <div ref={registrationGraphRef}>
                   <h1 className='center'>Date range</h1>
                   <Bar
                     data={registrationNumGraph}
@@ -6057,10 +6225,10 @@ const Analytics = ({ history }) => {
                       marginBottom: '20px',
                     }}
                   />
-                </>
+                </div>
               )}
               {showVisitationGraphs && (
-                <>
+                <div ref={visitationGraphRef}>
                   <h1 className='center'>Visiting frequency</h1>
                   <Bar
                     data={visitationNumGraph}
@@ -6074,10 +6242,10 @@ const Analytics = ({ history }) => {
                       marginBottom: '20px',
                     }}
                   />
-                </>
+                </div>
               )}
               {showGenderGraphs && (
-                <>
+                <div ref={genderGraphRef}>
                   <h1 className='center'>Gender</h1>
                   <Bar
                     data={genderNumGraph}
@@ -6099,10 +6267,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their gender
                   </h2>
-                </>
+                </div>
               )}
               {showHeightGraphs && (
-                <>
+                <div ref={heightGraphRef}>
                   <h1 className='center'>Height</h1>
                   <Bar
                     data={heightNumGraph}
@@ -6124,10 +6292,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their height
                   </h2>
-                </>
+                </div>
               )}
               {showBuildGraphs && (
-                <>
+                <div ref={buildGraphRef}>
                   <h1 className='center'>Body shape</h1>
                   <Bar
                     data={buildNumGraph}
@@ -6149,10 +6317,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their body shape
                   </h2>
-                </>
+                </div>
               )}
               {showHairColourGraphs && (
-                <>
+                <div ref={hairColourGraphRef}>
                   <h1 className='center'>Hair colour</h1>
                   <Bar
                     data={hairColourNumGraph}
@@ -6174,10 +6342,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their hair colour
                   </h2>
-                </>
+                </div>
               )}
               {showHairStyleGraphs && (
-                <>
+                <div ref={hairStyleGraphRef}>
                   <h1 className='center'>Hair style</h1>
                   <Bar
                     data={hairStyleNumGraph}
@@ -6199,10 +6367,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their hair style
                   </h2>
-                </>
+                </div>
               )}
               {showHairLengthGraphs && (
-                <>
+                <div ref={hairLengthGraphRef}>
                   <h1 className='center'>Hair length</h1>
                   <Bar
                     data={hairLengthNumGraph}
@@ -6224,10 +6392,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their hair length
                   </h2>
-                </>
+                </div>
               )}
               {showEyeColourGraphs && (
-                <>
+                <div ref={eyeColourGraphRef}>
                   <h1 className='center'>Eye colour</h1>
                   <Bar
                     data={eyeColourNumGraph}
@@ -6249,10 +6417,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their eye colour
                   </h2>
-                </>
+                </div>
               )}
               {showFeetTypeGraphs && (
-                <>
+                <div ref={feetTypeGraphRef}>
                   <h1 className='center'>Feet type</h1>
                   <Bar
                     data={feetTypeNumGraph}
@@ -6274,10 +6442,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their feet type
                   </h2>
-                </>
+                </div>
               )}
               {showMaritalGraphs && (
-                <>
+                <div ref={maritalGraphRef}>
                   <h1 className='center'>Marital status</h1>
                   <Bar
                     data={maritalNumGraph}
@@ -6299,10 +6467,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their marital status
                   </h2>
-                </>
+                </div>
               )}
               {showLocationGraphs && (
-                <>
+                <div ref={locationGraphRef}>
                   <h1 className='center'>Location</h1>
                   <Bar
                     data={locationNumGraph}
@@ -6324,10 +6492,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their location
                   </h2>
-                </>
+                </div>
               )}
               {showAgeGraphs && (
-                <>
+                <div ref={ageGraphRef}>
                   <h1 className='center'>Age range</h1>
                   <Bar
                     data={ageNumGraph}
@@ -6349,10 +6517,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their age
                   </h2>
-                </>
+                </div>
               )}
               {showChildrenGraphs && (
-                <>
+                <div ref={childrenGraphRef}>
                   <h1 className='center'>Has children</h1>
                   <Bar
                     data={childrenNumGraph}
@@ -6374,10 +6542,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their number of children
                   </h2>
-                </>
+                </div>
               )}
               {showLivesWithGraphs && (
-                <>
+                <div ref={livesWithGraphRef}>
                   <h1 className='center'>Lives with</h1>
                   <Bar
                     data={livesWithNumGraph}
@@ -6399,10 +6567,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated who they live with
                   </h2>
-                </>
+                </div>
               )}
               {showNationalityGraphs && (
-                <>
+                <div ref={nationalityGraphRef}>
                   <h1 className='center'>Nationality</h1>
                   <Bar
                     data={nationalityNumGraph}
@@ -6424,10 +6592,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their nationality
                   </h2>
-                </>
+                </div>
               )}
               {showLanguageGraphs && (
-                <>
+                <div ref={languageGraphRef}>
                   <h1 className='center'>Languages</h1>
                   <Bar
                     data={languageNumGraph}
@@ -6449,10 +6617,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their native language
                   </h2>
-                </>
+                </div>
               )}
               {showEthnicityGraphs && (
-                <>
+                <div ref={ethnicityGraphRef}>
                   <h1 className='center'>Ethnicity</h1>
                   <Bar
                     data={ethnicityNumGraph}
@@ -6474,10 +6642,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their ethnicity
                   </h2>
-                </>
+                </div>
               )}
               {showMusicGraphs && (
-                <>
+                <div ref={musicGraphRef}>
                   <h1 className='center'>Music</h1>
                   <Bar
                     data={musicNumGraph}
@@ -6499,10 +6667,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their favourite music
                   </h2>
-                </>
+                </div>
               )}
               {showMoviesGraphs && (
-                <>
+                <div ref={moviesGraphRef}>
                   <h1 className='center'>Movies</h1>
                   <Bar
                     data={moviesNumGraph}
@@ -6524,10 +6692,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their favourite movies
                   </h2>
-                </>
+                </div>
               )}
               {showReligionGraphs && (
-                <>
+                <div ref={religionGraphRef}>
                   <h1 className='center'>Religion</h1>
                   <Bar
                     data={religionNumGraph}
@@ -6549,10 +6717,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their religion
                   </h2>
-                </>
+                </div>
               )}
               {showOccupationGraphs && (
-                <>
+                <div ref={occupationGraphRef}>
                   <h1 className='center'>Occupation</h1>
                   <Bar
                     data={occupationNumGraph}
@@ -6574,10 +6742,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their occupation
                   </h2>
-                </>
+                </div>
               )}
               {showEducationGraphs && (
-                <>
+                <div ref={educationGraphRef}>
                   <h1 className='center'>Education</h1>
                   <Bar
                     data={educationNumGraph}
@@ -6599,10 +6767,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their education
                   </h2>
-                </>
+                </div>
               )}
               {showHobbiesGraphs && (
-                <>
+                <div ref={hobbiesGraphRef}>
                   <h1 className='center'>Hobbies</h1>
                   <Bar
                     data={hobbiesNumGraph}
@@ -6624,10 +6792,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their hobbies
                   </h2>
-                </>
+                </div>
               )}
               {showBooksGraphs && (
-                <>
+                <div ref={booksGraphRef}>
                   <h1 className='center'>Books</h1>
                   <Bar
                     data={booksNumGraph}
@@ -6649,10 +6817,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their favourite books
                   </h2>
-                </>
+                </div>
               )}
               {showSportsGraphs && (
-                <>
+                <div ref={sportsGraphRef}>
                   <h1 className='center'>Sports</h1>
                   <Bar
                     data={sportsNumGraph}
@@ -6674,10 +6842,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their favourite sports
                   </h2>
-                </>
+                </div>
               )}
               {showSmokesGraphs && (
-                <>
+                <div ref={smokesGraphRef}>
                   <h1 className='center'>Smokes</h1>
                   <Bar
                     data={smokesNumGraph}
@@ -6699,10 +6867,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated whether or not they smoke
                   </h2>
-                </>
+                </div>
               )}
               {showDrinksGraphs && (
-                <>
+                <div ref={drinksGraphRef}>
                   <h1 className='center'>Drinks</h1>
                   <Bar
                     data={drinksNumGraph}
@@ -6724,10 +6892,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated whether or not they drink
                   </h2>
-                </>
+                </div>
               )}
               {showFoodGraphs && (
-                <>
+                <div ref={foodGraphRef}>
                   <h1 className='center'>Food</h1>
                   <Bar
                     data={foodNumGraph}
@@ -6749,10 +6917,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated their taste in foods
                   </h2>
-                </>
+                </div>
               )}
               {showTreatsGraphs && (
-                <>
+                <div ref={treatsGraphRef}>
                   <h1 className='center'>How they treat themselves</h1>
                   <Bar
                     data={treatsNumGraph}
@@ -6774,10 +6942,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated how they treat themselves
                   </h2>
-                </>
+                </div>
               )}
               {showRelWantedGraphs && (
-                <>
+                <div ref={relWantedGraphRef}>
                   <h1 className='center'>Dating purpose</h1>
                   <Bar
                     data={relWantedNumGraph}
@@ -6799,10 +6967,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet updated what type of relationship they are looking for
                   </h2>
-                </>
+                </div>
               )}
               {showPointsGraphs && (
-                <>
+                <div ref={pointsGraphRef}>
                   <h1 className='center'># Points</h1>
                   <Scatter
                     data={pointsGraph}
@@ -6833,10 +7001,10 @@ const Analytics = ({ history }) => {
                     The average amount of points per user is currently
                     <span>{currentAverage.toFixed(2)}</span>
                   </h2>
-                </>
+                </div>
               )}
               {showProductsViewedGraphs && (
-                <>
+                <div ref={productsViewedGraphRef}>
                   <h1 className='center'># Page visits of each item in shop</h1>
                   <Bar
                     data={productsViewedNumGraph}
@@ -6858,10 +7026,10 @@ const Analytics = ({ history }) => {
                     <span>{currentPerNa.toFixed(2)}%</span> of users have not
                     yet viewed any products
                   </h2>
-                </>
+                </div>
               )}
               {showTotalPaidGraphs && (
-                <>
+                <div ref={totalPaidGraphRef}>
                   <h1 className='center'>Total amount paid in the shop</h1>
                   <Scatter
                     data={totalPaidGraph}
@@ -6909,10 +7077,10 @@ const Analytics = ({ history }) => {
                     <span>{currentNumNa}</span> users have not yet made a store
                     purchase
                   </h2>
-                </>
+                </div>
               )}
               {showOrdersGraphs && (
-                <>
+                <div ref={ordersGraphRef}>
                   <h1 className='center'># Orders in shop</h1>
                   <Scatter
                     data={ordersGraph}
@@ -6955,10 +7123,10 @@ const Analytics = ({ history }) => {
                     <span>{currentNumNa}</span> users have not yet placed an
                     order
                   </h2>
-                </>
+                </div>
               )}
               {showKeyWordsGraphs && (
-                <>
+                <div ref={keyWordsGraphRef}>
                   <h1 className='center'>Free keywords</h1>
                   <Bar
                     data={keyWordsGraph}
@@ -6970,7 +7138,7 @@ const Analytics = ({ history }) => {
                     <span>{currentNumNa}</span> users have not yet updated their
                     about section
                   </h2>
-                </>
+                </div>
               )}
             </>
           )}

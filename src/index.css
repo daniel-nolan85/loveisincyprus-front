@@ -2962,6 +2962,16 @@ small.user-chats-date {
   justify-content: space-around;
 }
 
+.analytics .analytics-dates {
+  width: 60px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.analytics .analytics-dates .reset {
+  color: #5388b4;
+}
+
 .analytics h2 span {
   color: var(--nav-color);
   padding-left: 30px;
