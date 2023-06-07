@@ -90,6 +90,7 @@ import FinalizingAdPayment from './pages/user/FinalizingAdPayment';
 import Analytics from './pages/admin/Analytics';
 import AdFinalize from './pages/user/AdFinalize';
 import AdSuccess from './pages/user/AdSuccess';
+import MobileBlock from './pages/admin/MobileBlock';
 
 let socket, selectedChatCompare;
 
@@ -633,6 +634,11 @@ const App = () => {
               exact
               path='/admin/calling-code-block'
               component={CallingCodeBlock}
+            />
+            <AdminRoute
+              exact
+              path='/admin/mobile-phone-block'
+              component={MobileBlock}
             />
             <AdminRoute exact path='/admin/category' component={Category} />
             <AdminRoute exact path='/admin/sub' component={Sub} />

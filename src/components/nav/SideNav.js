@@ -255,6 +255,13 @@ const SideNav = () => {
                           Calling Code-Block
                         </Link>
                         <br />
+                        <Link
+                          to='/admin/mobile-phone-block'
+                          onClick={() => setOpenNav(false)}
+                        >
+                          Mobile Phone-Block
+                        </Link>
+                        <br />
                       </>
                     )}
                     {user.canProducts && (

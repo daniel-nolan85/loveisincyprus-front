@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import LeftSidebar from '../../components/admin/LeftSidebar';
 import axios from 'axios';
-import { useSelector, useStore } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faSpinner,
@@ -18,8 +18,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import Chart from '../../components/cards/Chart';
-// import { useScreenshot } from 'use-react-screenshot';
 import html2canvas from 'html2canvas';
+import { toast } from 'react-toastify';
 
 const Analytics = ({ history }) => {
   const [loading, setLoading] = useState(true);
@@ -143,8 +143,6 @@ const Analytics = ({ history }) => {
   const [loadingChartImage, setLoadingChartImage] = useState(false);
 
   let { _id, token, role } = useSelector((state) => state.user);
-
-  // const [takeScreenshot, { getScreenshot }] = useScreenshot();
 
   const isFirstRun = useRef(true);
   const registrationGraphRef = useRef(null);
@@ -325,6 +323,9 @@ const Analytics = ({ history }) => {
       const image = canvas.toDataURL('image/png');
       setChartImage(image);
       setLoadingChartImage(false);
+      toast.success('Chart is ready to export', {
+        position: toast.POSITION.TOP_CENTER,
+      });
     });
   };
 

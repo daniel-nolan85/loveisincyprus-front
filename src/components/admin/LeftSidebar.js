@@ -23,6 +23,7 @@ import {
   faTable,
   faCommentSms,
   faCalculator,
+  faMobilePhone,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { ChatState } from '../../context/ChatProvider';
@@ -239,6 +240,10 @@ const LeftSidebar = () => {
             <Link to='/admin/calling-code-block'>
               <FontAwesomeIcon icon={faPhone} className='fa' />
               Calling Code-Block
+            </Link>
+            <Link to='/admin/mobile-phone-block'>
+              <FontAwesomeIcon icon={faMobilePhone} className='fa' />
+              Mobile Phone-Block
             </Link>
           </>
         )}
