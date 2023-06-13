@@ -36,12 +36,6 @@ const CouponEdit = ({
     }
   }, [couponToEdit]);
 
-  console.log('couponToEdit => ', couponToEdit);
-  console.log('name => ', name);
-  console.log('selectedProducts => ', selectedProducts);
-  console.log('discount => ', discount);
-  console.log('expiry => ', expiry);
-
   let { token } = useSelector((state) => state.user);
 
   const editCoupon = async (e, coupon) => {

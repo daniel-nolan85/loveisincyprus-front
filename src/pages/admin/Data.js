@@ -121,9 +121,6 @@ const Data = ({ history }) => {
   const [gCReceivedValueData, setGCReceivedValueData] = useState({});
   const [excelData, setExcelData] = useState([]);
 
-  console.log('users => ', users);
-  console.log('excelData => ', excelData);
-
   const { token, role } = useSelector((state) => state.user);
 
   const isFirstRun = useRef(true);

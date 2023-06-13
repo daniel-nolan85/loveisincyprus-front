@@ -334,11 +334,6 @@ const ProfileUpdate = ({
         <label className='csv'>
           Don't forget your country code (e.g. +357)
         </label>
-        {/* <label className='csv'>
-          Updating your primary mobile number will result in you being logged
-          out. To return to the site, please re-authenticate using the new
-          mobile number you have provided.
-        </label> */}
 
         <PhoneInput
           className='input-field'
@@ -389,7 +384,6 @@ const ProfileUpdate = ({
           />
           <FontAwesomeIcon
             icon={showAnswer ? faEyeSlash : faEye}
-            // className='fa update-eye'
             className={statement ? 'fa update-eye' : 'hide'}
             onClick={() => setShowAnswer(!showAnswer)}
           />
@@ -1118,7 +1112,6 @@ const ProfileUpdate = ({
           {myAppearanceSection()}
           {profilePlusSection()}
           <button
-            // onClick={handleSubmit}
             onClick={checkInfoExists}
             type='submit'
             className='submit-btn'

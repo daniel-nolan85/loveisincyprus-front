@@ -35,10 +35,6 @@ const FinalizingMembershipPayment = () => {
     setAmendMembership(JSON.parse(decodeURIComponent(getAmendMembership)));
   }, []);
 
-  console.log('status => ', status);
-  console.log('response => ', response);
-  console.log('amendMembership => ', amendMembership);
-
   const { amount } = response;
 
   useEffect(() => {

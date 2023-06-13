@@ -29,7 +29,6 @@ const RightSidebar = ({ rerenderAds }) => {
 
   useEffect(() => {
     if (rerenderAds) {
-      console.log('rerenderAds => ', rerenderAds);
       fetchPaidAds();
     }
   }, [rerenderAds]);
@@ -95,7 +94,6 @@ const RightSidebar = ({ rerenderAds }) => {
     await axios
       .get(`${process.env.REACT_APP_API}/fetch-paid-ads`)
       .then((res) => {
-        console.log(res.data);
         setAds(res.data);
       });
   };

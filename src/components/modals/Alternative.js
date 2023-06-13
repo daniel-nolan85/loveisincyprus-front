@@ -111,7 +111,6 @@ const Alternative = ({
       .then((res) => {
         if (res.data.length > 0) {
           checkAllowedAccess();
-          //   checkCallingCode();
         } else {
           toast.error('No user exists with this phone number.', {
             position: toast.POSITION.TOP_CENTER,

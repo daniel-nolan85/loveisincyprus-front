@@ -49,16 +49,6 @@ const RefundApprove = ({
 
   let { token } = useSelector((state) => state.user);
 
-  //   const { setNewRefunds } = ChatState();
-
-  //   const fetchNewVerifs = async () => {
-  //     await axios
-  //       .get(`${process.env.REACT_APP_API}/fetch-new-verifs`)
-  //       .then((res) => {
-  //         setNewVerifs(res.data);
-  //       });
-  //   };
-
   const processRefund = async (refund) => {
     setLoading(true);
     await axios
@@ -79,7 +69,6 @@ const RefundApprove = ({
             position: toast.POSITION.TOP_CENTER,
           }
         );
-        // fetchNewVerifs();
         setProducts([]);
         fetchRefunds();
         setProcessRefundModalIsOpen(false);
@@ -135,22 +124,8 @@ const RefundApprove = ({
               style={{ width: '100%' }}
               placeholder='Select items...'
               value={products}
-              // onChange={(value) => {
-              //   if (value.includes('all')) {
-              //     setProducts(
-              //       items.map((i) => `${i._id}, ${i.price}, ${i.title}`)
-              //     );
-              //   } else {
-              //     setProducts(value);
-              //   }
-              // }}
               onChange={(value) => setProducts(value)}
             >
-              {/* {items.length > 1 && (
-                <Option value='all' key='all'>
-                  Select all
-                </Option>
-              )} */}
               {itemsToDisplay.map((i, idx) => (
                 <Option
                   value={`${i._id}-${idx}, ${i.price}, ${i.title}`}

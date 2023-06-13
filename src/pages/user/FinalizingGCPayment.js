@@ -27,10 +27,6 @@ const FinalizingGCPayment = () => {
   const pendingGCDataString = localStorage.getItem('pendingGCData');
   const pendingGCData = JSON.parse(pendingGCDataString);
 
-  console.log('status => ', status);
-  console.log('response => ', response);
-  console.log('pendingGCData => ', pendingGCData);
-
   useEffect(() => {
     if (status && status === 'approved') {
       pendingGCData.succeeded = true;

@@ -167,7 +167,6 @@ const LargeCoverImage = ({
       style={modalStyles}
       contentLabel='Example Modal'
     >
-      {/* {images && images.length > 0 ? ( */}
       <div className='slideshow-container'>
         <div className='fade' id='first-slide'>
           {user._id === userId && (

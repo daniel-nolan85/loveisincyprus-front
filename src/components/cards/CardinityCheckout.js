@@ -103,7 +103,6 @@ const CardinityCheckout = ({
     setProcessing(true);
     createPayment(values, payable, userAgent, token, deliveryFee)
       .then((res) => {
-        console.log(res);
         if (res.data.errors) {
           toast.error(res.data.errors[0].message, {
             position: toast.POSITION.TOP_CENTER,
@@ -150,7 +149,6 @@ const CardinityCheckout = ({
           setProcessing(false);
           setSucceeded(true);
         } else if (res.data.status === 'pending') {
-          console.log(res.data);
           setCardinityPendingModalIsOpen(true);
           setPendingFormData(res.data);
           toast.warning(`Payment pending.`, {

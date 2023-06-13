@@ -82,7 +82,6 @@ const Reauthenticate = ({
           updatedMobile && updatePhoneNumber(auth.currentUser, updatedMobile);
           updatedEmail && updateEmail(auth.currentUser, updatedEmail);
           updatedAnswer && updatePassword(auth.currentUser, updatedAnswer);
-          //   setReauthenticated(true);
           setReauthenticateModalIsOpen(false);
         })
         .catch((err) => {

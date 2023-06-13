@@ -103,7 +103,6 @@ const MassMail = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setMailsAvailable(5 - res.data.listsNum);
         setNextAutomation(res.data.nextAutomation);
       })
@@ -124,7 +123,6 @@ const MassMail = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setMassMessages(res.data);
       })
       .catch((err) => {

@@ -47,7 +47,6 @@ const FinalizingPayment = () => {
 
   useEffect(() => {
     if (status && status === 'approved') {
-      console.log('ready to create order');
       if (discount) handleCoupon();
       addPoints(Math.floor(payable / 100), 'store purchase', token);
       toast.success(

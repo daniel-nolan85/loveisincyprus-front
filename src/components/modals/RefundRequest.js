@@ -131,25 +131,7 @@ const RefundRequest = ({
               placeholder='Select your unwanted items...'
               value={items}
               onChange={(value) => setItems(value)}
-              // onChange={(value) => {
-              //   if (value.includes('all')) {
-              //     setItems(
-              //       products.flatMap((p) =>
-              //         Array.from(
-              //           { length: p.count - p.refunded },
-              //           (_, i) =>
-              //             `${p.product._id}-${i}, ${p.product.price}, ${p.product.title}`
-              //         )
-              //       )
-              //     );
-              //   } else {
-              //     setItems(value);
-              //   }
-              // }}
             >
-              {/* <Option value='all' key='all'>
-                Select All
-              </Option> */}
               {products.flatMap((p) =>
                 Array.from({ length: p.count - p.refunded }, (_, i) => (
                   <Option

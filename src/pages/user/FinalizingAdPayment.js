@@ -13,11 +13,6 @@ const AdFinalize = () => {
   const [demographic, setDemographic] = useState([]);
   const [ok, setOk] = useState(false);
 
-  console.log('status => ', status);
-  console.log('approvedData => ', approvedData);
-  console.log('demographic => ', demographic);
-  console.log('ok => ', ok);
-
   const isFirstRun = useRef(true);
 
   let history = useHistory();

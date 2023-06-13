@@ -6,14 +6,11 @@ import visa from '../../assets/visa.png';
 import Mobile from '../../components/user/Mobile';
 
 const AdSuccess = (props) => {
-  console.log('props => ', props);
-
   const { card_brand, pan, exp_month, exp_year, holder } =
     props.location.state.approvedData.payment_instrument;
   const payable = props.location.state.approvedData.amount;
   const demographic = props.location.state.demographic;
 
-  console.log('demographic => ', demographic);
   return (
     <div className='container'>
       <LeftSidebar />

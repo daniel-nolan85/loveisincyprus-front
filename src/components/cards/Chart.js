@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
   Document,
   Page,
@@ -6,69 +6,52 @@ import {
   View,
   StyleSheet,
   Image,
+  Link,
 } from '@react-pdf/renderer';
-import { Bar, Scatter } from 'react-chartjs-2';
-import { Chart as ChartJS } from 'chart.js/auto';
+import Logo from '../../assets/logo.png';
 
-const Chart = ({ chartImage }) => {
-  const [text, setText] = useState('');
-
-  //   useEffect(() => {
-  //     const fetchData = async () => {
-  //       await reRenderCurrentGraph();
-
-  //       if (currentGraph && currentGraph === 'Date range') {
-  //         setNumData(registrationNumGraph);
-  //         setPerData(registrationPerGraph);
-  //       }
-  //     };
-  //     fetchData();
-  //     // if (currentGraph === 'Visiting frequency') visitationGraphs();
-  //     // if (currentGraph === 'Gender') genderGraphs();
-  //     // if (currentGraph === 'Height') heightGraphs();
-  //     // if (currentGraph === 'Body shape') buildGraphs();
-  //     // if (currentGraph === 'Hair colour') hairColourGraphs();
-  //     // if (currentGraph === 'Hair Style') hairStyleGraphs();
-  //     // if (currentGraph === 'Hair length') hairLengthGraphs();
-  //     // if (currentGraph === 'Eye colour') eyeColourGraphs();
-  //     // if (currentGraph === 'Feet type') feetTypeGraphs();
-  //     // if (currentGraph === 'Marital status') maritalGraphs();
-  //     // if (currentGraph === 'Location') locationGraphs();
-  //     // if (currentGraph === 'Age range') ageGraphs();
-  //     // if (currentGraph === 'Has children') childrenGraphs();
-  //     // if (currentGraph === 'Lives with') livesWithGraphs();
-  //     // if (currentGraph === 'Nationality') nationalityGraphs();
-  //     // if (currentGraph === 'Languages') languageGraphs();
-  //     // if (currentGraph === 'Ethnicity') ethnicityGraphs();
-  //     // if (currentGraph === 'Music') musicGraphs();
-  //     // if (currentGraph === 'Movies') moviesGraphs();
-  //     // if (currentGraph === 'Religion') religionGraphs();
-  //     // if (currentGraph === 'Occupation') occupationGraphs();
-  //     // if (currentGraph === 'Education') educationGraphs();
-  //     // if (currentGraph === 'Hobbies') hobbiesGraphs();
-  //     // if (currentGraph === 'Books') booksGraphs();
-  //     // if (currentGraph === 'Sports') sportsGraphs();
-  //     // if (currentGraph === 'Smokes') smokesGraphs();
-  //     // if (currentGraph === 'Drinks') drinksGraphs();
-  //     // if (currentGraph === 'Food') foodGraphs();
-  //     // if (currentGraph === 'How they treat themselves') treatsGraphs();
-  //     // if (currentGraph === 'Dating purpose') relWantedGraphs();
-  //     // if (currentGraph === '# Points') pointsGraphs();
-  //     // if (currentGraph === '# Page visits of each item in the shop')
-  //     //   productsViewedGraphs();
-  //     // if (currentGraph === 'Total amount paid in shop') totalPaidGraphs();
-  //     // if (currentGraph === '# Orders in shop') ordersGraphs();
-  //     // if (currentGraph === 'Free keywords') keyWordsGraphs();
-  //   }, [currentGraph]);
-
+const Chart = ({ userDataImage, chartImage }) => {
   return (
     <Document>
-      <Page>
-        {/* <Text>{currentGraph}</Text> */}
+      <Page style={styles.page}>
+        <Link src='https://www.loveisincyprus.com/'>
+          <Image src={Logo} style={styles.logo} />
+        </Link>
+        <Image src={userDataImage} />
         <Image src={chartImage} />
+        <Text style={styles.footer}>
+          <Link style={styles.link} src='https://www.loveisincyprus.com/'>
+            www.loveisincyprus.com
+          </Link>{' '}
+          &copy; {new Date().getFullYear()}
+        </Text>
       </Page>
     </Document>
   );
 };
+
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh',
+  },
+  logo: {
+    width: 50,
+    height: 50,
+    marginBottom: 10,
+  },
+  footer: {
+    fontSize: 10,
+    marginTop: 10,
+    marginBottom: 10,
+    color: '#626262',
+  },
+  link: {
+    color: '#ef5b85',
+    textDecoration: 'none',
+  },
+});
 
 export default Chart;

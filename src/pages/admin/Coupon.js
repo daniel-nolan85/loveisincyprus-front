@@ -41,8 +41,6 @@ const Coupon = ({ history }) => {
 
   const { token, canCoupon } = useSelector((state) => state.user);
 
-  console.log('selectedProducts => ', selectedProducts);
-
   useEffect(() => {
     if (!canCoupon) {
       history.push('/admin/dashboard');
@@ -73,7 +71,6 @@ const Coupon = ({ history }) => {
     setLoading(true);
     createCoupon({ name, selectedProducts, expiry, discount }, token)
       .then((res) => {
-        console.log(res);
         if (res.data.errors) {
           toast.error(`${res.data.message}`, {
             position: toast.POSITION.TOP_CENTER,

@@ -535,7 +535,6 @@ const Chats = ({ history }) => {
                             marginTop: isSameUser(messages, m, i, user._id)
                               ? 3
                               : 10,
-                            // padding: m.sender._id === user._id && '5px 10px',
                             padding: '5px 10px',
                           }}
                         >

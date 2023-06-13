@@ -130,7 +130,6 @@ const GiftCardCreate = () => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setThisUser(res.data);
         setUserLoading(false);
       })
@@ -180,7 +179,6 @@ const GiftCardCreate = () => {
           setProcessing(false);
           setSucceeded(true);
         } else if (res.data.status === 'pending') {
-          console.log(res.data);
           setCardinityPendingModalIsOpen(true);
           setPendingFormData(res.data);
           toast.warning(`Payment pending.`, {

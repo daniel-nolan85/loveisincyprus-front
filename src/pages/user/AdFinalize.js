@@ -27,11 +27,6 @@ const AdFinalize = ({ history }) => {
   const [approvedData, setApprovedData] = useState({});
   const [demographic, setDemographic] = useState([]);
 
-  console.log('ad => ', ad);
-  console.log('status => ', status);
-  console.log('accountInfo => ', accountInfo);
-  console.log('demographic => ', demographic);
-
   const isFirstRun = useRef(true);
 
   useEffect(() => {
@@ -88,7 +83,6 @@ const AdFinalize = ({ history }) => {
         ad,
       })
       .then((res) => {
-        console.log(res.data);
         if (res.data === null) {
           setStatus('deleted');
         } else if (res.data.status === 'paid') {
@@ -108,7 +102,6 @@ const AdFinalize = ({ history }) => {
     setRerenderAds(false);
     createAdPayment(accountInfo, payable, userAgent, ad._id, demographic).then(
       (res) => {
-        console.log(res);
         if (res.data.errors) {
           toast.error(res.data.errors[0].message, {
             position: toast.POSITION.TOP_CENTER,

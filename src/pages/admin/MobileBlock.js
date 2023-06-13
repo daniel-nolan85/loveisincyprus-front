@@ -23,8 +23,6 @@ const MobileBlock = ({ history }) => {
 
   const { token, role } = useSelector((state) => state.user);
 
-  console.log('blockedNumbers => ', blockedNumbers);
-
   useEffect(() => {
     if (role !== 'main-admin') {
       history.push('/admin/dashboard');
@@ -53,7 +51,6 @@ const MobileBlock = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         setLoading(false);
         setNumberToBlock('');
         toast.success(`${res.data.mobile} has been blocked`, {
@@ -88,7 +85,6 @@ const MobileBlock = ({ history }) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         toast.success(
           `${res.data.mobile} has been removed from the blacklist`,
           {

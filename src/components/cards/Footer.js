@@ -38,22 +38,6 @@ const Footer = () => {
           >
             <FontAwesomeIcon icon={faFacebook} className='fa' />
           </Link>
-          {/* <Link
-            to={{
-              pathname: 'https://www.instagram.com',
-            }}
-            target='_blank'
-          >
-            <FontAwesomeIcon icon={faInstagram} className='fa' />
-          </Link>
-          <Link
-            to={{
-              pathname: 'https://www.twitter.com',
-            }}
-            target='_blank'
-          >
-            <FontAwesomeIcon icon={faTwitter} className='fa' />
-          </Link> */}
         </div>
         <p className='credit'>
           LoveIsInCyprus &copy; {new Date().getFullYear()}

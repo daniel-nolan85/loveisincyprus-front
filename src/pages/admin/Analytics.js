@@ -139,12 +139,14 @@ const Analytics = ({ history }) => {
   const [ordersGraph, setOrdersGraph] = useState({});
   const [showKeyWordsGraphs, setShowKeyWordsGraphs] = useState(false);
   const [keyWordsGraph, setKeyWordsGraph] = useState({});
+  const [userDataImage, setUserDataImage] = useState(null);
   const [chartImage, setChartImage] = useState(null);
   const [loadingChartImage, setLoadingChartImage] = useState(false);
 
   let { _id, token, role } = useSelector((state) => state.user);
 
   const isFirstRun = useRef(true);
+  const userDataRef = useRef(null);
   const registrationGraphRef = useRef(null);
   const visitationGraphRef = useRef(null);
   const genderGraphRef = useRef(null);
@@ -251,6 +253,7 @@ const Analytics = ({ history }) => {
   const filterUsers = async () => {
     if (startDate && !endDate) return;
     else {
+      setUserDataImage(null);
       setChartImage(null);
       await axios
         .get(`${process.env.REACT_APP_API}/fetch-users-for-analytics`, {
@@ -279,6 +282,7 @@ const Analytics = ({ history }) => {
   };
 
   const preparePdf = () => {
+    captureDataScreenshot(userDataRef);
     if (showRegistrationGraphs) captureScreenshot(registrationGraphRef);
     if (showVisitationGraphs) captureScreenshot(visitationGraphRef);
     if (showGenderGraphs) captureScreenshot(genderGraphRef);
@@ -315,6 +319,15 @@ const Analytics = ({ history }) => {
     if (showTotalPaidGraphs) captureScreenshot(totalPaidGraphRef);
     if (showOrdersGraphs) captureScreenshot(ordersGraphRef);
     if (showKeyWordsGraphs) captureScreenshot(keyWordsGraphRef);
+  };
+
+  const captureDataScreenshot = (dataRef) => {
+    setLoadingChartImage(true);
+    html2canvas(dataRef.current).then((canvas) => {
+      const image = canvas.toDataURL('image/png');
+      setUserDataImage(image);
+      setLoadingChartImage(false);
+    });
   };
 
   const captureScreenshot = (graphRef) => {
@@ -371,6 +384,7 @@ const Analytics = ({ history }) => {
 
   const registrationGraphs = () => {
     setCurrentGraph('Date range');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowVisitationGraphs(false);
@@ -459,6 +473,7 @@ const Analytics = ({ history }) => {
 
   const visitationGraphs = () => {
     setCurrentGraph('Visiting frequency');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -552,6 +567,7 @@ const Analytics = ({ history }) => {
 
   const genderGraphs = () => {
     setCurrentGraph('Gender');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -662,6 +678,7 @@ const Analytics = ({ history }) => {
 
   const heightGraphs = () => {
     setCurrentGraph('Height');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -1175,6 +1192,7 @@ const Analytics = ({ history }) => {
 
   const buildGraphs = () => {
     setCurrentGraph('Body shape');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -1374,6 +1392,7 @@ const Analytics = ({ history }) => {
 
   const hairColourGraphs = () => {
     setCurrentGraph('Hair colour');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -1615,6 +1634,7 @@ const Analytics = ({ history }) => {
 
   const hairStyleGraphs = () => {
     setCurrentGraph('Hair style');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -1746,6 +1766,7 @@ const Analytics = ({ history }) => {
 
   const hairLengthGraphs = () => {
     setCurrentGraph('Hair length');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -1897,6 +1918,7 @@ const Analytics = ({ history }) => {
 
   const eyeColourGraphs = () => {
     setCurrentGraph('Eye colour');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -2048,6 +2070,7 @@ const Analytics = ({ history }) => {
 
   const feetTypeGraphs = () => {
     setCurrentGraph('Feet type');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -2179,6 +2202,7 @@ const Analytics = ({ history }) => {
 
   const maritalGraphs = () => {
     setCurrentGraph('Marital status');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -2357,6 +2381,7 @@ const Analytics = ({ history }) => {
 
   const locationGraphs = () => {
     setCurrentGraph('Location');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -2534,6 +2559,7 @@ const Analytics = ({ history }) => {
 
   const ageGraphs = () => {
     setCurrentGraph('Age range');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -2779,6 +2805,7 @@ const Analytics = ({ history }) => {
 
   const childrenGraphs = () => {
     setCurrentGraph('Has children');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -3002,6 +3029,7 @@ const Analytics = ({ history }) => {
 
   const livesWithGraphs = () => {
     setCurrentGraph('Lives with');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -3180,6 +3208,7 @@ const Analytics = ({ history }) => {
 
   const nationalityGraphs = () => {
     setCurrentGraph('Nationality');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -3281,6 +3310,7 @@ const Analytics = ({ history }) => {
 
   const languageGraphs = () => {
     setCurrentGraph('Languages');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -3379,6 +3409,7 @@ const Analytics = ({ history }) => {
 
   const ethnicityGraphs = () => {
     setCurrentGraph('Ethnicity');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -3622,6 +3653,7 @@ const Analytics = ({ history }) => {
 
   const musicGraphs = () => {
     setCurrentGraph('Music');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -3722,6 +3754,7 @@ const Analytics = ({ history }) => {
 
   const moviesGraphs = () => {
     setCurrentGraph('Movies');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -3822,6 +3855,7 @@ const Analytics = ({ history }) => {
 
   const religionGraphs = () => {
     setCurrentGraph('Religion');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -4149,6 +4183,7 @@ const Analytics = ({ history }) => {
 
   const occupationGraphs = () => {
     setCurrentGraph('Occupation');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -4250,6 +4285,7 @@ const Analytics = ({ history }) => {
 
   const educationGraphs = () => {
     setCurrentGraph('Education');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -4452,6 +4488,7 @@ const Analytics = ({ history }) => {
 
   const hobbiesGraphs = () => {
     setCurrentGraph('Hobbies');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -4552,6 +4589,7 @@ const Analytics = ({ history }) => {
 
   const booksGraphs = () => {
     setCurrentGraph('Books');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -4652,6 +4690,7 @@ const Analytics = ({ history }) => {
 
   const sportsGraphs = () => {
     setCurrentGraph('Sports');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -4752,6 +4791,7 @@ const Analytics = ({ history }) => {
 
   const smokesGraphs = () => {
     setCurrentGraph('Smokes');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -4883,6 +4923,7 @@ const Analytics = ({ history }) => {
 
   const drinksGraphs = () => {
     setCurrentGraph('Drinks');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -5014,6 +5055,7 @@ const Analytics = ({ history }) => {
 
   const foodGraphs = () => {
     setCurrentGraph('Food');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -5213,6 +5255,7 @@ const Analytics = ({ history }) => {
 
   const treatsGraphs = () => {
     setCurrentGraph('How they treat themselves');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -5313,6 +5356,7 @@ const Analytics = ({ history }) => {
 
   const relWantedGraphs = () => {
     setCurrentGraph('Dating purpose');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -5472,6 +5516,7 @@ const Analytics = ({ history }) => {
 
   const pointsGraphs = () => {
     setCurrentGraph('# Points');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -5538,6 +5583,7 @@ const Analytics = ({ history }) => {
 
   const productsViewedGraphs = () => {
     setCurrentGraph('# Page visits of each item in the shop');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -5828,6 +5874,7 @@ const Analytics = ({ history }) => {
 
   const totalPaidGraphs = () => {
     setCurrentGraph('Total amount paid in the shop');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -5899,6 +5946,7 @@ const Analytics = ({ history }) => {
 
   const ordersGraphs = () => {
     setCurrentGraph('# Orders in shop');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -5970,6 +6018,7 @@ const Analytics = ({ history }) => {
 
   const keyWordsGraphs = () => {
     setCurrentGraph('Free keywords');
+    setUserDataImage(null);
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
@@ -6130,7 +6179,12 @@ const Analytics = ({ history }) => {
                 )}
                 {chartImage && (
                   <PDFDownloadLink
-                    document={<Chart chartImage={chartImage} />}
+                    document={
+                      <Chart
+                        userDataImage={userDataImage}
+                        chartImage={chartImage}
+                      />
+                    }
                     fileName='chart.pdf'
                   >
                     <FontAwesomeIcon icon={faFilePdf} className='fa' />
@@ -6149,7 +6203,7 @@ const Analytics = ({ history }) => {
                 onClickOutside={() => setDatePickerIsOpen(false)}
               />
               {startDate && endDate ? (
-                <div className='selected-dates'>
+                <div className='selected-dates' ref={userDataRef}>
                   <p className='center'>
                     <span>{allUsers.length}</span>{' '}
                     {allUsers.length === 1 ? 'member' : 'members'} registered
@@ -6160,7 +6214,7 @@ const Analytics = ({ history }) => {
                   </p>
                 </div>
               ) : (
-                <div className='selected-dates'>
+                <div className='selected-dates' ref={userDataRef}>
                   <p className='center'>
                     There are currently <span>{allUsers.length}</span>{' '}
                     registered members

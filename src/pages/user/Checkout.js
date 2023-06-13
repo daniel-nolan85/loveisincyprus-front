@@ -247,7 +247,6 @@ const Checkout = ({ history }) => {
     e.preventDefault();
     setLoadingCoupon(true);
     applyUserCoupon(coupon, token).then((res) => {
-      console.log(res.data);
       if (res.data.err) {
         setLoadingCoupon(false);
         setDiscountError(res.data.err);

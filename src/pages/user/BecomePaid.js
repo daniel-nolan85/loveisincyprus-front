@@ -61,7 +61,6 @@ const BecomePaid = ({ history }) => {
       user.token,
       daysLeft
     ).then((res) => {
-      console.log(res);
       if ((res.data.response && res.data.response.errors) || res.data.errors) {
         toast.error(res.data.response.errors[0].message, {
           position: toast.POSITION.TOP_CENTER,
@@ -105,7 +104,6 @@ const BecomePaid = ({ history }) => {
         });
         setUserBankDetails(result);
       } else if (res.data.status === 'pending') {
-        console.log(res.data);
         setCardinityPendingModalIsOpen(true);
         setPendingFormData(res.data);
         toast.warning(`Payment pending.`, {

@@ -144,7 +144,6 @@ const UsersToSelect = ({
                 }}
                 type='button'
                 className='submit-btn'
-                // key={s._id}
               >
                 {loading && clickedSearch === s._id ? (
                   <FontAwesomeIcon icon={faSpinner} className='fa' spin />

@@ -52,8 +52,6 @@ const DeleteEvent = ({
 
   const { name, uploadedPhotos } = currentEvent;
 
-  console.log('currentEvent => ', currentEvent);
-
   const modalStyles = {
     content: {
       top: '50%',
