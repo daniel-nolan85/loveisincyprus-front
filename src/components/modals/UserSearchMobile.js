@@ -48,6 +48,7 @@ const UserSearchMobile = ({
   setParams,
 }) => {
   const [loading, setLoading] = useState(false);
+  const [vaccinated, setVaccinated] = useState('');
   const [ageRange, setAgeRange] = useState([0, 0]);
   const [incomeRange, setIncomeRange] = useState([0, 0]);
   const [ageOfPartner, setAgeOfPartner] = useState('');
@@ -107,6 +108,7 @@ const UserSearchMobile = ({
   };
 
   const map = {
+    vaccinated: setVaccinated,
     ageOfPartner: setAgeOfPartner,
     relWanted: setRelWanted,
     location: setLocation,
@@ -328,6 +330,29 @@ const UserSearchMobile = ({
 
     map[item.props.title](string);
   };
+
+  const isVaccinated = (
+    <Menu
+      onClick={handleDropdown}
+      items={[
+        {
+          label: 'Yes',
+          key: 'yes',
+          title: 'vaccinated',
+        },
+        {
+          label: 'No',
+          key: 'no',
+          title: 'vaccinated',
+        },
+        {
+          label: 'Prefer not to say',
+          key: 'prefer not to say',
+          title: 'vaccinated',
+        },
+      ]}
+    />
+  );
 
   const ageTheyWant = (
     <Menu
@@ -1704,6 +1729,7 @@ const UserSearchMobile = ({
     setParams([]);
     setAgeRange([0, 0]);
     setIncomeRange([0, 0]);
+    setVaccinated('');
     setAgeOfPartner('');
     setRelWanted('');
     setLocation('');
@@ -1868,6 +1894,11 @@ const UserSearchMobile = ({
               key='3'
               title={<span>With the following characteristics</span>}
             >
+              <Dropdown overlay={isVaccinated}>
+                <a className='ageTheyWant' onClick={(e) => e.preventDefault()}>
+                  {vaccinated || 'Are they vaccinated?'}
+                </a>
+              </Dropdown>
               <Dropdown overlay={ageTheyWant}>
                 <a className='ageTheyWant' onClick={(e) => e.preventDefault()}>
                   {ageOfPartner || 'Age they want'}

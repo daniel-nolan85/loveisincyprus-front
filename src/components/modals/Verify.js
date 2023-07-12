@@ -121,7 +121,7 @@ const Verify = ({
           likely to receive interactions.
         </h1>
         <h2>You will also receive 80 points for successful verification.</h2>
-        <h2>
+        <h2 style={{ fontWeight: 'bold', color: '#ef5b85' }}>
           To become verified, please upload a live photo of yourself holding a
           sign that displays your username and email.
         </h2>

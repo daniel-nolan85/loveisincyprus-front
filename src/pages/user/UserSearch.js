@@ -40,6 +40,7 @@ const initialInputValues = {
 const UserSearch = (props) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [vaccinated, setVaccinated] = useState('');
   const [ageRange, setAgeRange] = useState([0, 0]);
   const [incomeRange, setIncomeRange] = useState([0, 0]);
   const [ageOfPartner, setAgeOfPartner] = useState('');
@@ -80,6 +81,7 @@ const UserSearch = (props) => {
   const [returnedParams, setReturnedParams] = useState(props.location.state);
 
   const map = {
+    vaccinated: setVaccinated,
     ageOfPartner: setAgeOfPartner,
     relWanted: setRelWanted,
     location: setLocation,
@@ -322,6 +324,29 @@ const UserSearch = (props) => {
     );
     setUsers([...popular]);
   };
+
+  const isVaccinated = (
+    <Menu
+      onClick={handleDropdown}
+      items={[
+        {
+          label: 'Yes',
+          key: 'yes',
+          title: 'vaccinated',
+        },
+        {
+          label: 'No',
+          key: 'no',
+          title: 'vaccinated',
+        },
+        {
+          label: 'Prefer not to say',
+          key: 'prefer not to say',
+          title: 'vaccinated',
+        },
+      ]}
+    />
+  );
 
   const ageTheyWant = (
     <Menu
@@ -1698,6 +1723,7 @@ const UserSearch = (props) => {
     setParams([]);
     setAgeRange([0, 0]);
     setIncomeRange([0, 0]);
+    setVaccinated('');
     setAgeOfPartner('');
     setRelWanted('');
     setLocation('');
@@ -1879,6 +1905,11 @@ const UserSearch = (props) => {
               key='3'
               title={<span>With the following characteristics</span>}
             >
+              <Dropdown overlay={isVaccinated}>
+                <a className='ageTheyWant' onClick={(e) => e.preventDefault()}>
+                  {vaccinated || 'Are they vaccinated?'}
+                </a>
+              </Dropdown>
               <Dropdown overlay={ageTheyWant}>
                 <a className='ageTheyWant' onClick={(e) => e.preventDefault()}>
                   {ageOfPartner || 'Age they want'}

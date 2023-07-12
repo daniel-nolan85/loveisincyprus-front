@@ -145,6 +145,7 @@ const Profile = ({ history }) => {
   const [treatSelf, setTreatSelf] = useState([]);
   const [sexLikes, setSexLikes] = useState('');
   const [sexFrequency, setSexFrequency] = useState('');
+  const [vaccinated, setVaccinated] = useState('');
   const [progress, setProgress] = useState({});
   const [progressModalIsOpen, setProgressModalIsOpen] = useState(false);
   const [verifImg, setVerifImg] = useState(null);
@@ -290,6 +291,7 @@ const Profile = ({ history }) => {
       setTreatSelf(user.treatSelf);
       setSexLikes(user.sexLikes);
       setSexFrequency(user.sexFrequency);
+      setVaccinated(user.vaccinated);
       setProfilePhotos(user.profilePhotos);
       setCoverPhotos(user.coverPhotos);
       fetchPhotos();
@@ -417,6 +419,7 @@ const Profile = ({ history }) => {
           treatSelf,
           sexLikes,
           sexFrequency,
+          vaccinated,
           profilePhotos,
           coverPhotos,
           newProfileImages,
@@ -506,6 +509,7 @@ const Profile = ({ history }) => {
               treatSelf: res.data.treatSelf,
               sexLikes: res.data.sexLikes,
               sexFrequency: res.data.sexFrequency,
+              vaccinated: res.data.vaccinated,
               profilePhotos: res.data.profilePhotos,
               coverPhotos: res.data.coverPhotos,
             },
@@ -1460,6 +1464,8 @@ const Profile = ({ history }) => {
         setSexLikes={setSexLikes}
         sexFrequency={sexFrequency}
         setSexFrequency={setSexFrequency}
+        vaccinated={vaccinated}
+        setVaccinated={setVaccinated}
         loadingCoverImg={loadingCoverImg}
         loadingProfileImg={loadingProfileImg}
         setLoadingProfileImg={setLoadingProfileImg}

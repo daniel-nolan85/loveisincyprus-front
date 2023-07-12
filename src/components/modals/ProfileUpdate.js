@@ -133,6 +133,8 @@ const ProfileUpdate = ({
   setSexLikes,
   sexFrequency,
   setSexFrequency,
+  vaccinated,
+  setVaccinated,
   loadingProfileImg,
   setLoadingProfileImg,
   loadingCoverImg,
@@ -454,6 +456,16 @@ const ProfileUpdate = ({
           <option value='friendship'>Friendship</option>
           <option value='long-term relationship'>Long-term relationship</option>
           <option value='marriage'>Marriage</option>
+        </select>
+        <select
+          name='vaccinated'
+          onChange={(e) => setVaccinated(e.target.value)}
+          value={vaccinated}
+        >
+          <option value=''>Have you been vaccinated against Covid-19?</option>
+          <option value='yes'>Yes</option>
+          <option value='no'>No</option>
+          <option value='prefer not to say'>Prefer not to say</option>
         </select>
       </>
     );

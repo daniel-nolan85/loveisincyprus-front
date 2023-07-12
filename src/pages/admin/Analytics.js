@@ -40,6 +40,9 @@ const Analytics = ({ history }) => {
   const [showVisitationGraphs, setShowVisitationGraphs] = useState(false);
   const [visitationNumGraph, setVisitationNumGraph] = useState({});
   const [visitationPerGraph, setVisitationPerGraph] = useState({});
+  const [showVaccinatedGraphs, setShowVaccinatedGraphs] = useState(false);
+  const [vaccinatedNumGraph, setVaccinatedNumGraph] = useState({});
+  const [vaccinatedPerGraph, setVaccinatedPerGraph] = useState({});
   const [showGenderGraphs, setShowGenderGraphs] = useState(false);
   const [genderNumGraph, setGenderNumGraph] = useState({});
   const [genderPerGraph, setGenderPerGraph] = useState({});
@@ -149,6 +152,7 @@ const Analytics = ({ history }) => {
   const userDataRef = useRef(null);
   const registrationGraphRef = useRef(null);
   const visitationGraphRef = useRef(null);
+  const vaccinatedGraphRef = useRef(null);
   const genderGraphRef = useRef(null);
   const heightGraphRef = useRef(null);
   const buildGraphRef = useRef(null);
@@ -285,6 +289,7 @@ const Analytics = ({ history }) => {
     captureDataScreenshot(userDataRef);
     if (showRegistrationGraphs) captureScreenshot(registrationGraphRef);
     if (showVisitationGraphs) captureScreenshot(visitationGraphRef);
+    if (showVaccinatedGraphs) captureScreenshot(vaccinatedGraphRef);
     if (showGenderGraphs) captureScreenshot(genderGraphRef);
     if (showHeightGraphs) captureScreenshot(heightGraphRef);
     if (showBuildGraphs) captureScreenshot(buildGraphRef);
@@ -345,6 +350,7 @@ const Analytics = ({ history }) => {
   const reRenderCurrentGraph = () => {
     if (currentGraph === 'Date range') registrationGraphs();
     if (currentGraph === 'Visiting frequency') visitationGraphs();
+    if (currentGraph === 'Vaccinated') vaccinatedGraphs();
     if (currentGraph === 'Gender') genderGraphs();
     if (currentGraph === 'Height') heightGraphs();
     if (currentGraph === 'Body shape') buildGraphs();
@@ -388,6 +394,7 @@ const Analytics = ({ history }) => {
     setChartImage(null);
     setOpenFilter(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -477,6 +484,7 @@ const Analytics = ({ history }) => {
     setChartImage(null);
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -565,6 +573,140 @@ const Analytics = ({ history }) => {
     });
   };
 
+  const vaccinatedGraphs = () => {
+    setCurrentGraph('Vaccinated');
+    setUserDataImage(null);
+    setChartImage(null);
+    setOpenFilter(false);
+    setShowRegistrationGraphs(false);
+    setShowVisitationGraphs(false);
+    setShowGenderGraphs(false);
+    setShowHeightGraphs(false);
+    setShowBuildGraphs(false);
+    setShowHairColourGraphs(false);
+    setShowHairStyleGraphs(false);
+    setShowHairLengthGraphs(false);
+    setShowEyeColourGraphs(false);
+    setShowFeetTypeGraphs(false);
+    setShowMaritalGraphs(false);
+    setShowLocationGraphs(false);
+    setShowAgeGraphs(false);
+    setShowChildrenGraphs(false);
+    setShowLivesWithGraphs(false);
+    setShowNationalityGraphs(false);
+    setShowLanguageGraphs(false);
+    setShowEthnicityGraphs(false);
+    setShowMusicGraphs(false);
+    setShowMoviesGraphs(false);
+    setShowReligionGraphs(false);
+    setShowOccupationGraphs(false);
+    setShowEducationGraphs(false);
+    setShowHobbiesGraphs(false);
+    setShowBooksGraphs(false);
+    setShowSportsGraphs(false);
+    setShowSmokesGraphs(false);
+    setShowDrinksGraphs(false);
+    setShowFoodGraphs(false);
+    setShowTreatsGraphs(false);
+    setShowRelWantedGraphs(false);
+    setShowPointsGraphs(false);
+    setShowProductsViewedGraphs(false);
+    setShowTotalPaidGraphs(false);
+    setShowOrdersGraphs(false);
+    setShowKeyWordsGraphs(false);
+    setShowVaccinatedGraphs(true);
+
+    const allVaccinated = ['yes', 'no', 'prefer not to say'];
+    const vaccinatedCount = {};
+    allVaccinated.forEach((vaccinated) => (vaccinatedCount[vaccinated] = 0));
+    vaccinatedCount['na'] = 0;
+    allUsers.forEach((user) => {
+      const vaccinated = user.vaccinated || 'na';
+      if (allVaccinated.includes(vaccinated)) {
+        vaccinatedCount[vaccinated]++;
+      } else {
+        vaccinatedCount['na']++;
+      }
+    });
+
+    const numOfYes = vaccinatedCount['yes'];
+    const numOfNo = vaccinatedCount['no'];
+    const numOfPreferNotToSay = vaccinatedCount['prefer not to say'];
+    setCurrentNumNa(vaccinatedCount['na']);
+
+    const perOfYes = (vaccinatedCount['yes'] / allUsers.length) * 100;
+    const perOfNo = (vaccinatedCount['no'] / allUsers.length) * 100;
+    const perOfPreferNotToSay =
+      (vaccinatedCount['prefer not to say'] / allUsers.length) * 100;
+    setCurrentPerNa((vaccinatedCount['na'] / allUsers.length) * 100);
+
+    setVaccinatedNumGraph({
+      labels: ['Number of users by vaccination status'],
+      datasets: [
+        {
+          label: 'Yes',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [numOfYes],
+        },
+        {
+          label: 'No',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [numOfNo],
+        },
+        {
+          label: 'Prefer not to say',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [numOfPreferNotToSay],
+        },
+      ],
+    });
+
+    setVaccinatedPerGraph({
+      labels: ['Percentage of users by vaccination status'],
+      datasets: [
+        {
+          label: 'Yes',
+          backgroundColor: 'rgba(255, 0, 0, 0.2)',
+          borderColor: 'rgba(255, 0, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 0, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 0, 0, 1)',
+          data: [perOfYes],
+        },
+        {
+          label: 'No',
+          backgroundColor: 'rgba(255, 165, 0, 0.2)',
+          borderColor: 'rgba(255, 165, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 165, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 165, 0, 1)',
+          data: [perOfNo],
+        },
+        {
+          label: 'Prefer not to say',
+          backgroundColor: 'rgba(255, 255, 0, 0.2)',
+          borderColor: 'rgba(255, 255, 0, 1)',
+          borderWidth: 1,
+          hoverBackgroundColor: 'rgba(255, 255, 0, 0.4)',
+          hoverBorderColor: 'rgba(255, 255, 0, 1)',
+          data: [perOfPreferNotToSay],
+        },
+      ],
+    });
+  };
+
   const genderGraphs = () => {
     setCurrentGraph('Gender');
     setUserDataImage(null);
@@ -572,6 +714,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
     setShowHairColourGraphs(false);
@@ -1197,6 +1340,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowHairColourGraphs(false);
@@ -1397,6 +1541,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -1639,6 +1784,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -1771,6 +1917,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -1923,6 +2070,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -2075,6 +2223,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -2167,7 +2316,7 @@ const Analytics = ({ history }) => {
     });
 
     setFeetTypePerGraph({
-      labels: ['Percentage of users by hair style'],
+      labels: ['Percentage of users by feet type'],
       datasets: [
         {
           label: 'Egyptian',
@@ -2207,6 +2356,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -2386,6 +2536,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -2564,6 +2715,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -2810,6 +2962,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -3034,6 +3187,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -3213,6 +3367,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -3315,6 +3470,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -3414,6 +3570,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -3658,6 +3815,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -3759,6 +3917,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -3860,6 +4019,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -4188,6 +4348,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -4290,6 +4451,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -4493,6 +4655,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -4594,6 +4757,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -4695,6 +4859,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -4796,6 +4961,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -4928,6 +5094,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -5060,6 +5227,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -5260,6 +5428,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -5361,6 +5530,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -5521,6 +5691,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -5588,6 +5759,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -5879,6 +6051,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -5951,6 +6124,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -6023,6 +6197,7 @@ const Analytics = ({ history }) => {
     setOpenFilter(false);
     setShowRegistrationGraphs(false);
     setShowVisitationGraphs(false);
+    setShowVaccinatedGraphs(false);
     setShowGenderGraphs(false);
     setShowHeightGraphs(false);
     setShowBuildGraphs(false);
@@ -6225,6 +6400,7 @@ const Analytics = ({ history }) => {
                 <ul className='filter-options'>
                   <li onClick={registrationGraphs}>Date range</li>
                   <li onClick={visitationGraphs}>Visiting frequency</li>
+                  <li onClick={vaccinatedGraphs}>Vaccinated</li>
                   <li onClick={genderGraphs}>Gender</li>
                   <li onClick={heightGraphs}>Height</li>
                   <li onClick={buildGraphs}>Body shape</li>
@@ -6297,6 +6473,31 @@ const Analytics = ({ history }) => {
                       marginBottom: '20px',
                     }}
                   />
+                </div>
+              )}
+              {showVaccinatedGraphs && (
+                <div ref={vaccinatedGraphRef}>
+                  <h1 className='center'>Vaccinated</h1>
+                  <Bar
+                    data={vaccinatedNumGraph}
+                    style={{
+                      marginBottom: '20px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentNumNa}</span> users have not yet updated their
+                    vaccination status
+                  </h2>
+                  <Bar
+                    data={vaccinatedPerGraph}
+                    style={{
+                      marginBottom: '20px',
+                    }}
+                  />
+                  <h2 className='center'>
+                    <span>{currentPerNa.toFixed(2)}%</span> of users have not
+                    yet updated their vaccination status
+                  </h2>
                 </div>
               )}
               {showGenderGraphs && (

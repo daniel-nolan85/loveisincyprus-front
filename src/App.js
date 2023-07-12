@@ -212,6 +212,7 @@ const App = () => {
                 treatSelf: res.data.treatSelf,
                 sexLikes: res.data.sexLikes,
                 sexFrequency: res.data.sexFrequency,
+                vaccinated: res.data.vaccinated,
                 membership: res.data.membership,
                 clearPhoto: res.data.clearPhoto,
                 lastLogin: res.data.lastLogin,
