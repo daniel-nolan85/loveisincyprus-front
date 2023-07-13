@@ -82,6 +82,7 @@ const Analyse = ({
     theyWillRelocate,
     youWillRelocate,
     relWanted,
+    vaccinated,
     language,
     drinks,
     smokes,
@@ -256,6 +257,12 @@ const Analyse = ({
                   <li>
                     You and {userToAnalyse.username || userToAnalyse.name} are
                     both looking for {user.relWanted}
+                  </li>
+                )}
+                {vaccinated && (
+                  <li>
+                    You and {userToAnalyse.username || userToAnalyse.name} have
+                    the same Covid-19 vaccination status
                   </li>
                 )}
                 {language && (

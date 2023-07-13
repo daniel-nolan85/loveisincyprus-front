@@ -46,6 +46,7 @@ const ProfileProgress = ({
     location,
     genderWanted,
     relWanted,
+    vaccinated,
     language,
     maritalStatus,
     numOfChildren,
@@ -168,6 +169,13 @@ const ProfileProgress = ({
                   for yet`
                     : `${username} hasn't updated what kind of relationship they are looking
                   for yet`}
+                </li>
+              )}
+              {vaccinated && (
+                <li>
+                  {page === 'profile'
+                    ? `You haven't updated your Covid-19 vaccination status yet`
+                    : `${username} hasn't updated their Covid-19 vaccination status yet`}
                 </li>
               )}
               {language && (
