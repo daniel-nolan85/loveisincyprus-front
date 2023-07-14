@@ -47,7 +47,7 @@ const RefundResponse = ({
         </h3>
         <br />
         <div className='return-address'>
-          <p>WOLF</p>
+          <p>Ex Florum Limited</p>
           <p>Agiou Athanasiou 16-2</p>
           <p>8560 Peyia</p>
           <p>Cyprus</p>

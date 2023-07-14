@@ -266,11 +266,11 @@ const PrivacyPolicy = () => {
           </p>
           <br />
           <p>By post:</p>
-          <p>Aquilion Limited</p>
-          <p>Apex House</p>
-          <p>Grand Arcade</p>
-          <p>Tally Ho Corner</p>
-          <p>N12 0EH London, UK</p>
+
+          <p>Ex Florum Limited</p>
+          <p>Agiou Athanasiou 16-2</p>
+          <p>8560 Peyia</p>
+          <p>Cyprus</p>
           <br />
           <h2>Embedded content from other websites</h2>
           <p>
@@ -300,9 +300,8 @@ const PrivacyPolicy = () => {
           <p>
             For users that register on our website (if any), we also store the
             personal information they provide in their user profile. All users
-            can see, edit, or delete their personal information at any time
-            (except they cannot change their username). Website administrators
-            can also see and edit that information.
+            can see, edit, or delete their personal information at any time.
+            Website administrators can also see and edit that information.
           </p>
           <br />
           <h2>What rights you have over your data</h2>
@@ -322,12 +321,11 @@ const PrivacyPolicy = () => {
           </p>
           <br />
           <h2>Our contact information</h2>
-          <p>Aquilion Limited</p>
-          <p>Apex House</p>
-          <p>Grand Arcade</p>
-          <p>Tally Ho Corner</p>
-          <p>N12 0EH London, UK</p>
-          <p>Trade registration: 4230150</p>
+          <p>Ex Florum Limited</p>
+          <p>Agiou Athanasiou 16-2</p>
+          <p>8560 Peyia</p>
+          <p>Cyprus</p>
+          <p>Company number HE 4043910</p>
           <br />
           <h2>Additional information</h2>
           <h4>How we protect your data</h4>

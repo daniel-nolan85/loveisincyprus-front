@@ -10,7 +10,7 @@ const TsAndCs = () => {
       <div className='info-white-bg shadow'>
         <div className='info-content'>
           <h2>Dating Services Terms of Use</h2>
-          <p>(Terms of Use revised on February 17, 2023)</p>
+          <p>(Terms of Use revised on July 14, 2023)</p>
           <h3>Preamble</h3>
           <p>
             These Terms of Use are entered into between Loveisincyprus.com
@@ -463,7 +463,7 @@ const TsAndCs = () => {
           <br />
           <h4>5.B.3. Indemnity</h4>
           <p>
-            You agree to fully indemnify, Aquilion Ltd and our directors,
+            You agree to fully indemnify, Ex Florum Ltd and our directors,
             employees and suppliers, harmless immediately on demand, from and
             against all claims, liability, damages, losses, costs and expenses,
             including legal fees, arising out of any breach of the Conditions by
@@ -494,9 +494,9 @@ const TsAndCs = () => {
             Each Product purchased is sold subject to its Product specification.
             Every effort is made to ensure that each specific measurement is as
             accurate as possible and based on recognised industry standards of
-            conformity and tolerances. Aquilion Ltd accepts no liability for any
-            loss or damages occurred from product supplied out-of tolerance in
-            excess of the cost of replacing the faulty product.
+            conformity and tolerances. Ex Florum Ltd accepts no liability for
+            any loss or damages occurred from product supplied out-of tolerance
+            in excess of the cost of replacing the faulty product.
           </p>
           <br />
           <h4>5.B.7. Product guarantee</h4>
@@ -553,13 +553,13 @@ const TsAndCs = () => {
             legislation within 30 days, However we do try to fulfil all orders
             within 3 - 7 working days from stock. As described within our Terms
             and Conditions every reasonable effort will be made to contact you
-            should the delivery date be in excess of 7 days. Aquilion Ltd
+            should the delivery date be in excess of 7 days. Ex Florum Ltd
             accepts No liability for any loss or damages caused from late
             delivery of any order. Customers can call and discuss specific
             delivery requirements and short notice orders and every effort will
             be made to accommodate individual and unique circumstances. However
             we cannot be held liable for any costs or damages which result from
-            any failure in meeting any agreed delivery circumstances.
+            any failure in meeting any agreed delivery circumstances
           </p>
           <br />
           <h4>5.B.13. Redelivery of goods</h4>
@@ -1089,31 +1089,26 @@ const TsAndCs = () => {
           <h3>Article 15. Applicable law - Disputes</h3>
           <p>
             These Terms of Use are governed, interpreted and applied in
-            accordance with the laws of England and Wales, subject to mandatory
-            laws and regulations in force in the country of residence of the
-            Member or Subscriber. The language of interpretation is English. In
-            accordance with the rules applicable to mediation, prior to any
-            request for mediation, the Member or Subscriber must first raise any
-            dispute with Love is in Cyprus in writing in order to attempt an
-            amicable resolution.
+            accordance with the laws the Republic of Cyprus. The language of
+            interpretation is English. In accordance with the rules applicable
+            to mediation, prior to any request for mediation, the Member or
+            Subscriber must first raise any dispute with Love is in Cyprus in
+            writing in order to attempt an amicable resolution.
           </p>
           <br />
           <p>
             In the event that an amicable solution cannot be reached regarding a
             dispute relating to the Terms of Use, the competent authorities will
-            be the courts of the country of residence of the consumer located in
-            one of the member States of the European Economic Area or
-            Switzerland.
+            be the courts of the Republic of Cyprus.
           </p>
           <h3>Article 16. About us</h3>
           <p>
             The Services and Products provided by Love is in Cyprus to Members
-            and Subscribers pursuant to these Terms of Use are offered by
-            Aquilion Limited, a private limited company incorporated in England
-            and Wales with registered company number 4230150 (VAT number 797
-            4066 80) whose address is Apex House, Grand Arcade, Tally Ho Corner,
-            London N12 0EH, United Kingdom. The Website is hosted on Love is in
-            Cyprus's server(s).
+            and Subscribers pursuant to these Terms of Use are offered by Ex
+            Florum Limited, a private limited company incorporated in Cyprus
+            with registered company number HE 404391 (VAT number 10404391R)
+            whose address is Agiou Athanasiou 16-2, 8560 Peyia, Cyprus. The
+            Website is hosted on Love is in Cyprus's server(s)
           </p>
           <br />
           <p>

@@ -19,16 +19,14 @@ const Contact = () => {
                 <div className='contact-details'>
                   <FontAwesomeIcon icon={faMapMarkerAlt} className='fa' />
                   <p>
-                    <b>Aquilion Limited</b> <br />
-                    Apex House
+                    <b>Ex Florum Limited</b> <br />
+                    Agiou Athanasiou 16-2
                     <br />
-                    Grand Arcade
+                    8560 Peyia
                     <br />
-                    Tally Ho Corner
+                    Cyprus
                     <br />
-                    N12 0EH London, UK
-                    <br />
-                    Trade registration: 4230150
+                    Company number HE 404391
                   </p>
                 </div>
               </div>
