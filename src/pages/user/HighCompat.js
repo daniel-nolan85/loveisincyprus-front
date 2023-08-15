@@ -109,6 +109,12 @@ const HighCompat = ({ history }) => {
       })
       .catch((err) => {
         console.log(err);
+        toast.warning(
+          `Please update your subscription in order to follow other members.`,
+          {
+            position: toast.POSITION.TOP_CENTER,
+          }
+        );
       });
   };
 

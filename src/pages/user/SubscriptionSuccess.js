@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
-import mastercard from '../../assets/mastercard.png';
-import visa from '../../assets/visa.png';
 import moment from 'moment';
 import { useSelector } from 'react-redux';
 import Mobile from '../../components/user/Mobile';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 const SubscriptionSuccess = (props) => {
   const [fortnight, setFortnight] = useState('');
@@ -17,47 +17,22 @@ const SubscriptionSuccess = (props) => {
     setFortnight(moment(twoWeeks).format('MMMM Do YYYY'));
   }, []);
 
-  const { cardBrand, cardHolder, cardNumber, expiry } =
-    props.location.state.userBankDetails[0];
-  const payable = props.location.state.payable;
+  const payable = props.location.state;
 
   return (
     <div className='container'>
       <LeftSidebar />
       <div className='main-content'>
         <Mobile />
-        <div className='ps-card'>
-          <img
-            src={cardBrand === 'MasterCard' ? mastercard : visa}
-            className='ps-logo-card'
-          />
-          <div className='ps-cardinfo'>
-            <div className='ps-number-expiry'>
-              <div>
-                <label className='ps-label'>Card number:</label>
-                <span className='ps-input'>
-                  XXXX-XXXX-XXXX-{cardNumber.slice(-4)}
-                </span>
-              </div>
-            </div>
-            <div className='ps-name-cvc'>
-              <div>
-                <label className='ps-label'>Name:</label>
-                <span className='ps-input'>{cardHolder}</span>
-              </div>
-              <div>
-                <label className='ps-label'>Expiry:</label>
-                <span className='ps-input'>
-                  {expiry.substring(0, 2)} / {expiry.slice(-4)}
-                </span>
-              </div>
-            </div>
+        <div className='ps-success'>
+          <div className='ps-icon-container'>
+            <FontAwesomeIcon icon={faCheck} className='fa' />
           </div>
-        </div>
-        <div className='ps-receipt'>
+          <h2>Thank You!</h2>
+          <p>Your payment has been approved.</p>
           <div className='ps-col'>
             <p>Cost:</p>
-            <h2 className='ps-cost'>€{payable}</h2>
+            <h3 className='ps-cost'>€{payable}</h3>
           </div>
           <div className='ps-col'>
             <p>Subscription:</p>
@@ -68,18 +43,18 @@ const SubscriptionSuccess = (props) => {
                 ? 'Six months'
                 : payable === '90.00' && 'One year'}
             </h3>
-            <p className='ps-bought-items ps-description'>
-              You now have full access to all areas of the site until{' '}
-              {moment(membership.expiry).format('MMMM Do YYYY')}.
-            </p>
-            <p className='ps-bought-items ps-price'>
-              You may cancel your subscription by clicking your avatar at the
-              top of the page and selecting 'Cancel Subscription' to receive a
-              full refund any time between now and {fortnight}.
-            </p>
           </div>
+          <p>
+            You now have full access to all areas of the site until{' '}
+            {moment(membership.expiry).format('MMMM Do YYYY')}.
+          </p>
+          <p>
+            You may cancel your subscription by clicking your avatar at the top
+            of the page and selecting 'Cancel Subscription' to receive a full
+            refund any time between now and {fortnight}.
+          </p>
           <p className='ps-comprobe'>
-            This information will be sent to your email
+            This information has been sent to your email
           </p>
         </div>
       </div>

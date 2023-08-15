@@ -34,6 +34,7 @@ import Analyse from '../../components/modals/Analyse';
 import { HashLink as Link } from 'react-router-hash-link';
 import LargePostImage from '../../components/modals/LargePostImage';
 import ReportPost from '../../components/modals/ReportPost';
+import NotAMember from '../../components/modals/NotAMember';
 
 let socket;
 
@@ -70,6 +71,7 @@ const UserProfile = ({ history, location }) => {
   const [loadingImg, setLoadingImg] = useState(false);
   const [postImageModalIsOpen, setPostImageModalIsOpen] = useState(false);
   const [reportPostModalIsOpen, setReportPostModalIsOpen] = useState(false);
+  const [notAMemberModalIsOpen, setNotAMemberModalIsOpen] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -425,6 +427,10 @@ const UserProfile = ({ history, location }) => {
     setUserToUnfollow(u);
   };
 
+  const notAMember = () => {
+    setNotAMemberModalIsOpen(true);
+  };
+
   const handleAnalyse = async (u) => {
     setAnalyseModalIsOpen(true);
     setUserToAnalyse(u);
@@ -695,7 +701,11 @@ const UserProfile = ({ history, location }) => {
                       <button
                         type='button'
                         className='tooltip'
-                        onClick={() => history.push(`/create-gift-card/${_id}`)}
+                        onClick={
+                          user.membership.paid
+                            ? () => history.push(`/create-gift-card/${_id}`)
+                            : notAMember
+                        }
                       >
                         <FontAwesomeIcon icon={faGift} className='fa' />
                         <span className='tooltip-text'>
@@ -990,6 +1000,10 @@ const UserProfile = ({ history, location }) => {
                 unfollowModalIsOpen={unfollowModalIsOpen}
                 setUnfollowModalIsOpen={setUnfollowModalIsOpen}
                 userToUnfollow={userToUnfollow}
+              />
+              <NotAMember
+                notAMemberModalIsOpen={notAMemberModalIsOpen}
+                setNotAMemberModalIsOpen={setNotAMemberModalIsOpen}
               />
               <Analyse
                 analyseModalIsOpen={analyseModalIsOpen}

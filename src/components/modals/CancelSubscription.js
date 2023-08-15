@@ -1,8 +1,8 @@
 import React from 'react';
 import Modal from 'react-modal';
-import { refundSubscription } from '../../functions/cardinity';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 Modal.setAppElement('#root');
 
@@ -39,13 +39,26 @@ const CancelSubscription = ({
   };
 
   const cancelSubscription = async () => {
-    refundSubscription(user, user.token)
+    return await axios
+      .post(
+        `${process.env.REACT_APP_API}/refund-paypal-subscription-order`,
+        {
+          _id: user._id,
+          captureId: user.membership.captureId,
+        },
+        {
+          headers: {
+            authtoken: user.token,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
       .then((res) => {
         dispatch({
           type: 'LOGGED_IN_USER',
           payload: {
             ...user,
-            membership: res.data.membership,
+            membership: res.data.cancelSubscription.membership,
           },
         });
         toast.success(

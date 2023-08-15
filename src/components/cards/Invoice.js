@@ -9,7 +9,7 @@ import {
 } from '@david.kucsai/react-pdf-table';
 import moment from 'moment';
 
-const Invoice = ({ order }) => {
+const Invoice = ({ order, amount }) => {
   return (
     <Document>
       <Page style={styles.body}>
@@ -107,7 +107,7 @@ const Invoice = ({ order }) => {
           </Text>
           {'\n'}
           <Text>
-            Total Paid: {'       '}€{order.paymentIntent.amount}
+            Total Paid: {'       '}€{amount}
           </Text>
         </Text>
 

@@ -36,7 +36,7 @@ const PointsInfo = ({ pointsInfoModalIsOpen, setPointsInfoModalIsOpen }) => {
       contentLabel='Example Modal'
     >
       <div className='points-info'>
-        <h2>Points can be Accumulated in a number of ways</h2>
+        <h2>Points can be Accumulated in a number of ways:</h2>
         <table>
           <tbody>
             <tr>

@@ -46,7 +46,7 @@ const PointsQuestions = ({
           {membership.paid
             ? 'You can spend your '
             : 'Paid subscribers can spend their '}
-          accumulated points in the following ways.
+          accumulated points in the following ways:
         </h2>
         <table>
           <tbody>

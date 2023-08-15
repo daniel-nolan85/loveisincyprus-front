@@ -1,7 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 
 const ShowPaymentInfo = ({ order }) => {
+  const [amount, setAmount] = useState('');
+  const [currency, setCurrency] = useState('');
+
+  useEffect(() => {
+    fetchAmount();
+    fetchCurrency();
+  }, []);
+
+  const fetchAmount = () =>
+    setAmount(
+      order.paymentIntent.purchase_units[0].payments.captures[0].amount.value
+    );
+
+  const fetchCurrency = () =>
+    setCurrency(
+      order.paymentIntent.purchase_units[0].payments.captures[0].amount
+        .currency_code
+    );
+
   return (
     <>
       <h2 className='center'>User Info</h2>
@@ -21,16 +40,13 @@ const ShowPaymentInfo = ({ order }) => {
             <br />
             <span>
               Total paid: €
-              {order.paymentIntent.amount.toLocaleString('en-US', {
+              {amount.toLocaleString('en-US', {
                 style: 'currency',
                 currency: 'EUR',
               })}
             </span>{' '}
             <br />
-            <span>
-              Currency: {order.paymentIntent.currency.toUpperCase()}
-            </span>{' '}
-            <br />
+            <span>Currency: {currency.toUpperCase()}</span> <br />
             <span>
               Payment: {order.paymentIntent.status.toUpperCase()}
             </span>{' '}

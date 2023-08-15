@@ -47,8 +47,8 @@ export const applyUserCoupon = async (coupon, authtoken) =>
     }
   );
 
-export const createOrder = async (
-  cardinityResponse,
+export const createNewOrder = async (
+  paypalResponse,
   authtoken,
   deliverTo,
   deliveryAddress,
@@ -57,7 +57,7 @@ export const createOrder = async (
 ) =>
   await axios.post(
     `${process.env.REACT_APP_API}/order`,
-    { cardinityResponse, deliverTo, deliveryAddress, discount, deliveryFee },
+    { paypalResponse, deliverTo, deliveryAddress, discount, deliveryFee },
     {
       headers: {
         authtoken,

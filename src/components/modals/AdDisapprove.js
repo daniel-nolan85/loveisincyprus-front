@@ -20,8 +20,32 @@ const AdDisapprove = ({
 }) => {
   let { token } = useSelector((state) => state.user);
 
-  const disapproveAd = async (ad) => {
+  const voidPayment = async (ad) => {
     setLoading(true);
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/void-paypal-ad-auth`,
+        { authId: ad.authId },
+        {
+          headers: {
+            authtoken: token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        toast.success(`Payment returned to user.`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+        disapproveAd(ad);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
+  };
+
+  const disapproveAd = async (ad) => {
     await axios
       .put(
         `${process.env.REACT_APP_API}/disapprove-ad`,
@@ -85,6 +109,11 @@ const AdDisapprove = ({
       <div className='match'>
         <h1>Are you sure you want to reject approval on this ad?</h1>
         <br />
+        <h3>
+          Rejecting the ad will return the member's payment and this ad will
+          then be deleted.
+        </h3>
+        <br />
         <p>{content}</p>
         <br />
         {image && (
@@ -100,7 +129,7 @@ const AdDisapprove = ({
           value={reason}
           onChange={(e) => setReason(e.target.value)}
         />
-        <button className='submit-btn' onClick={() => disapproveAd(currentAd)}>
+        <button className='submit-btn' onClick={() => voidPayment(currentAd)}>
           {loading ? (
             <FontAwesomeIcon icon={faSpinner} className='fa' spin />
           ) : (

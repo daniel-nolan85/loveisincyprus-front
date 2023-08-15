@@ -7,7 +7,7 @@ import { faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { ChatState } from '../../context/ChatProvider';
 
-const RightSidebar = ({ rerenderAds }) => {
+const RightSidebar = () => {
   const [numOfUpcomingEvents, setNumOfUpcomingEvents] = useState('');
   const [ads, setAds] = useState([]);
   const [targetedAds, setTargetedAds] = useState([]);
@@ -26,12 +26,6 @@ const RightSidebar = ({ rerenderAds }) => {
     fetchReportedContent();
     fetchProductsForReview();
   }, []);
-
-  useEffect(() => {
-    if (rerenderAds) {
-      fetchPaidAds();
-    }
-  }, [rerenderAds]);
 
   const fetchNewAds = async () => {
     await axios

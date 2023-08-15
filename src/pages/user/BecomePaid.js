@@ -1,37 +1,26 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCircleInfo,
   faCircleQuestion,
 } from '@fortawesome/free-solid-svg-icons';
-import PaymentForm from '../../components/forms/PaymentForm';
-import { toast } from 'react-toastify';
-import { createMembershipPayment } from '../../functions/cardinity';
 import Mobile from '../../components/user/Mobile';
-import CardinityPending from '../../components/modals/CardinityPending';
+import Subscription from '../../components/paypal/Subscription';
+import SubInfo from '../../components/modals/SubInfo';
+import SubQuestions from '../../components/modals/SubQuestions';
 
-const BecomePaid = ({ history }) => {
-  const [succeeded, setSucceeded] = useState(false);
-  const [processing, setProcessing] = useState('');
-  const [userAgent, setUserAgent] = useState('');
+const BecomePaid = () => {
   const [payable, setPayable] = useState('10.00');
   const [daysLeft, setDaysLeft] = useState(0);
-  const [userBankDetails, setUserBankDetails] = useState({});
-  const [cardinityPendingModalIsOpen, setCardinityPendingModalIsOpen] =
-    useState(false);
-  const [pendingFormData, setPendingFormData] = useState('');
+  const [subInfoModalIsOpen, setSubInfoModalIsOpen] = useState(false);
+  const [subQuestionsModalIsOpen, setSubQuestionsModalIsOpen] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
-  const dispatch = useDispatch();
-
-  const isFirstRun = useRef(true);
-
   useEffect(() => {
-    setUserAgent(window.navigator.userAgent);
     const date1 = Date.now();
     const date2 = new Date(user.membership.expiry);
     const timeDifference = date2.getTime() - date1;
@@ -39,89 +28,12 @@ const BecomePaid = ({ history }) => {
     setDaysLeft(dayDifference);
   }, []);
 
-  useEffect(() => {
-    if (isFirstRun.current) {
-      isFirstRun.current = false;
-      return;
-    } else {
-      history.push({
-        pathname: '/subscription-successful',
-        state: { userBankDetails, payable },
-      });
-    }
-  }, [userBankDetails]);
+  const handleInfo = () => {
+    setSubInfoModalIsOpen(true);
+  };
 
-  const handleSubmit = async (values) => {
-    setProcessing(true);
-    createMembershipPayment(
-      values,
-      payable,
-      userAgent,
-      user,
-      user.token,
-      daysLeft
-    ).then((res) => {
-      if ((res.data.response && res.data.response.errors) || res.data.errors) {
-        toast.error(res.data.response.errors[0].message, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setProcessing(false);
-      }
-      if (res.data.response && res.data.response.status === 'approved') {
-        toast.success(
-          `Payment successful! Your paid membership will last for ${
-            payable === '10.00'
-              ? 'one month.'
-              : payable === '50.00'
-              ? 'six months.'
-              : payable === '90.00' && 'one year.'
-          }`,
-          {
-            position: toast.POSITION.TOP_CENTER,
-          }
-        );
-        setProcessing(false);
-        setSucceeded(true);
-        dispatch({
-          type: 'LOGGED_IN_USER',
-          payload: {
-            ...user,
-            membership: res.data.amendMembership.membership,
-            bankDetails: res.data.amendMembership.bankDetails,
-          },
-        });
-        const result = res.data.amendMembership.bankDetails.filter((obj) => {
-          return (
-            obj.cardBrand === res.data.response.payment_instrument.card_brand &&
-            obj.cardHolder === res.data.response.payment_instrument.holder &&
-            obj.cardNumber.slice(-4) ===
-              res.data.response.payment_instrument.pan &&
-            parseInt(obj.expiry.slice(0, 2)) ===
-              res.data.response.payment_instrument.exp_month &&
-            parseInt(obj.expiry.slice(-4)) ===
-              res.data.response.payment_instrument.exp_year
-          );
-        });
-        setUserBankDetails(result);
-      } else if (res.data.status === 'pending') {
-        setCardinityPendingModalIsOpen(true);
-        setPendingFormData(res.data);
-        toast.warning(`Payment pending.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        return;
-      } else if (res.data.status === 'declined') {
-        toast.error(`Payment declined.`, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setProcessing(false);
-      } else if (res.data.status === 401) {
-        toast.error(res.data.detail, {
-          position: toast.POSITION.TOP_CENTER,
-        });
-        setProcessing(false);
-      }
-    });
+  const handleQuestions = () => {
+    setSubQuestionsModalIsOpen(true);
   };
 
   return (
@@ -150,11 +62,19 @@ const BecomePaid = ({ history }) => {
         <>
           <div className='points-icons'>
             <div className='tooltip'>
-              <FontAwesomeIcon icon={faCircleInfo} className='fa' />
+              <FontAwesomeIcon
+                icon={faCircleInfo}
+                className='fa'
+                onClick={handleInfo}
+              />
               <span className='tooltip-text'>Info about memberships</span>
             </div>
             <div className='tooltip'>
-              <FontAwesomeIcon icon={faCircleQuestion} className='fa' />
+              <FontAwesomeIcon
+                icon={faCircleQuestion}
+                className='fa'
+                onClick={handleQuestions}
+              />
               <span className='tooltip-text'>Questions about memberships</span>
             </div>
           </div>
@@ -168,17 +88,18 @@ const BecomePaid = ({ history }) => {
             <option value='50.00'>Six months</option>
             <option value='90.00'>One year</option>
           </select>
-          <PaymentForm
-            handleSubmit={handleSubmit}
-            processing={processing}
-            succeeded={succeeded}
-          />
+
+          <Subscription payable={payable} daysLeft={daysLeft} />
         </>
       </div>
       <RightSidebar />
-      <CardinityPending
-        cardinityPendingModalIsOpen={cardinityPendingModalIsOpen}
-        pendingFormData={pendingFormData}
+      <SubInfo
+        subInfoModalIsOpen={subInfoModalIsOpen}
+        setSubInfoModalIsOpen={setSubInfoModalIsOpen}
+      />
+      <SubQuestions
+        subQuestionsModalIsOpen={subQuestionsModalIsOpen}
+        setSubQuestionsModalIsOpen={setSubQuestionsModalIsOpen}
       />
     </div>
   );

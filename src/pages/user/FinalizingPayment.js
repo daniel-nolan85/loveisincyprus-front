@@ -6,7 +6,7 @@ import Mobile from '../../components/user/Mobile';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { addPoints } from '../../functions/user';
-import { createOrder, emptyUserCart } from '../../functions/user';
+import { createNewOrder, emptyUserCart } from '../../functions/user';
 import { useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -58,7 +58,7 @@ const FinalizingPayment = () => {
           position: toast.POSITION.TOP_CENTER,
         }
       );
-      createOrder(
+      createNewOrder(
         response,
         token,
         deliverTo,

@@ -36,6 +36,19 @@ body {
   color: #626262;
 }
 
+.paypal-buttons {
+  margin-top: 20px;
+  z-index: 0;
+}
+
+.mt {
+  margin-top: 80px !important;
+}
+
+.clear {
+  clear: both;
+}
+
 #side-nav {
   width: 250px;
   height: 100vh;
@@ -1492,6 +1505,20 @@ nav {
   transition: all 800ms cubic-bezier(0, 0.89, 0.63, 0.98);
 }
 
+.sub-table {
+  display: flex;
+  justify-content: center;
+}
+
+.sub-table table {
+  border-collapse: collapse;
+}
+
+.sub-table th,
+.sub-table td {
+  padding: 8px;
+}
+
 /* --------------- membership-status-page --------------- */
 .ms-center {
   position: absolute;
@@ -1624,58 +1651,36 @@ nav {
 }
 
 /* --------------- payment-success-page --------------- */
-.ps-card {
-  background: #16181a;
-  border-radius: 14px;
-  max-width: 300px;
-  display: block;
-  margin: 10px auto;
-  padding-top: 60px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 30px;
-  box-shadow: 2px 10px 40px black;
-}
-
-.ps-logo-card {
-  max-width: 50px;
-  margin-bottom: 15px;
-  margin-top: -19px;
-}
-
-.ps-number-expiry,
-.ps-name-cvc {
-  display: flex;
-  justify-content: space-between;
-}
-
-.ps-label {
-  display: flex;
-  font-size: 10px;
-  color: white;
-  opacity: 0.4;
-}
-
-.ps-input {
-  color: #dbdce0;
-  display: block;
-  font-size: 15px;
-  margin-bottom: 8px;
-}
-
-.ps-cvc {
-  margin-right: 25px;
-}
-
-.ps-receipt {
-  border-radius: 4px;
-  padding: 5%;
-  padding-top: 230px;
-  max-width: 600px;
-  display: block;
-  margin: auto;
-  margin-top: -180px;
+.ps-success {
+  background: #fff;
+  border-radius: 6px;
   position: relative;
+  top: 50px;
+  text-align: center;
+  padding: 0 30px 30px;
+  color: #333;
+}
+
+.ps-icon-container {
+  width: 100px;
+  height: 100px;
+  margin-top: -50px;
+  border-radius: 50%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  background: var(--nav-color);
+  display: inline-block;
+}
+
+.ps-success .fa {
+  color: #fff;
+  font-size: 80px;
+  margin-top: 10px;
+}
+
+.ps-success h2 {
+  font-size: 38px;
+  font-weight: 500;
+  margin: 30px 0 10px;
 }
 
 .ps-col {
@@ -1683,34 +1688,27 @@ nav {
   float: left;
 }
 
-.ps-row {
-  display: flex;
-  justify-content: space-between;
-}
-
-.ps-row h2,
-.ps-row h3 {
-  margin-right: 20px;
-}
-
-.ps-bought-items {
-  margin-top: -3px;
+.ps-row p,
+.ps-row h2 {
+  margin: 0;
 }
 
 .ps-cost {
   color: var(--nav-color);
 }
 
-.ps-description {
-  font-size: 13px;
+.ps-bought-items {
+  font-size: 14px;
 }
 
-.ps-price {
-  font-size: 12px;
+.ps-info {
+  padding-top: 20px;
+  clear: both;
 }
 
 .ps-comprobe {
   text-align: center;
+  color: var(--nav-color);
 }
 
 @media (max-width: 600px) {

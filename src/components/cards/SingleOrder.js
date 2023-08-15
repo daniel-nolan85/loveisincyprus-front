@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs } from 'antd';
 import moment from 'moment';
 import Invoice from '../../components/cards/Invoice';
@@ -14,10 +14,21 @@ const SingleOrder = ({ order, loadUserOrders }) => {
   const [responseRefundModalIsOpen, setResponseRefundModalIsOpen] =
     useState(false);
   const [currentOrder, setCurrentOrder] = useState({});
+  const [amount, setAmount] = useState('');
+
+  useEffect(() => {
+    fetchAmount();
+  }, []);
+
+  const fetchAmount = () =>
+    setAmount(
+      order.paymentIntent.purchase_units[0].payments.captures[0].amount.value
+    );
 
   const { orderStatus, deliverTo, discount, deliveryFee } = order;
-  const { id, amount, status, created } = order.paymentIntent;
+  const { id, status } = order.paymentIntent;
   const { firstLine, secondLine, city, zip, country } = order.deliveryAddress;
+  const { created } = order.createdAt;
 
   const requestRefund = (order) => {
     setCurrentOrder(order);
@@ -130,7 +141,7 @@ const SingleOrder = ({ order, loadUserOrders }) => {
             </tbody>
           </table>
           <PDFDownloadLink
-            document={<Invoice order={order} />}
+            document={<Invoice order={order} amount={amount} />}
             fileName='invoice.pdf'
             className='submit-btn pdf'
           >

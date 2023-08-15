@@ -125,8 +125,6 @@ const Data = ({ history }) => {
 
   const isFirstRun = useRef(true);
 
-  console.log(users);
-
   const handleExport = () => {
     setExporting(true);
     const dataToExport = [

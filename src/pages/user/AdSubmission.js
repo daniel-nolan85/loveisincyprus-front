@@ -13,6 +13,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import AdPreview from '../../components/modals/AdPreview';
 import AdContact from '../../components/forms/AdContact';
+import AdPayment from '../../components/paypal/AdPayment';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
 import HyperlinkInfo from '../../components/modals/HyperlinkInfo';
@@ -42,6 +43,7 @@ const AdSubmission = () => {
   const [hyperlink, setHyperlink] = useState('');
   const [hyperlinkInfoModalIsOpen, setHyperlinkInfoModalIsOpen] =
     useState(false);
+  const [authId, setAuthId] = useState('');
 
   useEffect(() => {
     let selectedOpts = selectedGender.concat(selectedAge, selectedLocation);
@@ -75,6 +77,7 @@ const AdSubmission = () => {
         duration,
         demographic,
         contactInfo,
+        authId,
       })
       .then((res) => {
         setLoading(false);
@@ -95,6 +98,7 @@ const AdSubmission = () => {
           setSelectedAge([]);
           setSelectedLocation([]);
           setHyperlink('');
+          setAuthId('');
         }
       })
       .catch((err) => {
@@ -373,6 +377,16 @@ const AdSubmission = () => {
             loading={loading}
           />
         </div>
+        <div className='ad-section'>
+          <div className='ad-header'>
+            <span className='number'>6</span>
+            <h2>Finally, please choose a method of payment.</h2>
+          </div>
+          <p>
+            You will not be charged until your submission has been approved.
+          </p>
+          <AdPayment duration={duration} setAuthId={setAuthId} />
+        </div>
         <button
           onClick={adSubmit}
           type='submit'
@@ -381,7 +395,8 @@ const AdSubmission = () => {
             !content ||
             Object.keys(contactInfo).length === 0 ||
             uploading ||
-            loading
+            loading ||
+            !authId
           }
         >
           {loading ? (
