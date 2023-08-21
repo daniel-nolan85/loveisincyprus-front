@@ -62,6 +62,36 @@ const RefundApprove = ({
         }
       )
       .then((res) => {
+        // setLoading(false);
+        // toast.success(
+        //   `This refund is now being processed. A confirmation email has been sent to the user.`,
+        //   {
+        //     position: toast.POSITION.TOP_CENTER,
+        //   }
+        // );
+        // setProducts([]);
+        // fetchRefunds();
+        // setProcessRefundModalIsOpen(false);
+        payPalRefund(refund);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.log(err);
+      });
+  };
+
+  const payPalRefund = async (refund) => {
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/refund-paypal-shop-order`,
+        { refund, refundAmount },
+        {
+          headers: {
+            authtoken: token,
+          },
+        }
+      )
+      .then((res) => {
         setLoading(false);
         toast.success(
           `This refund is now being processed. A confirmation email has been sent to the user.`,
