@@ -1471,14 +1471,14 @@ nav {
 }
 
 .become-paid-content:hover .become-paid-text2 {
-  left: 350px;
+  left: 400px !important;
   opacity: 1;
   color: var(--nav-color);
 }
 
 .become-paid-text1 {
   color: #fff;
-  font-size: 30px;
+  font-size: 25px;
   position: absolute;
   left: 0px;
   top: -50px;
@@ -1493,9 +1493,9 @@ nav {
 
 .become-paid-text2 {
   color: #fff;
-  font-size: 30px;
+  font-size: 25px;
   position: absolute;
-  left: 450px;
+  left: 500px !important;
   top: 85px;
   opacity: 0;
   -webkit-transition: all 800ms cubic-bezier(0, 0.89, 0.63, 0.98);
@@ -6118,14 +6118,9 @@ table.product-info tbody {
 }
 
 /* --------------- media query for become-paid-card --------------- */
-@media (min-width: 1301px) {
-  .become-paid-text1,
+@media only screen and (min-width: 1501px) and (max-width: 1650px) {
   .become-paid-text2 {
-    font-size: 25px;
-  }
-
-  .become-paid-text2 {
-    left: 310px;
+    left: 400px !important;
   }
 
   .become-paid-content:hover .become-paid-text1 {
@@ -6133,13 +6128,36 @@ table.product-info tbody {
   }
 
   .become-paid-content:hover .become-paid-text2 {
-    left: 270px;
+    left: 350px !important;
+  }
+}
+
+@media only screen and (min-width: 1301px) and (max-width: 1500px) {
+  .become-paid-text1,
+  .become-paid-text2 {
+    font-size: 22px !important;
+  }
+
+  .become-paid-text2 {
+    left: 350px !important;
+  }
+
+  .become-paid-content:hover .become-paid-text2 {
+    left: 300px !important;
   }
 }
 
 @media only screen and (min-width: 1251px) and (max-width: 1300px) {
   .become-paid-content img {
     margin-top: -90px;
+  }
+
+  .become-paid-text2 {
+    left: 300px !important;
+  }
+
+  .become-paid-content:hover .become-paid-text2 {
+    left: 250px !important;
   }
 }
 
@@ -6157,7 +6175,7 @@ table.product-info tbody {
   }
 
   .become-paid-content:hover .become-paid-text2 {
-    left: 170px;
+    left: 170px !important;
     opacity: 1;
     color: var(--nav-color);
   }
@@ -6200,7 +6218,7 @@ table.product-info tbody {
 
   .become-paid-text2 {
     top: 80px;
-    left: 170px;
+    left: 170px !important;
   }
 }
 
@@ -6241,7 +6259,7 @@ table.product-info tbody {
   }
 
   .become-paid-content:hover .become-paid-text2 {
-    left: 170px;
+    left: 170px !important;
     opacity: 1;
     color: var(--nav-color);
   }
@@ -6261,7 +6279,7 @@ table.product-info tbody {
 
   .become-paid-text2 {
     top: 40px;
-    left: 150px;
+    left: 170px !important;
   }
 }
 
@@ -6286,7 +6304,7 @@ table.product-info tbody {
   .become-paid-content:hover .become-paid-text2 {
     opacity: 1;
     color: var(--nav-color);
-    left: 440px;
+    left: 440px !important;
   }
 
   .become-paid-text1,
@@ -6304,7 +6322,7 @@ table.product-info tbody {
 
   .become-paid-text2 {
     top: 100px;
-    left: 440px;
+    left: 440px !important;
   }
 }
 
@@ -6329,7 +6347,7 @@ table.product-info tbody {
   .become-paid-content:hover .become-paid-text2 {
     opacity: 1;
     color: var(--nav-color);
-    left: 320px;
+    left: 320px !important;
   }
 
   .become-paid-text1,
@@ -6347,7 +6365,7 @@ table.product-info tbody {
 
   .become-paid-text2 {
     top: 100px;
-    left: 320px;
+    left: 320px !important;
   }
 }
 
@@ -6379,7 +6397,7 @@ table.product-info tbody {
   }
 
   .become-paid-content:hover .become-paid-text2 {
-    left: 245px;
+    left: 245px !important;
     opacity: 1;
     color: var(--nav-color);
   }
@@ -6399,7 +6417,7 @@ table.product-info tbody {
 
   .become-paid-text2 {
     top: 100px;
-    left: 245px;
+    left: 245px !important;
   }
 }
 
@@ -6440,7 +6458,7 @@ table.product-info tbody {
   }
 
   .become-paid-content:hover .become-paid-text2 {
-    left: 180px;
+    left: 180px !important;
     opacity: 1;
     color: var(--nav-color);
   }
@@ -6460,7 +6478,7 @@ table.product-info tbody {
 
   .become-paid-text2 {
     top: 70px;
-    left: 180px;
+    left: 180px !important;
   }
 }
 

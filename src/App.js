@@ -83,12 +83,7 @@ import Refunds from './pages/admin/Refunds';
 import Data from './pages/admin/Data';
 import UserChats from './pages/admin/UserChats';
 import GiftCards from './pages/user/GiftCards';
-import FinalizingPayment from './pages/user/FinalizingPayment';
-import FinalizingGCPayment from './pages/user/FinalizingGCPayment';
-import FinalizingMembershipPayment from './pages/user/FinalizingMembershipPayment';
-import FinalizingAdPayment from './pages/user/FinalizingAdPayment';
 import Analytics from './pages/admin/Analytics';
-import AdFinalize from './pages/user/AdFinalize';
 import AdSuccess from './pages/user/AdSuccess';
 import MobileBlock from './pages/admin/MobileBlock';
 
@@ -537,12 +532,6 @@ const App = () => {
             <Route exact path='/shop/search' component={ShopSearch} />
             <Route exact path='/cart' component={Cart} />
             <Route exact path='/ad-submission' component={AdSubmission} />
-            <Route exact path='/ad-finalize' component={AdFinalize} />
-            <Route
-              exact
-              path='/finalizing-ad-payment'
-              component={FinalizingAdPayment}
-            />
             <Route exact path='/ad-successful' component={AdSuccess} />
             <UserRoute exact path='/user/dashboard' component={UserDashboard} />
             <UserRoute exact path='/user/profile/:userId' component={Profile} />
@@ -595,21 +584,6 @@ const App = () => {
               path='/chats'
               component={Chats}
               onLeave={() => setSelectedChat(undefined)}
-            />
-            <UserRoute
-              exact
-              path='/finalizing-payment'
-              component={FinalizingPayment}
-            />
-            <UserRoute
-              exact
-              path='/finalizing-gc-payment'
-              component={FinalizingGCPayment}
-            />
-            <UserRoute
-              exact
-              path='/finalizing-membership-payment'
-              component={FinalizingMembershipPayment}
             />
             <SubscriberRoute exact path='/swipe-to-match' component={Swipe} />
             <SubscriberRoute

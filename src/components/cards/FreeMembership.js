@@ -1,7 +1,7 @@
 import React from 'react';
 import freeMembership from '../../assets/animations/freeMembership.gif';
 
-const BecomePaid = () => {
+const FreeMembership = () => {
   return (
     <div
       className='free-membership-banner'
@@ -17,4 +17,4 @@ const BecomePaid = () => {
   );
 };
 
-export default BecomePaid;
+export default FreeMembership;
