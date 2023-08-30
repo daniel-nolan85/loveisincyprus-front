@@ -180,6 +180,7 @@ const Data = ({ history }) => {
           : '',
         u.mobile,
         u.membership.paid ? 'Paid' : 'Unpaid',
+        u.membership.cost === '5.00' ? 'Yes' : '',
         u.membership.cost === '10.00' ? 'Yes' : '',
         u.membership.cost === '50.00' ? 'Yes' : '',
         u.membership.cost === '90.00' ? 'Yes' : '',
@@ -457,9 +458,25 @@ const Data = ({ history }) => {
         const costA = a.membership.cost || '';
         const costB = b.membership.cost || '';
 
-        if (costA === '10.00' && costB !== '10.00') {
+        // if (costA === '10.00' && costB !== '10.00') {
+        //   return -1;
+        // } else if (costA !== '10.00' && costB === '10.00') {
+        //   return 1;
+        // } else {
+        //   return 0;
+        // }
+
+        if (
+          (costA === '5.00' || costA === '10.00') &&
+          costB !== '5.00' &&
+          costB !== '10.00'
+        ) {
           return -1;
-        } else if (costA !== '10.00' && costB === '10.00') {
+        } else if (
+          (costB === '5.00' || costB === '10.00') &&
+          costA !== '5.00' &&
+          costA !== '10.00'
+        ) {
           return 1;
         } else {
           return 0;
@@ -2116,7 +2133,8 @@ const Data = ({ history }) => {
                         )}
                       </td>
                       <td className='center-cell'>
-                        {u.membership.cost === '10.00' && (
+                        {(u.membership.cost === '5.00' ||
+                          u.membership.cost === '10.00') && (
                           <FontAwesomeIcon
                             icon={faCheck}
                             className='fa check'

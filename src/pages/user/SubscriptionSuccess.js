@@ -37,7 +37,7 @@ const SubscriptionSuccess = (props) => {
           <div className='ps-col'>
             <p>Subscription:</p>
             <h3 className='ps-bought-items'>
-              {payable === '10.00'
+              {payable === '5.00' || payable === '10.00'
                 ? 'One month'
                 : payable === '50.00'
                 ? 'Six months'

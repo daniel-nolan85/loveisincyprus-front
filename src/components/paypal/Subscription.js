@@ -68,7 +68,7 @@ const Subscription = ({ payable, daysLeft }) => {
       .then((res) => {
         toast.success(
           `Payment successful! Your paid membership will last for ${
-            payableRef.current === '10.00'
+            payableRef.current === '5.00' || payableRef.current === '10.00'
               ? 'one month.'
               : payableRef.current === '50.00'
               ? 'six months.'

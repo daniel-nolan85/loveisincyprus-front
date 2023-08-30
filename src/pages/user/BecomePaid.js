@@ -28,6 +28,17 @@ const BecomePaid = () => {
     setDaysLeft(dayDifference);
   }, []);
 
+  useEffect(() => {
+    const currentDate = new Date();
+    const expiryDate = new Date('2024-01-01');
+
+    if (currentDate < expiryDate) {
+      setPayable('5.00');
+    } else {
+      setPayable('10.00');
+    }
+  }, []);
+
   const handleInfo = () => {
     setSubInfoModalIsOpen(true);
   };
@@ -84,7 +95,13 @@ const BecomePaid = () => {
             onChange={(e) => setPayable(e.target.value)}
             value={payable}
           >
-            <option value='10.00'>One month</option>
+            <option
+              value={
+                payable === '10.00' ? '10.00' : payable === '5.00' && '5.00'
+              }
+            >
+              One month
+            </option>
             <option value='50.00'>Six months</option>
             <option value='90.00'>One year</option>
           </select>

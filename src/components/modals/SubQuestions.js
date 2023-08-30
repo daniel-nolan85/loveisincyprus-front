@@ -1,6 +1,5 @@
 import React from 'react';
 import Modal from 'react-modal';
-import { useSelector } from 'react-redux';
 
 Modal.setAppElement('#root');
 
@@ -8,7 +7,8 @@ const SubQuestions = ({
   subQuestionsModalIsOpen,
   setSubQuestionsModalIsOpen,
 }) => {
-  const { membership } = useSelector((state) => state.user);
+  const currentDate = new Date();
+  const expiryDate = new Date('2024-01-01');
 
   const modalStyles = {
     content: {
@@ -54,7 +54,7 @@ const SubQuestions = ({
               </tr>
               <tr>
                 <td>One month</td>
-                <td>€10.00</td>
+                <td>{currentDate < expiryDate ? '€5.00' : '€10.00'}</td>
               </tr>
               <tr>
                 <td>Six months</td>
