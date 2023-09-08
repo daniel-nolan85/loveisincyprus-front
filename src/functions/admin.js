@@ -13,3 +13,8 @@ export const changeStatus = async (orderId, orderStatus, authtoken) =>
       headers: { authtoken },
     }
   );
+
+export const getSubscriptions = async (authtoken) =>
+  await axios.get(`${process.env.REACT_APP_API}/admin/subscriptions`, {
+    headers: { authtoken },
+  });

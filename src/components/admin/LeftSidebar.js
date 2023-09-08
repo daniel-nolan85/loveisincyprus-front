@@ -24,6 +24,8 @@ import {
   faCommentSms,
   faCalculator,
   faMobilePhone,
+  faAddressCard,
+  faSprayCanSparkles,
 } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { ChatState } from '../../context/ChatProvider';
@@ -41,6 +43,8 @@ const LeftSidebar = () => {
     setProductsForReview,
     newOrders,
     setNewOrders,
+    newSubscriptions,
+    setNewSubscriptions,
     newRefunds,
     setNewRefunds,
   } = ChatState();
@@ -66,6 +70,7 @@ const LeftSidebar = () => {
     fetchReportedContent();
     fetchProductsForReview();
     fetchNewOrders();
+    fetchNewSubscriptions();
     fetchNewRefunds();
   }, []);
 
@@ -106,6 +111,14 @@ const LeftSidebar = () => {
       .get(`${process.env.REACT_APP_API}/fetch-new-orders`)
       .then((res) => {
         setNewOrders(res.data);
+      });
+  };
+
+  const fetchNewSubscriptions = async () => {
+    await axios
+      .get(`${process.env.REACT_APP_API}/fetch-new-subscriptions`)
+      .then((res) => {
+        setNewSubscriptions(res.data);
       });
   };
 
@@ -151,7 +164,7 @@ const LeftSidebar = () => {
         )}
         {role === 'main-admin' && (
           <Link to='/admin/product-review'>
-            <FontAwesomeIcon icon={faBarcode} className='fa' />
+            <FontAwesomeIcon icon={faSprayCanSparkles} className='fa' />
             Products to Review
             <span>
               {productsForReview &&
@@ -165,6 +178,17 @@ const LeftSidebar = () => {
             <FontAwesomeIcon icon={faFolderOpen} className='fa' />
             Orders
             <span>{newOrders && newOrders.length > 0 && newOrders.length}</span>
+          </Link>
+        )}
+        {role === 'main-admin' && (
+          <Link to='/admin/subscriptions'>
+            <FontAwesomeIcon icon={faAddressCard} className='fa' />
+            Subscriptions
+            <span>
+              {newSubscriptions &&
+                newSubscriptions.length > 0 &&
+                newSubscriptions.length}
+            </span>
           </Link>
         )}
         {role === 'main-admin' && (

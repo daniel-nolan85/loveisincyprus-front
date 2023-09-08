@@ -86,6 +86,7 @@ import GiftCards from './pages/user/GiftCards';
 import Analytics from './pages/admin/Analytics';
 import AdSuccess from './pages/user/AdSuccess';
 import MobileBlock from './pages/admin/MobileBlock';
+import Subscriptions from './pages/admin/Subscriptions';
 
 let socket, selectedChatCompare;
 
@@ -620,6 +621,11 @@ const App = () => {
             <AdminRoute exact path='/admin/product' component={Products} />
             <AdminRoute exact path='/admin/coupon' component={Coupon} />
             <AdminRoute exact path='/admin/orders' component={Orders} />
+            <AdminRoute
+              exact
+              path='/admin/subscriptions'
+              component={Subscriptions}
+            />
             <AdminRoute exact path='/admin/refunds' component={Refunds} />
             <AdminRoute exact path='/admin/data' component={Data} />
             <AdminRoute exact path='/admin/analytics' component={Analytics} />

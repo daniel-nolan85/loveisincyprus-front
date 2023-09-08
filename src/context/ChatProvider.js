@@ -21,6 +21,7 @@ const ChatProvider = ({ children }) => {
   const [reportedContent, setReportedContent] = useState(0);
   const [productsForReview, setProductsForReview] = useState(0);
   const [newOrders, setNewOrders] = useState(0);
+  const [newSubscriptions, setNewSubscriptions] = useState(0);
   const [timerFired, setTimerFired] = useState(false);
   const [newRefunds, setNewRefunds] = useState(0);
 
@@ -61,6 +62,8 @@ const ChatProvider = ({ children }) => {
         setProductsForReview,
         newOrders,
         setNewOrders,
+        newSubscriptions,
+        setNewSubscriptions,
         timerFired,
         setTimerFired,
         newRefunds,
