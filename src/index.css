@@ -3004,6 +3004,17 @@ small.user-chats-date {
   color: var(--nav-color);
 }
 
+.payment-type {
+  color: var(--nav-color);
+  text-transform: capitalize;
+}
+
+.subs-list-btns {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
 /* --------------- profile-page --------------- */
 .profile-container {
   padding: 20px 15%;

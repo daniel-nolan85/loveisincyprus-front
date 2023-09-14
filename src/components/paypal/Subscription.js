@@ -66,8 +66,34 @@ const Subscription = ({ payable, daysLeft }) => {
         }
       )
       .then((res) => {
-        console.log(res);
         createSubscription(res);
+        history.push({
+          pathname: '/subscription-successful',
+          state: payableRef.current,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const createSubscription = async (res) => {
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/create-subscription`,
+        {
+          membership: res.data.amendMembership.membership,
+          paymentId: res.data.responseData.id,
+          _id: user._id,
+        },
+        {
+          headers: {
+            authtoken: user.token,
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+      .then((res) => {
         toast.success(
           `Payment successful! Your paid membership will last for ${
             payableRef.current === '5.00' || payableRef.current === '10.00'
@@ -87,42 +113,11 @@ const Subscription = ({ payable, daysLeft }) => {
             membership: res.data.amendMembership.membership,
           },
         });
-        history.push({
-          pathname: '/subscription-successful',
-          state: payableRef.current,
-        });
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const createSubscription = async (res) => {
-    await axios
-      .post(
-        `${process.env.REACT_APP_API}/create-subscription`,
-        {
-          membership: res.data.amendMembership.membership,
-          paymentId: res.data.responseData.id,
-          // paymentId:
-          //   res.data.responseData.purchase_units[0].payments.captures[0].id,
-          _id: user._id,
-        },
-        {
-          headers: {
-            authtoken: user.token,
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-      .then((res) => console.log(res.data))
       .catch((err) => console.log(err));
   };
 
   const onError = (err) => {
-    // Handle payment errors (PENDING, FAILED, or other errors)
-    console.error('Payment error:', err);
-    // Display an error message to the user or take appropriate action.
     toast.error('Payment Failed', {
       position: toast.POSITION.TOP_CENTER,
     });

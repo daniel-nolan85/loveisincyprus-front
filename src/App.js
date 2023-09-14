@@ -301,6 +301,7 @@ const App = () => {
       catchIp();
       calcPoints();
       updateUserProgress();
+      cancelTrials();
     }
   }, [user && user.token]);
 
@@ -477,6 +478,12 @@ const App = () => {
 
   const updateUserProgress = async () => {
     await axios.put(`${process.env.REACT_APP_API}/update-user-progress`, {
+      _id: user._id,
+    });
+  };
+
+  const cancelTrials = async () => {
+    await axios.put(`${process.env.REACT_APP_API}/cancel-trial-periods`, {
       _id: user._id,
     });
   };

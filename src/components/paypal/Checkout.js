@@ -129,9 +129,6 @@ const Checkout = ({
   };
 
   const onError = (err) => {
-    // Handle payment errors (PENDING, FAILED, or other errors)
-    console.error('Payment error:', err);
-    // Display an error message to the user or take appropriate action.
     toast.error('Payment Failed', {
       position: toast.POSITION.TOP_CENTER,
     });

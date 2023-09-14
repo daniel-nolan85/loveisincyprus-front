@@ -15,6 +15,7 @@ const SideNav = () => {
     reportedContent,
     productsForReview,
     newOrders,
+    newSubscriptions,
     newRefunds,
   } = ChatState();
 
@@ -121,6 +122,22 @@ const SideNav = () => {
                             {newOrders &&
                               newOrders.length > 0 &&
                               newOrders.length}
+                          </span>
+                        </Link>
+                        <br />
+                      </>
+                    )}
+                    {user.role === 'main-admin' && (
+                      <>
+                        <Link
+                          to='/admin/subscriptions'
+                          onClick={() => setOpenNav(false)}
+                        >
+                          Subscriptions
+                          <span className='sidenav-count'>
+                            {newSubscriptions &&
+                              newSubscriptions.length > 0 &&
+                              newSubscriptions.length}
                           </span>
                         </Link>
                         <br />
