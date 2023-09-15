@@ -1,13 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getSubscriptions } from '../../functions/admin';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import LeftSidebar from '../../components/admin/LeftSidebar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCalendarDays,
   faFilePdf,
-  faFloppyDisk,
+  faSpinner,
   faMagnifyingGlass,
   faRotateLeft,
 } from '@fortawesome/free-solid-svg-icons';
@@ -27,6 +26,7 @@ const Subscriptions = ({ history }) => {
   const [endDate, setEndDate] = useState(null);
   const [datePickerIsOpen, setDatePickerIsOpen] = useState(false);
   const [filterByDate, setFilterByDate] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const isFirstRun = useRef(true);
 
@@ -59,6 +59,7 @@ const Subscriptions = ({ history }) => {
   const loadSubscriptions = () =>
     getSubscriptions(token).then((res) => {
       setSubscriptions(res.data);
+      setLoading(false);
     });
 
   const setSubsToSeen = async () => {
@@ -145,87 +146,97 @@ const Subscriptions = ({ history }) => {
     <div className='container search-container'>
       <LeftSidebar />
       <div className='admin-main-content analytics'>
-        <div className='search-box' style={{ marginBottom: '20px' }}>
-          <FontAwesomeIcon
-            icon={faMagnifyingGlass}
-            onClick={handleSearch}
-            className='fa'
-          />
-          <input
-            type='search'
-            placeholder='Search Subscriptions'
-            onChange={handleSearch}
-            value={query}
-          />
-          <input type='submit' hidden />
-        </div>
-        <div className='subs-list-btns'>
-          {endDate ? (
-            <div className='analytics-dates'>
-              <FontAwesomeIcon
-                icon={faCalendarDays}
-                className='fa'
-                onClick={chooseDuration}
-              />
-              <FontAwesomeIcon
-                icon={faRotateLeft}
-                className='fa reset'
-                onClick={resetDates}
-              />
-            </div>
-          ) : (
-            <FontAwesomeIcon
-              icon={faCalendarDays}
-              className='fa'
-              onClick={chooseDuration}
-            />
-          )}
-          <PDFDownloadLink
-            document={<SubsToView subscriptions={subscriptions} />}
-            fileName='subscriptions.pdf'
-          >
-            <FontAwesomeIcon icon={faFilePdf} className='fa' />
-          </PDFDownloadLink>
-        </div>
-        <DatePicker
-          selected={startDate}
-          onChange={(dates) => {
-            setRange(dates);
-          }}
-          startDate={startDate}
-          endDate={endDate}
-          selectsRange
-          open={datePickerIsOpen}
-          onClickOutside={() => setDatePickerIsOpen(false)}
-        />
-        {startDate && endDate ? (
-          <div className='selected-dates'>
-            <p className='center'>
-              <span>{subscriptions.length}</span>{' '}
-              {subscriptions.length === 1
-                ? 'subscription was '
-                : 'subscriptions were '}
-              purchased between{' '}
-              <span>{moment(startDate).format('dddd, D MMMM YYYY')}</span> and{' '}
-              <span>{moment(endDate).format('dddd, D MMMM YYYY')}</span>
-            </p>
+        {loading ? (
+          <div className='spinner'>
+            <FontAwesomeIcon icon={faSpinner} className='fa' spin />
           </div>
         ) : (
-          <div className='selected-dates'>
-            <p className='center'>
-              There {subscriptions.length === 1 ? 'has' : 'have'} currently been{' '}
-              <span>{subscriptions.length}</span> purchased{' '}
-              {subscriptions.length === 1 ? 'subscription' : 'subscriptions'}
-            </p>
-          </div>
+          <>
+            <div className='search-box' style={{ marginBottom: '20px' }}>
+              <FontAwesomeIcon
+                icon={faMagnifyingGlass}
+                onClick={handleSearch}
+                className='fa'
+              />
+              <input
+                type='search'
+                placeholder='Search Subscriptions'
+                onChange={handleSearch}
+                value={query}
+              />
+              <input type='submit' hidden />
+            </div>
+            <div className='subs-list-btns'>
+              {endDate ? (
+                <div className='analytics-dates'>
+                  <FontAwesomeIcon
+                    icon={faCalendarDays}
+                    className='fa'
+                    onClick={chooseDuration}
+                  />
+                  <FontAwesomeIcon
+                    icon={faRotateLeft}
+                    className='fa reset'
+                    onClick={resetDates}
+                  />
+                </div>
+              ) : (
+                <FontAwesomeIcon
+                  icon={faCalendarDays}
+                  className='fa'
+                  onClick={chooseDuration}
+                />
+              )}
+              <PDFDownloadLink
+                document={<SubsToView subscriptions={subscriptions} />}
+                fileName='subscriptions.pdf'
+              >
+                <FontAwesomeIcon icon={faFilePdf} className='fa' />
+              </PDFDownloadLink>
+            </div>
+            <DatePicker
+              selected={startDate}
+              onChange={(dates) => {
+                setRange(dates);
+              }}
+              startDate={startDate}
+              endDate={endDate}
+              selectsRange
+              open={datePickerIsOpen}
+              onClickOutside={() => setDatePickerIsOpen(false)}
+            />
+            {startDate && endDate ? (
+              <div className='selected-dates'>
+                <p className='center'>
+                  <span>{subscriptions.length}</span>{' '}
+                  {subscriptions.length === 1
+                    ? 'subscription was '
+                    : 'subscriptions were '}
+                  purchased between{' '}
+                  <span>{moment(startDate).format('dddd, D MMMM YYYY')}</span>{' '}
+                  and <span>{moment(endDate).format('dddd, D MMMM YYYY')}</span>
+                </p>
+              </div>
+            ) : (
+              <div className='selected-dates'>
+                <p className='center'>
+                  There {subscriptions.length === 1 ? 'has' : 'have'} currently
+                  been <span>{subscriptions.length}</span> purchased{' '}
+                  {subscriptions.length === 1
+                    ? 'subscription'
+                    : 'subscriptions'}
+                </p>
+              </div>
+            )}
+            <div>
+              <SubscriptionsList
+                subscriptions={subscriptions}
+                searched={searched}
+                query={query}
+              />
+            </div>
+          </>
         )}
-        <div>
-          <SubscriptionsList
-            subscriptions={subscriptions}
-            searched={searched}
-            query={query}
-          />
-        </div>
       </div>
     </div>
   );
