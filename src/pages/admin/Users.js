@@ -17,6 +17,7 @@ import {
   faUserGraduate,
   faSpinner,
   faUndo,
+  faAddressCard,
 } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
 import UserDeleteAdmin from '../../components/modals/UserDeleteAdmin';
@@ -31,6 +32,7 @@ import RemoveUserFromEventsEligible from '../../components/modals/RemoveUserFrom
 import ShowMain from '../../components/modals/ShowMain';
 import ShowSecondary from '../../components/modals/ShowSecondary';
 import AdminPreferences from '../../components/modals/AdminPreferences';
+import SubStatus from '../../components/modals/SubStatus';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 const Users = ({ history }) => {
@@ -81,6 +83,8 @@ const Users = ({ history }) => {
   const [adminPreferencesModalIsOpen, setAdminPreferencesModalIsOpen] =
     useState(false);
   const [secondaryAdmin, setSecondaryAdmin] = useState({});
+  const [subStatusModalIsOpen, setSubStatusModalIsOpen] = useState(false);
+  const [userToUpdateStatus, setUserToUpdateStatus] = useState({});
 
   const { token, _id, role, canUsers } = useSelector((state) => state.user);
 
@@ -162,6 +166,11 @@ const Users = ({ history }) => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const handleSubStatus = (u) => {
+    setSubStatusModalIsOpen(true);
+    setUserToUpdateStatus(u);
   };
 
   const removeFromEventsEligible = (u) => {
@@ -302,6 +311,13 @@ const Users = ({ history }) => {
                   >
                     <p>{u.username || u.name}</p>
                   </Link>
+                  <span>
+                    <FontAwesomeIcon
+                      icon={faAddressCard}
+                      className='fa sub-status'
+                      onClick={() => handleSubStatus(u)}
+                    />
+                  </span>
                   {u.eventsEligible === true ? (
                     <span>
                       <FontAwesomeIcon
@@ -498,6 +514,12 @@ const Users = ({ history }) => {
         adminPreferencesModalIsOpen={adminPreferencesModalIsOpen}
         setAdminPreferencesModalIsOpen={setAdminPreferencesModalIsOpen}
         secondaryAdmin={secondaryAdmin}
+        fetchUsers={fetchUsers}
+      />
+      <SubStatus
+        subStatusModalIsOpen={subStatusModalIsOpen}
+        setSubStatusModalIsOpen={setSubStatusModalIsOpen}
+        userToUpdateStatus={userToUpdateStatus}
         fetchUsers={fetchUsers}
       />
     </div>

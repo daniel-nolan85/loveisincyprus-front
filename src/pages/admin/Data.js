@@ -11,6 +11,7 @@ import {
   faMagnifyingGlass,
   faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
+import ViewPartner from '../../components/modals/ViewPartner';
 import LargeDataImage from '../../components/modals/LargeDataImage';
 import ProfileProgress from '../../components/modals/ProfileProgress';
 import PointsData from '../../components/modals/PointsData';
@@ -80,6 +81,8 @@ const Data = ({ history }) => {
   const [loadingDroppers, setLoadingDroppers] = useState(false);
   const [loadingPerfumes, setLoadingPerfumes] = useState(false);
   const [currentUsername, setCurrentUsername] = useState('');
+  const [viewSubStatusModalIsOpen, setViewSubStatusModalIsOpen] =
+    useState(false);
   const [profileImageModalIsOpen, setProfileImageModalIsOpen] = useState(false);
   const [progressModalIsOpen, setProgressModalIsOpen] = useState(false);
   const [pointsDataModalIsOpen, setPointsDataModalIsOpen] = useState(false);
@@ -101,6 +104,7 @@ const Data = ({ history }) => {
     useState(false);
   const [gCReceivedValueDataModalIsOpen, setGCReceivedValueDataModalIsOpen] =
     useState(false);
+  const [partner, setPartner] = useState('');
   const [profileImages, setProfileImages] = useState([]);
   const [progress, setProgress] = useState({});
   const [pointsData, setPointsData] = useState({});
@@ -434,17 +438,57 @@ const Data = ({ history }) => {
 
   useEffect(() => {
     if (loadingPaidOrUnpaid) {
+      // const sortedUsers = [...users].sort((a, b) => {
+      //   const paidA = a.membership.paid;
+      //   const paidB = b.membership.paid;
+
+      //   if (paidA && !paidB) {
+      //     return -1;
+      //   } else if (!paidA && paidB) {
+      //     return 1;
+      //   } else {
+      //     return 0;
+      //   }
+      // });
       const sortedUsers = [...users].sort((a, b) => {
         const paidA = a.membership.paid;
+        const freeA = a.membership.free;
         const paidB = b.membership.paid;
+        const freeB = b.membership.free;
 
-        if (paidA && !paidB) {
-          return -1;
-        } else if (!paidA && paidB) {
-          return 1;
-        } else {
-          return 0;
+        if (paidA && freeA !== null) {
+          // Case 1: a has paid membership with free not equal to null
+          if (paidB && freeB !== null) {
+            // Both a and b fall under the same category
+            return 0;
+          } else {
+            // a comes before b
+            return -1;
+          }
+        } else if (paidA && freeA === null) {
+          // Case 2: a has paid membership with free equal to null
+          if (paidB && freeB && freeB !== null) {
+            // b has paid membership with free not equal to null, so a comes after b
+            return 1;
+          } else if (paidB) {
+            // b has paid membership with free equal to null, so a comes before b
+            return -1;
+          } else {
+            // Both a and b fall under the same category
+            return 0;
+          }
+        } else if (!paidA) {
+          // Case 3: a does not have paid membership
+          if (!paidB) {
+            // Both a and b do not have paid membership, so maintain their original order
+            return 0;
+          } else {
+            // a does not have paid membership, but b does, so a comes after b
+            return 1;
+          }
         }
+        // Default case (should not be reached)
+        return 0;
       });
       setUsers(sortedUsers);
       setFilteredBy('paidOrUnpaid');
@@ -1496,6 +1540,12 @@ const Data = ({ history }) => {
       });
   };
 
+  const viewSubStatus = (u, username) => {
+    setViewSubStatusModalIsOpen(true);
+    setPartner(u);
+    setCurrentUsername(username);
+  };
+
   const viewProfilePics = (u, username) => {
     setProfileImageModalIsOpen(true);
     setProfileImages(u);
@@ -1753,7 +1803,7 @@ const Data = ({ history }) => {
                       {loadingPaidOrUnpaid ? (
                         <FontAwesomeIcon icon={faSpinner} className='fa' spin />
                       ) : (
-                        'Paid or Unpaid?'
+                        'Subscription Status'
                       )}
                     </th>
                     <th
@@ -2126,7 +2176,16 @@ const Data = ({ history }) => {
                       </td>
                       <td>{u.mobile}</td>
                       <td className='center-cell'>
-                        {u.membership.paid ? (
+                        {u.membership.paid && u.membership.free !== null ? (
+                          <p
+                            className='true link'
+                            onClick={() => {
+                              viewSubStatus(u.membership.free, u.username);
+                            }}
+                          >
+                            Free
+                          </p>
+                        ) : u.membership.paid && u.membership.free === null ? (
                           <p className='true'>Paid</p>
                         ) : (
                           <p className='false'>Unpaid</p>
@@ -2392,6 +2451,12 @@ const Data = ({ history }) => {
           </>
         )}
       </div>
+      <ViewPartner
+        viewSubStatusModalIsOpen={viewSubStatusModalIsOpen}
+        setViewSubStatusModalIsOpen={setViewSubStatusModalIsOpen}
+        partner={partner}
+        username={currentUsername}
+      />
       <LargeDataImage
         profileImageModalIsOpen={profileImageModalIsOpen}
         setProfileImageModalIsOpen={setProfileImageModalIsOpen}

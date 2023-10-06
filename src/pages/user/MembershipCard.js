@@ -66,7 +66,13 @@ const MembershipCard = () => {
                     Member since {moment(createdAt).format('MMMM Do YYYY')}
                   </span>
                 </div>
-                {membership.paid ? (
+                {membership.paid && membership.free !== null ? (
+                  <div className='ms-coords small'>
+                    <span>
+                      Full access member courtesy of {membership.free}
+                    </span>
+                  </div>
+                ) : membership.paid && membership.free === null ? (
                   <div className='ms-coords small'>
                     <span>
                       Full access member until{' '}

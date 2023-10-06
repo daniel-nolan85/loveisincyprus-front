@@ -2401,6 +2401,14 @@ nav {
   z-index: 10;
 }
 
+.admin-card .fa.sub-status {
+  position: absolute;
+  top: 10px;
+  right: 210px;
+  font-size: 25px;
+  z-index: 10;
+}
+
 .admin-card .fa.star {
   position: absolute;
   top: 10px;
