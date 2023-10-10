@@ -27,17 +27,44 @@ const Verify = ({
   const [webcamEnabled, setWebcamEnabled] = useState(false);
   const [flip, setFlip] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth);
+  const [mediaStream, setMediaStream] = useState(null);
+
+  useEffect(() => {
+    const isMobileDevice = window.innerWidth <= 1024;
+    setIsMobile(isMobileDevice);
+  }, []);
 
   let { user } = useSelector((state) => ({ ...state }));
 
   let dispatch = useDispatch();
 
   const webcamRef = useRef(null);
+  const mobcamRef = useRef();
 
   const capturePhoto = useCallback(async () => {
     const imageSrc = webcamRef.current.getScreenshot();
     setVerifImg(imageSrc);
   }, [webcamRef]);
+
+  const startCamera = async () => {
+    setLoading(false);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      mobcamRef.current.srcObject = stream;
+      setMediaStream(stream);
+    } catch (error) {
+      console.error('Error accessing the camera:', error);
+    }
+  };
+
+  const takePhoto = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = mobcamRef.current.videoWidth;
+    canvas.height = mobcamRef.current.videoHeight;
+    canvas.getContext('2d').drawImage(mobcamRef.current, 0, 0);
+    setVerifImg(canvas.toDataURL('image/jpeg'));
+  };
 
   const getVerified = async (e) => {
     e.preventDefault();
@@ -133,6 +160,9 @@ const Verify = ({
                 onClick={() => {
                   setWebcamEnabled(true);
                   setLoading(true);
+                  if (isMobile) {
+                    startCamera();
+                  }
                 }}
               >
                 <FontAwesomeIcon icon={faCamera} className='fa' />
@@ -153,7 +183,13 @@ const Verify = ({
                     <FontAwesomeIcon
                       icon={faCamera}
                       className='fa camera'
-                      onClick={capturePhoto}
+                      onClick={() => {
+                        if (!isMobile) {
+                          capturePhoto();
+                        } else {
+                          takePhoto();
+                        }
+                      }}
                     />
                     <span className='tooltip-text' style={{ zIndex: '9999' }}>
                       Take photo
@@ -183,13 +219,21 @@ const Verify = ({
               )}
               {!verifImg ? (
                 <div className='webcam-container'>
-                  <Webcam
-                    ref={webcamRef}
-                    screenshotFormat='image/jpeg'
-                    screenshotQuality={1}
-                    width={360}
-                    onUserMedia={() => setLoading(false)}
-                  />
+                  {!isMobile ? (
+                    <Webcam
+                      ref={webcamRef}
+                      screenshotFormat='image/jpeg'
+                      screenshotQuality={1}
+                      width={360}
+                      onUserMedia={() => setLoading(false)}
+                    />
+                  ) : (
+                    <video
+                      ref={mobcamRef}
+                      style={{ width: '360px' }}
+                      autoPlay
+                    />
+                  )}
                   {!loading && (
                     <div
                       className={`${

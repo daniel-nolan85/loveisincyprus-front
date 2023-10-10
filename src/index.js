@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import rootReducer from './reducers';
 import ChatProvider from './context/ChatProvider';
+import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 const store = createStore(rootReducer, composeWithDevTools());
 
@@ -26,4 +27,5 @@ ReactDOM.render(
   document.getElementById('root')
 );
 
+serviceWorkerRegistration.register();
 reportWebVitals();
