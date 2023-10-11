@@ -444,7 +444,6 @@ const App = () => {
                     }
                   )
                   .then((res) => {
-                    console.log(res.data);
                     dispatch({
                       type: 'LOGGED_IN_USER',
                       payload: {
@@ -473,7 +472,6 @@ const App = () => {
               }
             )
             .then((res) => {
-              console.log(res.data);
               dispatch({
                 type: 'LOGGED_IN_USER',
                 payload: {

@@ -13,8 +13,6 @@ const Orders = ({ history }) => {
   const [orders, setOrders] = useState([]);
   const [query, setQuery] = useState('');
 
-  console.log('query => ', query);
-
   const { setNewOrders } = ChatState();
 
   const { token, canOrders } = useSelector((state) => state.user);

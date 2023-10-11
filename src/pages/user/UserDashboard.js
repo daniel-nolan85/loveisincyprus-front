@@ -286,8 +286,8 @@ const UserDashboard = () => {
       .then(async (res) => {
         if (
           user.notifSubscription &&
-          user.notifSubscription.endpoint
-          // res.data.postedBy !== user._id
+          user.notifSubscription.endpoint &&
+          res.data.postedBy !== user._id
         ) {
           socket.emit('like post', res.data);
           await axios.post(

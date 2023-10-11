@@ -33,7 +33,6 @@ const AdDisapprove = ({
         }
       )
       .then((res) => {
-        console.log(res);
         toast.success(`Payment returned to user.`, {
           position: toast.POSITION.TOP_CENTER,
         });

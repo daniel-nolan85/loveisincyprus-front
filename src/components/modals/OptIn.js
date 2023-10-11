@@ -76,43 +76,84 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
   };
 
   const handleOptInOrOutNotifs = async () => {
-    await axios
-      .put(
-        `${process.env.REACT_APP_API}/user-opt-in-or-out-notifs`,
-        { user },
-        {
-          headers: {
-            authtoken: user.token,
-          },
-        }
-      )
-      .then((res) => {
-        dispatch({
-          type: 'LOGGED_IN_USER',
-          payload: {
-            ...user,
-            notifPermission: res.data.notifPermission,
-          },
-        });
-        if (res.data.notifPermission === 'granted') {
-          toast.success(
-            'You will now receive push notifications to your mobile device',
-            {
-              position: toast.POSITION.TOP_CENTER,
-            }
-          );
-        } else {
-          toast.error(
-            'You will not receive push notifications to your mobile device',
-            {
-              position: toast.POSITION.TOP_CENTER,
-            }
-          );
-        }
-      })
-      .catch((err) => {
-        console.log(err);
+    if (user.notifSubscription.permission !== 'granted') {
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.pushManager
+          .subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: process.env.REACT_APP_WEB_PUSH_PUBLIC,
+          })
+          .then(async (subscription) => {
+            await axios
+              .put(
+                `${process.env.REACT_APP_API}/notif-permission`,
+                {
+                  _id: user._id,
+                  permission: 'granted',
+                  endpoint: subscription.endpoint,
+                },
+                {
+                  headers: {
+                    authtoken: user.token,
+                  },
+                }
+              )
+              .then((res) => {
+                dispatch({
+                  type: 'LOGGED_IN_USER',
+                  payload: {
+                    ...user,
+                    notifSubscription: res.data.notifSubscription,
+                  },
+                });
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          });
       });
+    } else {
+      await axios
+        .put(
+          `${process.env.REACT_APP_API}/notif-permission`,
+          {
+            _id: user._id,
+            permission: 'denied',
+          },
+          {
+            headers: {
+              authtoken: user.token,
+            },
+          }
+        )
+        .then((res) => {
+          dispatch({
+            type: 'LOGGED_IN_USER',
+            payload: {
+              ...user,
+              notifSubscription: res.data.notifSubscription,
+            },
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+    if (user.notifSubscription.permission !== 'granted') {
+      toast.success(
+        'You will now receive push notifications to your mobile device',
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+    } else {
+      toast.error(
+        'You will not receive push notifications to your mobile device',
+        {
+          position: toast.POSITION.TOP_CENTER,
+        }
+      );
+    }
   };
 
   return (
@@ -137,7 +178,7 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
           <span />
         </div>
         <h2>
-          {user && user.notifPermission === 'granted'
+          {user && user.notifSubscription.permission !== 'granted'
             ? 'Subscribe to mobile notifications?'
             : 'Unsubscribe from mobile notifications?'}
         </h2>
@@ -145,7 +186,7 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
         <div
           id='opt-btn-notifs'
           className={
-            user && user.notifPermission === 'granted'
+            user && user.notifSubscription.permission !== 'granted'
               ? 'opt-btn-notifs-on'
               : ''
           }

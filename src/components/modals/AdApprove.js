@@ -31,7 +31,6 @@ const AdApprove = ({
         }
       )
       .then((res) => {
-        console.log(res);
         toast.success(`Payment successfully captured.`, {
           position: toast.POSITION.TOP_CENTER,
         });

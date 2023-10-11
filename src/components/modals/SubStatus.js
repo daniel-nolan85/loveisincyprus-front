@@ -35,8 +35,6 @@ const SubStatus = ({
 
   const { name, profileImage, username, membership } = userToUpdateStatus;
 
-  console.log('userToUpdateStatus => ', userToUpdateStatus);
-
   const membershipStatus = () => {
     if (membership && membership.free != undefined) {
       return 'Free';

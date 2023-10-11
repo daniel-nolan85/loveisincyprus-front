@@ -85,8 +85,6 @@ const Checkout = ({
       )
       .then((res) => {
         if (coupon) handleCoupon(cartTotalRef.current);
-        console.log('payable => ', payable);
-        console.log('payableRef.current => ', payableRef.current);
         addPoints(Math.floor(payableRef.current), 'store purchase', token);
         toast.success(
           `Payment successful!
