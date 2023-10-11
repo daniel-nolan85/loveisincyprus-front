@@ -139,7 +139,7 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
           console.log(err);
         });
     }
-    if (user.notifSubscription.permission !== 'granted') {
+    if (user.notifSubscription.permission === 'granted') {
       toast.success(
         'You will now receive push notifications to your mobile device',
         {
@@ -178,7 +178,7 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
           <span />
         </div>
         <h2>
-          {user && user.notifSubscription.permission !== 'granted'
+          {user && user.notifSubscription.permission === 'granted'
             ? 'Subscribe to mobile notifications?'
             : 'Unsubscribe from mobile notifications?'}
         </h2>
