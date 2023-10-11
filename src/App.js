@@ -244,6 +244,7 @@ const App = () => {
                 perfumes: res.data.perfumes,
                 visits: res.data.visits,
                 productsViewed: res.data.productsViewed,
+                notifSubscription: res.data.notifSubscription,
               },
             });
           })
@@ -291,6 +292,10 @@ const App = () => {
       socket.on('gift card added', (g) => {
         incrementNewNotifications(g, 'gift');
       });
+
+      if (user.notifPermission === undefined) {
+        requestNotifPermission();
+      }
       removeExpiredFeatures();
       handleExpiredAds();
       handleExpiredMemberships();
@@ -411,6 +416,78 @@ const App = () => {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const requestNotifPermission = () => {
+    if ('Notification' in window && window.innerWidth <= 1024) {
+      Notification.requestPermission().then(async (permission) => {
+        if (permission === 'granted') {
+          navigator.serviceWorker.ready.then((registration) => {
+            registration.pushManager
+              .subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: process.env.REACT_APP_WEB_PUSH_PUBLIC,
+              })
+              .then(async (subscription) => {
+                await axios
+                  .put(
+                    `${process.env.REACT_APP_API}/notif-permission`,
+                    {
+                      _id: user._id,
+                      permission,
+                      endpoint: subscription.endpoint,
+                    },
+                    {
+                      headers: {
+                        authtoken: user.token,
+                      },
+                    }
+                  )
+                  .then((res) => {
+                    console.log(res.data);
+                    dispatch({
+                      type: 'LOGGED_IN_USER',
+                      payload: {
+                        ...user,
+                        notifSubscription: res.data.notifSubscription,
+                      },
+                    });
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              });
+          });
+        } else {
+          await axios
+            .put(
+              `${process.env.REACT_APP_API}/notif-permission`,
+              {
+                _id: user._id,
+                permission,
+              },
+              {
+                headers: {
+                  authtoken: user.token,
+                },
+              }
+            )
+            .then((res) => {
+              console.log(res.data);
+              dispatch({
+                type: 'LOGGED_IN_USER',
+                payload: {
+                  ...user,
+                  notifSubscription: res.data.notifSubscription,
+                },
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        }
+      });
+    }
   };
 
   const removeExpiredFeatures = async () => {

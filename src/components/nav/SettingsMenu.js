@@ -4,7 +4,7 @@ import {
   faAddressCard,
   faArrowRightFromBracket,
   faEject,
-  faEnvelope,
+  faGear,
   faMoon,
   faPlay,
   faReply,
@@ -158,8 +158,8 @@ const SettingsMenu = ({
           }}
         >
           <span>
-            <FontAwesomeIcon icon={faEnvelope} className='fa' />
-            Mass Mail
+            <FontAwesomeIcon icon={faGear} className='fa' />
+            Preferences
           </span>
         </div>
         <div

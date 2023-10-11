@@ -17,6 +17,7 @@ import io from 'socket.io-client';
 import BecomePaid from '../../components/cards/BecomePaid';
 import Mobile from '../../components/user/Mobile';
 import FreeMembership from '../../components/cards/FreeMembership';
+import logo64 from '../../assets/logo64.png';
 
 let socket;
 
@@ -282,11 +283,30 @@ const UserDashboard = () => {
           },
         }
       )
-      .then((res) => {
-        if (res.data.postedBy !== user._id) {
+      .then(async (res) => {
+        if (
+          user.notifSubscription &&
+          user.notifSubscription.endpoint
+          // res.data.postedBy !== user._id
+        ) {
           socket.emit('like post', res.data);
+          await axios.post(
+            `${process.env.REACT_APP_API}/send-push-notification`,
+            {
+              endpoint: user.notifSubscription.endpoint,
+              payload: {
+                title: 'Post Liked',
+                body: 'Someone liked your post',
+                icon: logo64,
+              },
+            },
+            {
+              headers: {
+                authtoken: user.token,
+              },
+            }
+          );
         }
-        newsFeed();
       })
       .catch((err) => {
         console.log(err);

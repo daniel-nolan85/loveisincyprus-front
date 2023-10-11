@@ -75,6 +75,46 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
       });
   };
 
+  const handleOptInOrOutNotifs = async () => {
+    await axios
+      .put(
+        `${process.env.REACT_APP_API}/user-opt-in-or-out-notifs`,
+        { user },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+            notifPermission: res.data.notifPermission,
+          },
+        });
+        if (res.data.notifPermission === 'granted') {
+          toast.success(
+            'You will now receive push notifications to your mobile device',
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+        } else {
+          toast.error(
+            'You will not receive push notifications to your mobile device',
+            {
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <Modal
       isOpen={optinModalIsOpen}
@@ -83,16 +123,33 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
       contentLabel='Example Modal'
     >
       <div className='match'>
-        <h1>
+        <h2>
           {user && user.optIn
             ? 'Opt out of receiving mass mail?'
             : 'Opt in to receive mass mail?'}
-        </h1>
+        </h2>
         <br />
         <div
           id='opt-btn'
           className={user && user.optIn ? 'opt-btn-on' : ''}
           onClick={handleOptInOrOut}
+        >
+          <span />
+        </div>
+        <h2>
+          {user && user.notifPermission === 'granted'
+            ? 'Subscribe to mobile notifications?'
+            : 'Unsubscribe from mobile notifications?'}
+        </h2>
+        <br />
+        <div
+          id='opt-btn-notifs'
+          className={
+            user && user.notifPermission === 'granted'
+              ? 'opt-btn-notifs-on'
+              : ''
+          }
+          onClick={handleOptInOrOutNotifs}
         >
           <span />
         </div>

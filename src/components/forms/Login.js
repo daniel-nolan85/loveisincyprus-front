@@ -285,6 +285,7 @@ const Login = ({ showRegister }) => {
                   perfumes: res.data.perfumes,
                   visits: res.data.visits,
                   productsViewed: res.data.productsViewed,
+                  notifSubscription: res.data.notifSubscription,
                 },
               });
               roleBasedRedirect(res);
