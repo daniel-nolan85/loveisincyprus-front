@@ -144,7 +144,7 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
     }
     if (
       user.notifSubscription &&
-      user.notifSubscription.permission === 'granted'
+      user.notifSubscription.permission !== 'granted'
     ) {
       toast.success(
         'You will now receive push notifications to your mobile device',
@@ -177,41 +177,45 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
         </h2>
         <br />
         <div
-          id='opt-btn'
+          id={window.innerWidth <= 1024 ? 'opt-btn-mobile' : 'opt-btn'}
           className={user && user.optIn ? 'opt-btn-on' : ''}
           onClick={handleOptInOrOut}
         >
           <span />
         </div>
-        <h2>
-          {user &&
-          user.notifSubscription &&
-          user.notifSubscription.permission !== 'granted'
-            ? 'Subscribe to mobile notifications?'
-            : 'Unsubscribe from mobile notifications?'}
-        </h2>
-        <br />
-        <div
-          id='opt-btn-notifs'
-          className={
-            user &&
-            user.notifSubscription &&
-            user.notifSubscription.permission === 'granted'
-              ? 'opt-btn-notifs-on'
-              : ''
-          }
-          onClick={handleOptInOrOutNotifs}
-        >
-          <span />
-        </div>
+        {window.innerWidth <= 1024 && (
+          <>
+            <h2>
+              {user &&
+              user.notifSubscription &&
+              user.notifSubscription.permission === 'granted'
+                ? 'Unsubscribe from mobile notifications?'
+                : 'Subscribe to mobile notifications?'}
+            </h2>
+            <br />
+            <div
+              id='opt-btn-notifs'
+              className={
+                user &&
+                user.notifSubscription &&
+                user.notifSubscription.permission === 'granted'
+                  ? 'opt-btn-notifs-on'
+                  : ''
+              }
+              onClick={handleOptInOrOutNotifs}
+            >
+              <span />
+            </div>
 
-        <br />
-        <button
-          className='submit-btn trash'
-          onClick={() => setOptinModalIsOpen(false)}
-        >
-          Close
-        </button>
+            <br />
+            <button
+              className='submit-btn trash'
+              onClick={() => setOptinModalIsOpen(false)}
+            >
+              Close
+            </button>
+          </>
+        )}
       </div>
     </Modal>
   );

@@ -284,6 +284,7 @@ const UserDashboard = () => {
         }
       )
       .then(async (res) => {
+        newsFeed();
         if (
           user.notifSubscription &&
           user.notifSubscription.endpoint &&
