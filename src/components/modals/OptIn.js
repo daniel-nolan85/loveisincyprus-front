@@ -178,7 +178,9 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
           <span />
         </div>
         <h2>
-          {user && user.notifSubscription.permission === 'granted'
+          {user &&
+          user.notifSubscription &&
+          user.notifSubscription.permission !== 'granted'
             ? 'Subscribe to mobile notifications?'
             : 'Unsubscribe from mobile notifications?'}
         </h2>
@@ -186,7 +188,9 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
         <div
           id='opt-btn-notifs'
           className={
-            user && user.notifSubscription.permission !== 'granted'
+            user &&
+            user.notifSubscription &&
+            user.notifSubscription.permission === 'granted'
               ? 'opt-btn-notifs-on'
               : ''
           }

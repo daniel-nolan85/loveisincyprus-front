@@ -49,19 +49,19 @@ const Carousel = () => {
         pagination={{ clickable: true }}
       >
         <SwiperSlide className='carousel-slide'>
-          <img src={sliderPic1} />
+          <img src={sliderPic1} alt='happy couple' />
         </SwiperSlide>
         <SwiperSlide className='carousel-slide'>
-          <img src={sliderPic2} />
+          <img src={sliderPic2} alt='happy couple 2' />
         </SwiperSlide>
         <SwiperSlide className='carousel-slide'>
-          <img src={sliderPic3} />
+          <img src={sliderPic3} alt='happy couple 3' />
         </SwiperSlide>
         <SwiperSlide className='carousel-slide'>
-          <img src={sliderPic4} />
+          <img src={sliderPic4} alt='happy couple 4' />
         </SwiperSlide>
         <SwiperSlide className='carousel-slide'>
-          <img src={sliderPic5} />
+          <img src={sliderPic5} alt='happy couple 5' />
         </SwiperSlide>
       </Swiper>
 
