@@ -93,8 +93,6 @@ let socket, selectedChatCompare;
 const App = () => {
   const maintenance = false;
 
-  console.log(process.env.NODE_ENV);
-
   const [popupModalIsOpen, setPopupModalIsOpen] = useState(false);
   const [expiringModalIsOpen, setExpiringModalIsOpen] = useState(false);
   const [expiredModalIsOpen, setExpiredModalIsOpen] = useState(false);

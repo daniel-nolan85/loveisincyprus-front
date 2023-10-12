@@ -76,7 +76,10 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
   };
 
   const handleOptInOrOutNotifs = async () => {
-    if (user.notifSubscription.permission !== 'granted') {
+    if (
+      user.notifSubscription &&
+      user.notifSubscription.permission !== 'granted'
+    ) {
       navigator.serviceWorker.ready.then((registration) => {
         registration.pushManager
           .subscribe({
@@ -139,7 +142,10 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
           console.log(err);
         });
     }
-    if (user.notifSubscription.permission === 'granted') {
+    if (
+      user.notifSubscription &&
+      user.notifSubscription.permission === 'granted'
+    ) {
       toast.success(
         'You will now receive push notifications to your mobile device',
         {
