@@ -19,61 +19,17 @@ export function register(config) {
       if (isLocalhost) {
         checkValidServiceWorker(swUrl, config);
 
-        navigator.serviceWorker.ready.then((registration) => {
+        navigator.serviceWorker.ready.then(() => {
           console.log(
             'This web app is being served cache-first by a service ' +
               'worker. To learn more, visit https://cra.link/PWA'
           );
-          registerPushNotification(registration);
         });
       } else {
         registerValidSW(swUrl, config);
       }
     });
   }
-}
-
-function registerPushNotification(registration) {
-  if ('PushManager' in window) {
-    registration.pushManager
-      .getSubscription()
-      .then((subscription) => {
-        if (subscription) {
-          console.log('User is already subscribed to push notifications');
-        } else {
-          return registration.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: process.env.REACT_APP_WEB_PUSH_PUBLIC,
-          });
-        }
-      })
-      .then((subscription) => {
-        sendSubscriptionToServer(subscription);
-      })
-      .catch((error) => {
-        console.error('Error subscribing to push notifications:', error);
-      });
-  }
-}
-
-function sendSubscriptionToServer(subscription) {
-  fetch('/subscribe', {
-    method: 'POST',
-    body: JSON.stringify(subscription),
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then((response) => {
-      if (response.status === 200) {
-        console.log('Subscription data sent to server');
-      } else {
-        console.error('Failed to send subscription data to server');
-      }
-    })
-    .catch((error) => {
-      console.error('Error sending subscription data:', error);
-    });
 }
 
 function registerValidSW(swUrl, config) {
@@ -96,6 +52,7 @@ function registerValidSW(swUrl, config) {
               if (config && config.onUpdate) {
                 config.onUpdate(registration);
               }
+              // registerPushNotification(registration);
             } else {
               console.log('Content is cached for offline use.');
 
@@ -129,6 +86,9 @@ function checkValidServiceWorker(swUrl, config) {
         });
       } else {
         registerValidSW(swUrl, config);
+        // navigator.serviceWorker.ready.then((registration) => {
+        //   registerPushNotification(registration);
+        // });
       }
     })
     .catch(() => {
@@ -137,6 +97,51 @@ function checkValidServiceWorker(swUrl, config) {
       );
     });
 }
+
+// function registerPushNotification(registration) {
+//   if ('PushManager' in window) {
+//     registration.pushManager
+//       .getSubscription()
+//       .then((subscription) => {
+//         if (subscription) {
+//           console.log('User is already subscribed to push notifications');
+//         } else {
+//           return registration.pushManager.subscribe({
+//             userVisibleOnly: true,
+//             applicationServerKey: process.env.REACT_APP_WEB_PUSH_PUBLIC,
+//           });
+//         }
+//       })
+//       .then((subscription) => {
+//         sendSubscriptionToServer(subscription);
+//       })
+//       .catch((error) => {
+//         console.error('Error subscribing to push notifications:', error);
+//       });
+//   }
+// }
+
+// function sendSubscriptionToServer(subscription) {
+//   console.log('subscription => ', subscription);
+//   fetch('/subscribe', {
+//     method: 'POST',
+//     body: JSON.stringify(subscription),
+//     headers: {
+//       'Content-Type': 'application/json',
+//     },
+//   })
+//     .then((response) => {
+//       console.log('response => ', response);
+//       if (response.status === 200) {
+//         console.log('Subscription data sent to server');
+//       } else {
+//         console.error('Failed to send subscription data to server');
+//       }
+//     })
+//     .catch((error) => {
+//       console.error('Error sending subscription data:', error);
+//     });
+// }
 
 export function unregister() {
   if ('serviceWorker' in navigator) {

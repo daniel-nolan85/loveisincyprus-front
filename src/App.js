@@ -15,6 +15,7 @@ import Expired from './components/modals/Expired';
 import CancelSubscription from './components/modals/CancelSubscription';
 import OptIn from './components/modals/OptIn';
 import DeleteAccount from './components/modals/DeleteAccount';
+import NotifRequest from './components/modals/NotifRequest';
 
 import Maintenance from './pages/Maintenance';
 import Header from './components/nav/Header';
@@ -101,6 +102,7 @@ const App = () => {
   const [optinModalIsOpen, setOptinModalIsOpen] = useState(false);
   const [deleteAccountModalIsOpen, setDeleteAccountModalIsOpen] =
     useState(false);
+  const [notifRequestModalIsOpen, setNotifRequestModalIsOpen] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -292,10 +294,6 @@ const App = () => {
       socket.on('gift card added', (g) => {
         incrementNewNotifications(g, 'gift');
       });
-
-      if (user.notifPermission === undefined) {
-        requestNotifPermission();
-      }
       removeExpiredFeatures();
       handleExpiredAds();
       handleExpiredMemberships();
@@ -307,6 +305,14 @@ const App = () => {
       calcPoints();
       updateUserProgress();
       cancelTrials();
+
+      if (
+        navigator.serviceWorker.controller &&
+        user.notifSubscription === undefined &&
+        window.innerWidth <= 1024
+      ) {
+        setNotifRequestModalIsOpen(true);
+      }
     }
   }, [user && user.token]);
 
@@ -418,75 +424,74 @@ const App = () => {
       });
   };
 
-  const requestNotifPermission = () => {
-    if ('Notification' in window && window.innerWidth <= 1024) {
-      Notification.requestPermission().then(async (permission) => {
-        if (permission === 'granted') {
-          navigator.serviceWorker.ready.then((registration) => {
-            registration.pushManager
-              .subscribe({
-                userVisibleOnly: true,
-                applicationServerKey: process.env.REACT_APP_WEB_PUSH_PUBLIC,
-              })
-              .then(async (subscription) => {
-                await axios
-                  .put(
-                    `${process.env.REACT_APP_API}/notif-permission`,
-                    {
-                      _id: user._id,
-                      permission,
-                      endpoint: subscription.endpoint,
-                    },
-                    {
-                      headers: {
-                        authtoken: user.token,
-                      },
-                    }
-                  )
-                  .then((res) => {
-                    dispatch({
-                      type: 'LOGGED_IN_USER',
-                      payload: {
-                        ...user,
-                        notifSubscription: res.data.notifSubscription,
-                      },
-                    });
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
-              });
-          });
-        } else {
-          await axios
-            .put(
-              `${process.env.REACT_APP_API}/notif-permission`,
-              {
-                _id: user._id,
-                permission,
-              },
-              {
-                headers: {
-                  authtoken: user.token,
-                },
-              }
-            )
-            .then((res) => {
-              dispatch({
-                type: 'LOGGED_IN_USER',
-                payload: {
-                  ...user,
-                  notifSubscription: res.data.notifSubscription,
-                },
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        }
-      });
-    }
-  };
+  // const requestNotifPermission = () => {
+  //   if (window.innerWidth <= 1024) {
+  //     <NotifRequest user={user}/>
+  //       if (permission === 'granted') {
+  //         navigator.serviceWorker.ready.then((registration) => {
+  //           registration.pushManager
+  //             .subscribe({
+  //               userVisibleOnly: true,
+  //               applicationServerKey: process.env.REACT_APP_WEB_PUSH_PUBLIC,
+  //             })
+  //             .then(async (subscription) => {
+  //               await axios
+  //                 .put(
+  //                   `${process.env.REACT_APP_API}/notif-permission`,
+  //                   {
+  //                     _id: user._id,
+  //                     permission,
+  //                     endpoint: subscription.endpoint,
+  //                   },
+  //                   {
+  //                     headers: {
+  //                       authtoken: user.token,
+  //                     },
+  //                   }
+  //                 )
+  //                 .then((res) => {
+  //                   dispatch({
+  //                     type: 'LOGGED_IN_USER',
+  //                     payload: {
+  //                       ...user,
+  //                       notifSubscription: res.data.notifSubscription,
+  //                     },
+  //                   });
+  //                 })
+  //                 .catch((err) => {
+  //                   console.log(err);
+  //                 });
+  //             });
+  //         });
+  //       } else {
+  //         await axios
+  //           .put(
+  //             `${process.env.REACT_APP_API}/notif-permission`,
+  //             {
+  //               _id: user._id,
+  //               permission,
+  //             },
+  //             {
+  //               headers: {
+  //                 authtoken: user.token,
+  //               },
+  //             }
+  //           )
+  //           .then((res) => {
+  //             dispatch({
+  //               type: 'LOGGED_IN_USER',
+  //               payload: {
+  //                 ...user,
+  //                 notifSubscription: res.data.notifSubscription,
+  //               },
+  //             });
+  //           })
+  //           .catch((err) => {
+  //             console.log(err);
+  //           });
+  //       }
+  //   }
+  // };
 
   const removeExpiredFeatures = async () => {
     await axios.put(`${process.env.REACT_APP_API}/remove-expired-features`);
@@ -599,6 +604,10 @@ const App = () => {
           <DeleteAccount
             deleteAccountModalIsOpen={deleteAccountModalIsOpen}
             setDeleteAccountModalIsOpen={setDeleteAccountModalIsOpen}
+          />
+          <NotifRequest
+            notifRequestModalIsOpen={notifRequestModalIsOpen}
+            setNotifRequestModalIsOpen={setNotifRequestModalIsOpen}
           />
           <Switch>
             <Route exact path='/' component={Home} />
