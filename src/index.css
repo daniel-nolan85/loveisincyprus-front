@@ -1313,21 +1313,8 @@ nav {
   display: flex;
   transition: padding-left 0.5s, background 0.5s;
 }
-#opt-btn-mobile {
-  position: absolute;
-  top: 25%;
-  right: 45%;
-  background: #ccc;
-  width: 45px;
-  border-radius: 15px;
-  padding: 2px 3px;
-  cursor: pointer;
-  display: flex;
-  transition: padding-left 0.5s, background 0.5s;
-}
 
-#opt-btn span,
-#opt-btn-mobile span {
+#opt-btn span {
   width: 18px;
   height: 18px;
   background: #fff;
@@ -1335,34 +1322,7 @@ nav {
   display: inline-block;
 }
 
-#opt-btn.opt-btn-on,
-#opt-btn-mobile.opt-btn-on {
-  padding-left: 23px;
-  background: var(--nav-color);
-}
-
-#opt-btn-notifs {
-  position: absolute;
-  top: 55%;
-  right: 45%;
-  background: #ccc;
-  width: 45px;
-  border-radius: 15px;
-  padding: 2px 3px;
-  cursor: pointer;
-  display: flex;
-  transition: padding-left 0.5s, background 0.5s;
-}
-
-#opt-btn-notifs span {
-  width: 18px;
-  height: 18px;
-  background: #fff;
-  border-radius: 50%;
-  display: inline-block;
-}
-
-#opt-btn-notifs.opt-btn-notifs-on {
+#opt-btn.opt-btn-on {
   padding-left: 23px;
   background: var(--nav-color);
 }

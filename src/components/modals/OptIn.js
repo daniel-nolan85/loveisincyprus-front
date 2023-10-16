@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -7,8 +7,6 @@ import { useSelector, useDispatch } from 'react-redux';
 Modal.setAppElement('#root');
 
 const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
-  const [notifContent, setNotifContent] = useState(null);
-
   const { user } = useSelector((state) => ({ ...state }));
 
   const dispatch = useDispatch();
@@ -36,47 +34,6 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
       overflowY: 'auto',
     },
   };
-
-  useEffect(() => {
-    const loadNotifContent = async () => {
-      if ('serviceWorker' in navigator) {
-        setNotifContent(
-          <>
-            <h2>
-              {user &&
-              user.notifSubscription &&
-              user.notifSubscription.permission === 'granted'
-                ? 'Unsubscribe from mobile notifications?'
-                : 'Subscribe to mobile notifications?'}
-            </h2>
-            <br />
-            <div
-              id='opt-btn-notifs'
-              className={
-                user &&
-                user.notifSubscription &&
-                user.notifSubscription.permission === 'granted'
-                  ? 'opt-btn-notifs-on'
-                  : ''
-              }
-              onClick={handleOptInOrOutNotifs}
-            >
-              <span />
-            </div>
-
-            <br />
-            <button
-              className='submit-btn trash'
-              onClick={() => setOptinModalIsOpen(false)}
-            >
-              Close
-            </button>
-          </>
-        );
-      }
-    };
-    loadNotifContent();
-  }, []);
 
   const handleOptInOrOut = async () => {
     await axios
@@ -118,93 +75,6 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
       });
   };
 
-  const handleOptInOrOutNotifs = async () => {
-    if (
-      user.notifSubscription &&
-      user.notifSubscription.permission !== 'granted'
-    ) {
-      navigator.serviceWorker.ready.then((registration) => {
-        registration.pushManager
-          .subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: process.env.REACT_APP_WEB_PUSH_PUBLIC,
-          })
-          .then(async (subscription) => {
-            await axios
-              .put(
-                `${process.env.REACT_APP_API}/notif-permission`,
-                {
-                  _id: user._id,
-                  permission: 'granted',
-                  endpoint: subscription.endpoint,
-                },
-                {
-                  headers: {
-                    authtoken: user.token,
-                  },
-                }
-              )
-              .then((res) => {
-                dispatch({
-                  type: 'LOGGED_IN_USER',
-                  payload: {
-                    ...user,
-                    notifSubscription: res.data.notifSubscription,
-                  },
-                });
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          });
-      });
-    } else {
-      await axios
-        .put(
-          `${process.env.REACT_APP_API}/notif-permission`,
-          {
-            _id: user._id,
-            permission: 'denied',
-          },
-          {
-            headers: {
-              authtoken: user.token,
-            },
-          }
-        )
-        .then((res) => {
-          dispatch({
-            type: 'LOGGED_IN_USER',
-            payload: {
-              ...user,
-              notifSubscription: res.data.notifSubscription,
-            },
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-    if (
-      user.notifSubscription &&
-      user.notifSubscription.permission !== 'granted'
-    ) {
-      toast.success(
-        'You will now receive push notifications to your mobile device',
-        {
-          position: toast.POSITION.TOP_CENTER,
-        }
-      );
-    } else {
-      toast.error(
-        'You will not receive push notifications to your mobile device',
-        {
-          position: toast.POSITION.TOP_CENTER,
-        }
-      );
-    }
-  };
-
   return (
     <Modal
       isOpen={optinModalIsOpen}
@@ -220,13 +90,12 @@ const OptIn = ({ optinModalIsOpen, setOptinModalIsOpen }) => {
         </h2>
         <br />
         <div
-          id={notifContent ? 'opt-btn-mobile' : 'opt-btn'}
+          id='opt-btn'
           className={user && user.optIn ? 'opt-btn-on' : ''}
           onClick={handleOptInOrOut}
         >
           <span />
         </div>
-        {window.innerWidth <= 1024 && notifContent}
       </div>
     </Modal>
   );

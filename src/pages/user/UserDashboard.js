@@ -287,14 +287,15 @@ const UserDashboard = () => {
         newsFeed();
         if (
           user.notifSubscription &&
-          user.notifSubscription.endpoint &&
-          res.data.postedBy !== user._id
+          user.notifSubscription.endpoint
+          // res.data.postedBy !== user._id
         ) {
           socket.emit('like post', res.data);
           await axios.post(
             `${process.env.REACT_APP_API}/send-push-notification`,
             {
               endpoint: user.notifSubscription.endpoint,
+              keys: user.notifSubscription.keys,
               payload: {
                 title: 'Post Liked',
                 body: 'Someone liked your post',
