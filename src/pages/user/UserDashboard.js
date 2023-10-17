@@ -272,6 +272,36 @@ const UserDashboard = () => {
     setPostToDelete(post);
   };
 
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding)
+      .replace(/\-/g, '+')
+      .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  }
+
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+    const base64 = (base64String + padding)
+      .replace(/\-/g, '+')
+      .replace(/_/g, '/');
+
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  }
+
   const handleLike = async (_id) => {
     await axios
       .put(
@@ -285,30 +315,26 @@ const UserDashboard = () => {
       )
       .then(async (res) => {
         newsFeed();
-        if (
-          user.notifSubscription &&
-          user.notifSubscription.endpoint
-          // res.data.postedBy !== user._id
-        ) {
-          socket.emit('like post', res.data);
-          await axios.post(
-            `${process.env.REACT_APP_API}/send-push-notification`,
-            {
-              endpoint: user.notifSubscription.endpoint,
-              keys: user.notifSubscription.keys,
-              payload: {
-                title: 'Post Liked',
-                body: 'Someone liked your post',
-                icon: logo64,
-              },
+        // if (res.data.postedBy !== user._id) {
+        socket.emit('like post', res.data);
+        await axios.post(
+          `${process.env.REACT_APP_API}/send-push-notification`,
+          {
+            _id: res.data.postedBy,
+            payload: {
+              title: 'Post Liked',
+              body: 'Someone liked your post',
+              icon: logo64,
             },
-            {
-              headers: {
-                authtoken: user.token,
-              },
-            }
-          );
-        }
+          },
+          {
+            headers: {
+              authtoken: user.token,
+            },
+          }
+        );
+
+        // }
       })
       .catch((err) => {
         console.log(err);
