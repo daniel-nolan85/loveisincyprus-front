@@ -87,6 +87,7 @@
     ]
   },
   "devDependencies": {
-    "react-error-overlay": "^6.0.9"
+    "react-error-overlay": "^6.0.9",
+    "workbox-cli": "^7.0.0"
   }
 }

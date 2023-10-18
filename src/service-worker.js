@@ -1,3 +1,4 @@
+importScripts('custom-service-worker.js');
 import { clientsClaim } from 'workbox-core';
 import { ExpirationPlugin } from 'workbox-expiration';
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
@@ -39,33 +40,3 @@ self.addEventListener('message', (event) => {
     self.skipWaiting();
   }
 });
-
-self.addEventListener('install', (e) => {
-  console.log('Service Worker installed');
-});
-
-self.addEventListener('push', (e) => {
-  const data = e.data.json();
-  console.log('Push received...', data);
-  self.registration.showNotification(data.title, {
-    body: data.body,
-    icon: data.icon,
-  });
-});
-
-// self.addEventListener('push', (event) => {
-//   const data = event.data.json();
-//   console.log('Push received...', data);
-//   event.waitUntil(
-//     self.registration
-//       .showNotification(data.title, {
-//         body: data.body,
-//         icon: data.icon,
-//       })
-//       .catch((error) => {
-//         console.error('Error displaying notification:', error);
-//       })
-//   );
-// });
-
-console.log('service-worker running');
