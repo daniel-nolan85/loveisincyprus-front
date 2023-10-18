@@ -315,26 +315,25 @@ const UserDashboard = () => {
       )
       .then(async (res) => {
         newsFeed();
-        // if (res.data.postedBy !== user._id) {
-        socket.emit('like post', res.data);
-        await axios.post(
-          `${process.env.REACT_APP_API}/send-push-notification`,
-          {
-            _id: res.data.postedBy,
-            payload: {
-              title: 'Post Liked',
-              body: 'Someone liked your post',
-              icon: logo64,
+        if (res.data.postedBy !== user._id) {
+          socket.emit('like post', res.data);
+          await axios.post(
+            `${process.env.REACT_APP_API}/send-push-notification`,
+            {
+              _id: res.data.postedBy,
+              payload: {
+                title: 'Post Liked',
+                body: 'Someone liked your post',
+                icon: logo64,
+              },
             },
-          },
-          {
-            headers: {
-              authtoken: user.token,
-            },
-          }
-        );
-
-        // }
+            {
+              headers: {
+                authtoken: user.token,
+              },
+            }
+          );
+        }
       })
       .catch((err) => {
         console.log(err);
