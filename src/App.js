@@ -303,7 +303,9 @@ const App = () => {
       calcPoints();
       updateUserProgress();
       cancelTrials();
-      if (window.innerWidth <= 1024) requestNotifPermission();
+      if (window.innerWidth <= 1024) {
+        requestNotifPermission();
+      }
     }
   }, [user && user.token]);
 

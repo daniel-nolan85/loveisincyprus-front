@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faAddressCard,
   faArrowRightFromBracket,
+  faDownload,
   faEject,
   faEnvelope,
   faMoon,
@@ -14,6 +15,8 @@ import {
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import defaultProfile from '../../assets/defaultProfile.png';
+import { toast } from 'react-toastify';
+import { ChatState } from '../../context/ChatProvider';
 
 const SettingsMenu = ({
   settingsMenu,
@@ -28,6 +31,8 @@ const SettingsMenu = ({
   let { _id, name, username, profileImage, membership, role } = useSelector(
     (state) => state.user
   );
+
+  const { deferredPrompt } = ChatState();
 
   const box = useRef(null);
   useOutsideAlerter(box);
@@ -72,6 +77,17 @@ const SettingsMenu = ({
     }, [ref, settingsMenu]);
   }
 
+  const installApp = async () => {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        toast.success(`Thank you for installing`, {
+          position: toast.POSITION.TOP_CENTER,
+        });
+      }
+    });
+  };
+
   return (
     <div
       className={
@@ -102,6 +118,20 @@ const SettingsMenu = ({
           </div>
         </Link>
         <hr />
+        {Object.keys(deferredPrompt).length !== 0 && (
+          <div
+            className='settings-links'
+            onClick={() => {
+              setSettingsMenu(false);
+              installApp();
+            }}
+          >
+            <span>
+              <FontAwesomeIcon icon={faDownload} className='fa' />
+              Install App
+            </span>
+          </div>
+        )}
         <div className='settings-links' onClick={() => setSettingsMenu(false)}>
           <Link to='/membership-card'>
             <FontAwesomeIcon icon={faAddressCard} className='fa' />

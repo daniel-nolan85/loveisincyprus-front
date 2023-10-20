@@ -24,6 +24,7 @@ const ChatProvider = ({ children }) => {
   const [newSubscriptions, setNewSubscriptions] = useState(0);
   const [timerFired, setTimerFired] = useState(false);
   const [newRefunds, setNewRefunds] = useState(0);
+  const [deferredPrompt, setDeferredPrompt] = useState({});
 
   return (
     <ChatContext.Provider
@@ -68,6 +69,8 @@ const ChatProvider = ({ children }) => {
         setTimerFired,
         newRefunds,
         setNewRefunds,
+        deferredPrompt,
+        setDeferredPrompt,
       }}
     >
       {children}

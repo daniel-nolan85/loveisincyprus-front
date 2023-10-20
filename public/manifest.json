@@ -4,8 +4,8 @@
   "theme_color": "#ef5b85",
   "background_color": "#ef5b85",
   "display": "standalone",
-  "scope": "/",
   "start_url": "/",
+  "scope": "/",
   "description": "Love is in Cyprus - Make Dating More Human",
   "icons": [
     {
