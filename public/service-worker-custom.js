@@ -15,3 +15,15 @@ self.addEventListener('push', (e) => {
     currentBadgeCount = newBadgeCount;
   }
 });
+
+self.addEventListener('message', (event) => {
+  if (
+    navigator.setAppBadge &&
+    event.data &&
+    event.data.action === 'resetBadgeCount'
+  ) {
+    const newBadgeCount = 0;
+    navigator.setAppBadge(newBadgeCount);
+    currentBadgeCount = newBadgeCount;
+  }
+});

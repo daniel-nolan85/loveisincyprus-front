@@ -306,6 +306,11 @@ const App = () => {
       if (window.innerWidth <= 1024) {
         requestNotifPermission();
       }
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.controller.postMessage({
+          action: 'resetBadgeCount',
+        });
+      }
     }
   }, [user && user.token]);
 
