@@ -16,14 +16,25 @@ self.addEventListener('push', (e) => {
   }
 });
 
+// self.addEventListener('message', (event) => {
+//   if (
+//     navigator.setAppBadge &&
+//     event.data &&
+//     event.data.action === 'resetBadgeCount'
+//   ) {
+//     const newBadgeCount = 0;
+//     navigator.setAppBadge(newBadgeCount);
+//     currentBadgeCount = newBadgeCount;
+//   }
+// });
+
 self.addEventListener('message', (event) => {
-  if (
-    navigator.setAppBadge &&
-    event.data &&
-    event.data.action === 'resetBadgeCount'
-  ) {
+  if (event.data && event.data.action === 'resetBadgeCount') {
     const newBadgeCount = 0;
-    navigator.setAppBadge(newBadgeCount);
+    if (navigator.setAppBadge) {
+      navigator.setAppBadge(newBadgeCount);
+    }
+    self.registration.setBadge(newBadgeCount);
     currentBadgeCount = newBadgeCount;
   }
 });
