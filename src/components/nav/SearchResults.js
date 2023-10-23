@@ -10,6 +10,7 @@ import Match from '../../components/modals/Match';
 import Unfollow from '../../components/modals/Unfollow';
 import io from 'socket.io-client';
 import { addPoints } from '../../functions/user';
+import logo64 from '../../assets/logo64.png';
 
 let socket;
 
@@ -49,7 +50,7 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
           },
         }
       )
-      .then((res) => {
+      .then(async (res) => {
         if (res.data.matches.includes(u._id)) {
           setMatchModalIsOpen(true);
           setMatch(u);
@@ -76,6 +77,22 @@ const SearchResults = ({ searchResults, setSearchResults, setQuery }) => {
             matches: res.data.matches,
           },
         });
+        await axios.post(
+          `${process.env.REACT_APP_API}/send-push-notification`,
+          {
+            _id: u._id,
+            payload: {
+              title: 'New Follower',
+              body: `${user.username || user.name} is now following you`,
+              icon: logo64,
+            },
+          },
+          {
+            headers: {
+              authtoken: user.token,
+            },
+          }
+        );
       })
       .catch((err) => {
         console.log(err);

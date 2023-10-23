@@ -4,6 +4,7 @@ import RightSidebar from '../../components/user/RightSidebar';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import defaultProfile from '../../assets/defaultProfile.png';
+import logo64 from '../../assets/logo64.png';
 import TinderCard from 'react-tinder-card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faXmark, faSpinner } from '@fortawesome/free-solid-svg-icons';
@@ -105,7 +106,7 @@ const Swipe = ({ history }) => {
           },
         }
       )
-      .then((res) => {
+      .then(async (res) => {
         if (res.data.matches.includes(u._id)) {
           setMatchModalIsOpen(true);
           setMatch(u);
@@ -132,6 +133,22 @@ const Swipe = ({ history }) => {
             matches: res.data.matches,
           },
         });
+        await axios.post(
+          `${process.env.REACT_APP_API}/send-push-notification`,
+          {
+            _id: u._id,
+            payload: {
+              title: 'New Follower',
+              body: `${user.username || user.name} is now following you`,
+              icon: logo64,
+            },
+          },
+          {
+            headers: {
+              authtoken: user.token,
+            },
+          }
+        );
         usersToSwipe();
       })
       .catch((err) => {

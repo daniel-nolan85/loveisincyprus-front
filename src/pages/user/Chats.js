@@ -8,6 +8,7 @@ import {
   faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 import defaultProfile from '../../assets/defaultProfile.png';
+import logo64 from '../../assets/logo64.png';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { ChatState } from '../../context/ChatProvider';
@@ -288,11 +289,29 @@ const Chats = ({ history }) => {
               },
             }
           )
-          .then((res) => {
+          .then(async (res) => {
             socket.emit('new message', res.data);
             setMessages([...messages, res.data]);
             socket.emit('stop typing', selectedChat._id);
             fetchChats();
+            await axios.post(
+              `${process.env.REACT_APP_API}/send-push-notification`,
+              {
+                _id: theirId,
+                payload: {
+                  title: 'New Message',
+                  body: `You have received a new message from ${
+                    user.username || user.name
+                  }`,
+                  icon: logo64,
+                },
+              },
+              {
+                headers: {
+                  authtoken: user.token,
+                },
+              }
+            );
           })
           .catch((err) => {
             console.log(err);

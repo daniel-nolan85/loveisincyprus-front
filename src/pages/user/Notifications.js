@@ -13,6 +13,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Mobile from '../../components/user/Mobile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import logo64 from '../../assets/logo64.png';
 
 let socket;
 
@@ -256,7 +257,7 @@ const Notifications = () => {
           },
         }
       )
-      .then((res) => {
+      .then(async (res) => {
         toast.success(`Comment added.`, {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -267,6 +268,22 @@ const Notifications = () => {
         populateNotifications();
         if (res.data.postedBy._id !== user._id) {
           socket.emit('new comment', res.data);
+          await axios.post(
+            `${process.env.REACT_APP_API}/send-push-notification`,
+            {
+              _id: res.data.postedBy._id,
+              payload: {
+                title: 'New Comment',
+                body: `${user.username || user.name} commented on your post`,
+                icon: logo64,
+              },
+            },
+            {
+              headers: {
+                authtoken: user.token,
+              },
+            }
+          );
         }
       })
       .catch((err) => {
@@ -328,8 +345,25 @@ const Notifications = () => {
           },
         }
       )
-      .then((res) => {
+      .then(async (res) => {
         if (res.data.postedBy !== user._id) {
+          socket.emit('like post', res.data);
+          await axios.post(
+            `${process.env.REACT_APP_API}/send-push-notification`,
+            {
+              _id: res.data.postedBy,
+              payload: {
+                title: 'Post Liked',
+                body: `${user.username || user.name} liked your post`,
+                icon: logo64,
+              },
+            },
+            {
+              headers: {
+                authtoken: user.token,
+              },
+            }
+          );
         }
         fetchNotifications();
         populateNotifications();

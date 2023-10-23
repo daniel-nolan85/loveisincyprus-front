@@ -12,6 +12,7 @@ import EventPostList from '../../components/cards/EventPostList';
 import AddComment from '../../components/modals/AddComment';
 import io from 'socket.io-client';
 import Mobile from '../../components/user/Mobile';
+import logo64 from '../../assets/logo64.png';
 
 let socket;
 
@@ -154,9 +155,25 @@ const EventInfo = () => {
           },
         }
       )
-      .then((res) => {
+      .then(async (res) => {
         if (res.data.postedBy !== user._id) {
           socket.emit('like post', res.data);
+          await axios.post(
+            `${process.env.REACT_APP_API}/send-push-notification`,
+            {
+              _id: res.data.postedBy,
+              payload: {
+                title: 'New Like',
+                body: `${user.username || user.name} liked your event post`,
+                icon: logo64,
+              },
+            },
+            {
+              headers: {
+                authtoken: user.token,
+              },
+            }
+          );
         }
         fetchEvent();
       })
@@ -202,7 +219,7 @@ const EventInfo = () => {
           },
         }
       )
-      .then((res) => {
+      .then(async (res) => {
         toast.success(`Comment added.`, {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -212,6 +229,24 @@ const EventInfo = () => {
         fetchEvent();
         if (res.data.postedBy._id !== user._id) {
           socket.emit('new comment', res.data);
+          await axios.post(
+            `${process.env.REACT_APP_API}/send-push-notification`,
+            {
+              _id: res.data.postedBy._id,
+              payload: {
+                title: 'New Comment',
+                body: `${
+                  user.username || user.name
+                } commented on your event post`,
+                icon: logo64,
+              },
+            },
+            {
+              headers: {
+                authtoken: user.token,
+              },
+            }
+          );
         }
       })
       .catch((err) => {

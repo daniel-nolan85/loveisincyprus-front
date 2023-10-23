@@ -16,6 +16,7 @@ import Mobile from '../../components/user/Mobile';
 import { useParams, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import defaultProfile from '../../assets/defaultProfile.png';
+import logo64 from '../../assets/logo64.png';
 import io from 'socket.io-client';
 import GiftCard from '../../components/paypal/GIftCard';
 
@@ -116,7 +117,7 @@ const GiftCardCreate = () => {
         to: _id,
         couponCode,
       })
-      .then((res) => {
+      .then(async (res) => {
         setLoading(false);
         if (res.data.error) {
           toast.error(res.data.error, {
@@ -132,6 +133,22 @@ const GiftCardCreate = () => {
           setAmount('0.00');
           setSucceeded(false);
           socket.emit('new gift card', res.data);
+          await axios.post(
+            `${process.env.REACT_APP_API}/send-push-notification`,
+            {
+              _id,
+              payload: {
+                title: 'New Gift Card',
+                body: `${user.username || user.name} has sent you a gift card`,
+                icon: logo64,
+              },
+            },
+            {
+              headers: {
+                authtoken: user.token,
+              },
+            }
+          );
         }
       })
       .catch((err) => {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHeart, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import defaultProfile from '../../assets/defaultProfile.png';
+import logo64 from '../../assets/logo64.png';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import LeftSidebar from '../../components/user/LeftSidebar';
@@ -79,7 +80,7 @@ const HighCompat = ({ history }) => {
           },
         }
       )
-      .then((res) => {
+      .then(async (res) => {
         if (res.data.matches.includes(u._id)) {
           setMatchModalIsOpen(true);
           setMatch(u);
@@ -106,6 +107,22 @@ const HighCompat = ({ history }) => {
             matches: res.data.matches,
           },
         });
+        await axios.post(
+          `${process.env.REACT_APP_API}/send-push-notification`,
+          {
+            _id: u._id,
+            payload: {
+              title: 'New Follower',
+              body: `${user.username || user.name} is now following you`,
+              icon: logo64,
+            },
+          },
+          {
+            headers: {
+              authtoken: user.token,
+            },
+          }
+        );
       })
       .catch((err) => {
         console.log(err);

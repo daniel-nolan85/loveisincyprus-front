@@ -131,7 +131,7 @@ const UserDashboard = () => {
           },
         }
       )
-      .then((res) => {
+      .then(async (res) => {
         if (res.data.matches.includes(u._id)) {
           setMatchModalIsOpen(true);
           setMatch(u);
@@ -158,6 +158,22 @@ const UserDashboard = () => {
             matches: res.data.matches,
           },
         });
+        await axios.post(
+          `${process.env.REACT_APP_API}/send-push-notification`,
+          {
+            _id: u._id,
+            payload: {
+              title: 'New Follower',
+              body: `${user.username || user.name} is now following you`,
+              icon: logo64,
+            },
+          },
+          {
+            headers: {
+              authtoken: user.token,
+            },
+          }
+        );
         let filtered = users.filter((f) => f._id !== u._id);
         setUsers(filtered);
         findUsers();
@@ -315,25 +331,25 @@ const UserDashboard = () => {
       )
       .then(async (res) => {
         newsFeed();
-        // if (res.data.postedBy !== user._id) {
-        socket.emit('like post', res.data);
-        await axios.post(
-          `${process.env.REACT_APP_API}/send-push-notification`,
-          {
-            _id: res.data.postedBy,
-            payload: {
-              title: 'Post Liked',
-              body: `${user.username || user.name} liked your post`,
-              icon: logo64,
+        if (res.data.postedBy !== user._id) {
+          socket.emit('like post', res.data);
+          await axios.post(
+            `${process.env.REACT_APP_API}/send-push-notification`,
+            {
+              _id: res.data.postedBy,
+              payload: {
+                title: 'Post Liked',
+                body: `${user.username || user.name} liked your post`,
+                icon: logo64,
+              },
             },
-          },
-          {
-            headers: {
-              authtoken: user.token,
-            },
-          }
-        );
-        // }
+            {
+              headers: {
+                authtoken: user.token,
+              },
+            }
+          );
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -377,7 +393,7 @@ const UserDashboard = () => {
           },
         }
       )
-      .then((res) => {
+      .then(async (res) => {
         toast.success(`Comment added.`, {
           position: toast.POSITION.TOP_CENTER,
         });
@@ -387,6 +403,22 @@ const UserDashboard = () => {
         newsFeed();
         if (res.data.postedBy._id !== user._id) {
           socket.emit('new comment', res.data);
+          await axios.post(
+            `${process.env.REACT_APP_API}/send-push-notification`,
+            {
+              _id: res.data.postedBy._id,
+              payload: {
+                title: 'New Comment',
+                body: `${user.username || user.name} commented on your post`,
+                icon: logo64,
+              },
+            },
+            {
+              headers: {
+                authtoken: user.token,
+              },
+            }
+          );
         }
       })
       .catch((err) => {

@@ -17,6 +17,7 @@ import {
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import defaultProfile from '../../assets/defaultProfile.png';
+import logo64 from '../../assets/logo64.png';
 import { useParams } from 'react-router-dom';
 import LargeCoverImage from '../../components/modals/LargeCoverImage';
 import LargeProfileImage from '../../components/modals/LargeProfileImage';
@@ -204,7 +205,7 @@ const UserProfile = ({ history, location }) => {
             },
           }
         )
-        .then((res) => {
+        .then(async (res) => {
           if (!res.data.visitors.includes(user._id)) {
             socket.emit('new visitor', res.data, user);
             addPoints(5, 'new visitor', user.token, res.data);
@@ -212,6 +213,22 @@ const UserProfile = ({ history, location }) => {
             toast.success(`First visit. You have been awarded 1 point!`, {
               position: toast.POSITION.TOP_CENTER,
             });
+            await axios.post(
+              `${process.env.REACT_APP_API}/send-push-notification`,
+              {
+                _id: userId,
+                payload: {
+                  title: 'New Visitor',
+                  body: `${user.username || user.name} visited your profile`,
+                  icon: logo64,
+                },
+              },
+              {
+                headers: {
+                  authtoken: user.token,
+                },
+              }
+            );
           }
         })
         .catch((err) => {
@@ -272,8 +289,24 @@ const UserProfile = ({ history, location }) => {
           },
         }
       )
-      .then((res) => {
+      .then(async (res) => {
         socket.emit('like post', res.data);
+        await axios.post(
+          `${process.env.REACT_APP_API}/send-push-notification`,
+          {
+            _id: userId,
+            payload: {
+              title: 'Post Liked',
+              body: `${user.username || user.name} liked your post`,
+              icon: logo64,
+            },
+          },
+          {
+            headers: {
+              authtoken: user.token,
+            },
+          }
+        );
         fetchThisUsersPosts();
       })
       .catch((err) => {
@@ -383,7 +416,7 @@ const UserProfile = ({ history, location }) => {
           },
         }
       )
-      .then((res) => {
+      .then(async (res) => {
         if (res.data.matches.includes(u._id)) {
           setMatchModalIsOpen(true);
           setMatch(u);
@@ -410,6 +443,22 @@ const UserProfile = ({ history, location }) => {
             matches: res.data.matches,
           },
         });
+        await axios.post(
+          `${process.env.REACT_APP_API}/send-push-notification`,
+          {
+            _id: userId,
+            payload: {
+              title: 'New Follower',
+              body: `${user.username || user.name} is now following you`,
+              icon: logo64,
+            },
+          },
+          {
+            headers: {
+              authtoken: user.token,
+            },
+          }
+        );
       })
       .catch((err) => {
         console.log(err);
