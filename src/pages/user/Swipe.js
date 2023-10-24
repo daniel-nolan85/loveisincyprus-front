@@ -7,7 +7,13 @@ import defaultProfile from '../../assets/defaultProfile.png';
 import logo64 from '../../assets/logo64.png';
 import TinderCard from 'react-tinder-card';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faXmark, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import {
+  faHeart,
+  faXmark,
+  faSpinner,
+  faArrowCircleRight,
+  faArrowCircleLeft,
+} from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
 import Match from '../../components/modals/Match';
 import { addPoints } from '../../functions/user';
@@ -177,6 +183,24 @@ const Swipe = ({ history }) => {
               )}
               {users.length > 0 && (
                 <>
+                  <div class='intro'>
+                    <h1 className='center tinder-text'>
+                      Swipe{' '}
+                      <FontAwesomeIcon
+                        icon={faArrowCircleRight}
+                        className='fa tinder-arrow'
+                      />{' '}
+                      if you like this member.
+                    </h1>
+                    <h1 className='center'>
+                      Otherwise, swipe{' '}
+                      <FontAwesomeIcon
+                        icon={faArrowCircleLeft}
+                        className='fa tinder-arrow'
+                      />{' '}
+                      to pass.
+                    </h1>
+                  </div>
                   {users.map((u) => (
                     <TinderCard
                       className='swipe'
@@ -210,26 +234,10 @@ const Swipe = ({ history }) => {
                       </div>
                     </TinderCard>
                   ))}
-
-                  <div className='swipe-buttons'>
-                    <FontAwesomeIcon
-                      icon={faXmark}
-                      className='fa nope'
-                      onClick={() => {
-                        handleSwipe('left', users.slice(-1)[0]);
-                      }}
-                    />
-                    <FontAwesomeIcon
-                      icon={faHeart}
-                      className='fa like'
-                      onClick={() => {
-                        handleSwipe('right', users.slice(-1)[0]);
-                      }}
-                    />
-                  </div>
                 </>
               )}
             </div>
+            <div class='space-below'></div>
 
             <Match
               matchModalIsOpen={matchModalIsOpen}

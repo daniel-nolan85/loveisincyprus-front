@@ -4012,6 +4012,16 @@ span.link {
   margin-top: 20px;
 }
 
+.tinder-card-container h1.tinder-text {
+  position: relative;
+}
+
+.tinder-card-container .fa.tinder-arrow {
+  color: var(--nav-color);
+  position: relative;
+  top: 2px;
+}
+
 .tinder-card-container .fa.spin {
   z-index: -1;
   font-size: 50px;
@@ -4020,10 +4030,12 @@ span.link {
 
 .swipe {
   position: absolute;
+  height: 700px;
 }
 
 .tinder-card {
   position: relative;
+  top: 150px;
   width: 320px;
   height: 500px;
   object-fit: contain;
@@ -4033,6 +4045,7 @@ span.link {
   margin: 0 auto;
   border-radius: 20px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  cursor: pointer;
 }
 
 .tinder-card h3 {
@@ -4042,33 +4055,6 @@ span.link {
 .tinder-card-info {
   position: absolute;
   bottom: 10px;
-}
-
-.swipe-buttons {
-  position: fixed;
-  bottom: 5vh;
-  width: 320px;
-  display: flex;
-  justify-content: space-evenly;
-  cursor: pointer;
-}
-
-.swipe-buttons .fa {
-  border: 1px solid var(--bg-color);
-  background: var(--bg-color);
-  width: 30px;
-  height: 30px;
-  padding: 20px;
-  border-radius: 50%;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-}
-
-.swipe-buttons .fa.nope {
-  color: #c70000;
-}
-
-.swipe-buttons .fa.like {
-  color: var(--nav-color);
 }
 
 .match {
@@ -6119,20 +6105,34 @@ table.product-info tbody {
 }
 
 /* --------------- media query for swipe page --------------- */
+@media (max-width: 1238px) {
+  .tinder-card {
+    top: 200px;
+  }
+}
+
+@media (max-width: 1069px) {
+  .tinder-card {
+    top: 230px;
+  }
+}
+
 @media (max-width: 900px) {
   .tinder-card {
+    top: 150px;
     height: 400px;
   }
+}
 
-  .swipe-buttons {
-    position: absolute;
-    bottom: -350px;
-    padding-bottom: 20px;
+@media (max-width: 512px) {
+  .tinder-card {
+    top: 200px;
   }
+}
 
-  .swipe-buttons .fa {
-    height: 25px;
-    width: 25px;
+@media (max-width: 444px) {
+  .tinder-card {
+    top: 230px;
   }
 }
 

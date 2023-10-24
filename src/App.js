@@ -307,8 +307,10 @@ const App = () => {
         requestNotifPermission();
       }
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.controller.postMessage({
-          action: 'resetBadgeCount',
+        navigator.serviceWorker.ready.then((registration) => {
+          if (registration && registration.active) {
+            registration.active.postMessage({ action: 'resetBadgeCount' });
+          }
         });
       }
     }
