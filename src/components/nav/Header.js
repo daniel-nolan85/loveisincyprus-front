@@ -24,6 +24,7 @@ const Header = ({
   setCancelSubscriptionModalIsOpen,
   setOptinModalIsOpen,
   setDeleteAccountModalIsOpen,
+  setInstallationInstructionsModalIsOpen,
 }) => {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
@@ -226,6 +227,9 @@ const Header = ({
               }
               setOptinModalIsOpen={setOptinModalIsOpen}
               setDeleteAccountModalIsOpen={setDeleteAccountModalIsOpen}
+              setInstallationInstructionsModalIsOpen={
+                setInstallationInstructionsModalIsOpen
+              }
             />
           </>
         )}

@@ -25,8 +25,10 @@ const SettingsMenu = ({
   setCancelSubscriptionModalIsOpen,
   setOptinModalIsOpen,
   setDeleteAccountModalIsOpen,
+  setInstallationInstructionsModalIsOpen,
 }) => {
   const [darkMode, setDarkMode] = useState(false);
+  const [appInstalled, setAppInstalled] = useState(false);
 
   let { _id, name, username, profileImage, membership, role } = useSelector(
     (state) => state.user
@@ -48,6 +50,14 @@ const SettingsMenu = ({
       localStorage.setItem('theme', 'light');
     }
   }, [darkMode]);
+
+  useEffect(() => {
+    if (window.matchMedia('(display-mode: standalone)').matches) {
+      setAppInstalled(true);
+    } else {
+      setAppInstalled(false);
+    }
+  }, []);
 
   const handleDarkMode = () => {
     setDarkMode(!darkMode);
@@ -88,6 +98,10 @@ const SettingsMenu = ({
     });
   };
 
+  const showInstallInstructions = () => {
+    console.log('show instructions');
+  };
+
   return (
     <div
       className={
@@ -118,12 +132,17 @@ const SettingsMenu = ({
           </div>
         </Link>
         <hr />
-        {Object.keys(deferredPrompt).length !== 0 && (
+        {(Object.keys(deferredPrompt).length !== 0 || !appInstalled) &&
+        window.innerWidth <= 1024 ? (
           <div
             className='settings-links'
             onClick={() => {
               setSettingsMenu(false);
-              installApp();
+              if (Object.keys(deferredPrompt).length !== 0) {
+                installApp();
+              } else if (!appInstalled) {
+                setInstallationInstructionsModalIsOpen(true);
+              }
             }}
           >
             <span>
@@ -131,7 +150,7 @@ const SettingsMenu = ({
               Install App
             </span>
           </div>
-        )}
+        ) : null}
         <div className='settings-links' onClick={() => setSettingsMenu(false)}>
           <Link to='/membership-card'>
             <FontAwesomeIcon icon={faAddressCard} className='fa' />

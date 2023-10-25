@@ -49,6 +49,14 @@ body {
   clear: both;
 }
 
+.pink {
+  color: var(--nav-color);
+}
+
+.bold {
+  font-weight: bold;
+}
+
 #side-nav {
   width: 250px;
   height: 100vh;
@@ -1335,6 +1343,14 @@ nav {
 .popup-links:hover {
   font-weight: bold;
   color: var(--nav-color);
+}
+
+/* --------------- app-install-instructions --------------- */
+.app-install {
+  font-size: 25px;
+  position: relative;
+  top: 5px;
+  margin: 0 5px;
 }
 
 /* --------------- free-membership-card --------------- */

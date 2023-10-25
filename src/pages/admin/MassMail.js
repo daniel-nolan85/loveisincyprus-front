@@ -15,6 +15,7 @@ import {
 import UsersToSelect from '../../components/modals/UsersToSelect';
 import axios from 'axios';
 import defaultProfile from '../../assets/defaultProfile.png';
+import logo64 from '../../assets/logo64.png';
 import { sendMassMail } from '../../functions/chat';
 import io from 'socket.io-client';
 import ReactQuill from 'react-quill';
@@ -43,6 +44,7 @@ const MassMail = ({ history }) => {
   const [selectedUsersModalIsOpen, setSelectedUsersModalIsOpen] =
     useState(false);
   const [subject, setSubject] = useState('');
+  const [userIds, setUserIds] = useState([]);
 
   const { token, _id, canMassMail } = useSelector((state) => state.user);
 
@@ -68,6 +70,10 @@ const MassMail = ({ history }) => {
       fetchMailchimpData();
     }
   }, [token]);
+
+  useEffect(() => {
+    setUserIds(values.selected.map((user) => user._id));
+  }, [values]);
 
   const fetchOptIns = async () => {
     setLoadingOpen(true);
@@ -161,6 +167,29 @@ const MassMail = ({ history }) => {
       setLoading(true);
       sendMassMail(values, subject, token, Logo)
         .then((res) => {
+          fetchMassMessages();
+          socket.emit('new mass mail', res.data);
+          toast.success('Your message has been sent', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          userIds.forEach(async (userId) => {
+            await axios.post(
+              `${process.env.REACT_APP_API}/send-push-notification`,
+              {
+                _id: userId,
+                payload: {
+                  title: 'New Message',
+                  body: 'You have received a new message from Love is in Cyprus',
+                  icon: logo64,
+                },
+              },
+              {
+                headers: {
+                  authtoken: token,
+                },
+              }
+            );
+          });
           setLoading(false);
           setValues({
             image: {},
@@ -168,11 +197,6 @@ const MassMail = ({ history }) => {
             selected: [],
           });
           setSubject('');
-          fetchMassMessages();
-          socket.emit('new mass mail', res.data);
-          toast.success('Your message has been sent', {
-            position: toast.POSITION.TOP_CENTER,
-          });
         })
         .catch((err) => {
           console.log(err);

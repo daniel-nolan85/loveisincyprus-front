@@ -19,6 +19,8 @@ self.addEventListener('message', (event) => {
     const newBadgeCount = 0;
     if (navigator.setAppBadge) {
       navigator.setAppBadge(newBadgeCount);
+    } else if ('setBadge' in navigator && 'clearBadge' in navigator) {
+      navigator.clearBadge();
     }
     self.registration.setBadge(newBadgeCount);
     currentBadgeCount = newBadgeCount;

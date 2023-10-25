@@ -15,6 +15,7 @@ import Expired from './components/modals/Expired';
 import CancelSubscription from './components/modals/CancelSubscription';
 import OptIn from './components/modals/OptIn';
 import DeleteAccount from './components/modals/DeleteAccount';
+import InstallationInstructions from './components/modals/InstallationInstructions';
 
 import Maintenance from './pages/Maintenance';
 import Header from './components/nav/Header';
@@ -101,6 +102,10 @@ const App = () => {
   const [optinModalIsOpen, setOptinModalIsOpen] = useState(false);
   const [deleteAccountModalIsOpen, setDeleteAccountModalIsOpen] =
     useState(false);
+  const [
+    installationInstructionsModalIsOpen,
+    setInstallationInstructionsModalIsOpen,
+  ] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
 
@@ -572,6 +577,9 @@ const App = () => {
             setCancelSubscriptionModalIsOpen={setCancelSubscriptionModalIsOpen}
             setOptinModalIsOpen={setOptinModalIsOpen}
             setDeleteAccountModalIsOpen={setDeleteAccountModalIsOpen}
+            setInstallationInstructionsModalIsOpen={
+              setInstallationInstructionsModalIsOpen
+            }
           />
           <SideDrawer />
           <ToastContainer />
@@ -598,6 +606,14 @@ const App = () => {
           <DeleteAccount
             deleteAccountModalIsOpen={deleteAccountModalIsOpen}
             setDeleteAccountModalIsOpen={setDeleteAccountModalIsOpen}
+          />
+          <InstallationInstructions
+            installationInstructionsModalIsOpen={
+              installationInstructionsModalIsOpen
+            }
+            setInstallationInstructionsModalIsOpen={
+              setInstallationInstructionsModalIsOpen
+            }
           />
           <Switch>
             <Route exact path='/' component={Home} />

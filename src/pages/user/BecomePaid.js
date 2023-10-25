@@ -89,22 +89,40 @@ const BecomePaid = () => {
               <span className='tooltip-text'>Questions about memberships</span>
             </div>
           </div>
-          <h2>How long would you like your paid membership to last?</h2>
-          <select
-            name='payable'
-            onChange={(e) => setPayable(e.target.value)}
-            value={payable}
-          >
-            <option
-              value={
-                payable === '10.00' ? '10.00' : payable === '5.00' && '5.00'
-              }
+          <div className='ad-section' style={{ marginTop: '40px' }}>
+            <div className='ad-header'>
+              <span className='number'>1</span>
+              <h2>Do you have a subscription coupon?</h2>
+            </div>
+            <input
+              className='input-field'
+              type='text'
+              placeholder='Please enter your coupon code here if you have one'
+              // onChange={handleHyperlink}
+              // value={hyperlink}
+            />
+          </div>
+          <div className='ad-section'>
+            <div className='ad-header'>
+              <span className='number'>2</span>
+              <h2>How long would you like your paid membership to last?</h2>
+            </div>
+            <select
+              name='payable'
+              onChange={(e) => setPayable(e.target.value)}
+              value={payable}
             >
-              One month
-            </option>
-            <option value='50.00'>Six months</option>
-            <option value='90.00'>One year</option>
-          </select>
+              <option
+                value={
+                  payable === '10.00' ? '10.00' : payable === '5.00' && '5.00'
+                }
+              >
+                One month
+              </option>
+              <option value='50.00'>Six months</option>
+              <option value='90.00'>One year</option>
+            </select>
+          </div>
 
           <Subscription payable={payable} daysLeft={daysLeft} />
         </>
