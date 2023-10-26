@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSpinner, faPaperPlane } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Select } from 'antd';
+import { Select, Radio } from 'antd';
 
 const { Option } = Select;
 
@@ -24,6 +24,8 @@ const CouponEdit = ({
 }) => {
   const [name, setName] = useState('');
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [subscription, setSubscription] = useState(false);
+  const [partner, setPartner] = useState('');
   const [discount, setDiscount] = useState(0);
   const [expiry, setExpiry] = useState('');
 
@@ -31,6 +33,8 @@ const CouponEdit = ({
     if (couponToEdit) {
       setName(couponToEdit.name);
       setSelectedProducts(couponToEdit.products);
+      setSubscription(couponToEdit.subscription);
+      setPartner(couponToEdit.partner);
       setDiscount(couponToEdit.discount);
       setExpiry(couponToEdit.expiry);
     }
@@ -38,12 +42,28 @@ const CouponEdit = ({
 
   let { token } = useSelector((state) => state.user);
 
+  const handleRadio = (e) => {
+    if (e.target.value === 'yes') {
+      setSubscription(true);
+      setDiscount(100);
+    } else {
+      setSubscription(false);
+      setDiscount('');
+    }
+  };
+
   const editCoupon = async (e, coupon) => {
+    if (subscription && partner === '') {
+      toast.error('Please enter a partner', {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
     e.preventDefault();
     setLoading(true);
     updateCoupon(
       coupon._id,
-      { name, selectedProducts, discount, expiry },
+      { name, selectedProducts, subscription, partner, discount, expiry },
       token
     )
       .then((res) => {
@@ -95,12 +115,36 @@ const CouponEdit = ({
               </Option>
             ))}
         </Select>
+        <div className='sub-section'>
+          <span>Subscription</span>
+          <Radio.Group
+            onChange={handleRadio}
+            value={subscription ? 'yes' : 'no'}
+            name='subscription'
+          >
+            <Radio value='no'>No</Radio>
+            <Radio value='yes'>Yes</Radio>
+          </Radio.Group>
+        </div>
         <input
           type='text'
-          className='input-field'
+          className={`input-field partner ${subscription ? 'open' : ''}`}
+          placeholder='Partner'
+          value={partner}
+          onChange={(e) => setPartner(e.target.value)}
+          required={subscription}
+        />
+        <input
+          type='text'
+          className={`input-field discount ${subscription ? 'open' : ''}`}
           placeholder='Discount'
-          defaultValue={discount}
-          onChange={(e) => setDiscount(e.target.value)}
+          value={subscription ? 100 : discount}
+          onChange={(e) => {
+            if (!subscription) {
+              setDiscount(e.target.value);
+            }
+          }}
+          readOnly={subscription}
           required
         />
         <DatePicker

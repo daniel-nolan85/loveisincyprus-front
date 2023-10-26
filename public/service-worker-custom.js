@@ -22,7 +22,6 @@ self.addEventListener('message', (event) => {
     } else if ('setBadge' in navigator && 'clearBadge' in navigator) {
       navigator.clearBadge();
     }
-    self.registration.setBadge(newBadgeCount);
     currentBadgeCount = newBadgeCount;
   }
 });

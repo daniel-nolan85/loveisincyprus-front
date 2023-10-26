@@ -150,7 +150,6 @@ const SubStatus = ({
         </Radio.Group>
         {selectedStatus === 'Paid' && membershipStatus() !== 'Paid' && (
           <>
-            <h2 style={{ marginBottom: '0px' }}>Select an expiry date</h2>
             <DatePicker
               selected={new Date(expiry)}
               defaultValue={expiry}
@@ -168,13 +167,29 @@ const SubStatus = ({
           </>
         )}
         {selectedStatus === 'Free' && membershipStatus() !== 'Free' && (
-          <input
-            type='text'
-            className='input-field'
-            placeholder='Name of partner'
-            value={partner}
-            onChange={(e) => setPartner(e.target.value)}
-          />
+          <>
+            <input
+              type='text'
+              className='input-field'
+              placeholder='Name of partner'
+              value={partner}
+              onChange={(e) => setPartner(e.target.value)}
+            />
+            <DatePicker
+              selected={new Date(expiry)}
+              defaultValue={expiry}
+              onChange={(date) => setExpiry(date)}
+              dateFormat='dd/MM/yyyy'
+              minDate={new Date()}
+              showMonthDropdown
+              showYearDropdown
+              scrollableMonthDropdown
+              scrollableYearDropdown
+              yearDropdownItemNumber={100}
+              placeholderText='Select Expiry'
+              style={{ zIndex: 100 }}
+            />
+          </>
         )}
         <button
           className='submit-btn'

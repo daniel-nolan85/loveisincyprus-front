@@ -438,18 +438,6 @@ const Data = ({ history }) => {
 
   useEffect(() => {
     if (loadingPaidOrUnpaid) {
-      // const sortedUsers = [...users].sort((a, b) => {
-      //   const paidA = a.membership.paid;
-      //   const paidB = b.membership.paid;
-
-      //   if (paidA && !paidB) {
-      //     return -1;
-      //   } else if (!paidA && paidB) {
-      //     return 1;
-      //   } else {
-      //     return 0;
-      //   }
-      // });
       const sortedUsers = [...users].sort((a, b) => {
         const paidA = a.membership.paid;
         const freeA = a.membership.free;
@@ -457,37 +445,26 @@ const Data = ({ history }) => {
         const freeB = b.membership.free;
 
         if (paidA && freeA !== null) {
-          // Case 1: a has paid membership with free not equal to null
           if (paidB && freeB !== null) {
-            // Both a and b fall under the same category
             return 0;
           } else {
-            // a comes before b
             return -1;
           }
         } else if (paidA && freeA === null) {
-          // Case 2: a has paid membership with free equal to null
           if (paidB && freeB && freeB !== null) {
-            // b has paid membership with free not equal to null, so a comes after b
             return 1;
           } else if (paidB) {
-            // b has paid membership with free equal to null, so a comes before b
             return -1;
           } else {
-            // Both a and b fall under the same category
             return 0;
           }
         } else if (!paidA) {
-          // Case 3: a does not have paid membership
           if (!paidB) {
-            // Both a and b do not have paid membership, so maintain their original order
             return 0;
           } else {
-            // a does not have paid membership, but b does, so a comes after b
             return 1;
           }
         }
-        // Default case (should not be reached)
         return 0;
       });
       setUsers(sortedUsers);
@@ -501,14 +478,6 @@ const Data = ({ history }) => {
       const sortedUsers = [...users].sort((a, b) => {
         const costA = a.membership.cost || '';
         const costB = b.membership.cost || '';
-
-        // if (costA === '10.00' && costB !== '10.00') {
-        //   return -1;
-        // } else if (costA !== '10.00' && costB === '10.00') {
-        //   return 1;
-        // } else {
-        //   return 0;
-        // }
 
         if (
           (costA === '5.00' || costA === '10.00') &&

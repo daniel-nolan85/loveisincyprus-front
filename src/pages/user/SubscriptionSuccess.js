@@ -29,30 +29,43 @@ const SubscriptionSuccess = (props) => {
             <FontAwesomeIcon icon={faCheck} className='fa' />
           </div>
           <h2>Thank You!</h2>
-          <p>Your payment has been approved.</p>
-          <div className='ps-col'>
-            <p>Cost:</p>
-            <h3 className='ps-cost'>€{payable}</h3>
-          </div>
-          <div className='ps-col'>
-            <p>Subscription:</p>
-            <h3 className='ps-bought-items'>
-              {payable === '5.00' || payable === '10.00'
-                ? 'One month'
-                : payable === '50.00'
-                ? 'Six months'
-                : payable === '90.00' && 'One year'}
-            </h3>
-          </div>
-          <p>
-            You now have full access to all areas of the site until{' '}
-            {moment(membership.expiry).format('MMMM Do YYYY')}.
-          </p>
-          <p>
-            You may cancel your subscription by clicking your avatar at the top
-            of the page and selecting 'Cancel Subscription' to receive a full
-            refund any time between now and {fortnight}.
-          </p>
+          {payable !== '0.00' ? (
+            <>
+              <p>Your payment has been approved.</p>
+              <div className='ps-col'>
+                <p>Cost:</p>
+                <h3 className='ps-cost'>€{payable}</h3>
+              </div>
+              <div className='ps-col'>
+                <p>Subscription:</p>
+                <h3 className='ps-bought-items'>
+                  {payable === '5.00' || payable === '10.00'
+                    ? 'One month'
+                    : payable === '50.00'
+                    ? 'Six months'
+                    : payable === '90.00' && 'One year'}
+                </h3>
+              </div>
+              <p>
+                You now have full access to all areas of the site until{' '}
+                {moment(membership.expiry).format('MMMM Do YYYY')}.
+              </p>
+              <p>
+                You may cancel your subscription by clicking your avatar at the
+                top of the page and selecting 'Cancel Subscription' to receive a
+                full refund any time between now and {fortnight}.
+              </p>
+            </>
+          ) : (
+            <>
+              <p>Your subscription has been approved.</p>
+              <p>
+                You now have full access to all areas of the site until{' '}
+                {moment(membership.expiry).format('MMMM Do YYYY')}, courtesy of{' '}
+                {membership.free}
+              </p>
+            </>
+          )}
           <p className='ps-comprobe'>
             This information has been sent to your email
           </p>

@@ -2098,6 +2098,10 @@ nav {
   background: #5388b4;
 }
 
+.submit-btn.coupon {
+  width: 150px;
+}
+
 .advert-preview {
   width: 100%;
 }
@@ -2704,6 +2708,15 @@ nav {
   margin: 0 auto;
 }
 
+.form-box.coupon .sub-section {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-bottom: 1px solid #626262;
+  justify-content: space-between;
+}
+
 .form-box.coupon .ant-select-selector {
   border: none;
   background-color: transparent;
@@ -2732,6 +2745,38 @@ nav {
 .form-box.coupon.update .react-datepicker__day--today {
   background-color: transparent !important;
   font-weight: normal;
+}
+
+.form-box.coupon .input-field.partner {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease-in-out, max-height 0.3s ease-in-out,
+    margin 0.3s ease-in-out, padding 0.3s ease-in-out;
+  padding: 0;
+  margin: 0;
+}
+
+.form-box.coupon .input-field.partner.open {
+  opacity: 1;
+  max-height: 50px;
+  padding: 10px 0;
+  margin: 10px 0;
+}
+
+.form-box.coupon .input-field.discount {
+  padding: 0 0 10px 0;
+  margin: 0;
+  transition: ease-in-out, margin 0.3s ease-in-out, padding 0.3s ease-in-out;
+}
+
+.form-box.coupon .input-field.discount.open {
+  padding: 10px 0;
+  margin: 10px 0;
+}
+
+.hide-input-field {
+  display: none;
 }
 
 .form-box.event {

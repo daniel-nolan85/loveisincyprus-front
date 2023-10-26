@@ -1,24 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import LeftSidebar from '../../components/user/LeftSidebar';
 import RightSidebar from '../../components/user/RightSidebar';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faCircleInfo,
   faCircleQuestion,
+  faPaperPlane,
+  faSpinner,
 } from '@fortawesome/free-solid-svg-icons';
 import Mobile from '../../components/user/Mobile';
 import Subscription from '../../components/paypal/Subscription';
 import SubInfo from '../../components/modals/SubInfo';
 import SubQuestions from '../../components/modals/SubQuestions';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
 
 const BecomePaid = () => {
   const [payable, setPayable] = useState('10.00');
   const [daysLeft, setDaysLeft] = useState(0);
   const [subInfoModalIsOpen, setSubInfoModalIsOpen] = useState(false);
   const [subQuestionsModalIsOpen, setSubQuestionsModalIsOpen] = useState(false);
+  const [coupon, setCoupon] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const { user } = useSelector((state) => ({ ...state }));
+  const dispatch = useDispatch();
+
+  const history = useHistory();
 
   useEffect(() => {
     const date1 = Date.now();
@@ -45,6 +55,69 @@ const BecomePaid = () => {
 
   const handleQuestions = () => {
     setSubQuestionsModalIsOpen(true);
+  };
+
+  const handleCoupon = async () => {
+    setLoading(true);
+    await axios
+      .post(
+        `${process.env.REACT_APP_API}/validate-sub-coupon`,
+        { coupon },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        if (res.data.err) {
+          setLoading(false);
+          toast.error(res.data.err, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+        } else {
+          console.log(res.data);
+          toast.success('Coupon applied successfully!', {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          updateMembership();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
+  };
+
+  const updateMembership = async () => {
+    await axios
+      .put(
+        `${process.env.REACT_APP_API}/update-free-membership`,
+        { _id: user._id, coupon },
+        {
+          headers: {
+            authtoken: user.token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        dispatch({
+          type: 'LOGGED_IN_USER',
+          payload: {
+            ...user,
+            membership: res.data.membership,
+          },
+        });
+        history.push({
+          pathname: '/subscription-successful',
+          state: '0.00',
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+      });
   };
 
   return (
@@ -98,9 +171,22 @@ const BecomePaid = () => {
               className='input-field'
               type='text'
               placeholder='Please enter your coupon code here if you have one'
-              // onChange={handleHyperlink}
-              // value={hyperlink}
+              onChange={(e) => setCoupon(e.target.value)}
+              value={coupon}
             />
+            <button
+              onClick={handleCoupon}
+              type='submit'
+              className='submit-btn coupon'
+              disabled={!coupon}
+            >
+              {loading ? (
+                <FontAwesomeIcon icon={faSpinner} className='fa' spin />
+              ) : (
+                <FontAwesomeIcon icon={faPaperPlane} className='fa' />
+              )}
+              Apply
+            </button>
           </div>
           <div className='ad-section'>
             <div className='ad-header'>

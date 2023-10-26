@@ -16,11 +16,12 @@ import {
   faEdit,
   faTrashCan,
   faMagnifyingGlass,
+  faAddressCard,
 } from '@fortawesome/free-solid-svg-icons';
 import LeftSidebar from '../../components/admin/LeftSidebar';
 import CouponDelete from '../../components/modals/CouponDelete';
 import CouponEdit from '../../components/modals/CouponEdit';
-import { Select } from 'antd';
+import { Select, Radio } from 'antd';
 import { getProductsByCount } from '../../functions/product';
 
 const { Option } = Select;
@@ -29,6 +30,8 @@ const Coupon = ({ history }) => {
   const [name, setName] = useState('');
   const [products, setProducts] = useState([]);
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [subscription, setSubscription] = useState(false);
+  const [partner, setPartner] = useState('');
   const [discount, setDiscount] = useState('');
   const [expiry, setExpiry] = useState('');
   const [loading, setLoading] = useState(false);
@@ -66,10 +69,29 @@ const Coupon = ({ history }) => {
       });
   };
 
+  const handleRadio = (e) => {
+    if (e.target.value === 'yes') {
+      setSubscription(true);
+      setDiscount(100);
+    } else {
+      setSubscription(false);
+      setDiscount('');
+    }
+  };
+
   const handleSubmit = (e) => {
+    if (subscription && !partner) {
+      toast.error('Please enter a partner', {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      return;
+    }
     e.preventDefault();
     setLoading(true);
-    createCoupon({ name, selectedProducts, expiry, discount }, token)
+    createCoupon(
+      { name, selectedProducts, subscription, partner, expiry, discount },
+      token
+    )
       .then((res) => {
         if (res.data.errors) {
           toast.error(`${res.data.message}`, {
@@ -81,8 +103,19 @@ const Coupon = ({ history }) => {
           setLoading(false);
           setName('');
           setSelectedProducts([]);
+          setPartner('');
           setDiscount('');
           setExpiry('');
+          document
+            .querySelectorAll('label.ant-radio-wrapper-checked')
+            .forEach((label) => {
+              label.classList.remove('ant-radio-wrapper-checked');
+            });
+          document
+            .querySelectorAll('span.ant-radio-checked')
+            .forEach((span) => {
+              span.classList.remove('ant-radio-checked');
+            });
           toast.success(`${res.data.name} has been created`, {
             position: toast.POSITION.TOP_CENTER,
           });
@@ -142,12 +175,32 @@ const Coupon = ({ history }) => {
               </Option>
             ))}
         </Select>
+        <div className='sub-section'>
+          <span>Subscription</span>
+          <Radio.Group onChange={handleRadio} name='subscription'>
+            <Radio value='no'>No</Radio>
+            <Radio value='yes'>Yes</Radio>
+          </Radio.Group>
+        </div>
         <input
           type='text'
-          className='input-field'
+          className={`input-field partner ${subscription ? 'open' : ''}`}
+          placeholder='Partner'
+          value={partner}
+          onChange={(e) => setPartner(e.target.value)}
+          required={subscription}
+        />
+        <input
+          type='text'
+          className={`input-field discount ${subscription ? 'open' : ''}`}
           placeholder='Discount'
-          value={discount}
-          onChange={(e) => setDiscount(e.target.value)}
+          value={subscription ? 100 : discount}
+          onChange={(e) => {
+            if (!subscription) {
+              setDiscount(e.target.value);
+            }
+          }}
+          readOnly={subscription}
           required
         />
         <DatePicker
@@ -206,6 +259,12 @@ const Coupon = ({ history }) => {
                 </p>
                 <p>Expiry: {new Date(c.expiry).toLocaleDateString()}</p>
               </div>
+              {c.subscription && (
+                <FontAwesomeIcon
+                  icon={faAddressCard}
+                  className='fa sub-status'
+                />
+              )}
               <FontAwesomeIcon
                 icon={faTrashCan}
                 className='fa trash'
