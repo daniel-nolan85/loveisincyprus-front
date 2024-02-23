@@ -19,7 +19,7 @@ const LoginAndRegister = ({ history }) => {
   useEffect(() => {
     if (blacklist.some((b) => b.ip === ip)) {
       toast.error(
-        'Access to LoveIsInCyprus from this IP address has been denied',
+        'Access to LoveIsInCyprus from this IP address has been denied', 
         {
           position: toast.POSITION.TOP_CENTER,
         }
