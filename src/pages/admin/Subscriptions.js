@@ -91,10 +91,10 @@ const Subscriptions = ({ history }) => {
   };
 
   const searched = (query) => (q) =>
-    (q.userInfo.name && q.userInfo.name.toLowerCase().includes(query)) ||
-    (q.userInfo.username &&
-      q.userInfo.username.toLowerCase().includes(query)) ||
-    (q.userInfo.email && q.userInfo.email.toLowerCase().includes(query)) ||
+    (q.userInfo?.name && q.userInfo.name.toLowerCase().includes(query)) ||
+    (q.userInfo?.username &&
+      q.userInfo?.username.toLowerCase().includes(query)) ||
+    (q.userInfo?.email && q.userInfo.email.toLowerCase().includes(query)) ||
     (q.paymentType && q.paymentType.includes(query)) ||
     (q.duration && q.duration.toString().includes(query)) ||
     (q.cost && q.cost.includes(query));

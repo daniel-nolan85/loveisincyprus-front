@@ -31,16 +31,22 @@ const SubsToView = ({ subscriptions }) => {
             <View style={styles.column}>
               <Text style={styles.subtitle}>Members Info:</Text>
               <Text style={styles.text}>
-                <Text>Name: {subscription.userInfo.name}</Text>
-                {'\n'}
-                <Text>Username: {subscription.userInfo.username}</Text>
-                {'\n'}
-                <Text>Email: {subscription.userInfo.email}</Text>
-                {'\n'}
-                <Text>
-                  IP(s): {subscription.userInfo.ipAddresses.join(', ')}
-                </Text>
-                {'\n'}
+                {subscription.userInfo && subscription.userInfo.name ? (
+                  <>
+                    <Text>Name: {subscription.userInfo.name}</Text>
+                    {'\n'}
+                    <Text>Username: {subscription.userInfo.username}</Text>
+                    {'\n'}
+                    <Text>Email: {subscription.userInfo.email}</Text>
+                    {'\n'}
+                    <Text>
+                      IP(s): {subscription.userInfo.ipAddresses.join(', ')}
+                    </Text>
+                    {'\n'}
+                  </>
+                ) : (
+                  <Text>User info not available</Text>
+                )}
               </Text>
             </View>
             <View style={styles.column}>
